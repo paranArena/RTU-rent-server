@@ -2,7 +2,6 @@ package com.RenToU.rentserver.infrastructure;
 
 import com.RenToU.rentserver.domain.Member;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -11,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 @Repository
 @RequiredArgsConstructor
-public class JPAMemberRepsitory implements MemberRepository{
+public class JPAMemberRepository implements MemberRepository{
 
     @PersistenceContext
     private EntityManager em;
@@ -19,7 +18,7 @@ public class JPAMemberRepsitory implements MemberRepository{
     @Override
     public List<Member> findAll() {
         return em.createQuery("select m from Member m", Member.class)
-                .getResultList();;
+                .getResultList();
     }
 
     @Override
