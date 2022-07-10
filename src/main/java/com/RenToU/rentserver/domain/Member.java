@@ -1,10 +1,14 @@
 package com.RenToU.rentserver.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,6 +20,9 @@ import java.util.List;
 
 @Entity
 @Getter @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Member {
     @Id @GeneratedValue
     @Column(name = "member_id")
@@ -31,7 +38,7 @@ public class Member {
 
     private String major;
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<ClubMember> clubList = new ArrayList<>();
 
     @CreatedDate
@@ -40,4 +47,13 @@ public class Member {
 
     @LastModifiedDate
     private LocalDateTime updatedAt;
+
+    public Member createMember(String name,String email){
+        Member member = Member.builder()
+                .name(name)
+                .email(email)
+                .build();
+        member.clubList = new ArrayList<>();
+        return member;
+    }
 }

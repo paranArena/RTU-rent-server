@@ -1,6 +1,7 @@
 package com.RenToU.rentserver.infrastructure;
 
 import com.RenToU.rentserver.domain.Member;
+import com.RenToU.rentserver.exceptions.MemberNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -22,8 +23,9 @@ public class JPAMemberRepository implements MemberRepository{
     }
 
     @Override
-    public Optional<Member> findById(Long id) {
-        return Optional.of(em.find(Member.class,id));
+    public Member findById(Long id) {
+        return Optional.of(em.find(Member.class,id))
+                .orElseThrow(() -> new MemberNotFoundException(id));
     }
 
     @Override
@@ -36,4 +38,5 @@ public class JPAMemberRepository implements MemberRepository{
     public void delete(Member member) {
         em.remove(member);
     }
+
 }

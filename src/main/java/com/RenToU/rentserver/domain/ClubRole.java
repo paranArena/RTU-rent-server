@@ -7,5 +7,5 @@ import javax.persistence.Embeddable;
 @Embeddable
 @Getter
 public enum ClubRole {
-    OWNER,ADMIN,USER,WAIT
+    OWNER, ADMIN, USER, WAIT
 }
