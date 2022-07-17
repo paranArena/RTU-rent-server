@@ -15,6 +15,8 @@ import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -43,23 +45,29 @@ public class MemberDTO {
     @Mapping("major")
     private String major;
 
-    private Authority authority;
+    private Set<Authority> authorities;
 
     @OneToMany(mappedBy = "member")
     private List<ClubMember> clubList = new ArrayList<>();
 
+    private Set<AuthorityDTO> authorityDtoSet;
+
     public static MemberDTO from(Member member) {
         if(member == null) return null;
 
-        Authority authority = Authority.USER;
-
         return MemberDTO.builder()
+                .id(member.getId())
                 .email(member.getEmail())
                 .name(member.getName())
                 .phoneNumber(member.getPhoneNumber())
                 .studentId(member.getStudentId())
                 .major(member.getMajor())
-                .authority(member.getAuthority())
+//                .authorityDtoSet(member.getAuthorities().stream()
+//                        .map(authority -> AuthorityDTO.builder()
+//                                .authorityName(authority.getAuthority().getAuthorityName())
+//                                .build()
+//                        )
+//                        .collect(Collectors.toSet()))
                 .build();
     }
 

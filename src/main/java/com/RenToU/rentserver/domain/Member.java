@@ -7,7 +7,9 @@ import org.springframework.data.annotation.LastModifiedDate;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter @Setter
@@ -35,15 +37,25 @@ public class Member {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<ClubMember> clubList = new ArrayList<>();
 
-    @Enumerated(EnumType.STRING)
-    private Authority authority;
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<MemberAuthority> authorities = new ArrayList<>();
 
-    @CreatedDate
-    @Column(updatable = false, nullable = false)
-    private LocalDateTime createdAt;
+    @Column(name = "activated")
+    private boolean activated;
 
-    @LastModifiedDate
-    private LocalDateTime updatedAt;
+//    @ManyToMany
+//    @JoinTable(
+//            name = "member_authority",
+//            joinColumns = {@JoinColumn(name = "member_id", referencedColumnName = "member_id")},
+//            inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "authority_name")})
+//    private Set<Authority> authorities;
+
+//    @CreatedDate
+//    @Column(updatable = false, nullable = false)
+//    private LocalDateTime createdAt;
+
+//    @LastModifiedDate
+//    private LocalDateTime updatedAt;
 
     public Member createMember(String name,String email){
         Member member = Member.builder()
@@ -53,4 +65,5 @@ public class Member {
         member.clubList = new ArrayList<>();
         return member;
     }
+
 }

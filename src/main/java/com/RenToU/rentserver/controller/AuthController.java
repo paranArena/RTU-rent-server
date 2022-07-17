@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.io.Console;
 
 @RestController
 @RequestMapping("/api")
@@ -31,18 +32,21 @@ public class AuthController {
 
     @PostMapping("/authenticate")
     public ResponseEntity<TokenDTO> authorize(@Valid @RequestBody LoginDTO loginDto) {
-
+        System.out.println("1");
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword());
 
+        System.out.println("token : " + authenticationToken);
+        System.out.println("obj : " + authenticationManagerBuilder.getObject());
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+        System.out.println(authentication);
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
+        System.out.println("1");
         String jwt = tokenProvider.createToken(authentication);
-
+        System.out.println("1");
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
-
+        System.out.println("1");
         return new ResponseEntity<>(new TokenDTO(jwt), httpHeaders, HttpStatus.OK);
     }
 }

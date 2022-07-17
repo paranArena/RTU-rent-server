@@ -4,12 +4,17 @@ package com.RenToU.rentserver.application;
 import com.RenToU.rentserver.DTO.MemberDTO;
 import com.RenToU.rentserver.domain.Authority;
 import com.RenToU.rentserver.domain.Member;
+import com.RenToU.rentserver.domain.MemberAuthority;
 import com.RenToU.rentserver.exeption.DuplicateMemberException;
 import com.RenToU.rentserver.infrastructure.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @Service
 public class LoginService {
@@ -27,14 +32,12 @@ public class LoginService {
             throw new DuplicateMemberException("이미 가입되어 있는 유저입니다.");
         }
 
-        Authority authority = Authority.USER;
-
         Member member = Member.builder()
+                .activated(true)
                 .email(memberDTO.getEmail())
                 .password(passwordEncoder.encode(memberDTO.getPassword()))
                 .name(memberDTO.getName())
                 .phoneNumber(memberDTO.getPhoneNumber())
-                .authority(authority)
                 .studentId(memberDTO.getStudentId())
                 .major(memberDTO.getMajor())
                 .build();

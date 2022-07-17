@@ -4,11 +4,26 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
-@Embeddable
+@Entity
 @Getter
-public enum Authority {
-    ADMIN, USER
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class Authority {
+
+    @Id
+    @Column(name = "authority_name", length = 50)
+    private String authorityName;
+
+    @OneToMany(mappedBy = "authority", cascade = CascadeType.ALL)
+    private List<MemberAuthority> authorities = new ArrayList<>();
 }
+
 
 
