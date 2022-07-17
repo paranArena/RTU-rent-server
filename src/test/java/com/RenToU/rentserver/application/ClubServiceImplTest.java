@@ -5,6 +5,7 @@ import com.RenToU.rentserver.domain.Member;
 import com.RenToU.rentserver.infrastructure.ClubRepository;
 import com.RenToU.rentserver.infrastructure.JPAClubRepository;
 import com.RenToU.rentserver.infrastructure.JPAMemberRepository;
+import com.RenToU.rentserver.infrastructure.JPAProductRepository;
 import com.RenToU.rentserver.infrastructure.MemberRepository;
 import com.github.dozermapper.core.Mapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,6 +22,7 @@ class ClubServiceImplTest {
 
     private ClubServiceImpl clubService;
     private JPAClubRepository clubRepository = mock(JPAClubRepository.class);
+    private JPAProductRepository productRepository = mock(JPAProductRepository.class);
     private JPAMemberRepository memberRepository = mock(JPAMemberRepository.class);
 
     private Mapper mapper;
@@ -34,7 +36,7 @@ class ClubServiceImplTest {
 
     @BeforeEach
     void setup(){
-        clubService = new ClubServiceImpl(mapper,clubRepository,memberRepository);
+        clubService = new ClubServiceImpl(mapper,clubRepository,productRepository,memberRepository);
         Member member = Member.builder()
                 .id(INITIAL_MEMBER_ID)
                 .name(INITIAL_MEMBER_NAME)

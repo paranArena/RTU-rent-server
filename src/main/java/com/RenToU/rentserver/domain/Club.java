@@ -49,11 +49,17 @@ public class Club {
 
     @OneToMany(mappedBy = "club", cascade = CascadeType.ALL)
     private List<Notification> notifications = new ArrayList<>();
+    @OneToMany(mappedBy = "club", cascade = CascadeType.ALL)
+    private List<Product> products = new ArrayList<>();
 
     //연관관계 편의 메소드
     public void addClubMember(ClubMember clubMember){
         memberList.add(clubMember);
         clubMember.setClub(this);
+    }
+    public void addProduct(Product product) {
+        products.add(product);
+        product.setClub(this);
     }
     public void addNotification(Notification notification){
         notifications.add(notification);
@@ -84,4 +90,6 @@ public class Club {
         }
         return clubMember.get();
     }
+
+
 }
