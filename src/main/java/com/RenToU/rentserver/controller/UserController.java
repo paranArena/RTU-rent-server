@@ -1,8 +1,8 @@
 package com.RenToU.rentserver.controller;
 
 
-import com.RenToU.rentserver.DTO.UserDTO;
-import com.RenToU.rentserver.service.UserService;
+import com.RenToU.rentserver.DTO.MemberDTO;
+import com.RenToU.rentserver.application.LoginService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -15,10 +15,10 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/api")
 public class UserController {
-    private final UserService userService;
+    private final LoginService loginService;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
+    public UserController(LoginService loginService) {
+        this.loginService = loginService;
     }
 
     @GetMapping("/hello")
@@ -32,21 +32,19 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<UserDTO> signup(
-            @Valid @RequestBody UserDTO userDto
-    ) {
-        return ResponseEntity.ok(userService.signup(userDto));
+    public ResponseEntity<MemberDTO> signup(@Valid @RequestBody MemberDTO memberDTO) {
+        return ResponseEntity.ok(loginService.signup(memberDTO));
     }
 
-    @GetMapping("/user")
-    @PreAuthorize("hasAnyRole('USER','ADMIN')")
-    public ResponseEntity<UserDTO> getMyUserInfo(HttpServletRequest request) {
-        return ResponseEntity.ok(userService.getMyUserWithAuthorities());
-    }
+//    @GetMapping("/user")
+//    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+//    public ResponseEntity<MemberDTO> getMyUserInfo(HttpServletRequest request) {
+//        return ResponseEntity.ok(loginService.getMyUserWithAuthorities());
+//    }
 
-    @GetMapping("/user/{username}")
-    @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<UserDTO> getUserInfo(@PathVariable String username) {
-        return ResponseEntity.ok(userService.getUserWithAuthorities(username));
-    }
+//    @GetMapping("/user/{username}")
+//    @PreAuthorize("hasAnyRole('ADMIN')")
+//    public ResponseEntity<MemberDTO> getUserInfo(@PathVariable String username) {
+//        return ResponseEntity.ok(loginService.getUserWithAuthorities(username));
+//    }
 }
