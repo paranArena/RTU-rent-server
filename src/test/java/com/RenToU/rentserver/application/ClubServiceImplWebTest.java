@@ -9,6 +9,7 @@ import com.RenToU.rentserver.exceptions.NoAdminPermissionException;
 import com.RenToU.rentserver.exceptions.NotWaitingJoinException;
 import com.RenToU.rentserver.infrastructure.JPAClubRepository;
 import com.RenToU.rentserver.infrastructure.JPAMemberRepository;
+import com.github.dozermapper.core.Mapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,8 @@ class ClubServiceImplWebTest {
 
     @Autowired
     EntityManager em;
+
+    private Mapper mapper;
     @Autowired
     private ClubServiceImpl clubService;
     @Autowired
@@ -47,7 +50,7 @@ class ClubServiceImplWebTest {
 
     @BeforeEach
     void setup(){
-        clubService = new ClubServiceImpl(clubRepository,memberRepository);
+        clubService = new ClubServiceImpl(mapper,clubRepository,memberRepository);
     }
 
 

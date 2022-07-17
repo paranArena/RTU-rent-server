@@ -6,6 +6,7 @@ import com.RenToU.rentserver.infrastructure.ClubRepository;
 import com.RenToU.rentserver.infrastructure.JPAClubRepository;
 import com.RenToU.rentserver.infrastructure.JPAMemberRepository;
 import com.RenToU.rentserver.infrastructure.MemberRepository;
+import com.github.dozermapper.core.Mapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -21,6 +22,8 @@ class ClubServiceImplTest {
     private ClubServiceImpl clubService;
     private JPAClubRepository clubRepository = mock(JPAClubRepository.class);
     private JPAMemberRepository memberRepository = mock(JPAMemberRepository.class);
+
+    private Mapper mapper;
     private static final Long INITIAL_MEMBER_ID = 1L;
     private static final String INITIAL_MEMBER_NAME = "TestMemberName";
     private static final String INITIAL_MEMBER_EMAIL = "testemail@ajou.ac.kr";
@@ -31,7 +34,7 @@ class ClubServiceImplTest {
 
     @BeforeEach
     void setup(){
-        clubService = new ClubServiceImpl(clubRepository,memberRepository);
+        clubService = new ClubServiceImpl(mapper,clubRepository,memberRepository);
         Member member = Member.builder()
                 .id(INITIAL_MEMBER_ID)
                 .name(INITIAL_MEMBER_NAME)
