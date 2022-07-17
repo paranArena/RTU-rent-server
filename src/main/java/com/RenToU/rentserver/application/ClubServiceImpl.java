@@ -1,9 +1,14 @@
 package com.RenToU.rentserver.application;
 
+import com.RenToU.rentserver.DTO.NotificationDTO;
+import com.RenToU.rentserver.DTO.ProductDTO;
 import com.RenToU.rentserver.domain.Club;
 import com.RenToU.rentserver.domain.ClubMember;
 import com.RenToU.rentserver.domain.ClubRole;
+import com.RenToU.rentserver.domain.Item;
 import com.RenToU.rentserver.domain.Member;
+import com.RenToU.rentserver.domain.Notification;
+import com.RenToU.rentserver.domain.Product;
 import com.RenToU.rentserver.exceptions.CannotJoinClubException;
 import com.RenToU.rentserver.exceptions.MemberNotFoundException;
 import com.RenToU.rentserver.infrastructure.JPAClubRepository;
@@ -19,7 +24,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Service
 public class ClubServiceImpl implements ClubService{
-
+    private final Mapper mapper;
     private final JPAClubRepository clubRepository;
     private final MemberRepository memberRepository;
 
@@ -71,9 +76,44 @@ public class ClubServiceImpl implements ClubService{
     }
 
     /**
-     * 유저가 가입 신청 가능한 상태인지 확인
-     * @param club 가입하려는 클럽
-     * @param member 가입하려는 유저
+     *Notification
+     */
+    @Override
+    public Long createNotification(Long clubId, Long writerId, NotificationDTO notificationDTO) {
+        Club club = clubRepository.findById(clubId);
+        Member writer = memberRepository.findById(writerId);
+        club.findClubMemberByMember(writer).validateAdmin();
+        Notification notification = mapper.map(notificationDTO,Notification.class);
+        club.addNotification(notification);
+        clubRepository.save(club);
+        return notification.getId();
+    }
+    /**
+     * product
+     */
+    @Override
+    public void registerProduct(Long clubId, ProductDTO productDTO, Long memberId){
+        Club club = clubRepository.findById(clubId);
+        Member requester = memberRepository.findById(memberId);
+        club.findClubMemberByMember(requester).validateAdmin();
+        Product product = mapper.map(productDTO,Product.class);
+        club.addProduct(product);
+        clubRepository.save(club);
+    }
+    @Override
+    public void registerItem(Long productId, Long memberId){
+        Product product = productRepository.findById(productId);
+        Member requester = memberRepository.findById(memberId);
+        Club club = product.getClub();
+        club.findClubMemberByMember(requester).validateAdmin();
+        product.addSeq();
+        Item item = Item.createItem(product);
+        product.addItem(item);
+        productRepository.save(product);
+    }
+
+    /**
+     * validation
      */
     private void validateCanJoin(Club club,Member member) {
         if(club.getMemberList().contains(member)){
