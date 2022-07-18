@@ -34,12 +34,16 @@ public class CustomUserDetailsService implements UserDetailsService {
         if (!member.isActivated()) {
             throw new RuntimeException(username + " -> 활성화되어 있지 않습니다.");
         }
-        List<GrantedAuthority> grantedAuthorities = member.getAuthorities().stream()
-                .map(authority -> new SimpleGrantedAuthority(authority.toString()))
+        List<GrantedAuthority> grantedAuthorities = member.getAuths().stream()
+                .map(authority -> new SimpleGrantedAuthority(authority.getAuthorityName()))
                 .collect(Collectors.toList());
 //        return new org.springframework.security.core.userdetails.User(user.getUsername(),
 //                user.getPassword(),
 //                grantedAuthorities);
+
+        System.out.println("cuds" + new org.springframework.security.core.userdetails.User(member.getEmail(),
+                member.getPassword(),
+                grantedAuthorities));
 
         return new org.springframework.security.core.userdetails.User(member.getEmail(),
                 member.getPassword(),

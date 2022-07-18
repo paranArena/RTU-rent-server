@@ -39,7 +39,7 @@ public class AuthController {
         System.out.println("token : " + authenticationToken);
         System.out.println("obj : " + authenticationManagerBuilder.getObject());
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-        System.out.println(authentication);
+        System.out.println("test");
         SecurityContextHolder.getContext().setAuthentication(authentication);
         System.out.println("1");
         String jwt = tokenProvider.createToken(authentication);

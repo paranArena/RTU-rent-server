@@ -13,6 +13,8 @@ import com.RenToU.rentserver.exceptions.CannotJoinClubException;
 import com.RenToU.rentserver.exceptions.MemberNotFoundException;
 import com.RenToU.rentserver.infrastructure.JPAClubRepository;
 import com.RenToU.rentserver.infrastructure.MemberRepository;
+import com.RenToU.rentserver.infrastructure.ProductRepository;
+import com.github.dozermapper.core.Mapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +29,8 @@ public class ClubServiceImpl implements ClubService{
     private final Mapper mapper;
     private final JPAClubRepository clubRepository;
     private final MemberRepository memberRepository;
+
+    private final ProductRepository productRepository;
 
     @Override
     public Club findClub(Long clubId) {
@@ -79,9 +83,10 @@ public class ClubServiceImpl implements ClubService{
      *Notification
      */
     @Override
+    @Transactional
     public Long createNotification(Long clubId, Long writerId, NotificationDTO notificationDTO) {
         Club club = clubRepository.findById(clubId);
-        Member writer = memberRepository.findById(writerId);
+        Member writer = findMember(writerId);
         club.findClubMemberByMember(writer).validateAdmin();
         Notification notification = mapper.map(notificationDTO,Notification.class);
         club.addNotification(notification);
@@ -92,18 +97,20 @@ public class ClubServiceImpl implements ClubService{
      * product
      */
     @Override
+    @Transactional
     public void registerProduct(Long clubId, ProductDTO productDTO, Long memberId){
         Club club = clubRepository.findById(clubId);
-        Member requester = memberRepository.findById(memberId);
+        Member requester = findMember(memberId);
         club.findClubMemberByMember(requester).validateAdmin();
         Product product = mapper.map(productDTO,Product.class);
         club.addProduct(product);
         clubRepository.save(club);
     }
     @Override
+    @Transactional
     public void registerItem(Long productId, Long memberId){
         Product product = productRepository.findById(productId);
-        Member requester = memberRepository.findById(memberId);
+        Member requester =findMember(memberId);
         Club club = product.getClub();
         club.findClubMemberByMember(requester).validateAdmin();
         product.addSeq();
