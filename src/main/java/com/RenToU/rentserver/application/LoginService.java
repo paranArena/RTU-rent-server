@@ -33,11 +33,14 @@ public class LoginService {
         if (memberRepository.findByEmail(memberDTO.getEmail()).orElse(null) != null) {
             throw new DuplicateMemberException("이미 가입되어 있는 유저입니다.");
         }
+
         makeDefaultRoleIfNotExists();
+
         Member member = mapper.map(memberDTO,Member.class);
+        member.setPassword(passwordEncoder.encode(memberDTO.getPassword()));
         member.setNewUser();
         MemberAuthority memberAuthority = new MemberAuthority();
-        Authority user = authorityRepository.findByAuthorityName("USER").get();
+        Authority user = authorityRepository.findByAuthorityName("USER_ROLE").get();
         member.addMemberAuth(memberAuthority);
         user.addMemberAuth(memberAuthority);
         return MemberDTO.from(memberRepository.save(member));
@@ -55,8 +58,8 @@ public class LoginService {
     private void makeDefaultRoleIfNotExists(){
         List<Authority> all = authorityRepository.findAll();
         if(all.isEmpty()){
-            authorityRepository.save((Authority.createAuth("ADMIN")));
-            authorityRepository.save((Authority.createAuth("USER")));
+            authorityRepository.save((Authority.createAuth("ADMIN_ROLE")));
+            authorityRepository.save((Authority.createAuth("USER_ROLE")));
         }
     }
 }
