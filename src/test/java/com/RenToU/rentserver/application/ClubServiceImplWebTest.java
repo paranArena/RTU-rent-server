@@ -3,13 +3,8 @@ package com.RenToU.rentserver.application;
 import com.RenToU.rentserver.domain.Club;
 import com.RenToU.rentserver.domain.ClubRole;
 import com.RenToU.rentserver.domain.Member;
-import com.RenToU.rentserver.exceptions.CannotJoinClubException;
 import com.RenToU.rentserver.exceptions.MemberNotFoundException;
-import com.RenToU.rentserver.exceptions.NoAdminPermissionException;
-import com.RenToU.rentserver.exceptions.NotWaitingJoinException;
-import com.RenToU.rentserver.infrastructure.JPAClubRepository;
 import com.RenToU.rentserver.infrastructure.JPAMemberRepository;
-import com.RenToU.rentserver.infrastructure.JPAProductRepository;
 import com.github.dozermapper.core.Mapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,12 +13,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import java.util.ArrayList;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
