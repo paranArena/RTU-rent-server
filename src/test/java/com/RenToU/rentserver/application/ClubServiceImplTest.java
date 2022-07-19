@@ -2,17 +2,12 @@ package com.RenToU.rentserver.application;
 
 import com.RenToU.rentserver.domain.Club;
 import com.RenToU.rentserver.domain.Member;
-import com.RenToU.rentserver.infrastructure.ClubRepository;
-import com.RenToU.rentserver.infrastructure.JPAClubRepository;
 import com.RenToU.rentserver.infrastructure.JPAMemberRepository;
-import com.RenToU.rentserver.infrastructure.JPAProductRepository;
-import com.RenToU.rentserver.infrastructure.MemberRepository;
 import com.github.dozermapper.core.Mapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;

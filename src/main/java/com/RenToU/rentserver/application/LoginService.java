@@ -5,18 +5,15 @@ import com.RenToU.rentserver.DTO.MemberDTO;
 import com.RenToU.rentserver.domain.Authority;
 import com.RenToU.rentserver.domain.Member;
 import com.RenToU.rentserver.domain.MemberAuthority;
-import com.RenToU.rentserver.exeption.DuplicateMemberException;
+import com.RenToU.rentserver.exceptions.DuplicateMemberException;
 import com.RenToU.rentserver.infrastructure.AuthorityRepository;
 import com.RenToU.rentserver.infrastructure.MemberRepository;
 import com.github.dozermapper.core.Mapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 @Transactional
 @Service

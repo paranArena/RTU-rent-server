@@ -1,16 +1,12 @@
 package com.RenToU.rentserver.infrastructure;
 
 import com.RenToU.rentserver.domain.Club;
+import com.RenToU.rentserver.domain.Member;
 import com.RenToU.rentserver.domain.Product;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface ProductRepository {
-    List<Product> findAll();
+public interface ProductRepository extends JpaRepository<Product, Long> {
 
-    Product findById(Long id);
-
-    Product save(Product product);
-
-    void delete(Product product);
 }

@@ -1,4 +1,4 @@
-package com.RenToU.rentserver.exeption;
+package com.RenToU.rentserver.exceptions;
 
 public class DuplicateMemberException extends RuntimeException {
     public DuplicateMemberException() {

@@ -7,8 +7,6 @@ import com.RenToU.rentserver.domain.Club;
 import java.util.List;
 
 public interface ClubService {
-    public Club findClub(Long clubId);
-
     public List<Club> findClubs();
 
     public Long createClub(Long memberId, String clubName, String clubIntro);
