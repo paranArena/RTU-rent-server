@@ -1,18 +1,12 @@
 package com.RenToU.rentserver.infrastructure;
 
 import com.RenToU.rentserver.domain.Member;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.EntityGraph;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
 import java.util.Optional;
 
-public interface MemberRepository {
-    List<Member> findAll();
+public interface MemberRepository extends JpaRepository<Member, Long> {
 
-    Member findById(Long id);
-
-    Member save(Member member);
-
-    void delete(Member member);
-
+    Optional<Member> findByEmail(String email);
 }
