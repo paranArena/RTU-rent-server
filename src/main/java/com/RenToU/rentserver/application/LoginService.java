@@ -8,6 +8,7 @@ import com.RenToU.rentserver.domain.MemberAuthority;
 import com.RenToU.rentserver.exceptions.DuplicateMemberException;
 import com.RenToU.rentserver.infrastructure.AuthorityRepository;
 import com.RenToU.rentserver.infrastructure.MemberRepository;
+import com.RenToU.rentserver.util.SecurityUtil;
 import com.github.dozermapper.core.Mapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -47,11 +48,12 @@ public class LoginService {
 //    public MemberDTO getMemberWithAuthorities(String email) {
 //        return MemberDTO.from(memberRepository.findOneWithAuthoritiesByUsername(email).orElse(null));
 //    }
+//
+    @Transactional(readOnly = true)
+    public MemberDTO getMyUserWithAuthorities() {
+        return MemberDTO.from(SecurityUtil.getCurrentUsername().flatMap(memberRepository::findOneWithAuthoritiesByEmail).orElse(null));
+    }
 
-//    @Transactional(readOnly = true)
-//    public MemberDTO getMyUserWithAuthorities() {
-//        return MemberDTO.from(SecurityUtil.getCurrentUsername().flatMap(memberRepository::findOneWithAuthoritiesByUsername).orElse(null));
-//    }
     private void makeDefaultRoleIfNotExists(){
         List<Authority> all = authorityRepository.findAll();
         if(all.isEmpty()){
