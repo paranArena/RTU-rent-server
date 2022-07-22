@@ -4,7 +4,7 @@ RenToU rent spring server
 API SEVER URL:
 https://rtu-rent-server-uwdjr.run.goorm.io
 
-# Client-side Test
+# Local Client-side Test
 1. develop branch clone
 2. 실행 (저는 그냥 인텔리제이로 열어서 실행버튼 눌렀어요..)
 3. http://localhost:8080 으로 request Test
