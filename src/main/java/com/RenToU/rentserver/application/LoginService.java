@@ -32,15 +32,16 @@ public class LoginService {
             throw new DuplicateMemberException("이미 가입되어 있는 유저입니다.");
         }
 
+        // for dev
         makeDefaultRoleIfNotExists();
 
         Member member = mapper.map(memberDTO,Member.class);
         member.setPassword(passwordEncoder.encode(memberDTO.getPassword()));
         member.setNewUser();
         MemberAuthority memberAuthority = new MemberAuthority();
-        Authority user = authorityRepository.findByAuthorityName("USER_ROLE").get();
+        Authority authority = authorityRepository.findByAuthorityName("ROLE_USER").get();
         member.addMemberAuth(memberAuthority);
-        user.addMemberAuth(memberAuthority);
+        authority.addMemberAuth(memberAuthority);
         return MemberDTO.from(memberRepository.save(member));
     }
 
@@ -57,8 +58,8 @@ public class LoginService {
     private void makeDefaultRoleIfNotExists(){
         List<Authority> all = authorityRepository.findAll();
         if(all.isEmpty()){
-            authorityRepository.save((Authority.createAuth("ADMIN_ROLE")));
-            authorityRepository.save((Authority.createAuth("USER_ROLE")));
+            authorityRepository.save((Authority.createAuth("ROLE_ADMIN")));
+            authorityRepository.save((Authority.createAuth("ROLE_USER")));
         }
     }
 }
