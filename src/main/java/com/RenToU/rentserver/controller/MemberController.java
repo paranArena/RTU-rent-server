@@ -3,6 +3,7 @@ package com.RenToU.rentserver.controller;
 
 import com.RenToU.rentserver.DTO.MemberDTO;
 import com.RenToU.rentserver.application.LoginService;
+import com.RenToU.rentserver.domain.Member;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -13,35 +14,21 @@ import javax.validation.Valid;
 import java.io.IOException;
 
 @RestController
-@RequestMapping("/api")
-public class UserController {
+@RequestMapping("/members")
+public class MemberController {
+
     private final LoginService loginService;
 
-    public UserController(LoginService loginService) {
+    MemberController(LoginService loginService){
         this.loginService = loginService;
     }
 
-    @GetMapping("/hello")
-    public ResponseEntity<String> hello() {
-        return ResponseEntity.ok("hello");
+    @GetMapping("")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    public ResponseEntity<MemberDTO> getMyUserInfo(HttpServletRequest request) {
+        return ResponseEntity.ok(loginService.getMyUserWithAuthorities());
     }
-
-    @PostMapping("/test-redirect")
-    public void testRedirect(HttpServletResponse response) throws IOException {
-        response.sendRedirect("/api/user");
-    }
-
-    @PostMapping("/signup")
-    public ResponseEntity<MemberDTO> signup(@Valid @RequestBody MemberDTO memberDTO) {
-        return ResponseEntity.ok(loginService.signup(memberDTO));
-    }
-
-//    @GetMapping("/user")
-//    @PreAuthorize("hasAnyRole('USER','ADMIN')")
-//    public ResponseEntity<MemberDTO> getMyUserInfo(HttpServletRequest request) {
-//        return ResponseEntity.ok(loginService.getMyUserWithAuthorities());
-//    }
-
+//
 //    @GetMapping("/user/{username}")
 //    @PreAuthorize("hasAnyRole('ADMIN')")
 //    public ResponseEntity<MemberDTO> getUserInfo(@PathVariable String username) {
