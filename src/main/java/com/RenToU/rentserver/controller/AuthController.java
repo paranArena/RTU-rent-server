@@ -1,10 +1,8 @@
 package com.RenToU.rentserver.controller;
 
-import com.RenToU.rentserver.DTO.LoginDTO;
-import com.RenToU.rentserver.DTO.TokenDTO;
-import com.RenToU.rentserver.jwt.JwtFilter;
+import com.RenToU.rentserver.DTO.*;
+import com.RenToU.rentserver.application.LoginService;
 import com.RenToU.rentserver.jwt.TokenProvider;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,36 +15,51 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.io.Console;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("")
 public class AuthController {
     private final TokenProvider tokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
+    private final LoginService loginService;
 
-    public AuthController(TokenProvider tokenProvider, AuthenticationManagerBuilder authenticationManagerBuilder) {
+    public AuthController(TokenProvider tokenProvider, AuthenticationManagerBuilder authenticationManagerBuilder, LoginService loginService) {
         this.tokenProvider = tokenProvider;
         this.authenticationManagerBuilder = authenticationManagerBuilder;
+        this.loginService = loginService;
+    }
+
+//    @PostMapping("/test-redirect")
+//    public void testRedirect(HttpServletResponse response) throws IOException {
+//        response.sendRedirect("/api/user");
+//    }
+
+    @PostMapping("/signup")
+    public ResponseEntity<?> signup(@Valid @RequestBody MemberDTO memberDTO) {
+
+//        return ResponseEntity.ok(loginService.signup(memberDTO));
+        return new ResponseEntity<>(ResponseDTO.res(StatusCode.OK, ResponseMessage.CREATED_USER, loginService.signup(memberDTO)), HttpStatus.OK);
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<TokenDTO> authorize(@Valid @RequestBody LoginDTO loginDto) {
-        System.out.println("1");
+    public ResponseEntity<?> authorize(@Valid @RequestBody LoginDTO loginDto) {
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword());
 
-        System.out.println("token : " + authenticationToken);
-        System.out.println("obj : " + authenticationManagerBuilder.getObject());
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-        System.out.println("test");
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        System.out.println("1");
         String jwt = tokenProvider.createToken(authentication);
-        System.out.println("1");
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
-        System.out.println("1");
-        return new ResponseEntity<>(new TokenDTO(jwt), httpHeaders, HttpStatus.OK);
+//        HttpHeaders httpHeaders = new HttpHeaders();
+//        httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
+//        return new ResponseEntity<>(new TokenDTO(jwt), httpHeaders, HttpStatus.OK);
+
+        return new ResponseEntity<>(ResponseDTO.res(StatusCode.OK, ResponseMessage.LOGIN_SUCCESS, new TokenDTO(jwt)), HttpStatus.OK);
     }
+
+    @PostMapping("/logout")
+    public  ResponseEntity<?> logout(){
+        //TODO
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }
