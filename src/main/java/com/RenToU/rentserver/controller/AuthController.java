@@ -32,8 +32,8 @@ public class AuthController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<?> hello(HttpServletRequest request) {
-        return new ResponseEntity<>(ResponseDTO.res(StatusCode.OK, "Server is Running :)"), HttpStatus.OK);
+    public ResponseEntity<String> hello(HttpServletRequest request) {
+        return ResponseEntity.ok("<h1> Server is Running :) </h1>");
     }
 
 //    @PostMapping("/test-redirect")
