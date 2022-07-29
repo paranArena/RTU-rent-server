@@ -9,11 +9,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @RestController
@@ -27,6 +29,11 @@ public class AuthController {
         this.tokenProvider = tokenProvider;
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.loginService = loginService;
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<String> hello(HttpServletRequest request) {
+        return ResponseEntity.ok("<h1> Server is Running :) </h1>");
     }
 
 //    @PostMapping("/test-redirect")
@@ -58,7 +65,7 @@ public class AuthController {
 
     @PostMapping("/logout")
     public  ResponseEntity<?> logout(){
-        //TODO
+        // TODO
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
