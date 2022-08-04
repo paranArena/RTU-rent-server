@@ -1,6 +1,5 @@
 package com.RenToU.rentserver.DTO;
 
-import com.github.dozermapper.core.Mapping;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,12 +11,15 @@ import javax.validation.constraints.NotBlank;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class NotificationDTO {
-    private Long id;
+public class ClubDTO {
+    private long id;
+
     @NotBlank
-    @Mapping("title")
-    private String title;
+    private String name;
+
     @NotBlank
-    @Mapping("content")
-    private String content;
+    private String introduction;
+
+    private String thumbnail_path;
 }
+
