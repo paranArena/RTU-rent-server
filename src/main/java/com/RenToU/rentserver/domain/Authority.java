@@ -32,6 +32,7 @@ public class Authority {
         auth.memberAuths = new ArrayList<>();
         return auth;
     }
+
     public void addMemberAuth(MemberAuthority memberAuthority) {
         this.memberAuths.add(memberAuthority);
         memberAuthority.setAuthority(this);
