@@ -4,7 +4,9 @@ import com.RenToU.rentserver.domain.Club;
 import com.RenToU.rentserver.domain.ClubRole;
 import com.RenToU.rentserver.domain.Member;
 import com.RenToU.rentserver.exceptions.MemberNotFoundException;
-import com.RenToU.rentserver.infrastructure.JPAMemberRepository;
+import com.RenToU.rentserver.infrastructure.ClubRepository;
+import com.RenToU.rentserver.infrastructure.MemberRepository;
+import com.RenToU.rentserver.infrastructure.ProductRepository;
 import com.github.dozermapper.core.Mapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,11 +33,11 @@ class ClubServiceImplWebTest {
     @Autowired
     private ClubServiceImpl clubService;
     @Autowired
-    private JPAClubRepository clubRepository;
+    private ClubRepository clubRepository;
     @Autowired
-    private JPAProductRepository productRepository;
+    private ProductRepository productRepository;
     @Autowired
-    private JPAMemberRepository memberRepository;
+    private MemberRepository memberRepository;
     private static final Long INITIAL_MEMBER_ID = 1L;
     private static final String INITIAL_MEMBER_NAME = "TestMemberName";
     private static final String INITIAL_MEMBER_EMAIL = "testemail@ajou.ac.kr";
@@ -46,7 +48,7 @@ class ClubServiceImplWebTest {
 
     @BeforeEach
     void setup(){
-        clubService = new ClubServiceImpl(mapper,clubRepository,productRepository,memberRepository);
+        clubService = new ClubServiceImpl(mapper,clubRepository,memberRepository,productRepository);
     }
 
 
