@@ -65,12 +65,14 @@ public class Member {
         this.memberAuths.add(memberAuthority);
         memberAuthority.setMember(this);
     }
-    public Member createMember(String name,String email){
+    public Member createMember(){
         Member member = Member.builder()
                 .name(name)
                 .email(email)
                 .build();
         member.clubList = new ArrayList<>();
+        member.memberAuths = new ArrayList<>();
+        member.activated = true;
         return member;
     }
 
