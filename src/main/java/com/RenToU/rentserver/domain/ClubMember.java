@@ -28,7 +28,7 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ClubMember {
+public class ClubMember extends BaseTimeEntity {
     @Id @GeneratedValue
     @Column(name = "club_member_id")
     private Long id;
@@ -44,12 +44,12 @@ public class ClubMember {
     @Enumerated(EnumType.STRING)
     private ClubRole role;
 
-    @CreatedDate
-    @Column(updatable = false, nullable = false)
-    private LocalDateTime createdAt;
+    // @CreatedDate
+    // @Column(updatable = false, nullable = false)
+    // private LocalDateTime createdAt;
 
-    @LastModifiedDate
-    private LocalDateTime updatedAt;
+    // @LastModifiedDate
+    // private LocalDateTime updatedAt;
 
     public static ClubMember createClubMember(Member member,ClubRole role) {
         ClubMember clubMember = ClubMember.builder()
