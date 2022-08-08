@@ -44,13 +44,6 @@ public class ClubMember extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private ClubRole role;
 
-    // @CreatedDate
-    // @Column(updatable = false, nullable = false)
-    // private LocalDateTime createdAt;
-
-    // @LastModifiedDate
-    // private LocalDateTime updatedAt;
-
     public static ClubMember createClubMember(Member member,ClubRole role) {
         ClubMember clubMember = ClubMember.builder()
                 .member(member)
