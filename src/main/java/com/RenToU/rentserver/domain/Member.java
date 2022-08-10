@@ -41,6 +41,8 @@ public class Member {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<MemberAuthority> memberAuths = new ArrayList<>();
 
+    @OneToMany(mappedBy = "member")
+    private List<Rental> rentals = new ArrayList<>();
     @Column(name = "activated")
     private boolean activated = true;
 

@@ -15,13 +15,17 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import java.time.LocalDateTime;
+
+import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+//물건 ex:) 1번 우산, 2번 책
 public class Item {
     @GeneratedValue
     @Id
@@ -33,6 +37,8 @@ public class Item {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
+    @OneToOne(mappedBy = "item", fetch = LAZY)
+    private Rental rental;
     @CreatedDate
     @Column(updatable = false, nullable = false)
     private LocalDateTime createdAt;
