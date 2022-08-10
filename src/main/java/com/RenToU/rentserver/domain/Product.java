@@ -18,7 +18,7 @@ import javax.persistence.OneToMany;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
+//물품 ex) 책, 우산
 @Entity
 @Getter
 @Setter
