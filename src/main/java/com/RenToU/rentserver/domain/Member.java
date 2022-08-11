@@ -41,6 +41,9 @@ public class Member {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<MemberAuthority> authorities = new ArrayList<>();
 
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<Rental> rentals = new ArrayList<>();
+
     @Column(name = "activated")
     private boolean activated;
 
@@ -87,3 +90,4 @@ public class Member {
         }).collect(Collectors.toList());
     }
 }
+
