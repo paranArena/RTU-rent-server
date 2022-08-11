@@ -3,6 +3,9 @@ package com.RenToU.rentserver.controller;
 import com.RenToU.rentserver.DTO.*;
 import com.RenToU.rentserver.application.LoginService;
 import com.RenToU.rentserver.jwt.TokenProvider;
+
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,17 +22,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("")
 public class AuthController {
     private final TokenProvider tokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final LoginService loginService;
-
-    public AuthController(TokenProvider tokenProvider, AuthenticationManagerBuilder authenticationManagerBuilder, LoginService loginService) {
-        this.tokenProvider = tokenProvider;
-        this.authenticationManagerBuilder = authenticationManagerBuilder;
-        this.loginService = loginService;
-    }
 
     @GetMapping("/")
     public ResponseEntity<String> hello(HttpServletRequest request) {

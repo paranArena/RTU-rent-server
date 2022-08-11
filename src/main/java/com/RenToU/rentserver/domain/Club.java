@@ -37,7 +37,6 @@ public class Club extends BaseTimeEntity{
 
     private String introduction;
 
-
     @OneToMany(mappedBy = "club", cascade = CascadeType.ALL)
     private List<ClubMember> memberList = new ArrayList<>();
 
@@ -61,10 +60,11 @@ public class Club extends BaseTimeEntity{
     }
 
 
-    public static Club createClub(String clubName, String clubIntro, Member member) {
+    public static Club createClub(String clubName, String clubIntro, String thumbnailPath,Member member) {
         Club club = Club.builder()
                 .name(clubName)
                 .introduction(clubIntro)
+                .thumbnailPath(thumbnailPath)
                 .build();
         club.memberList = new ArrayList<>();
         club.notifications = new ArrayList<>();
