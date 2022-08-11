@@ -3,6 +3,9 @@ package com.RenToU.rentserver.application;
 
 import com.RenToU.rentserver.domain.Member;
 import com.RenToU.rentserver.infrastructure.MemberRepository;
+
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,12 +18,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component("userDetailsService")
+@RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
     private final MemberRepository memberRepository;
-
-    public CustomUserDetailsService(MemberRepository memberRepository) {
-        this.memberRepository = memberRepository;
-    }
 
     @Override
     @Transactional
