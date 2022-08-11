@@ -3,15 +3,17 @@ RenToU rent spring server
 
 API SEVER URL:
 https://rtu-rent-server-uwdjr.run.goorm.io
+-> 눌러서 들어갔을 때 "Server is Running :)" 이라고 뜨지 않으면 서버가 다운되어 있는 것. 이해찬에게 말씀해주세요!
 
-# Local Client-side Test
-1. develop branch clone
-2. 실행 (저는 그냥 인텔리제이로 열어서 실행버튼 눌렀어요..)
-3. http://localhost:8080 으로 request Test
-  - [Postman API spec](https://documenter.getpostman.com/view/20800581/UzR1M3qi)
-  - 1차적으로 위 API spec에 있는 signup, login, getMyInfo 만 리퀘스트 해보시면 될 것같습니다!
 
-문제있으면 카톡으로 말씀해주세요~
+API SPECIFICATION:
+https://documenter.getpostman.com/view/20800581/UzR1M3qi
+
+# Client-side Test
+1. API SPEC에서 request경로와 request 양식, response 예시 확인
+2. 테스트하고자하는 API를 위의 SERVER URL + SPEC상의 경로에 request
+3. status code 500 -> 서버에러 발생시 이해찬에게 연락 
+4. 이 외 문의 사항 언제든지 편하게 연락 :)
 
 
 ---

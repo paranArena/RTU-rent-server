@@ -25,7 +25,7 @@ import java.util.Optional;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Club {
+public class Club extends BaseTimeEntity{
     @Id
     @GeneratedValue
     @Column(name = "club_id")
@@ -36,13 +36,6 @@ public class Club {
     private String thumbnailPath;
 
     private String introduction;
-
-    @CreatedDate
-    @Column(updatable = false, nullable = false)
-    private LocalDateTime createdAt;
-
-    @LastModifiedDate
-    private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "club", cascade = CascadeType.ALL)
     private List<ClubMember> memberList = new ArrayList<>();
@@ -67,12 +60,11 @@ public class Club {
     }
 
 
-    public static Club createClub(String clubName, String clubIntro, Member member) {
+    public static Club createClub(String clubName, String clubIntro, String thumbnailPath,Member member) {
         Club club = Club.builder()
                 .name(clubName)
                 .introduction(clubIntro)
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
+                .thumbnailPath(thumbnailPath)
                 .build();
         club.memberList = new ArrayList<>();
         club.notifications = new ArrayList<>();
