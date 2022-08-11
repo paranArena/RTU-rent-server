@@ -2,7 +2,7 @@ package com.RenToU.rentserver.controller;
 
 
 import com.RenToU.rentserver.DTO.MemberDTO;
-import com.RenToU.rentserver.application.LoginService;
+import com.RenToU.rentserver.application.MemberService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -17,11 +17,17 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/members")
 public class MemberController {
 
-    private final LoginService loginService;
+    private final MemberService memberService;
 
     @GetMapping("")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
-    public ResponseEntity<MemberDTO> getMyUserInfo(HttpServletRequest request) {
-        return ResponseEntity.ok(loginService.getMyUserWithAuthorities());
+    public ResponseEntity<MemberDTO> getMyInfo(HttpServletRequest request) {
+        return ResponseEntity.ok(memberService.getMyUserWithAuthorities());
+    }
+
+    @GetMapping("/{email}") // TODO change to id
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public ResponseEntity<MemberDTO> getMemberInfo(@PathVariable String email) {
+        return ResponseEntity.ok(memberService.getUserWithAuthorities(email));
     }
 }
