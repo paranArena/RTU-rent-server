@@ -87,3 +87,4 @@ public class Member {
         }).collect(Collectors.toList());
     }
 }
+
