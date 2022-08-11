@@ -1,5 +1,6 @@
 package com.RenToU.rentserver.domain;
 
+import com.RenToU.rentserver.exceptions.CannotRentException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -56,5 +57,14 @@ public class Item {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    /**
+     * 비즈니스 로직
+     */
+    public void validateRentable(){
+        if(this.rental != null){
+            throw new CannotRentException(this.id);
+        }
     }
 }
