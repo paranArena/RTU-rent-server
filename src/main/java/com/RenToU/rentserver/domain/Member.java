@@ -39,10 +39,10 @@ public class Member {
     private List<ClubMember> clubList = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-    private List<MemberAuthority> memberAuths = new ArrayList<>();
+    private List<MemberAuthority> authorities = new ArrayList<>();
 
     @Column(name = "activated")
-    private boolean activated = true;
+    private boolean activated;
 
 //    @ManyToMany
 //    @JoinTable(
@@ -62,28 +62,29 @@ public class Member {
      *연관관계 편의 메소드
      */
     public void addMemberAuth(MemberAuthority memberAuthority) {
-        this.memberAuths.add(memberAuthority);
+        this.authorities.add(memberAuthority);
         memberAuthority.setMember(this);
     }
-    public Member createMember(){
+
+    public Member createMember(String name,String email){
         Member member = Member.builder()
                 .name(name)
                 .email(email)
                 .build();
         member.clubList = new ArrayList<>();
-        member.memberAuths = new ArrayList<>();
-        member.activated = true;
         return member;
     }
 
     public void setNewUser() {
         this.activated = true;
-        this.memberAuths = new ArrayList<>();
+        this.authorities = new ArrayList<>();
         this.clubList = new ArrayList<>();
     }
+
     public List<Authority> getAuths(){
-        return memberAuths.stream().map(memberAuth ->{
-            return memberAuth.getAuthority();
+        return authorities.stream().map(authorities ->{
+            return authorities.getAuthority();
         }).collect(Collectors.toList());
     }
 }
+
