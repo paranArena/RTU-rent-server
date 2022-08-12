@@ -2,7 +2,7 @@ package com.RenToU.rentserver.controller;
 
 import com.RenToU.rentserver.DTO.*;
 import com.RenToU.rentserver.application.ClubServiceImpl;
-import com.RenToU.rentserver.application.LoginService;
+import com.RenToU.rentserver.application.MemberService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -21,13 +21,12 @@ import javax.validation.Valid;
 public class ClubController {
 
     private final ClubServiceImpl clubService;
-    private final LoginService loginService;
+    private final MemberService memberService;
 
     @PostMapping("")
     public ResponseEntity<?> signup(@Valid @RequestBody ClubDTO clubDTO) {
 
-        long memberId = loginService.getMyUserWithAuthorities().getId();
-        clubService.createClub(memberId, clubDTO.getName(), clubDTO.getThumbnailPath(),clubDTO.getIntroduction());
+        clubService.createClub(memberService.getMyIdWithAuthorities(), clubDTO.getName(), clubDTO.getThumbnailPath(),clubDTO.getIntroduction());
         return new ResponseEntity<>(ResponseDTO.res(StatusCode.OK, ResponseMessage.CREATED_CLUB, null), HttpStatus.OK);
     }
 }
