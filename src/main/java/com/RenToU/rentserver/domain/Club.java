@@ -5,9 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -15,7 +12,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -38,12 +34,13 @@ public class Club extends BaseTimeEntity{
     private String introduction;
 
     @OneToMany(mappedBy = "club", cascade = CascadeType.ALL)
-    private List<ClubMember> memberList = new ArrayList<>();
+    private List<ClubMember> memberList;
 
     @OneToMany(mappedBy = "club", cascade = CascadeType.ALL)
-    private List<Notification> notifications = new ArrayList<>();
+    private List<Notification> notifications;
+    
     @OneToMany(mappedBy = "club", cascade = CascadeType.ALL)
-    private List<Product> products = new ArrayList<>();
+    private List<Product> products;
 
     //연관관계 편의 메소드
     public void addClubMember(ClubMember clubMember){

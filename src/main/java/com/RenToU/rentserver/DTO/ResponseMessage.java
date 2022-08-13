@@ -11,4 +11,6 @@ public class ResponseMessage {
     public static final String DELETE_USER = "회원 탈퇴 성공";
     public static final String INTERNAL_SERVER_ERROR = "서버 내부 에러";
     public static final String DB_ERROR = "데이터베이스 에러";
+    public static final String REQUEST_CLUB_JOIN = "클럽 가입 신청 완료";
+    public static final String ACCEPT_CLUB_JOIN = "클럽 가입 승인 완료";
 }

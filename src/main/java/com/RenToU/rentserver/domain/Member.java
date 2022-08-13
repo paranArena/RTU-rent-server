@@ -45,13 +45,13 @@ public class Member extends BaseTimeEntity{
     private boolean activated;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-    private List<ClubMember> clubList = new ArrayList<>();
+    private List<ClubMember> clubList;
 
     // @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     // private List<MemberAuthority> authorities = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-    private List<Rental> rentals = new ArrayList<>();
+    private List<Rental> rentals;
 
    @ManyToMany
    @JoinTable(

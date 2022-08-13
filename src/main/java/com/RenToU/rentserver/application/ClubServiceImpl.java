@@ -40,7 +40,7 @@ public class ClubServiceImpl implements ClubService{
 
     @Override
     @Transactional
-    public Long createClub(Long memberId, String clubName, String thumbnailPath,String clubIntro) {
+    public Long createClub(Long memberId, String clubName, String thumbnailPath, String clubIntro) {
         //회원 조회
         Member member = findMember(memberId);
         //클럽 생성
