@@ -3,16 +3,18 @@ RenToU rent spring server
 
 API SEVER URL:
 https://rtu-rent-server-uwdjr.run.goorm.io
--> 눌러서 들어갔을 때 "Server is Running :)" 이라고 뜨지 않으면 서버가 다운되어 있는 것. 이해찬에게 말씀해주세요!
-
+- 눌러서 들어갔을 때 "Server is Running :)" 이라고 뜨지 않으면 서버가 다운되어 있는 것. 이해찬에게 말씀해주세요!
+- spring 서버와 연결된 database는 걔속 초기화됩니다.(제가 개발하면서 서버를 실행시킬때마다..)
 
 API SPECIFICATION:
 https://documenter.getpostman.com/view/20800581/UzR1M3qi
+- 원래 됐던 request가 갑자기 error가 나거나 이상하다면 spec을 다시 확인해주세요!
+- requset/response 형식이나, url이 변경됐을 수도 있습니다.
 
 # Client-side Test
 1. API SPEC에서 request경로와 request 양식, response 예시 확인
 2. 테스트하고자하는 API를 위의 SERVER URL + SPEC상의 경로에 request
-3. status code 500 -> 서버에러 발생시 이해찬에게 연락 
+3. status code 500 -> 서버에러 발생시 이해찬에게 연락
 4. 이 외 문의 사항 언제든지 편하게 연락 :)
 
 
