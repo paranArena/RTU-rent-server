@@ -30,7 +30,7 @@ public class MemberService {
         if (memberRepository.findOneWithAuthoritiesByEmail(memberDto.getEmail()).orElse(null) != null) {
             throw new DuplicateMemberException("이미 가입되어 있는 유저입니다.");
         }
-        
+
         makeDefaultRoleIfNotExists();
 
         Authority authority = Authority.builder()
@@ -74,7 +74,8 @@ public class MemberService {
                         .orElseThrow(() -> new NotFoundMemberException("Member not found"));
         return member.getId();
     }
-
+    
+    @Transactional(readOnly = true)
     private void makeDefaultRoleIfNotExists(){
         List<Authority> all = authorityRepository.findAll();
         if(all.isEmpty()){
