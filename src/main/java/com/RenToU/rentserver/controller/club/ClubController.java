@@ -1,4 +1,4 @@
-package com.RenToU.rentserver.controller;
+package com.RenToU.rentserver.controller.club;
 
 import com.RenToU.rentserver.DTO.*;
 import com.RenToU.rentserver.application.ClubServiceImpl;
@@ -10,8 +10,11 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -38,20 +41,30 @@ public class ClubController {
             thumbnailPath = s3Service.upload(thumbnail);
         }
         Club club = clubService.createClub(memberService.getMyIdWithAuthorities(), name, intro, thumbnailPath);
-        return new ResponseEntity<>(ResponseDTO.res(StatusCode.OK, ResponseMessage.CREATED_CLUB, ClubDTO.from(club)), HttpStatus.OK);
+        return new ResponseEntity<>(ResponseDTO.res(StatusCode.OK, ResponseMessage.CREATE_CLUB, ClubDTO.from(club)), HttpStatus.OK);
     }
 
-    @PostMapping("/{club_id}/requests/join")
-    public ResponseEntity<?> requestClubJoin(@PathVariable("club_id") Long clubId) {
-        clubService.requestClubJoin(clubId, memberService.getMyIdWithAuthorities());
-        return new ResponseEntity<>(ResponseDTO.res(StatusCode.OK, ResponseMessage.REQUEST_CLUB_JOIN, null), HttpStatus.OK);
+    @GetMapping("/{clubId}")
+    public ResponseEntity<?> getClubInfo(@PathVariable long clubId) {
+        // Club club = clubService.findClub(clubId);
+        return new ResponseEntity<>(ResponseDTO.res(StatusCode.OK, ResponseMessage.GET_CLUB, null), HttpStatus.OK);
     }
 
-    @PostMapping("/{club_id}/requests/join/{join_member_id}")
-    public ResponseEntity<?> acceptClubJoin(
-        @PathVariable("club_id") Long clubId, @PathVariable("join_member_id") Long joinMemberId
-        ) {
-        clubService.acceptClubJoin(clubId, memberService.getMyIdWithAuthorities(), joinMemberId);
-        return new ResponseEntity<>(ResponseDTO.res(StatusCode.OK, ResponseMessage.ACCEPT_CLUB_JOIN, null), HttpStatus.OK);
+    @PutMapping("/{clubId}")
+    public ResponseEntity<?> updateClubInfo(@RequestParam("name") String name, @RequestParam("introduction") String intro, @RequestParam("thumbnail") MultipartFile thumbnail) throws IOException {
+        String thumbnailPath = null;
+        if(!thumbnail.isEmpty()){
+            thumbnailPath = s3Service.upload(thumbnail);
+        }
+        Club club = clubService.createClub(memberService.getMyIdWithAuthorities(), name, intro, thumbnailPath);
+        return new ResponseEntity<>(ResponseDTO.res(StatusCode.OK, ResponseMessage.UPDATE_CLUB, ClubDTO.from(club)), HttpStatus.OK);
     }
+
+    @DeleteMapping("/{clubId}")
+    public ResponseEntity<?> deleteClub(@PathVariable long clubId) {
+        // clubService.deleteClub(clubId);
+        return new ResponseEntity<>(ResponseDTO.res(StatusCode.OK, ResponseMessage.DELETE_CLUB, null), HttpStatus.OK);
+    }
+
+
 }

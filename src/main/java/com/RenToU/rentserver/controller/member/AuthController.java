@@ -1,4 +1,4 @@
-package com.RenToU.rentserver.controller;
+package com.RenToU.rentserver.controller.member;
 
 import com.RenToU.rentserver.DTO.*;
 import com.RenToU.rentserver.application.MemberService;
@@ -44,11 +44,11 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@Valid @RequestBody MemberDTO memberDTO) {
 
-        return new ResponseEntity<>(ResponseDTO.res(StatusCode.OK, ResponseMessage.CREATED_USER, memberService.signup(memberDTO)), HttpStatus.OK);
+        return new ResponseEntity<>(ResponseDTO.res(StatusCode.OK, ResponseMessage.CREATE_USER, memberService.signup(memberDTO)), HttpStatus.OK);
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<TokenDTO> authorize(@Valid @RequestBody LoginDTO loginDto) {
+    public ResponseEntity<TokenDTO> login(@Valid @RequestBody LoginDTO loginDto) {
 
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword());
