@@ -3,6 +3,7 @@ package com.RenToU.rentserver.domain;
 import com.RenToU.rentserver.exceptions.MemberNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Cleanup;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -27,6 +28,7 @@ public class Club extends BaseTimeEntity{
     @Column(name = "club_id")
     private Long id;
 
+    @Column(unique = true)
     private String name;
 
     private String thumbnailPath;

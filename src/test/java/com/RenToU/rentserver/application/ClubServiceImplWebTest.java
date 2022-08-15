@@ -56,16 +56,14 @@ class ClubServiceImplWebTest {
     @Test
     public void createClub(){
         Member member = createMember(INITIAL_MEMBER_NAME,INITIAL_MEMBER_EMAIL);
-        Long clubId = clubService.createClub(member.getId(),INITIAL_CLUB_NAME,INITIAL_CLUB_THUMBNAILPATH,INITIAL_CLUB_INTRO);
-        Club club = em.find(Club.class,clubId);
+        Club club = clubService.createClub(member.getId(),INITIAL_CLUB_NAME,INITIAL_CLUB_INTRO,INITIAL_CLUB_THUMBNAILPATH);
         assertThat(club.getName()).isEqualTo(INITIAL_CLUB_NAME);
         assertThat(club.getMemberList().get(0).getMember().getName()).isEqualTo(member.getName());
     }
     @Test
     public void 가입신청(){
         Member member = createMember(INITIAL_MEMBER_NAME,INITIAL_MEMBER_EMAIL);
-        Long clubId = clubService.createClub(member.getId(),INITIAL_CLUB_NAME,INITIAL_CLUB_THUMBNAILPATH,INITIAL_CLUB_INTRO);
-        Club club = em.find(Club.class,clubId);
+        Club club = clubService.createClub(member.getId(),INITIAL_CLUB_NAME,INITIAL_CLUB_INTRO,INITIAL_CLUB_THUMBNAILPATH);
         Member joiner = createMember("Joiner","Joiner@ajou.ac.kr");
         assertThatThrownBy(()->club.findClubMemberByMember(joiner))
                 .isInstanceOf(MemberNotFoundException.class);
@@ -75,8 +73,7 @@ class ClubServiceImplWebTest {
     @Test
     public void 가입승인(){
         Member member = createMember(INITIAL_MEMBER_NAME,INITIAL_MEMBER_EMAIL);
-        Long clubId = clubService.createClub(member.getId(),INITIAL_CLUB_NAME,INITIAL_CLUB_THUMBNAILPATH,INITIAL_CLUB_INTRO);
-        Club club = em.find(Club.class,clubId);
+        Club club = clubService.createClub(member.getId(),INITIAL_CLUB_NAME,INITIAL_CLUB_INTRO,INITIAL_CLUB_THUMBNAILPATH);
         Member joiner = createMember("Joiner","Joiner@ajou.ac.kr");
         clubService.requestClubJoin(club.getId(),joiner.getId());
         assertThat(club.findClubMemberByMember(joiner).getRole()).isEqualTo(ClubRole.WAIT);
@@ -86,8 +83,7 @@ class ClubServiceImplWebTest {
     @Test
     public void 가입승인_예외_승인권한_없음(){
         Member owner = createMember(INITIAL_MEMBER_NAME,INITIAL_MEMBER_EMAIL);
-        Long clubId = clubService.createClub(owner.getId(),INITIAL_CLUB_NAME,INITIAL_CLUB_THUMBNAILPATH,INITIAL_CLUB_INTRO);
-        Club club = em.find(Club.class,clubId);
+        Club club = clubService.createClub(owner.getId(),INITIAL_CLUB_NAME,INITIAL_CLUB_INTRO,INITIAL_CLUB_THUMBNAILPATH);
         Member member = createMember(INITIAL_MEMBER_NAME,INITIAL_MEMBER_EMAIL);
         Member joiner = createMember("Joiner","Joiner@ajou.ac.kr");
         clubService.requestClubJoin(club.getId(),joiner.getId());
@@ -97,8 +93,7 @@ class ClubServiceImplWebTest {
     @Test
     public void 가입승인_예외_신청하지_않은_사용자(){
         Member owner = createMember(INITIAL_MEMBER_NAME,INITIAL_MEMBER_EMAIL);
-        Long clubId = clubService.createClub(owner.getId(),INITIAL_CLUB_NAME,INITIAL_CLUB_THUMBNAILPATH,INITIAL_CLUB_INTRO);
-        Club club = em.find(Club.class,clubId);
+        Club club = clubService.createClub(owner.getId(),INITIAL_CLUB_NAME,INITIAL_CLUB_INTRO,INITIAL_CLUB_THUMBNAILPATH);
         Member joiner = createMember("Joiner","Joiner@ajou.ac.kr");
         assertThatThrownBy(()->clubService.acceptClubJoin(club.getId(),owner.getId(), joiner.getId()))
                 .isInstanceOf(MemberNotFoundException.class);

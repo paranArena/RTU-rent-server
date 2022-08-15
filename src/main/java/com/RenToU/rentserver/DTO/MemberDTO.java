@@ -1,6 +1,5 @@
 package com.RenToU.rentserver.DTO;
 
-import com.RenToU.rentserver.domain.Authority;
 import com.RenToU.rentserver.domain.ClubMember;
 import com.RenToU.rentserver.domain.Member;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -15,7 +14,6 @@ import javax.persistence.OneToMany;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -59,7 +57,7 @@ public class MemberDTO {
     private String major;
 
     @OneToMany(mappedBy = "member")
-    private List<ClubMember> clubList = new ArrayList<>();
+    private List<ClubMember> clubList;
 
     private Set<AuthorityDTO> authorityDtoSet;
 

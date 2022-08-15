@@ -1,8 +1,6 @@
 package com.RenToU.rentserver.application;
 
 import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,7 +10,6 @@ import com.RenToU.rentserver.domain.Authority;
 import com.RenToU.rentserver.domain.Member;
 import com.RenToU.rentserver.exceptions.DuplicateMemberException;
 import com.RenToU.rentserver.exceptions.NotFoundMemberException;
-import com.RenToU.rentserver.infrastructure.AuthorityRepository;
 import com.RenToU.rentserver.infrastructure.MemberRepository;
 import com.RenToU.rentserver.util.SecurityUtil;
 
@@ -22,7 +19,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MemberService {
     private final MemberRepository memberRepository;
-    private final AuthorityRepository authorityRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
@@ -78,15 +74,6 @@ public class MemberService {
                         .flatMap(memberRepository::findOneWithAuthoritiesByEmail)
                         .orElseThrow(() -> new NotFoundMemberException("Member not found"));
         return member.getId();
-    }
-    
-    @Transactional(readOnly = true)
-    private void makeDefaultRoleIfNotExists(){
-        List<Authority> all = authorityRepository.findAll();
-        if(all.isEmpty()){
-            authorityRepository.save((Authority.builder().authorityName("ROLE_ADMIN").build()));
-            authorityRepository.save((Authority.builder().authorityName("ROLE_USER").build()));
-        }
     }
 }
 
