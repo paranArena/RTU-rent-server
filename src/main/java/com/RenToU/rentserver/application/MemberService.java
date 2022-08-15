@@ -28,10 +28,15 @@ public class MemberService {
     @Transactional
     public MemberDTO signup(MemberDTO memberDto) {
         if (memberRepository.findOneWithAuthoritiesByEmail(memberDto.getEmail()).orElse(null) != null) {
-            throw new DuplicateMemberException("이미 가입되어 있는 유저입니다.");
+            throw new DuplicateMemberException("이미 존재하는 이메일입니다.");
+        }
+        if (memberRepository.findOneWithAuthoritiesByPhoneNumber(memberDto.getPhoneNumber()).orElse(null) != null) {
+            throw new DuplicateMemberException("이미 존재하는 휴대폰 번호입니다.");
+        }
+        if (memberRepository.findOneWithAuthoritiesByStudentId(memberDto.getStudentId()).orElse(null) != null) {
+            throw new DuplicateMemberException("이미 존재하는 학번입니다.");
         }
 
-        makeDefaultRoleIfNotExists();
 
         Authority authority = Authority.builder()
                 .authorityName("ROLE_USER")
