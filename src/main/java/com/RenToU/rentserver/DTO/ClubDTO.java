@@ -20,6 +20,6 @@ public class ClubDTO {
     @NotBlank
     private String introduction;
 
-    private String thumbnail_path;
+    private String thumbnailPath;
 }
 
