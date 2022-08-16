@@ -68,8 +68,7 @@ public class Club extends BaseTimeEntity{
                 .build();
         club.memberList = new ArrayList<>();
         club.notifications = new ArrayList<>();
-        ClubMember clubMember = ClubMember.createClubMember(member, ClubRole.OWNER);
-        club.addClubMember(clubMember);
+        ClubMember.createClubMember(club, member, ClubRole.OWNER);
         return club;
     }
 
