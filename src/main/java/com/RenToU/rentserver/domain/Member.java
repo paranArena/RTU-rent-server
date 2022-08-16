@@ -1,15 +1,11 @@
 package com.RenToU.rentserver.domain;
 
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Entity
 @Getter @Setter
@@ -79,17 +75,5 @@ public class Member extends BaseTimeEntity{
         member.clubList = new ArrayList<>();
         return member;
     }
-
-    // public void setNewUser() {
-    //     this.activated = true;
-    //     this.authorities = new ArrayList<>();
-    //     this.clubList = new ArrayList<>();
-    // }
-
-    // public List<Authority> getAuths(){
-    //     return authorities.stream().map(authorities ->{
-    //         return authorities.getAuthority();
-    //     }).collect(Collectors.toList());
-    // }
 }
 

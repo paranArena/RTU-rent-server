@@ -56,9 +56,9 @@ class ClubServiceImplTest {
 
     @Test
     public void createClub(){
-        Long clubId = clubService.createClub(INITIAL_MEMBER_ID,INITIAL_CLUB_NAME,INITIAL_CLUB_THUMBNAILPATH,INITIAL_CLUB_INTRO);
+        Club club = clubService.createClub(INITIAL_MEMBER_ID,INITIAL_CLUB_NAME,INITIAL_CLUB_INTRO,INITIAL_CLUB_THUMBNAILPATH);
         verify(memberRepository).findById(INITIAL_MEMBER_ID);
         verify(clubRepository).save(any(Club.class));
-        assertThat(clubId).isEqualTo(INITIAL_CLUB_ID);
+        assertThat(club.getId()).isEqualTo(INITIAL_CLUB_ID);
     }
 }

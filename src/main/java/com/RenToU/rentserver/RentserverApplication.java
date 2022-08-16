@@ -18,5 +18,4 @@ public class RentserverApplication {
 	public Mapper dozerMapper() {
 		return DozerBeanMapperBuilder.buildDefault();
 	}
-
 }

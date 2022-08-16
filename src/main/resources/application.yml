@@ -1,30 +1,18 @@
-spring:
-    datasource:
-        url: jdbc:mysql://ren2u.cfoukd3jcnhj.ap-northeast-2.rds.amazonaws.com:3306/rentserver
-        username: admin
-        password: ajouparan2022-2
-        driver-class-name: com.mysql.jdbc.Driver
+logging.level:
+    org.hibernate.SQL: debug
+    org.hibernate.type: trace
 
+spring:
     jpa:
-        hibernate:
-            ddl-auto: create
+        hibernate.ddl-auto: create
         properties:
             hibernate:
                 show_sql: true
                 format_sql: true
+        # use data.sql
         defer-datasource-initialization: true
-    sql:
-        init:
-            mode: always
+    # use data.sql
+    sql.init.mode: always
 
-jwt:
-    header: Authorization
-    #HS512 알고리즘을 사용할 것이기 때문에 512bit, 즉 64byte 이상의 secret key를 사용해야 한다.
-    #echo 'silvernine-tech-spring-boot-jwt-tutorial-secret-silvernine-tech-spring-boot-jwt-tutorial-secret'|base64
-    #secret key 를 위 문자를 인코딩한 값으로 사용했음
-    secret: c2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQtc2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQK
-    token-validity-in-seconds: 86400 # token exprie time
-
-logging.level:
-    org.hibernate.SQL: debug
-    org.hibernate.type: trace
+# import other properties
+spring.profiles.include: jwt, rds, s3

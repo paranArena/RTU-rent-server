@@ -13,4 +13,5 @@ public class ResponseMessage {
     public static final String DB_ERROR = "데이터베이스 에러";
     public static final String REQUEST_CLUB_JOIN = "클럽 가입 신청 완료";
     public static final String ACCEPT_CLUB_JOIN = "클럽 가입 승인 완료";
+    public static final String UPLOAD_IMAGE = "사진 업로드 완료";
 }
