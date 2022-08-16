@@ -1,8 +1,8 @@
 package com.RenToU.rentserver.DTO;
 
-import com.RenToU.rentserver.domain.Authority;
 import com.RenToU.rentserver.domain.ClubMember;
 import com.RenToU.rentserver.domain.Member;
+import com.RenToU.rentserver.domain.Rental;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dozermapper.core.Mapping;
 import lombok.AllArgsConstructor;
@@ -15,7 +15,6 @@ import javax.persistence.OneToMany;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -26,6 +25,8 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MemberDTO {
+
+    private Long id;
 
     @NotBlank
     @Email
@@ -58,8 +59,11 @@ public class MemberDTO {
     @Mapping("major")
     private String major;
 
-    @OneToMany(mappedBy = "member")
-    private List<ClubMember> clubList = new ArrayList<>();
+    private boolean activated;
+
+    private List<ClubMember> clubList;
+
+    private List<Rental> rentals;
 
     private Set<AuthorityDTO> authorityDtoSet;
 
@@ -67,15 +71,19 @@ public class MemberDTO {
         if(member == null) return null;
 
         return MemberDTO.builder()
-                .email(member.getEmail())
-                .name(member.getName())
-                .phoneNumber(member.getPhoneNumber())
-                .studentId(member.getStudentId())
-                .major(member.getMajor())
-                .authorityDtoSet(member.getAuthorities().stream()
-                    .map(authority -> AuthorityDTO.builder().authorityName(authority.getAuthorityName()).build())
-                    .collect(Collectors.toSet()))
-                .build();
+            .id(member.getId())
+            .email(member.getEmail())
+            .name(member.getName())
+            .phoneNumber(member.getPhoneNumber())
+            .studentId(member.getStudentId())
+            .major(member.getMajor())
+            .activated(member.isActivated())
+            .clubList(member.getClubList())
+            .rentals(member.getRentals())
+            .authorityDtoSet(member.getAuthorities().stream()
+                .map(authority -> AuthorityDTO.builder().authorityName(authority.getAuthorityName()).build())
+                .collect(Collectors.toSet()))
+            .build();
     }
 
 }

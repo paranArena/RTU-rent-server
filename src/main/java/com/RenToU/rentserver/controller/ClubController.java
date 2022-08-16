@@ -3,6 +3,8 @@ package com.RenToU.rentserver.controller;
 import com.RenToU.rentserver.DTO.*;
 import com.RenToU.rentserver.application.ClubServiceImpl;
 import com.RenToU.rentserver.application.MemberService;
+import com.RenToU.rentserver.application.S3Service;
+import com.RenToU.rentserver.domain.Club;
 
 import lombok.RequiredArgsConstructor;
 
@@ -12,7 +14,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 import javax.validation.Valid;
 
@@ -23,11 +29,16 @@ public class ClubController {
 
     private final ClubServiceImpl clubService;
     private final MemberService memberService;
+    private final S3Service s3Service;
 
     @PostMapping("")
-    public ResponseEntity<?> createClub(@Valid @RequestBody ClubDTO clubDTO) {
-        clubService.createClub(memberService.getMyIdWithAuthorities(), clubDTO.getName(), clubDTO.getThumbnailPath(),clubDTO.getIntroduction());
-        return new ResponseEntity<>(ResponseDTO.res(StatusCode.OK, ResponseMessage.CREATED_CLUB, null), HttpStatus.OK);
+    public ResponseEntity<?> createClub(@RequestParam("name") String name, @RequestParam("introduction") String intro, @RequestParam("thumbnail") MultipartFile thumbnail) throws IOException {
+        String thumbnailPath = null;
+        if(!thumbnail.isEmpty()){
+            thumbnailPath = s3Service.upload(thumbnail);
+        }
+        ClubDTO clubDto = clubService.createClub(memberService.getMyIdWithAuthorities(), name, intro, thumbnailPath);
+        return new ResponseEntity<>(ResponseDTO.res(StatusCode.OK, ResponseMessage.CREATED_CLUB, clubDto), HttpStatus.OK);
     }
 
     @PostMapping("/{club_id}/requests/join")
