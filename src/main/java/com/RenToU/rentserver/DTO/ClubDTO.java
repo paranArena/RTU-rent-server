@@ -6,13 +6,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotBlank;
 
 import com.RenToU.rentserver.domain.Club;
-import com.RenToU.rentserver.domain.ClubMember;
-import com.RenToU.rentserver.domain.Notification;
-import com.RenToU.rentserver.domain.Product;
 
 @Getter
 @Builder
@@ -30,11 +28,11 @@ public class ClubDTO {
 
     private String thumbnailPath;
 
-    private List<ClubMember> memberList;
+    private List<ClubMemberDTO> memberList;
 
-    private List<Notification> notifications;
+    private List<NotificationDTO> notifications;
 
-    private List<Product> products;
+    private List<ProductDTO> products;
     
     public static ClubDTO from(Club club){
         if(club == null) return null;
@@ -44,9 +42,15 @@ public class ClubDTO {
             .name(club.getName())
             .introduction(club.getIntroduction())
             .thumbnailPath(club.getThumbnailPath())
-            .memberList(club.getMemberList())
-            .notifications(club.getNotifications())
-            .products(club.getProducts())
+            .memberList(club.getMemberList().stream()
+                .map(member -> ClubMemberDTO.from(member))
+                .collect(Collectors.toList()))
+            .notifications(club.getNotifications().stream()
+                .map(notification -> NotificationDTO.from(notification))
+                .collect(Collectors.toList()))
+            .products(club.getProducts().stream()
+                .map(product -> ProductDTO.from(product))
+                .collect(Collectors.toList()))
             .build();
     }
 }
