@@ -75,6 +75,7 @@ public class MemberDTO {
                 .authorityDtoSet(member.getAuthorities().stream()
                     .map(authority -> AuthorityDTO.builder().authorityName(authority.getAuthorityName()).build())
                     .collect(Collectors.toSet()))
+                .clubList(member.getClubList())
                 .build();
     }
 
