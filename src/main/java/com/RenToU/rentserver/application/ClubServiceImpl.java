@@ -1,5 +1,6 @@
 package com.RenToU.rentserver.application;
 
+import com.RenToU.rentserver.DTO.ClubDTO;
 import com.RenToU.rentserver.DTO.NotificationDTO;
 import com.RenToU.rentserver.DTO.ProductDTO;
 import com.RenToU.rentserver.domain.Club;
@@ -11,6 +12,7 @@ import com.RenToU.rentserver.domain.Notification;
 import com.RenToU.rentserver.domain.Product;
 import com.RenToU.rentserver.exceptions.CannotJoinClubException;
 import com.RenToU.rentserver.exceptions.ClubNotFoundException;
+import com.RenToU.rentserver.exceptions.DuplicateMemberException;
 import com.RenToU.rentserver.exceptions.MemberNotFoundException;
 import com.RenToU.rentserver.exceptions.ProductNotFoundException;
 import com.RenToU.rentserver.infrastructure.ClubRepository;
@@ -40,13 +42,17 @@ public class ClubServiceImpl implements ClubService{
 
     @Override
     @Transactional
-    public Long createClub(Long memberId, String clubName, String thumbnailPath, String clubIntro) {
+    public ClubDTO createClub(Long memberId, String clubName, String clubIntro, String thumbnailPath) {
+        if (clubRepository.findByName(clubName).orElse(null) != null) {
+            //TODO DuplicateClubException으로 교체?
+            throw new DuplicateMemberException("이미 존재하는 모임 이름입니다.");
+        }
         //회원 조회
         Member member = findMember(memberId);
         //클럽 생성
         Club club = Club.createClub(clubName, clubIntro, thumbnailPath, member);
         clubRepository.save(club);
-        return club.getId();
+        return ClubDTO.from(club);
     }
 
     @Override

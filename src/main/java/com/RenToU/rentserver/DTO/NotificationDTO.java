@@ -13,11 +13,16 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 @AllArgsConstructor
 public class NotificationDTO {
+
     private Long id;
+
     @NotBlank
     @Mapping("title")
     private String title;
+    
     @NotBlank
     @Mapping("content")
     private String content;
+
+    //TODO createdAt, updatedAt, image
 }
