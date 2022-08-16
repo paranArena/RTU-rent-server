@@ -65,6 +65,10 @@ public class Member {
         this.authorities.add(memberAuthority);
         memberAuthority.setMember(this);
     }
+    public void addClubList(ClubMember clubMember) {
+        this.clubList.add(clubMember);
+        clubMember.setMember(this);
+    }
 
     public Member createMember(String name,String email){
         Member member = Member.builder()

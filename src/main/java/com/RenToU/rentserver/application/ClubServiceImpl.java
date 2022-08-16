@@ -56,8 +56,7 @@ public class ClubServiceImpl implements ClubService{
         Member member = findMember(memberId);
         Club club = findClub(clubId);
         validateCanJoin(club, member);
-        ClubMember clubmember = ClubMember.createClubMember(member, ClubRole.WAIT);
-        club.addClubMember(clubmember);
+        ClubMember.createClubMember(club, member, ClubRole.WAIT);
         clubRepository.save(club);
     }
     @Override
