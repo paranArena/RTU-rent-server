@@ -59,10 +59,6 @@ public class Member extends BaseTimeEntity{
     /**
      *연관관계 편의 메소드
      */
-    // public void addMemberAuth(MemberAuthority memberAuthority) {
-    //     this.authorities.add(memberAuthority);
-    //     memberAuthority.setMember(this);
-    // }
 
     public Member createMember(String name,String email){
         Member member = Member.builder()
@@ -72,17 +68,5 @@ public class Member extends BaseTimeEntity{
         member.clubList = new ArrayList<>();
         return member;
     }
-
-    // public void setNewUser() {
-    //     this.activated = true;
-    //     this.authorities = new ArrayList<>();
-    //     this.clubList = new ArrayList<>();
-    // }
-
-    // public List<Authority> getAuths(){
-    //     return authorities.stream().map(authorities ->{
-    //         return authorities.getAuthority();
-    //     }).collect(Collectors.toList());
-    // }
 }
 
