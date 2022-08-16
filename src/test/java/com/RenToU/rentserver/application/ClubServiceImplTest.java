@@ -32,6 +32,7 @@ class ClubServiceImplTest {
     private static final Long INITIAL_CLUB_ID = 1L;
     private static final String INITIAL_CLUB_NAME = "TestClubName";
     private static final String INITIAL_CLUB_INTRO = "TetClubIntrodution.";
+    private static final String INITIAL_CLUB_THUMBNAILPATH = "test/thumbnail/path";
 
     @BeforeEach
     void setup(){
@@ -55,7 +56,7 @@ class ClubServiceImplTest {
 
     @Test
     public void createClub(){
-        Long clubId = clubService.createClub(INITIAL_MEMBER_ID,INITIAL_CLUB_NAME,INITIAL_CLUB_INTRO);
+        Long clubId = clubService.createClub(INITIAL_MEMBER_ID,INITIAL_CLUB_NAME,INITIAL_CLUB_THUMBNAILPATH,INITIAL_CLUB_INTRO);
         verify(memberRepository).findById(INITIAL_MEMBER_ID);
         verify(clubRepository).save(any(Club.class));
         assertThat(clubId).isEqualTo(INITIAL_CLUB_ID);
