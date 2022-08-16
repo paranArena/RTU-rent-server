@@ -26,15 +26,20 @@ public class Product {
     @GeneratedValue @Id
     @Column(name = "product_id")
     private Long id;
+
     private String name;
+
     private int sequence;
+
     private RentalPolicy rentalPolicy;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "club_id")
     private Club club;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<Item> items = new ArrayList<>();
+    
     @CreatedDate
     @Column(updatable = false, nullable = false)
     private LocalDateTime createdAt;

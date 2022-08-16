@@ -15,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -26,7 +27,8 @@ import static org.mockito.Mockito.verify;
 @Transactional
 class ClubServiceImplWebTest {
 
-    @Autowired
+    
+    @PersistenceContext
     EntityManager em;
 
     private Mapper mapper;
@@ -45,6 +47,7 @@ class ClubServiceImplWebTest {
     private static final Long INITIAL_CLUB_ID = 1L;
     private static final String INITIAL_CLUB_NAME = "TestClubName";
     private static final String INITIAL_CLUB_INTRO = "TetClubIntrodution.";
+    private static final String INITIAL_CLUB_THUMBNAILPATH = "test/thumbnail/path";
 
     @BeforeEach
     void setup(){
@@ -55,7 +58,7 @@ class ClubServiceImplWebTest {
     @Test
     public void createClub(){
         Member member = createMember(INITIAL_MEMBER_NAME,INITIAL_MEMBER_EMAIL);
-        Long clubId = clubService.createClub(member.getId(),INITIAL_CLUB_NAME,INITIAL_CLUB_INTRO);
+        Long clubId = clubService.createClub(member.getId(),INITIAL_CLUB_NAME,INITIAL_CLUB_THUMBNAILPATH,INITIAL_CLUB_INTRO);
         Club club = em.find(Club.class,clubId);
         assertThat(club.getName()).isEqualTo(INITIAL_CLUB_NAME);
         assertThat(club.getMemberList().get(0).getMember().getName()).isEqualTo(member.getName());
@@ -63,7 +66,7 @@ class ClubServiceImplWebTest {
     @Test
     public void 가입신청(){
         Member member = createMember(INITIAL_MEMBER_NAME,INITIAL_MEMBER_EMAIL);
-        Long clubId = clubService.createClub(member.getId(),INITIAL_CLUB_NAME,INITIAL_CLUB_INTRO);
+        Long clubId = clubService.createClub(member.getId(),INITIAL_CLUB_NAME,INITIAL_CLUB_THUMBNAILPATH,INITIAL_CLUB_INTRO);
         Club club = em.find(Club.class,clubId);
         Member joiner = createMember("Joiner","Joiner@ajou.ac.kr");
         assertThatThrownBy(()->club.findClubMemberByMember(joiner))
@@ -74,7 +77,7 @@ class ClubServiceImplWebTest {
     @Test
     public void 가입승인(){
         Member member = createMember(INITIAL_MEMBER_NAME,INITIAL_MEMBER_EMAIL);
-        Long clubId = clubService.createClub(member.getId(),INITIAL_CLUB_NAME,INITIAL_CLUB_INTRO);
+        Long clubId = clubService.createClub(member.getId(),INITIAL_CLUB_NAME,INITIAL_CLUB_THUMBNAILPATH,INITIAL_CLUB_INTRO);
         Club club = em.find(Club.class,clubId);
         Member joiner = createMember("Joiner","Joiner@ajou.ac.kr");
         clubService.requestClubJoin(club.getId(),joiner.getId());
@@ -85,7 +88,7 @@ class ClubServiceImplWebTest {
     @Test
     public void 가입승인_예외_승인권한_없음(){
         Member owner = createMember(INITIAL_MEMBER_NAME,INITIAL_MEMBER_EMAIL);
-        Long clubId = clubService.createClub(owner.getId(),INITIAL_CLUB_NAME,INITIAL_CLUB_INTRO);
+        Long clubId = clubService.createClub(owner.getId(),INITIAL_CLUB_NAME,INITIAL_CLUB_THUMBNAILPATH,INITIAL_CLUB_INTRO);
         Club club = em.find(Club.class,clubId);
         Member member = createMember(INITIAL_MEMBER_NAME,INITIAL_MEMBER_EMAIL);
         Member joiner = createMember("Joiner","Joiner@ajou.ac.kr");
@@ -96,7 +99,7 @@ class ClubServiceImplWebTest {
     @Test
     public void 가입승인_예외_신청하지_않은_사용자(){
         Member owner = createMember(INITIAL_MEMBER_NAME,INITIAL_MEMBER_EMAIL);
-        Long clubId = clubService.createClub(owner.getId(),INITIAL_CLUB_NAME,INITIAL_CLUB_INTRO);
+        Long clubId = clubService.createClub(owner.getId(),INITIAL_CLUB_NAME,INITIAL_CLUB_THUMBNAILPATH,INITIAL_CLUB_INTRO);
         Club club = em.find(Club.class,clubId);
         Member joiner = createMember("Joiner","Joiner@ajou.ac.kr");
         assertThatThrownBy(()->clubService.acceptClubJoin(club.getId(),owner.getId(), joiner.getId()))
