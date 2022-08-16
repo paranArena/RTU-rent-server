@@ -1,5 +1,6 @@
 package com.RenToU.rentserver.application;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -50,10 +51,11 @@ public class MemberService {
                 .studentId(memberDto.getStudentId())
                 .major(memberDto.getMajor())
                 .activated(true)
-                // .clubList()
+//                .clubList(new ArrayList<>())
                 // .rentals()
                 .authorities(Collections.singleton(authority))
                 .build();
+        member.setClubList(new ArrayList<>());
 
         return MemberDTO.from(memberRepository.save(member));
     }
