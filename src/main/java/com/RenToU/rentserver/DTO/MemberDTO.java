@@ -12,7 +12,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.OneToMany;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -24,28 +26,37 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MemberDTO {
-    private Long id;
+
     @NotBlank
+    @Email
     @Mapping("email")
+    @Size(min = 1, max = 50)
     private String email;
+
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @NotBlank
     @Mapping("password")
+    @Size(min = 1, max = 100)
     private String password;
+
     @NotBlank
     @Mapping("name")
+    @Size(min = 1, max = 20)
     private String name;
+
     @NotBlank
     @Mapping("phoneNumber")
+    @Size(min = 1, max = 20)
     private String phoneNumber;
+
     @NotBlank
     @Mapping("studentId")
+    @Size(min = 1, max = 20)
     private String studentId;
+
     @NotBlank
     @Mapping("major")
     private String major;
-
-    private Set<Authority> authorities;
 
     @OneToMany(mappedBy = "member")
     private List<ClubMember> clubList = new ArrayList<>();
@@ -56,18 +67,14 @@ public class MemberDTO {
         if(member == null) return null;
 
         return MemberDTO.builder()
-                .id(member.getId())
                 .email(member.getEmail())
                 .name(member.getName())
                 .phoneNumber(member.getPhoneNumber())
                 .studentId(member.getStudentId())
                 .major(member.getMajor())
-//                .authorityDtoSet(member.getAuthorities().stream()
-//                        .map(authority -> AuthorityDTO.builder()
-//                                .authorityName(authority.getAuthority().getAuthorityName())
-//                                .build()
-//                        )
-//                        .collect(Collectors.toSet()))
+                .authorityDtoSet(member.getAuthorities().stream()
+                    .map(authority -> AuthorityDTO.builder().authorityName(authority.getAuthorityName()).build())
+                    .collect(Collectors.toSet()))
                 .build();
     }
 

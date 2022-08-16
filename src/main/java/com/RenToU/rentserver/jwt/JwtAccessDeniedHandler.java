@@ -1,6 +1,5 @@
 package com.RenToU.rentserver.jwt;
 
-
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
