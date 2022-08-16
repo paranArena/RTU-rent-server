@@ -47,11 +47,8 @@ public class MemberService {
                 .studentId(memberDto.getStudentId())
                 .major(memberDto.getMajor())
                 .activated(true)
-//                .clubList(new ArrayList<>())
-                // .rentals()
                 .authorities(Collections.singleton(authority))
                 .build();
-        member.setClubList(new ArrayList<>());
 
         return MemberDTO.from(memberRepository.save(member));
     }
@@ -76,15 +73,6 @@ public class MemberService {
                         .flatMap(memberRepository::findOneWithAuthoritiesByEmail)
                         .orElseThrow(() -> new NotFoundMemberException("Member not found"));
         return member.getId();
-    }
-    
-    @Transactional(readOnly = true)
-    public void makeDefaultRoleIfNotExists(){
-        List<Authority> all = authorityRepository.findAll();
-        if(all.isEmpty()){
-            authorityRepository.save((Authority.builder().authorityName("ROLE_ADMIN").build()));
-            authorityRepository.save((Authority.builder().authorityName("ROLE_USER").build()));
-        }
     }
 }
 

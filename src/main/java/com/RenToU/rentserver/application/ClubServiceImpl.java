@@ -111,7 +111,7 @@ public class ClubServiceImpl implements ClubService{
     @Transactional
     public void registerItem(Long productId, Long memberId){
         Product product = findProduct(productId);
-        Member requester =findMember(memberId);
+        Member requester = findMember(memberId);
         Club club = product.getClub();
         club.findClubMemberByMember(requester).validateAdmin();
         product.addSeq();

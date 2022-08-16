@@ -35,14 +35,17 @@ public class Club extends BaseTimeEntity{
     
     private String thumbnailPath;
 
+    @Builder.Default
     @OneToMany(mappedBy = "club", cascade = CascadeType.ALL)
-    private List<ClubMember> memberList;
+    private List<ClubMember> memberList = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "club", cascade = CascadeType.ALL)
-    private List<Notification> notifications;
+    private List<Notification> notifications = new ArrayList<>();
     
+    @Builder.Default
     @OneToMany(mappedBy = "club", cascade = CascadeType.ALL)
-    private List<Product> products;
+    private List<Product> products = new ArrayList<>();
 
     //연관관계 편의 메소드
     public void addClubMember(ClubMember clubMember){
@@ -65,8 +68,6 @@ public class Club extends BaseTimeEntity{
                 .introduction(clubIntro)
                 .thumbnailPath(thumbnailPath)
                 .build();
-        club.memberList = new ArrayList<>();
-        club.notifications = new ArrayList<>();
         ClubMember.createClubMember(club, member, ClubRole.OWNER);
         return club;
     }
