@@ -27,7 +27,7 @@ import static org.mockito.Mockito.verify;
 @Transactional
 class ClubServiceImplWebTest {
 
-    
+
     @PersistenceContext
     EntityManager em;
 
