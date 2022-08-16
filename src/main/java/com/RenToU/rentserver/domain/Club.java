@@ -31,9 +31,9 @@ public class Club extends BaseTimeEntity{
     @Column(unique = true)
     private String name;
 
-    private String thumbnailPath;
-
     private String introduction;
+    
+    private String thumbnailPath;
 
     @OneToMany(mappedBy = "club", cascade = CascadeType.ALL)
     private List<ClubMember> memberList;
