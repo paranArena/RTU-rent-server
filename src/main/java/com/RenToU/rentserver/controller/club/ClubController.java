@@ -40,8 +40,8 @@ public class ClubController {
         if(!thumbnail.isEmpty()){
             thumbnailPath = s3Service.upload(thumbnail);
         }
-        Club club = clubService.createClub(memberService.getMyIdWithAuthorities(), name, intro, thumbnailPath);
-        return new ResponseEntity<>(ResponseDTO.res(StatusCode.OK, ResponseMessage.CREATE_CLUB, ClubDTO.from(club)), HttpStatus.OK);
+        ClubDTO clubDto = clubService.createClub(memberService.getMyIdWithAuthorities(), name, intro, thumbnailPath);
+        return new ResponseEntity<>(ResponseDTO.res(StatusCode.OK, ResponseMessage.CREATED_CLUB, clubDto), HttpStatus.OK);
     }
 
     @GetMapping("/{clubId}")
