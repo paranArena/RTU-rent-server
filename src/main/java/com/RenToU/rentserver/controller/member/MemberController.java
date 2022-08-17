@@ -1,4 +1,4 @@
-package com.RenToU.rentserver.controller;
+package com.RenToU.rentserver.controller.member;
 
 
 import com.RenToU.rentserver.DTO.MemberDTO;

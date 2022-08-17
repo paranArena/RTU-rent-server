@@ -31,10 +31,14 @@ public class NotificationDTO {
 
     private LocalDateTime updatedAt;
 
-    //TODO image
-    public static NotificationDTO from(Notification notification){
-        if(notification == null) return null;
-
-        return null;
+    public static NotificationDTO from(Notification notification) {
+        return NotificationDTO.builder()
+        .id(notification.getId())
+        .title(notification.getTitle())
+        .content(notification.getContent())
+        .createdAt(notification.getCreatedAt())
+        .updatedAt(notification.getUpdatedAt())
+        .build();
     }
+    //TODO image
 }
