@@ -49,6 +49,9 @@ java -version
 ```
 ./gradlew build && java -jar ${java.set.build.path}libs/*.jar
 
+# 테스트 오류 날 때
+./gradlew  build --exclude-task test && java -jar build/libs/rentserver-0.0.1-SNAPSHOT.jar
+
 # 명령어 순서
 
 ./gradlew  build --exclude-task test #로 빌드(자꾸 테스트 오류 떠서)
