@@ -1,5 +1,6 @@
 package com.RenToU.rentserver.application;
 
+import com.RenToU.rentserver.DTO.ClubDTO;
 import com.RenToU.rentserver.domain.Club;
 import com.RenToU.rentserver.domain.Member;
 import com.RenToU.rentserver.infrastructure.ClubRepository;
@@ -56,9 +57,9 @@ class ClubServiceImplTest {
 
     @Test
     public void createClub(){
-        Club club = clubService.createClub(INITIAL_MEMBER_ID,INITIAL_CLUB_NAME,INITIAL_CLUB_INTRO,INITIAL_CLUB_THUMBNAILPATH);
+        ClubDTO clubDto = clubService.createClub(INITIAL_MEMBER_ID,INITIAL_CLUB_NAME,INITIAL_CLUB_INTRO,INITIAL_CLUB_THUMBNAILPATH);
         verify(memberRepository).findById(INITIAL_MEMBER_ID);
         verify(clubRepository).save(any(Club.class));
-        assertThat(club.getId()).isEqualTo(INITIAL_CLUB_ID);
+        assertThat(clubDto.getId()).isEqualTo(INITIAL_CLUB_ID);
     }
 }

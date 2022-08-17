@@ -1,5 +1,6 @@
 package com.RenToU.rentserver.application;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -46,8 +47,6 @@ public class MemberService {
                 .studentId(memberDto.getStudentId())
                 .major(memberDto.getMajor())
                 .activated(true)
-                // .clubList()
-                // .rentals()
                 .authorities(Collections.singleton(authority))
                 .build();
 
