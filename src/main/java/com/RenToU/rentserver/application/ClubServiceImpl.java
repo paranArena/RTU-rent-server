@@ -85,14 +85,14 @@ public class ClubServiceImpl implements ClubService{
      */
     @Override
     @Transactional
-    public Long createNotification(Long clubId, Long writerId, NotificationDTO notificationDTO) {
+    public NotificationDTO createNotification(Long clubId, Long writerId, NotificationDTO notificationDTO) {
         Club club = findClub(clubId);
         Member writer = findMember(writerId);
         club.findClubMemberByMember(writer).validateAdmin();
         Notification notification = mapper.map(notificationDTO,Notification.class);
         club.addNotification(notification);
         clubRepository.save(club);
-        return notification.getId();
+        return NotificationDTO.from(notification);
     }
     /**
      * product
