@@ -62,7 +62,6 @@ public class AuthController {
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
 
         return new ResponseEntity<>(new TokenDTO(jwt), httpHeaders, HttpStatus.OK);
-        // return new ResponseEntity<>(ResponseDTO.res(StatusCode.OK, ResponseMessage.LOGIN_SUCCESS, new TokenDTO(jwt)), HttpStatus.OK);
     }
 
     @PostMapping("/logout")

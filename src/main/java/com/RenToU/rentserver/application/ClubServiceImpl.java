@@ -1,5 +1,6 @@
 package com.RenToU.rentserver.application;
 
+import com.RenToU.rentserver.DTO.ClubDTO;
 import com.RenToU.rentserver.DTO.NotificationDTO;
 import com.RenToU.rentserver.DTO.ProductDTO;
 import com.RenToU.rentserver.domain.Club;
@@ -41,7 +42,7 @@ public class ClubServiceImpl implements ClubService{
 
     @Override
     @Transactional
-    public Club createClub(Long memberId, String clubName, String clubIntro, String thumbnailPath) {
+    public ClubDTO createClub(Long memberId, String clubName, String clubIntro, String thumbnailPath) {
         if (clubRepository.findByName(clubName).orElse(null) != null) {
             //TODO DuplicateClubException으로 교체?
             throw new DuplicateMemberException("이미 존재하는 모임 이름입니다.");
@@ -51,7 +52,7 @@ public class ClubServiceImpl implements ClubService{
         //클럽 생성
         Club club = Club.createClub(clubName, clubIntro, thumbnailPath, member);
         clubRepository.save(club);
-        return club;
+        return ClubDTO.from(club);
     }
 
     @Override
@@ -61,8 +62,7 @@ public class ClubServiceImpl implements ClubService{
         Member member = findMember(memberId);
         Club club = findClub(clubId);
         validateCanJoin(club, member);
-        ClubMember clubmember = ClubMember.createClubMember(member, ClubRole.WAIT);
-        club.addClubMember(clubmember);
+        ClubMember.createClubMember(club, member, ClubRole.WAIT);
         clubRepository.save(club);
     }
     @Override
@@ -111,7 +111,7 @@ public class ClubServiceImpl implements ClubService{
     @Transactional
     public void registerItem(Long productId, Long memberId){
         Product product = findProduct(productId);
-        Member requester =findMember(memberId);
+        Member requester = findMember(memberId);
         Club club = product.getClub();
         club.findClubMemberByMember(requester).validateAdmin();
         product.addSeq();

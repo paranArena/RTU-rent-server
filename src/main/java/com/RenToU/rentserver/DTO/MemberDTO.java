@@ -1,6 +1,5 @@
 package com.RenToU.rentserver.DTO;
 
-import com.RenToU.rentserver.domain.ClubMember;
 import com.RenToU.rentserver.domain.Member;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dozermapper.core.Mapping;
@@ -10,10 +9,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.OneToMany;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -24,6 +23,8 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MemberDTO {
+
+    private Long id;
 
     @NotBlank
     @Email
@@ -56,8 +57,11 @@ public class MemberDTO {
     @Mapping("major")
     private String major;
 
-    @OneToMany(mappedBy = "member")
-    private List<ClubMember> clubList;
+    private boolean activated;
+
+    private List<MemberClubDTO> clubList;
+
+    private List<RentalDTO> rentals;
 
     private Set<AuthorityDTO> authorityDtoSet;
 
@@ -65,15 +69,22 @@ public class MemberDTO {
         if(member == null) return null;
 
         return MemberDTO.builder()
-                .email(member.getEmail())
-                .name(member.getName())
-                .phoneNumber(member.getPhoneNumber())
-                .studentId(member.getStudentId())
-                .major(member.getMajor())
-                .authorityDtoSet(member.getAuthorities().stream()
-                    .map(authority -> AuthorityDTO.builder().authorityName(authority.getAuthorityName()).build())
-                    .collect(Collectors.toSet()))
-                .build();
+            .id(member.getId())
+            .email(member.getEmail())
+            .name(member.getName())
+            .phoneNumber(member.getPhoneNumber())
+            .studentId(member.getStudentId())
+            .major(member.getMajor())
+            .activated(member.isActivated())
+            .clubList(member.getClubList().stream()
+                .map(club -> MemberClubDTO.from(club))
+                .collect(Collectors.toList()))
+            .rentals(member.getRentals().stream()
+                .map(rental -> RentalDTO.from(rental))
+                .collect(Collectors.toList()))
+            .authorityDtoSet(member.getAuthorities().stream()
+                .map(authority -> AuthorityDTO.builder().authorityName(authority.getAuthorityName()).build())
+                .collect(Collectors.toSet()))
+            .build();
     }
-
 }
