@@ -4,7 +4,6 @@ import com.RenToU.rentserver.DTO.*;
 import com.RenToU.rentserver.application.ClubServiceImpl;
 import com.RenToU.rentserver.application.MemberService;
 import com.RenToU.rentserver.application.S3Service;
-import com.RenToU.rentserver.domain.Club;
 
 import lombok.RequiredArgsConstructor;
 
@@ -15,15 +14,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-
-import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
@@ -41,7 +37,7 @@ public class ClubController {
             thumbnailPath = s3Service.upload(thumbnail);
         }
         ClubDTO clubDto = clubService.createClub(memberService.getMyIdWithAuthorities(), name, intro, thumbnailPath);
-        return new ResponseEntity<>(ResponseDTO.res(StatusCode.OK, ResponseMessage.CREATED_CLUB, clubDto), HttpStatus.OK);
+        return new ResponseEntity<>(ResponseDTO.res(StatusCode.OK, ResponseMessage.CREATE_CLUB, clubDto), HttpStatus.OK);
     }
 
     @GetMapping("/{clubId}")
@@ -56,8 +52,8 @@ public class ClubController {
         if(!thumbnail.isEmpty()){
             thumbnailPath = s3Service.upload(thumbnail);
         }
-        Club club = clubService.createClub(memberService.getMyIdWithAuthorities(), name, intro, thumbnailPath);
-        return new ResponseEntity<>(ResponseDTO.res(StatusCode.OK, ResponseMessage.UPDATE_CLUB, ClubDTO.from(club)), HttpStatus.OK);
+        ClubDTO clubDto = clubService.createClub(memberService.getMyIdWithAuthorities(), name, intro, thumbnailPath);
+        return new ResponseEntity<>(ResponseDTO.res(StatusCode.OK, ResponseMessage.UPDATE_CLUB, clubDto), HttpStatus.OK);
     }
 
     @DeleteMapping("/{clubId}")
