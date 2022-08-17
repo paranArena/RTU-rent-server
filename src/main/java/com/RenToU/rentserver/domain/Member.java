@@ -40,14 +40,13 @@ public class Member extends BaseTimeEntity{
     @Column(name = "activated")
     private boolean activated;
 
+    @Builder.Default
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-    private List<ClubMember> clubList;
+    private List<ClubMember> clubList = new ArrayList<>();
 
-    // @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-    // private List<MemberAuthority> authorities = new ArrayList<>();
-
+    @Builder.Default
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-    private List<Rental> rentals;
+    private List<Rental> rentals = new ArrayList<>();
 
    @ManyToMany
    @JoinTable(
@@ -59,13 +58,19 @@ public class Member extends BaseTimeEntity{
     /**
      *연관관계 편의 메소드
      */
-
+    // public void addMemberAuth(MemberAuthority memberAuthority) {
+    //     this.authorities.add(memberAuthority);
+    //     memberAuthority.setMember(this);
+    // }
+    public void addClubList(ClubMember clubMember) {
+        this.clubList.add(clubMember);
+        clubMember.setMember(this);
+    }
     public Member createMember(String name,String email){
         Member member = Member.builder()
                 .name(name)
                 .email(email)
                 .build();
-        member.clubList = new ArrayList<>();
         return member;
     }
 }

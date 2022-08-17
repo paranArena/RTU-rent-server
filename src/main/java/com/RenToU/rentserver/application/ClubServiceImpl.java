@@ -62,8 +62,7 @@ public class ClubServiceImpl implements ClubService{
         Member member = findMember(memberId);
         Club club = findClub(clubId);
         validateCanJoin(club, member);
-        ClubMember clubmember = ClubMember.createClubMember(member, ClubRole.WAIT);
-        club.addClubMember(clubmember);
+        ClubMember.createClubMember(club, member, ClubRole.WAIT);
         clubRepository.save(club);
     }
     @Override
@@ -112,7 +111,7 @@ public class ClubServiceImpl implements ClubService{
     @Transactional
     public void registerItem(Long productId, Long memberId){
         Product product = findProduct(productId);
-        Member requester =findMember(memberId);
+        Member requester = findMember(memberId);
         Club club = product.getClub();
         club.findClubMemberByMember(requester).validateAdmin();
         product.addSeq();
