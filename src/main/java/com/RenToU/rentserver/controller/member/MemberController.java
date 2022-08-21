@@ -25,9 +25,15 @@ public class MemberController {
         return ResponseEntity.ok(memberService.getMyUserWithAuthorities());
     }
 
-    @GetMapping("/{email}") // TODO change to id
+    @GetMapping("/{email}")
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<MemberDTO> getMemberInfo(@PathVariable("email") String email) {
         return ResponseEntity.ok(memberService.getUserWithAuthorities(email));
+    }
+
+    @GetMapping("/{email}/exists")
+    public ResponseEntity<Boolean> checkEmailDuplicate(@PathVariable("email") String email) {
+
+        return ResponseEntity.ok(memberService.checkEmailDuplicate(email));
     }
 }
