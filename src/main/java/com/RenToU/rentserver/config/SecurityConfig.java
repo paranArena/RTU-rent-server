@@ -67,6 +67,7 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers("/signup").permitAll()
                 .antMatchers("/authenticate").permitAll()
+                .antMatchers("/members/{email}/exists").permitAll()
                 .antMatchers("/").permitAll()
 
                 .anyRequest().authenticated()

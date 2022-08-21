@@ -23,13 +23,13 @@ public class MemberService {
 
     @Transactional
     public MemberDTO signup(MemberDTO memberDto) {
-        if (memberRepository.findOneWithAuthoritiesByEmail(memberDto.getEmail()).orElse(null) != null) {
+        if (memberRepository.existsByEmail(memberDto.getEmail())) {
             throw new DuplicateMemberException("이미 존재하는 이메일입니다.");
         }
-        if (memberRepository.findOneWithAuthoritiesByPhoneNumber(memberDto.getPhoneNumber()).orElse(null) != null) {
+        if (memberRepository.existsByPhoneNumber(memberDto.getPhoneNumber())) {
             throw new DuplicateMemberException("이미 존재하는 휴대폰 번호입니다.");
         }
-        if (memberRepository.findOneWithAuthoritiesByStudentId(memberDto.getStudentId()).orElse(null) != null) {
+        if (memberRepository.existsByStudentId(memberDto.getStudentId())) {
             throw new DuplicateMemberException("이미 존재하는 학번입니다.");
         }
 
@@ -72,6 +72,11 @@ public class MemberService {
                         .flatMap(memberRepository::findOneWithAuthoritiesByEmail)
                         .orElseThrow(() -> new NotFoundMemberException("Member not found"));
         return member.getId();
+    }
+
+    @Transactional(readOnly = true)
+    public boolean checkEmailDuplicate(String email) {
+        return memberRepository.existsByEmail(email);
     }
 }
 
