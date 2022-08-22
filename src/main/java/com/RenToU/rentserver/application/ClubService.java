@@ -11,7 +11,7 @@ import java.util.List;
 public interface ClubService {
     public List<Club> findClubs();
 
-    public ClubDTO createClub(Long memberId, String clubName, String clubIntro, String thumbnailPath);
+    public ClubDTO createClub(Long memberId, String clubName, String clubIntro, String thumbnailPath, List<String> clubHashtags);
 
     public void requestClubJoin(Long clubId, Long memberId);
     public void acceptClubJoin(Long clubId, Long ownerId, Long joinMemberId);

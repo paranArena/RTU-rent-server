@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -31,12 +32,12 @@ public class ClubController {
     private final S3Service s3Service;
 
     @PostMapping("")
-    public ResponseEntity<?> createClub(@RequestParam("name") String name, @RequestParam("introduction") String intro, @RequestParam("thumbnail") MultipartFile thumbnail) throws IOException {
+    public ResponseEntity<?> createClub(@RequestParam("name") String name, @RequestParam("introduction") String intro, @RequestParam("thumbnail") MultipartFile thumbnail,@RequestParam("hashtags") List<String> hashtags) throws IOException {
         String thumbnailPath = null;
         if(!thumbnail.isEmpty()){
             thumbnailPath = s3Service.upload(thumbnail);
         }
-        ClubDTO clubDto = clubService.createClub(memberService.getMyIdWithAuthorities(), name, intro, thumbnailPath);
+        ClubDTO clubDto = clubService.createClub(memberService.getMyIdWithAuthorities(), name, intro, thumbnailPath,hashtags);
         return new ResponseEntity<>(ResponseDTO.res(StatusCode.OK, ResponseMessage.CREATE_CLUB, clubDto), HttpStatus.OK);
     }
 
@@ -47,12 +48,12 @@ public class ClubController {
     }
 
     @PutMapping("/{clubId}")
-    public ResponseEntity<?> updateClubInfo(@RequestParam("name") String name, @RequestParam("introduction") String intro, @RequestParam("thumbnail") MultipartFile thumbnail) throws IOException {
+    public ResponseEntity<?> updateClubInfo(@RequestParam("name") String name, @RequestParam("introduction") String intro, @RequestParam("thumbnail") MultipartFile thumbnail,@RequestParam("hashtags") List<String> hashtags) throws IOException {
         String thumbnailPath = null;
         if(!thumbnail.isEmpty()){
             thumbnailPath = s3Service.upload(thumbnail);
         }
-        ClubDTO clubDto = clubService.createClub(memberService.getMyIdWithAuthorities(), name, intro, thumbnailPath);
+        ClubDTO clubDto = clubService.createClub(memberService.getMyIdWithAuthorities(), name, intro, thumbnailPath,hashtags);
         return new ResponseEntity<>(ResponseDTO.res(StatusCode.OK, ResponseMessage.UPDATE_CLUB, clubDto), HttpStatus.OK);
     }
 
