@@ -37,7 +37,7 @@ public class ClubController {
         if(!thumbnail.isEmpty()){
             thumbnailPath = s3Service.upload(thumbnail);
         }
-        ClubDTO clubDto = clubService.createClub(memberService.getMyIdWithAuthorities(), name, intro, thumbnailPath,hashtags);
+        ClubDTO clubDto = clubService.createClub(memberService.getMyIdWithAuthorities(), name, intro, thumbnailPath, hashtags);
         return new ResponseEntity<>(ResponseDTO.res(StatusCode.OK, ResponseMessage.CREATE_CLUB, clubDto), HttpStatus.OK);
     }
 
