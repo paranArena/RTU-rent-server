@@ -42,7 +42,7 @@ public class ClubServiceImpl implements ClubService{
 
     @Override
     @Transactional
-    public ClubDTO createClub(Long memberId, String clubName, String clubIntro, String thumbnailPath, List<String> clubHashtags ) {
+    public Club createClub(Long memberId, String clubName, String clubIntro, String thumbnailPath, List<String> clubHashtags ) {
         if (clubRepository.findByName(clubName).orElse(null) != null) {
             //TODO DuplicateClubException으로 교체?
             throw new DuplicateMemberException("이미 존재하는 모임 이름입니다.");
@@ -52,7 +52,7 @@ public class ClubServiceImpl implements ClubService{
         //클럽 생성
         Club club = Club.createClub(clubName, clubIntro, thumbnailPath, member, clubHashtags);
         clubRepository.save(club);
-        return ClubDTO.from(club);
+        return club;
     }
 
     @Override
@@ -85,14 +85,15 @@ public class ClubServiceImpl implements ClubService{
      */
     @Override
     @Transactional
-    public NotificationDTO createNotification(Long clubId, Long writerId, NotificationDTO notificationDTO) {
-        Club club = findClub(clubId);
-        Member writer = findMember(writerId);
-        club.findClubMemberByMember(writer).validateAdmin();
-        Notification notification = mapper.map(notificationDTO,Notification.class);
-        club.addNotification(notification);
-        clubRepository.save(club);
-        return NotificationDTO.from(notification);
+    public Notification createNotification(Long clubId, Long writerId, String title, String content) {
+        // Club club = findClub(clubId);
+        // Member writer = findMember(writerId);
+        // club.findClubMemberByMember(writer).validateAdmin();
+        // Notification notification = mapper.map(notificationDTO,Notification.class);
+        // club.addNotification(notification);
+        // clubRepository.save(club);
+        // return notification;
+        return new Notification();
     }
     /**
      * product
