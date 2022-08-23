@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.RenToU.rentserver.DTO.MemberDTO;
+import com.RenToU.rentserver.DTO.SignupDTO;
 import com.RenToU.rentserver.domain.Authority;
 import com.RenToU.rentserver.domain.Member;
 import com.RenToU.rentserver.exceptions.DuplicateMemberException;
@@ -22,14 +23,14 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public MemberDTO signup(MemberDTO memberDto) {
-        if (memberRepository.existsByEmail(memberDto.getEmail())) {
+    public Member signup(SignupDTO signupDTO) {
+        if (memberRepository.existsByEmail(signupDTO.getEmail())) {
             throw new DuplicateMemberException("이미 존재하는 이메일입니다.");
         }
-        if (memberRepository.existsByPhoneNumber(memberDto.getPhoneNumber())) {
+        if (memberRepository.existsByPhoneNumber(signupDTO.getPhoneNumber())) {
             throw new DuplicateMemberException("이미 존재하는 휴대폰 번호입니다.");
         }
-        if (memberRepository.existsByStudentId(memberDto.getStudentId())) {
+        if (memberRepository.existsByStudentId(signupDTO.getStudentId())) {
             throw new DuplicateMemberException("이미 존재하는 학번입니다.");
         }
 
@@ -39,31 +40,29 @@ public class MemberService {
                 .build();
 
         Member member = Member.builder()
-                .email(memberDto.getEmail())
-                .password(passwordEncoder.encode(memberDto.getPassword()))
-                .name(memberDto.getName())
-                .phoneNumber(memberDto.getPhoneNumber())
-                .studentId(memberDto.getStudentId())
-                .major(memberDto.getMajor())
+                .email(signupDTO.getEmail())
+                .password(passwordEncoder.encode(signupDTO.getPassword()))
+                .name(signupDTO.getName())
+                .phoneNumber(signupDTO.getPhoneNumber())
+                .studentId(signupDTO.getStudentId())
+                .major(signupDTO.getMajor())
                 .activated(true)
                 .authorities(Collections.singleton(authority))
                 .build();
 
-        return MemberDTO.from(memberRepository.save(member));
+        return memberRepository.save(member);
     }
 
     @Transactional(readOnly = true)
-    public MemberDTO getUserWithAuthorities(String email) {
-        return MemberDTO.from(memberRepository.findOneWithAuthoritiesByEmail(email).orElse(null));
+    public Member getUserWithAuthorities(String email) {
+        return memberRepository.findOneWithAuthoritiesByEmail(email).orElse(null);
     }
 
     @Transactional(readOnly = true)
-    public MemberDTO getMyUserWithAuthorities() {
-        return MemberDTO.from(
-                SecurityUtil.getCurrentUsername()
-                        .flatMap(memberRepository::findOneWithAuthoritiesByEmail)
-                        .orElseThrow(() -> new NotFoundMemberException("Member not found"))
-        );
+    public Member getMyUserWithAuthorities() {
+        return SecurityUtil.getCurrentUsername()
+                .flatMap(memberRepository::findOneWithAuthoritiesByEmail)
+                .orElseThrow(() -> new NotFoundMemberException("Member not found"));
     }
 
     @Transactional(readOnly = true)
