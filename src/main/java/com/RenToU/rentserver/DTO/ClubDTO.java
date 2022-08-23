@@ -6,11 +6,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotBlank;
 
 import com.RenToU.rentserver.domain.Club;
+import com.RenToU.rentserver.domain.ClubHashtag;
 
 @Getter
 @Builder
@@ -28,6 +30,8 @@ public class ClubDTO {
 
     private String thumbnailPath;
 
+    private List<String> hashtags;
+
     private List<ClubMemberDTO> memberList;
 
     private List<NotificationDTO> notifications;
@@ -42,6 +46,9 @@ public class ClubDTO {
             .name(club.getName())
             .introduction(club.getIntroduction())
             .thumbnailPath(club.getThumbnailPath())
+            .hashtags(club.getHashtags().stream()
+                .map(clubhashtag -> clubhashtag.getHashtag().getName())
+                .collect(Collectors.toList()))
             .memberList(club.getMemberList().stream()
                 .map(member -> ClubMemberDTO.from(member))
                 .collect(Collectors.toList()))
