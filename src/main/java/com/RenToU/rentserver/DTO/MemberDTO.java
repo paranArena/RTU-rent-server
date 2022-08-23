@@ -2,7 +2,6 @@ package com.RenToU.rentserver.DTO;
 
 import com.RenToU.rentserver.domain.Member;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.github.dozermapper.core.Mapping;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,6 +10,7 @@ import lombok.Setter;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import java.util.List;
@@ -26,35 +26,28 @@ public class MemberDTO {
 
     private Long id;
 
-    @NotBlank
+    @NotBlank(message = "이메일을 입력해주세요.")
     @Email
-    @Mapping("email")
     @Size(min = 1, max = 50)
     private String email;
 
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @NotBlank
-    @Mapping("password")
-    @Size(min = 1, max = 100)
-    private String password;
+    // @NotBlank(message = "비밀번호를 입력해주세요")
+    // @Size(min = 1, max = 100)
+    // private String password;
 
-    @NotBlank
-    @Mapping("name")
+    @NotBlank(message = "이름을 입력해주세요.")
     @Size(min = 1, max = 20)
     private String name;
 
-    @NotBlank
-    @Mapping("phoneNumber")
-    @Size(min = 1, max = 20)
+    @NotBlank(message = "휴대폰 번호를 입력해주세요.")
+    @Pattern(regexp = "(01[016789])(\\d{3,4})(\\d{4})", message = "올바른 휴대폰 번호를 입력해주세요.")
     private String phoneNumber;
 
-    @NotBlank
-    @Mapping("studentId")
+    @NotBlank(message = "학번을 입력헤주세요.")
     @Size(min = 1, max = 20)
     private String studentId;
 
-    @NotBlank
-    @Mapping("major")
+    @NotBlank(message = "전공을 입력해주세요.")
     private String major;
 
     private boolean activated;

@@ -11,12 +11,12 @@ import java.util.List;
 public interface ClubService {
     public List<Club> findClubs();
 
-    public ClubDTO createClub(Long memberId, String clubName, String clubIntro, String thumbnailPath, List<String> clubHashtags);
+    public Club createClub(Long memberId, String clubName, String clubIntro, String thumbnailPath, List<String> clubHashtags);
 
     public void requestClubJoin(Long clubId, Long memberId);
     public void acceptClubJoin(Long clubId, Long ownerId, Long joinMemberId);
 
-    public NotificationDTO createNotification(Long clubId, Long WriterId, NotificationDTO notificationDTO);
+    public Notification createNotification(Long clubId, Long WriterId, String title, String content);
     public void registerProduct(Long clubId, ProductDTO productDTO, Long memberId);
     public void registerItem(Long productId, Long memberId);
 }

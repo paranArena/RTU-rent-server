@@ -2,6 +2,7 @@ package com.RenToU.rentserver.controller.member;
 
 import com.RenToU.rentserver.DTO.*;
 import com.RenToU.rentserver.application.MemberService;
+import com.RenToU.rentserver.domain.Member;
 import com.RenToU.rentserver.jwt.JwtFilter;
 import com.RenToU.rentserver.jwt.TokenProvider;
 
@@ -42,9 +43,9 @@ public class AuthController {
 //    }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> signup(@Valid @RequestBody MemberDTO memberDTO) {
-
-        return new ResponseEntity<>(ResponseDTO.res(StatusCode.OK, ResponseMessage.CREATE_USER, memberService.signup(memberDTO)), HttpStatus.OK);
+    public ResponseEntity<?> signup(@Valid @RequestBody SignupDTO signupDTO) {
+        Member member = memberService.signup(signupDTO);
+        return new ResponseEntity<>(ResponseDTO.res(StatusCode.OK, ResponseMessage.CREATE_USER, MemberDTO.from(member) ), HttpStatus.OK);
     }
 
     @PostMapping("/authenticate")
