@@ -16,6 +16,7 @@ import com.RenToU.rentserver.DTO.ResponseMessage;
 import com.RenToU.rentserver.DTO.StatusCode;
 import com.RenToU.rentserver.application.ClubServiceImpl;
 import com.RenToU.rentserver.application.MemberService;
+import com.RenToU.rentserver.domain.Notification;
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,7 +31,7 @@ public class NotificationController {
     @PostMapping("")
     public ResponseEntity<?> createNotification(@PathVariable Long clubId, @Valid @RequestBody NotificationDTO notificationDTO){
 
-        NotificationDTO resData = clubService.createNotification(clubId, memberService.getMyIdWithAuthorities(), notificationDTO);
-        return new ResponseEntity<>(ResponseDTO.res(StatusCode.OK, ResponseMessage.UPDATE_CLUB, resData), HttpStatus.OK);
+        Notification notification = clubService.createNotification(clubId, memberService.getMyIdWithAuthorities(), notificationDTO.getTitle(), notificationDTO.getContent());
+        return new ResponseEntity<>(ResponseDTO.res(StatusCode.OK, ResponseMessage.UPDATE_CLUB, NotificationDTO.from(notification)), HttpStatus.OK);
     }
 }
