@@ -67,4 +67,8 @@ public class Item {
             throw new CannotRentException(this.id);
         }
     }
+
+    public void finishRental() {
+        this.rental = null;
+    }
 }

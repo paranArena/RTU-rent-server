@@ -1,5 +1,5 @@
 package com.RenToU.rentserver.domain;
 
 public enum RentalStatus {
-    WAIT,
+    WAIT, RENT,DONE
 }

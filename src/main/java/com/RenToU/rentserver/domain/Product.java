@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.geo.Point;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -32,6 +33,12 @@ public class Product {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "club_id")
     private Club club;
+
+    private Point location;
+
+    private int rentTerm;//대여 가능 일수
+
+    private int pickupDistance;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<Item> items = new ArrayList<>();

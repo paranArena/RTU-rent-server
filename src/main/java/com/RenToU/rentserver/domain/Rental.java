@@ -1,8 +1,14 @@
 package com.RenToU.rentserver.domain;
 
+import com.RenToU.rentserver.exceptions.CannotRentException;
+import com.RenToU.rentserver.exceptions.NotRentingException;
+import com.RenToU.rentserver.exceptions.NotWaitingException;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -11,6 +17,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -23,30 +30,77 @@ import static javax.persistence.FetchType.LAZY;
 
 @Getter
 @Entity
+@Builder
+@RequiredArgsConstructor
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Rental {
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="rental_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn
+    @JoinColumn(name="member_id")
     private Member member;
 
     @Enumerated(EnumType.STRING)
     private RentalStatus rentalStatus;
 
-    private LocalDateTime rentDate;
+    private LocalDateTime rentDate;//렌탈 시작 시간
 
-    private LocalDateTime expDate;
+    private LocalDateTime expDate;//렌탈 만료 시간
 
     @OneToOne(fetch = LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "item_id")
     private Item item;
 
 
+    public static Rental createRental(Item item, Member member) {
+        Rental rental = Rental.builder()
+                .rentalStatus(RentalStatus.WAIT)
+                .member(member)
+                .item(item)
+                .rentDate(LocalDateTime.now())
+                .build();
+        return rental;
+    }
+    public void cancel(){
+        if(this.rentalStatus != RentalStatus.WAIT) {
+            throw new IllegalStateException("렌탈을 취소할 수 없는 상태입니다.");
+        }
+        this.item.finishRental();
 
+    }
 
+    public void validateWaiting() {
+        if(this.rentalStatus != RentalStatus.WAIT){
+            throw new NotWaitingException(this.id);
+        }
+    }
 
+    public void startRental() {
+        this.rentalStatus = rentalStatus.RENT;
+        this.rentDate = LocalDateTime.now();
+        this.setExpDate();
+    }
+    public void finishRental() {
+        this.rentalStatus = rentalStatus.DONE;
+        this.getItem().finishRental();
+    }
 
+    private void setExpDate() {
+        this.expDate = LocalDateTime.now().plusDays(this.getItem().getProduct().getRentTerm());
+    }
+
+    public void validateRent() {
+        if(this.rentalStatus != RentalStatus.RENT){
+            throw new NotRentingException(this.id);
+        }
+    }
+
+    public void validateMember(Member member) {
+        if(this.member != member){
+            throw new NotRentingException(this.id);
+        }
+    }
 }
