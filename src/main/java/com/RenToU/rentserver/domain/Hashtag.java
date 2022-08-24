@@ -35,6 +35,12 @@ public class Hashtag extends BaseTimeEntity{
     @OneToMany(mappedBy = "hashtag", cascade = CascadeType.ALL)
     private List<ClubHashtag> clubs = new ArrayList<>();
 
+    public static Hashtag createHashtag(String hashtagName) {
+        return Hashtag.builder()
+                .name(hashtagName)
+                .build();
+    }
+
     public void addClubs(ClubHashtag clubHashtag) {
         this.clubs.add(clubHashtag);
         clubHashtag.setHashtag(this);
