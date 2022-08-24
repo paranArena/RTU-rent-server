@@ -6,6 +6,7 @@ import com.RenToU.rentserver.DTO.ProductDTO;
 import com.RenToU.rentserver.domain.Club;
 import com.RenToU.rentserver.domain.ClubMember;
 import com.RenToU.rentserver.domain.ClubRole;
+import com.RenToU.rentserver.domain.Hashtag;
 import com.RenToU.rentserver.domain.Item;
 import com.RenToU.rentserver.domain.Member;
 import com.RenToU.rentserver.domain.Notification;
@@ -16,6 +17,7 @@ import com.RenToU.rentserver.exceptions.DuplicateMemberException;
 import com.RenToU.rentserver.exceptions.MemberNotFoundException;
 import com.RenToU.rentserver.exceptions.ProductNotFoundException;
 import com.RenToU.rentserver.infrastructure.ClubRepository;
+import com.RenToU.rentserver.infrastructure.HashtagRepository;
 import com.RenToU.rentserver.infrastructure.MemberRepository;
 import com.RenToU.rentserver.infrastructure.ProductRepository;
 import com.github.dozermapper.core.Mapper;
@@ -24,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -32,6 +35,7 @@ public class ClubServiceImpl implements ClubService{
     private final Mapper mapper;
     private final ClubRepository clubRepository;
     private final MemberRepository memberRepository;
+    private final HashtagRepository hashtagRepository;
 
     private final ProductRepository productRepository;
 
@@ -42,13 +46,16 @@ public class ClubServiceImpl implements ClubService{
 
     @Override
     @Transactional
-    public Club createClub(Long memberId, String clubName, String clubIntro, String thumbnailPath, List<String> clubHashtags ) {
+    public Club createClub(Long memberId, String clubName, String clubIntro, String thumbnailPath, List<String> hashtagNames ) {
         if (clubRepository.findByName(clubName).orElse(null) != null) {
             //TODO DuplicateClubException으로 교체?
             throw new DuplicateMemberException("이미 존재하는 모임 이름입니다.");
         }
         //회원 조회
         Member member = findMember(memberId);
+        List<Hashtag> clubHashtags = hashtagNames.stream().map(hashtagName ->{
+            return findHashtagByNameOrCreate(hashtagName);
+        }).collect(Collectors.toList());
         //클럽 생성
         Club club = Club.createClub(clubName, clubIntro, thumbnailPath, member, clubHashtags);
         clubRepository.save(club);
@@ -80,46 +87,6 @@ public class ClubServiceImpl implements ClubService{
         clubRepository.save(club);
     }
 
-    /**
-     *Notification
-     */
-    @Override
-    @Transactional
-    public Notification createNotification(Long clubId, Long writerId, String title, String content) {
-        // Club club = findClub(clubId);
-        // Member writer = findMember(writerId);
-        // club.findClubMemberByMember(writer).validateAdmin();
-        // Notification notification = mapper.map(notificationDTO,Notification.class);
-        // club.addNotification(notification);
-        // clubRepository.save(club);
-        // return notification;
-        return new Notification();
-    }
-    /**
-     * product
-     */
-    @Override
-    @Transactional
-    public void registerProduct(Long clubId, ProductDTO productDTO, Long memberId){
-        Club club = findClub(clubId);
-        Member requester = findMember(memberId);
-        club.findClubMemberByMember(requester).validateAdmin();
-        Product product = mapper.map(productDTO,Product.class);
-        club.addProduct(product);
-        clubRepository.save(club);
-    }
-    @Override
-    @Transactional
-    public void registerItem(Long productId, Long memberId){
-        Product product = findProduct(productId);
-        Member requester = findMember(memberId);
-        Club club = product.getClub();
-        club.findClubMemberByMember(requester).validateAdmin();
-        product.addSeq();
-        Item item = Item.createItem(product);
-        product.addItem(item);
-        productRepository.save(product);
-    }
 
     /**
      * validation
@@ -134,13 +101,13 @@ public class ClubServiceImpl implements ClubService{
         return memberRepository.findById(id)
                 .orElseThrow(() -> new MemberNotFoundException(id));
     }
-    private Product findProduct(Long id){
-        return productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException(id));
-    }
     private Club findClub(Long id){
         return clubRepository.findById(id)
                 .orElseThrow(() -> new ClubNotFoundException(id));
+    }
+    private Hashtag findHashtagByNameOrCreate(String hashtagName){
+        return hashtagRepository.findByName(hashtagName)
+                .orElse(Hashtag.createHashtag(hashtagName));
     }
 
 }
