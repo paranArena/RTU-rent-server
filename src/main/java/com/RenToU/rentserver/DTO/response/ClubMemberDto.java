@@ -1,4 +1,4 @@
-package com.RenToU.rentserver.DTO;
+package com.RenToU.rentserver.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,7 +16,7 @@ import com.github.dozermapper.core.Mapping;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ClubMemberDTO {
+public class ClubMemberDto {
     
     private Long id;
 
@@ -45,10 +45,10 @@ public class ClubMemberDTO {
     @Mapping("major")
     private String major;
 
-    public static ClubMemberDTO from(ClubMember clubMember) {
+    public static ClubMemberDto from(ClubMember clubMember) {
         if(clubMember == null) return null;
 
-        return ClubMemberDTO.builder()
+        return ClubMemberDto.builder()
             .id(clubMember.getId())
             .email(clubMember.getMember().getEmail())
             .name(clubMember.getMember().getName())
