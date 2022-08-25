@@ -66,8 +66,16 @@ public class Member extends BaseTimeEntity{
         this.clubList.add(clubMember);
         clubMember.setMember(this);
     }
-    public Member createMember(String name,String email){
+    public static Member createMember(String name,String email){
         Member member = Member.builder()
+                .name(name)
+                .email(email)
+                .build();
+        return member;
+    }
+    public static Member createMemberWithId(Long id,String name,String email){
+        Member member = Member.builder()
+                .id(id)
                 .name(name)
                 .email(email)
                 .build();

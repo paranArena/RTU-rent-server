@@ -2,6 +2,7 @@ package com.RenToU.rentserver.controller.club;
 
 import javax.validation.Valid;
 
+import com.RenToU.rentserver.application.NotificationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,11 +27,12 @@ public class NotificationController {
     
     private final MemberService memberService;
     private final ClubServiceImpl clubService;
+    private final NotificationService notificationService;
 
     @PostMapping("")
-    public ResponseEntity<?> createNotification(@PathVariable Long clubId, @Valid @RequestBody CreateNotificationDto notificationDTO){
-        long memberId = memberService.getMyIdWithAuthorities();
-        clubService.createNotification(clubId, memberId, notificationDTO);
-        return new ResponseEntity<>(ResponseDto.res(StatusCode.OK, ResponseMessage.CREATE_NOTIFICATION), HttpStatus.OK);
+    public ResponseEntity<?> createNotification(@PathVariable Long clubId, @Valid @RequestBody NotificationDTO notificationDTO){
+
+        Notification notification = notificationService.createNotification(clubId, memberService.getMyIdWithAuthorities(), notificationDTO.getTitle(), notificationDTO.getContent());
+        return new ResponseEntity<>(ResponseDTO.res(StatusCode.OK, ResponseMessage.UPDATE_CLUB, NotificationDTO.from(notification)), HttpStatus.OK);
     }
 }

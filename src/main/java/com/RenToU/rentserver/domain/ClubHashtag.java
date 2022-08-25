@@ -45,9 +45,10 @@ public class ClubHashtag extends BaseTimeEntity {
         this.hashtag = hashtag;
     }
 
-    public static void createClubHashtag(Club club, Hashtag hashtag){
+    public static ClubHashtag createClubHashtag(Club club, Hashtag hashtag){
         ClubHashtag clubHashtag = new ClubHashtag();
         club.addHashtag(clubHashtag);
         hashtag.addClubs(clubHashtag);
+        return clubHashtag;
     }
 }

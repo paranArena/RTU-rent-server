@@ -17,6 +17,7 @@ import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -72,16 +73,13 @@ public class Club extends BaseTimeEntity{
     }
 
 
-    public static Club createClub(String clubName, String clubIntro, String thumbnailPath,Member member,List<String> hashtags) {
+    public static Club createClub(String clubName, String clubIntro, String thumbnailPath,Member member,List<Hashtag> hashtags) {
         Club club = Club.builder()
                 .name(clubName)
                 .introduction(clubIntro)
                 .thumbnailPath(thumbnailPath)
                 .build();
-        for(String hashtagName : hashtags){
-            Hashtag hashtag = Hashtag.builder()
-                    .name(hashtagName)
-                .build();
+        for(Hashtag hashtag : hashtags){
             ClubHashtag.createClubHashtag(club,hashtag);
         }
         ClubMember.createClubMember(club, member, ClubRole.OWNER);
@@ -96,6 +94,11 @@ public class Club extends BaseTimeEntity{
             throw new MemberNotFoundException(member.getId());
         }
         return clubMember.get();
+    }
+    public List<String> getHashtagNames(){
+        return this.hashtags.stream().map(hashtag->{
+            return hashtag.getHashtag().getName();
+        }).collect(Collectors.toList());
     }
 
 
