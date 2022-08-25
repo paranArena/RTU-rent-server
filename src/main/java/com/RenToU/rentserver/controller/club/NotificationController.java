@@ -10,13 +10,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.RenToU.rentserver.DTO.NotificationDTO;
-import com.RenToU.rentserver.DTO.ResponseDTO;
-import com.RenToU.rentserver.DTO.ResponseMessage;
-import com.RenToU.rentserver.DTO.StatusCode;
 import com.RenToU.rentserver.application.ClubServiceImpl;
 import com.RenToU.rentserver.application.MemberService;
-import com.RenToU.rentserver.domain.Notification;
+import com.RenToU.rentserver.dto.StatusCode;
+import com.RenToU.rentserver.dto.request.CreateNotificationDto;
+import com.RenToU.rentserver.dto.response.ResponseDto;
+import com.RenToU.rentserver.dto.response.ResponseMessage;
 
 import lombok.RequiredArgsConstructor;
 
@@ -29,9 +28,9 @@ public class NotificationController {
     private final ClubServiceImpl clubService;
 
     @PostMapping("")
-    public ResponseEntity<?> createNotification(@PathVariable Long clubId, @Valid @RequestBody NotificationDTO notificationDTO){
-
-        Notification notification = clubService.createNotification(clubId, memberService.getMyIdWithAuthorities(), notificationDTO.getTitle(), notificationDTO.getContent());
-        return new ResponseEntity<>(ResponseDTO.res(StatusCode.OK, ResponseMessage.UPDATE_CLUB, NotificationDTO.from(notification)), HttpStatus.OK);
+    public ResponseEntity<?> createNotification(@PathVariable Long clubId, @Valid @RequestBody CreateNotificationDto notificationDTO){
+        long memberId = memberService.getMyIdWithAuthorities();
+        clubService.createNotification(clubId, memberId, notificationDTO);
+        return new ResponseEntity<>(ResponseDto.res(StatusCode.OK, ResponseMessage.CREATE_NOTIFICATION), HttpStatus.OK);
     }
 }

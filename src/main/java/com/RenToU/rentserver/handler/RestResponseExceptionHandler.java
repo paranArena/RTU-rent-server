@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import com.RenToU.rentserver.DTO.ErrorDTO;
+import com.RenToU.rentserver.dto.response.ErrorDto;
 import com.RenToU.rentserver.exceptions.DuplicateMemberException;
 import com.RenToU.rentserver.exceptions.NotFoundMemberException;
 
@@ -21,14 +21,14 @@ public class RestResponseExceptionHandler extends ResponseEntityExceptionHandler
     @ResponseStatus(CONFLICT)
     @ExceptionHandler(value = { DuplicateMemberException.class })
     @ResponseBody
-    protected ErrorDTO badRequest(RuntimeException ex, WebRequest request) {
-        return new ErrorDTO(CONFLICT.value(), ex.getMessage());
+    protected ErrorDto badRequest(RuntimeException ex, WebRequest request) {
+        return new ErrorDto(CONFLICT.value(), ex.getMessage());
     }
 
     @ResponseStatus(FORBIDDEN)
     @ExceptionHandler(value = { NotFoundMemberException.class, AccessDeniedException.class })
     @ResponseBody
-    protected ErrorDTO forbidden(RuntimeException ex, WebRequest request) {
-        return new ErrorDTO(FORBIDDEN.value(), ex.getMessage());
+    protected ErrorDto forbidden(RuntimeException ex, WebRequest request) {
+        return new ErrorDto(FORBIDDEN.value(), ex.getMessage());
     }
 }

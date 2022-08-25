@@ -7,17 +7,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.RenToU.rentserver.DTO.ResponseDTO;
-import com.RenToU.rentserver.DTO.ResponseMessage;
-import com.RenToU.rentserver.DTO.StatusCode;
 import com.RenToU.rentserver.application.ClubService;
 import com.RenToU.rentserver.application.MemberService;
+import com.RenToU.rentserver.dto.StatusCode;
+import com.RenToU.rentserver.dto.response.ResponseDto;
+import com.RenToU.rentserver.dto.response.ResponseMessage;
 
 import lombok.RequiredArgsConstructor;
 
-/**
- * ClubAdministrateController
- */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/clubs/{clubId}/requests")
@@ -29,7 +26,7 @@ public class ClubAdministrateController {
     @PostMapping("/join")
     public ResponseEntity<?> requestClubJoin(@PathVariable Long clubId) {
         clubService.requestClubJoin(clubId, memberService.getMyIdWithAuthorities());
-        return new ResponseEntity<>(ResponseDTO.res(StatusCode.OK, ResponseMessage.REQUEST_CLUB_JOIN, null), HttpStatus.OK);
+        return new ResponseEntity<>(ResponseDto.res(StatusCode.OK, ResponseMessage.REQUEST_CLUB_JOIN, null), HttpStatus.OK);
     }
 
     @PostMapping("/join/{joinMemberId}")
@@ -38,7 +35,7 @@ public class ClubAdministrateController {
         @PathVariable Long joinMemberId
         ) {
         clubService.acceptClubJoin(clubId, memberService.getMyIdWithAuthorities(), joinMemberId);
-        return new ResponseEntity<>(ResponseDTO.res(StatusCode.OK, ResponseMessage.ACCEPT_CLUB_JOIN, null), HttpStatus.OK);
+        return new ResponseEntity<>(ResponseDto.res(StatusCode.OK, ResponseMessage.ACCEPT_CLUB_JOIN, null), HttpStatus.OK);
     }
     
 }
