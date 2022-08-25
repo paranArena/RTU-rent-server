@@ -15,7 +15,4 @@ public interface ClubService {
     public void requestClubJoin(Long clubId, Long memberId);
     public void acceptClubJoin(Long clubId, Long ownerId, Long joinMemberId);
 
-    public void createNotification(Long clubId, Long WriterId, CreateNotificationDto notificationDto);
-    public void registerProduct(ProductServiceDto productDto);
-    public void registerItem(Long productId, Long memberId);
 }
