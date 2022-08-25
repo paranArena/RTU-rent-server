@@ -61,6 +61,19 @@ public class Product extends BaseTimeEntity{
         club.addProduct(this);
 
     }
+    //클럽과의 관계 생성, item 생성
+    public void initialSetting(Club club,List<RentalPolicy> policies ) {
+        this.setClub(club);
+        for(int i = 1; i <= quantity; i++){
+            Item item = Item.createItem(this,policies.get(i-1),i);
+            this.addItem(item);
+        }
+    }
+
+    public void addQuantity() {
+        this.quantity++;
+    }
+
 
     /**
      * 비즈니스 로직

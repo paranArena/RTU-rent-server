@@ -5,6 +5,7 @@ import com.RenToU.rentserver.domain.Club;
 import com.RenToU.rentserver.domain.Item;
 import com.RenToU.rentserver.domain.Member;
 import com.RenToU.rentserver.domain.Product;
+import com.RenToU.rentserver.domain.RentalPolicy;
 import com.RenToU.rentserver.exceptions.ClubNotFoundException;
 import com.RenToU.rentserver.exceptions.MemberNotFoundException;
 import com.RenToU.rentserver.exceptions.ProductNotFoundException;
@@ -29,16 +30,17 @@ public class ProductService {
         Member requester = findMember(dto.getMemberId());
         club.findClubMemberByMember(requester).validateAdmin();
         Product product = mapper.map(dto,Product.class);
-        product.setClub(club);
+        product.initialSetting(club, dto.getRentalPolicies());
         clubRepository.save(club);
     }
     @Transactional
-    public void registerItem(Long productId, Long memberId, int numbering){
+    public void registerItem(Long productId, Long memberId, RentalPolicy rentalPolicy, int numbering){
         Product product = findProduct(productId);
         Member requester = findMember(memberId);
         Club club = product.getClub();
         club.findClubMemberByMember(requester).validateAdmin();
-        Item item = Item.createItem(product,numbering);
+        Item item = Item.createItem(product,rentalPolicy,numbering);
+        product.addQuantity();
         product.addItem(item);
         productRepository.save(product);
     }

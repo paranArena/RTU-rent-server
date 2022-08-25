@@ -39,9 +39,10 @@ public class Item extends BaseTimeEntity{
     @OneToOne(mappedBy = "item", fetch = LAZY)
     private Rental rental;
 
-    public static Item createItem(Product product,int numbering) {
+    public static Item createItem(Product product,RentalPolicy rentalPolicy, int numbering) {
        Item item = Item.builder()
                .numbering(numbering)
+               .rentalPolicy(rentalPolicy)
                .product(product)
                .build();
        return item;

@@ -2,6 +2,7 @@ package com.RenToU.rentserver.DTO.service;
 
 import com.RenToU.rentserver.domain.Club;
 import com.RenToU.rentserver.domain.Product;
+import com.RenToU.rentserver.domain.RentalPolicy;
 import com.github.dozermapper.core.Mapping;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +10,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.geo.Point;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -39,6 +42,7 @@ public class ProductServiceDto {
     private String caution;
     @Mapping("imagePath")
     private String imagePath;
+    private List<RentalPolicy> rentalPolicies;
 
 
 }
