@@ -12,8 +12,11 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductServiceDto {
+    //other request var
     private long clubId;
+    private long memberId;
 
+    //mapped by CreateProductDto 
     private String name;
     private String category;
     private int price;
@@ -22,7 +25,7 @@ public class ProductServiceDto {
     private String pickupLocation;
     private String caution;
 
+    //S3Service
     private String imagePath;
 
-    private long memberId;
 }

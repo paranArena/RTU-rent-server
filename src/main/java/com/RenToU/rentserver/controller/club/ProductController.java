@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.RenToU.rentserver.application.ClubServiceImpl;
 import com.RenToU.rentserver.application.MemberService;
+import com.RenToU.rentserver.application.ProductService;
 import com.RenToU.rentserver.application.S3Service;
 import com.RenToU.rentserver.dto.StatusCode;
 import com.RenToU.rentserver.dto.request.CreateProductDto;
@@ -31,7 +32,7 @@ import lombok.RequiredArgsConstructor;
 public class ProductController {
     
     private final MemberService memberService;
-    private final ClubServiceImpl clubService;
+    private final ProductService productService;
     private final S3Service s3Service;
     private final Mapper mapper;
 
@@ -48,7 +49,7 @@ public class ProductController {
         productServiceDto.setClubId(clubId);
         productServiceDto.setMemberId(memberId);
 
-        clubService.registerProduct(productServiceDto);
+        productService.registerProduct(productServiceDto);
         return new ResponseEntity<>(ResponseDto.res(StatusCode.OK, ResponseMessage.UPDATE_CLUB), HttpStatus.OK);
     }
 }

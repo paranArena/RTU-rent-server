@@ -16,8 +16,6 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 public class CreateNotificationDto {
 
-    private Long id;
-
     @NotBlank
     @Mapping("title")
     private String title;

@@ -19,7 +19,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateClubDto {
-    private Long id;
 
     @NotBlank
     private String name;
