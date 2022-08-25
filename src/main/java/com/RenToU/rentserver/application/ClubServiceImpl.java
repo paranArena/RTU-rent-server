@@ -1,8 +1,5 @@
 package com.RenToU.rentserver.application;
 
-import com.RenToU.rentserver.DTO.ClubDTO;
-import com.RenToU.rentserver.DTO.NotificationDTO;
-import com.RenToU.rentserver.DTO.ProductDTO;
 import com.RenToU.rentserver.domain.Club;
 import com.RenToU.rentserver.domain.ClubMember;
 import com.RenToU.rentserver.domain.ClubRole;
@@ -11,6 +8,11 @@ import com.RenToU.rentserver.domain.Item;
 import com.RenToU.rentserver.domain.Member;
 import com.RenToU.rentserver.domain.Notification;
 import com.RenToU.rentserver.domain.Product;
+import com.RenToU.rentserver.dto.request.CreateNotificationDto;
+import com.RenToU.rentserver.dto.request.CreateProductDto;
+import com.RenToU.rentserver.dto.response.ClubDto;
+import com.RenToU.rentserver.dto.response.NotificationDto;
+import com.RenToU.rentserver.dto.service.ProductServiceDto;
 import com.RenToU.rentserver.exceptions.CannotJoinClubException;
 import com.RenToU.rentserver.exceptions.ClubNotFoundException;
 import com.RenToU.rentserver.exceptions.DuplicateMemberException;

@@ -1,9 +1,9 @@
-package com.RenToU.rentserver.DTO;
+package com.RenToU.rentserver.dto;
 
 import com.RenToU.rentserver.domain.Rental;
 
-public class RentalDTO {
-    public static RentalDTO from(Rental rental){
+public class RentalDto {
+    public static RentalDto from(Rental rental){
         if(rental == null) return null;
 
         return null;

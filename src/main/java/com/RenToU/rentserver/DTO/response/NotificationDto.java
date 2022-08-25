@@ -1,4 +1,4 @@
-package com.RenToU.rentserver.DTO;
+package com.RenToU.rentserver.dto.response;
 
 import com.RenToU.rentserver.domain.Notification;
 import com.github.dozermapper.core.Mapping;
@@ -15,7 +15,7 @@ import javax.validation.constraints.NotBlank;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class NotificationDTO {
+public class NotificationDto {
 
     private Long id;
 
@@ -31,8 +31,10 @@ public class NotificationDTO {
 
     private LocalDateTime updatedAt;
 
-    public static NotificationDTO from(Notification notification) {
-        return NotificationDTO.builder()
+    public static NotificationDto from(Notification notification) {
+        if(notification == null) return null;
+
+        return NotificationDto.builder()
         .id(notification.getId())
         .title(notification.getTitle())
         .content(notification.getContent())
@@ -40,5 +42,4 @@ public class NotificationDTO {
         .updatedAt(notification.getUpdatedAt())
         .build();
     }
-    //TODO image
 }
