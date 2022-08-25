@@ -8,7 +8,6 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
 
   jpa:
-    database-platform: org.hibernate.spatial.dialect.mysql.MySQL56InnoDBSpatialDialect
     hibernate:
       ddl-auto: create
     properties:

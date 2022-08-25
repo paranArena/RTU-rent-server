@@ -6,12 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -21,7 +16,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -44,18 +38,21 @@ public class ClubMember extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private ClubRole role;
 
-    public static ClubMember createClubMember(Member member,ClubRole role) {
+    public static ClubMember createClubMember(Club club, Member member,ClubRole role) {
         ClubMember clubMember = ClubMember.builder()
-                .member(member)
                 .role(role)
                 .build();
+        club.addClubMember(clubMember);
+        member.addClubList(clubMember);
         return clubMember;
     }
 
     public void setClub(Club club) {
         this.club = club;
     }
-
+    public void setMember(Member member) {
+        this.member = member;
+    }
     public void acceptJoin(){
         if(this.role == ClubRole.WAIT) {
             this.role = ClubRole.USER;

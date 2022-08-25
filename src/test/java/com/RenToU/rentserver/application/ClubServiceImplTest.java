@@ -1,63 +1,75 @@
 package com.RenToU.rentserver.application;
 
 import com.RenToU.rentserver.domain.Club;
+import com.RenToU.rentserver.domain.ClubRole;
 import com.RenToU.rentserver.domain.Member;
 import com.RenToU.rentserver.infrastructure.ClubRepository;
+import com.RenToU.rentserver.infrastructure.HashtagRepository;
 import com.RenToU.rentserver.infrastructure.MemberRepository;
 import com.RenToU.rentserver.infrastructure.ProductRepository;
 import com.github.dozermapper.core.Mapper;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-
+import static org.junit.jupiter.api.Assertions.*;
+@SpringBootTest
+@DisplayName("ClubService 클래스")
+@Transactional
 class ClubServiceImplTest {
-
-    private ClubServiceImpl clubService;
-    private ClubRepository clubRepository = mock(ClubRepository.class);
-    private ProductRepository productRepository = mock(ProductRepository.class);
-    private MemberRepository memberRepository = mock(MemberRepository.class);
-
+    private ClubService service;
+    @Autowired
     private Mapper mapper;
-    private static final Long INITIAL_MEMBER_ID = 1L;
-    private static final String INITIAL_MEMBER_NAME = "TestMemberName";
-    private static final String INITIAL_MEMBER_EMAIL = "testemail@ajou.ac.kr";
+    @Autowired
+    MemberRepository memberRepository;
+    @Autowired
+    HashtagRepository hashtagRepository;
+    @Autowired
+    ClubRepository clubRepository;
+    @Autowired
+    ProductRepository productRepository;
 
-    private static final Long INITIAL_CLUB_ID = 1L;
-    private static final String INITIAL_CLUB_NAME = "TestClubName";
-    private static final String INITIAL_CLUB_INTRO = "TetClubIntrodution.";
+    private static String INITIAL_CLUB_NAME = "NEW CLUB";
+    private static String INITIAL_CLUB_INTRO = "새로 생성한 클럽입니다.";
+    private static String INITIAL_CLUB_THUMB = "www.google.com";
+    private static List<String> INITIAL_CLUB_HASHTAGS = List.of("hashtag1","hashtag2");
+    private Member owner;
+
 
     @BeforeEach
-    void setup(){
-        clubService = new ClubServiceImpl(mapper,clubRepository,memberRepository,productRepository);
-        Member member = Member.builder()
-                .id(INITIAL_MEMBER_ID)
-                .name(INITIAL_MEMBER_NAME)
-                .email(INITIAL_MEMBER_EMAIL)
-                .build();
-        given(memberRepository.findById(INITIAL_MEMBER_ID)).willReturn(Optional.of(member));
-        given(clubRepository.save(any(Club.class))).will(invocation ->{
-            Club source = invocation.getArgument(0);
-                return Club.builder()
-                        .id(INITIAL_CLUB_ID)
-                        .name(source.getName())
-                        .introduction(source.getIntroduction())
-                        .memberList(source.getMemberList())
-                        .build();
-        });
+    void setUp() {
+        service = new ClubServiceImpl(mapper, clubRepository, memberRepository, hashtagRepository, productRepository);
+        owner = memberRepository.findById(1L).get();
     }
 
-    @Test
-    public void createClub(){
-        Long clubId = clubService.createClub(INITIAL_MEMBER_ID,INITIAL_CLUB_NAME,INITIAL_CLUB_INTRO);
-        verify(memberRepository).findById(INITIAL_MEMBER_ID);
-        verify(clubRepository).save(any(Club.class));
-        assertThat(clubId).isEqualTo(INITIAL_CLUB_ID);
+    @Nested
+    @DisplayName("createClub메소드는")
+    class Describe_createClub {
+        @Nested
+        @DisplayName("멤버ID,클럽이름,클럽 설명, 썸네일 주소, 해쉬태그목록이 주어진다면")
+        class data_given {
+            @Test
+            @DisplayName("새 클럽을 생성하고 리턴한다.")
+            void it_return_new_club() {
+                Club club = service.createClub(owner.getId(),INITIAL_CLUB_NAME,INITIAL_CLUB_INTRO,INITIAL_CLUB_THUMB,INITIAL_CLUB_HASHTAGS);
+                assertThat(club.getMemberList().get(0).getMember().getId()).isEqualTo(owner.getId());
+                assertThat(club.getName()).isEqualTo(INITIAL_CLUB_NAME);
+                assertThat(club.getIntroduction()).isEqualTo(INITIAL_CLUB_INTRO);
+                assertThat(club.getThumbnailPath()).isEqualTo(INITIAL_CLUB_THUMB);
+                assertThat(club.getHashtagNames()).isEqualTo(INITIAL_CLUB_HASHTAGS);
+            }
+        }
     }
+
 }

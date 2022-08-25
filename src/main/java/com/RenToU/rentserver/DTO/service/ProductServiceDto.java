@@ -1,0 +1,44 @@
+package com.RenToU.rentserver.DTO.service;
+
+import com.RenToU.rentserver.domain.Club;
+import com.RenToU.rentserver.domain.Product;
+import com.github.dozermapper.core.Mapping;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.data.geo.Point;
+
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class ProductServiceDto {
+    //other request var
+    private long clubId;
+    private long memberId;
+
+    //mapped by CreateProductDto
+    @Mapping("name")
+    private String name;
+    @Mapping("category")
+    private String category;
+    @Mapping("quantity")
+    private int quantity;
+    @Mapping("location")
+    private Point location;
+    @Mapping("fifoRentalPeriod")
+    private int fifoRentalPeriod;
+    @Mapping("reserveRentalPeriod")
+    private int reserveRentalPeriod;
+    @Mapping("price")
+    private int price;
+    @Mapping("caution")
+    private String caution;
+    @Mapping("imagePath")
+    private String imagePath;
+
+
+}
