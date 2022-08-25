@@ -1,12 +1,11 @@
 package com.RenToU.rentserver.domain;
 
-import com.RenToU.rentserver.DTO.NotificationDTO;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,29 +13,41 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
-import java.time.LocalDateTime;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Getter @Setter
-public class Notification{
+@Builder
+@RequiredArgsConstructor
+@AllArgsConstructor
+public class Notification extends BaseTimeEntity{
     @Id
     @GeneratedValue
     @Column(name = "notification_id")
     private Long id;
 
+    @NotNull
     private String title;
 
+    @NotNull
     private String content;
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member writer;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "club_id")
     private Club club;
 
-    @CreatedDate
-    @Column(updatable = false, nullable = false)
-    private LocalDateTime createdAt;
-
-    @LastModifiedDate
-    private LocalDateTime updatedAt;
+    public static Notification createNotification(String title, String content,Member writer,Club club) {
+         Notification notification =  Notification.builder()
+                 .title(title)
+                 .content(content)
+                 .writer(writer)
+                 .build();
+         club.addNotification(notification);
+         notification.setClub(club);
+         return notification;
+    }
 }

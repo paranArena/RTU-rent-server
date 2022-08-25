@@ -1,4 +1,4 @@
-package com.RenToU.rentserver.DTO;
+package com.RenToU.rentserver.DTO.response;
 
 import lombok.*;
 
@@ -7,7 +7,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class TokenDTO {
+public class TokenDto {
 
     private String token;
 }

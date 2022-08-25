@@ -1,4 +1,4 @@
-package com.RenToU.rentserver.DTO;
+package com.RenToU.rentserver.DTO.response;
 
 import lombok.*;
 
@@ -7,6 +7,6 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthorityDTO {
+public class AuthorityDto {
     private String authorityName;
 }

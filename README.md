@@ -1,18 +1,19 @@
 # RTU-rent-server
-RenToU rent spring server
+ren2u spring boot server
 
-API SEVER URL:
-https://rtu-rent-server-uwdjr.run.goorm.io
--> 눌러서 들어갔을 때 "Server is Running :)" 이라고 뜨지 않으면 서버가 다운되어 있는 것. 이해찬에게 말씀해주세요!
+API SEVER URL:  
+~~https://rtu-rent-server-uwdjr.run.goorm.io~~  
+http://ec2-13-125-234-225.ap-northeast-2.compute.amazonaws.com:8080
+- 눌러서 들어갔을 때 "Server is Running :)" 이라고 뜨지 않으면 서버가 다운되어 있는 것. 이해찬에게 DM
 
-
-API SPECIFICATION:
-https://documenter.getpostman.com/view/20800581/UzR1M3qi
+API SPECIFICATION:   
+https://documenter.getpostman.com/view/20800581/UzR1M3qi  
+이 문서에 API 상세 설명 적어놓았습니다.
 
 # Client-side Test
 1. API SPEC에서 request경로와 request 양식, response 예시 확인
 2. 테스트하고자하는 API를 위의 SERVER URL + SPEC상의 경로에 request
-3. status code 500 -> 서버에러 발생시 이해찬에게 연락 
+3. status code 500 -> 서버에러 발생시 이해찬에게 연락
 4. 이 외 문의 사항 언제든지 편하게 연락 :)
 
 
@@ -36,24 +37,27 @@ sudo update-alternatives --config javac
 javac -version
 java -version
 ```
-이후 디폴트로 등록
 
+ec2
+```
+nohup ./gradlew build --exclude-task test && java -jar build/libs/rentserver-0.0.1-SNAPSHOT.jar 1>/dev/null 2>&1 &
+```
 
-그레이들도 버전낮아서(4점대?) 7점대로 업글
+테스트 제외 빌드
+```
+./gradlew  build --exclude-task test && java -jar build/libs/rentserver-0.0.1-SNAPSHOT.jar
+```
+
+그레이들 버전낮아서(4점대?) 7점대로 업글
 ```
 ./gradlew wrapper --gradle-version 7.4
 ```
-빌드명령어
+
 ```
-./gradlew build && java -jar ${java.set.build.path}libs/*.jar
-
-# 명령어 순서
-
-./gradlew  build --exclude-task test #로 빌드(자꾸 테스트 오류 떠서)
-
-java -jar build/libs/rentserver-0.0.1-SNAPSHOT.jar
-(libs 폴더가 생성되지 않았으면 빌드가 제대로 되지 않은것)
-
 ./gradlew clean build #기존 파일을 지우고 새로 빌드
 ```
+
+refference
+- [ec2 spring boot env setting](https://velog.io/@nefertiri/AWS-EC2%EB%A1%9C-%EC%84%9C%EB%B2%84-%EB%A7%8C%EB%93%A4%EA%B8%B0)
+- [exception handling](https://bcp0109.tistory.com/303)
 
