@@ -90,7 +90,7 @@ public class RentalService {
 
     private void isInTheRange(Location location, Product product){
         Double distance = GeometryUtil.distance(location.getLatitude(),location.getLongitude(),product.getLocation().getX(),product.getLocation().getY());
-        if(distance > product.getPickupDistance()){
+        if(distance > 30){// 인정 거리 30m 로 임의 설정
             throw new NotInRangeException(distance);
         }
     }
