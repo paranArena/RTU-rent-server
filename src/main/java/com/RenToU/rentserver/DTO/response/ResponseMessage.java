@@ -1,4 +1,4 @@
-package com.RenToU.rentserver.DTO;
+package com.RenToU.rentserver.dto.response;
 
 public class ResponseMessage {
     public static final String LOGIN_SUCCESS = "로그인 성공";
@@ -19,4 +19,10 @@ public class ResponseMessage {
     public static final String GET_CLUB = "클럽 조회 성공";
     public static final String UPDATE_CLUB = "클럽 수정 성공";
     public static final String DELETE_CLUB = "클럽 삭제 성공";
+
+    public static final String CREATE_NOTIFICATION = "공지 생성 성공";
+    public static final String GET_NOTIFICATION = "공지 생성 성공";
+    public static final String UPDATE_NOTIFICATION = "공지 수정 성공";
+    public static final String DELETE_NOTIFICATION = "공지 삭제 성공";
+
 }

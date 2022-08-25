@@ -1,8 +1,14 @@
 package com.RenToU.rentserver.controller.member;
 
-import com.RenToU.rentserver.DTO.*;
 import com.RenToU.rentserver.application.MemberService;
 import com.RenToU.rentserver.domain.Member;
+import com.RenToU.rentserver.dto.*;
+import com.RenToU.rentserver.dto.request.LoginDto;
+import com.RenToU.rentserver.dto.request.SignupDto;
+import com.RenToU.rentserver.dto.response.MemberDto;
+import com.RenToU.rentserver.dto.response.ResponseDto;
+import com.RenToU.rentserver.dto.response.ResponseMessage;
+import com.RenToU.rentserver.dto.response.TokenDto;
 import com.RenToU.rentserver.jwt.JwtFilter;
 import com.RenToU.rentserver.jwt.TokenProvider;
 
@@ -43,13 +49,13 @@ public class AuthController {
 //    }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> signup(@Valid @RequestBody SignupDTO signupDTO) {
+    public ResponseEntity<?> signup(@Valid @RequestBody SignupDto signupDTO) {
         Member member = memberService.signup(signupDTO);
-        return new ResponseEntity<>(ResponseDTO.res(StatusCode.OK, ResponseMessage.CREATE_USER, MemberDTO.from(member) ), HttpStatus.OK);
+        return new ResponseEntity<>(ResponseDto.res(StatusCode.OK, ResponseMessage.CREATE_USER, MemberDto.from(member) ), HttpStatus.OK);
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<TokenDTO> login(@Valid @RequestBody LoginDTO loginDto) {
+    public ResponseEntity<TokenDto> login(@Valid @RequestBody LoginDto loginDto) {
 
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword());
@@ -62,7 +68,7 @@ public class AuthController {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
 
-        return new ResponseEntity<>(new TokenDTO(jwt), httpHeaders, HttpStatus.OK);
+        return new ResponseEntity<>(new TokenDto(jwt), httpHeaders, HttpStatus.OK);
     }
 
     @PostMapping("/logout")

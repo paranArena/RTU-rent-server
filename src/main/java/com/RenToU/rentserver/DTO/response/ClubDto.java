@@ -1,4 +1,4 @@
-package com.RenToU.rentserver.DTO;
+package com.RenToU.rentserver.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -6,19 +6,17 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotBlank;
 
 import com.RenToU.rentserver.domain.Club;
-import com.RenToU.rentserver.domain.ClubHashtag;
 
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ClubDTO {
+public class ClubDto {
 
     private Long id;
 
@@ -32,29 +30,29 @@ public class ClubDTO {
 
     private List<String> hashtags;
 
-    private List<ClubMemberDTO> memberList;
+    private List<ClubMemberDto> memberList;
 
-    private List<NotificationDTO> notifications;
+    private List<NotificationDto> notifications;
 
-    private List<ProductDTO> products;
+    private List<ProductDto> products;
     
-    public static ClubDTO from(Club club){
+    public static ClubDto from(Club club){
         if(club == null) return null;
 
-        return ClubDTO.builder()
+        return ClubDto.builder()
             .id(club.getId())
             .name(club.getName())
             .introduction(club.getIntroduction())
             .thumbnailPath(club.getThumbnailPath())
             .hashtags(club.getHashtagNames())
             .memberList(club.getMemberList().stream()
-                .map(member -> ClubMemberDTO.from(member))
+                .map(member -> ClubMemberDto.from(member))
                 .collect(Collectors.toList()))
             .notifications(club.getNotifications().stream()
-                .map(notification -> NotificationDTO.from(notification))
+                .map(notification -> NotificationDto.from(notification))
                 .collect(Collectors.toList()))
             .products(club.getProducts().stream()
-                .map(product -> ProductDTO.from(product))
+                .map(product -> ProductDto.from(product))
                 .collect(Collectors.toList()))
             .build();
     }

@@ -1,10 +1,9 @@
 package com.RenToU.rentserver.application;
 
-import com.RenToU.rentserver.DTO.ClubDTO;
-import com.RenToU.rentserver.DTO.NotificationDTO;
-import com.RenToU.rentserver.DTO.ProductDTO;
 import com.RenToU.rentserver.domain.Club;
-import com.RenToU.rentserver.domain.Notification;
+import com.RenToU.rentserver.dto.request.CreateNotificationDto;
+import com.RenToU.rentserver.dto.request.CreateProductDto;
+import com.RenToU.rentserver.dto.service.ProductServiceDto;
 
 import java.util.List;
 

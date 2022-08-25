@@ -1,4 +1,4 @@
-package com.RenToU.rentserver.DTO;
+package com.RenToU.rentserver.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +11,7 @@ import com.RenToU.rentserver.domain.ClubMember;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class MemberClubDTO {
+public class MemberClubDto {
     
     private long id;
 
@@ -23,10 +23,10 @@ public class MemberClubDTO {
     
     private String thumbnailPath;
 
-    public static MemberClubDTO from(ClubMember clubMember) {
+    public static MemberClubDto from(ClubMember clubMember) {
         if(clubMember == null) return null;
 
-        return MemberClubDTO.builder()
+        return MemberClubDto.builder()
             .id(clubMember.getId())
             .clubId(clubMember.getClub().getId())
             .name(clubMember.getClub().getName())

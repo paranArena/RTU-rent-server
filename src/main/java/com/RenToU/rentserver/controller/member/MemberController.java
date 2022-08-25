@@ -1,9 +1,9 @@
 package com.RenToU.rentserver.controller.member;
 
 
-import com.RenToU.rentserver.DTO.MemberDTO;
 import com.RenToU.rentserver.application.MemberService;
 import com.RenToU.rentserver.domain.Member;
+import com.RenToU.rentserver.dto.response.MemberDto;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,16 +22,16 @@ public class MemberController {
 
     @GetMapping("")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
-    public ResponseEntity<MemberDTO> getMyInfo(HttpServletRequest request) {
+    public ResponseEntity<MemberDto> getMyInfo(HttpServletRequest request) {
         Member member = memberService.getMyUserWithAuthorities();
-        return ResponseEntity.ok(MemberDTO.from(member));
+        return ResponseEntity.ok(MemberDto.from(member));
     }
 
     @GetMapping("/{email}")
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<MemberDTO> getMemberInfo(@PathVariable("email") String email) {
+    public ResponseEntity<MemberDto> getMemberInfo(@PathVariable("email") String email) {
         Member member = memberService.getUserWithAuthorities(email);
-        return ResponseEntity.ok(MemberDTO.from(member));
+        return ResponseEntity.ok(MemberDto.from(member));
     }
 
     @GetMapping("/{email}/exists")
