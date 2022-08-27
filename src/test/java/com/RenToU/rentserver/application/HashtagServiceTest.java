@@ -48,7 +48,7 @@ class HashtagServiceTest {
         when(hashtagRepository.findByName("testHash")).thenReturn(Optional.of(hashtag));
         when(clubHashtagRepository.findByHashtag(hashtag)).thenReturn(List.of(clubHashtag1,clubHashtag2));
         //when
-        List<Club> findClubs = service.findGroupsWithHashtag(hashtag.getName());
+        List<Club> findClubs = service.findClubsWithHashtag(hashtag.getName());
         //then
         assertThat(findClubs.stream().count()).isEqualTo(2);
         assertThat(findClubs.get(0)).isEqualTo(club);
