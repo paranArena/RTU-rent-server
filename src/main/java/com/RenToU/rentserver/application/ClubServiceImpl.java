@@ -28,6 +28,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Transactional(readOnly = true)
@@ -87,6 +88,12 @@ public class ClubServiceImpl implements ClubService{
         //가입
         clubMember.acceptJoin();
         clubRepository.save(club);
+    }
+    @Override
+    public Club findClubByName(String clubName){
+        return clubRepository.findByName(clubName)
+                .orElseThrow(() -> new ClubNotFoundException(clubName));
+
     }
 
 
