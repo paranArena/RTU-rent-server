@@ -92,4 +92,13 @@ public class ClubController {
         }
         return new ResponseEntity<>(ResponseDto.res(StatusCode.BAD_REQUEST, ResponseMessage.SEARCH_CLUB_FAIL), HttpStatus.BAD_REQUEST);
     }
+
+    @GetMapping("/all")
+    public ResponseEntity<?> searchAllClubs(){
+        List<Club> clubs = clubService.findClubs();
+        List<ClubDto> clubDtos = clubs.stream()
+            .map(club->ClubDto.from(club))
+            .collect(Collectors.toList());
+        return new ResponseEntity<>(ResponseDto.res(StatusCode.OK, ResponseMessage.SEARCH_CLUB_SUCCESS, clubDtos), HttpStatus.OK);
+    }
 }
