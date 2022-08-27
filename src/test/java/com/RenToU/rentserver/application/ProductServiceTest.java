@@ -1,6 +1,7 @@
 package com.RenToU.rentserver.application;
 
 import com.RenToU.rentserver.domain.Club;
+import com.RenToU.rentserver.domain.Location;
 import com.RenToU.rentserver.domain.Member;
 import com.RenToU.rentserver.domain.Product;
 import com.RenToU.rentserver.domain.RentalPolicy;
@@ -37,7 +38,7 @@ class ProductServiceTest {
     private Mapper mapper;
     @Mock
     private ClubRepository clubRepository;
-    Point point = new Point(1.0,1.0);
+    Location location = new Location(1.0,1.0);
     @Test
     @DisplayName("product 등록 테스트")
     public void registerProductTest() throws Exception {
@@ -47,8 +48,8 @@ class ProductServiceTest {
         //when
         when(clubRepository.findById(1L)).thenReturn(Optional.of(club));
         when(memberRepository.findById(1L)).thenReturn(Optional.of(member));
-        ProductServiceDto productServiceDto = new ProductServiceDto(1L,1L,"카메라","전자기기",3,point,3,3,100000,"caution","www.com", List.of(RentalPolicy.FIFO,RentalPolicy.FIFO,RentalPolicy.RESERVE));
-        Product mappedProduct = Product.createProduct("카메라","전자기기",3,point,3,3,100000,"caution","www.com");
+        ProductServiceDto productServiceDto = new ProductServiceDto(1L,1L,"카메라","전자기기",3,location,3,3,100000,"caution","www.com", List.of(RentalPolicy.FIFO,RentalPolicy.FIFO,RentalPolicy.RESERVE));
+        Product mappedProduct = Product.createProduct("카메라","전자기기",3,location,3,3,100000,"caution","www.com");
         when(mapper.map(productServiceDto,Product.class)).thenReturn(mappedProduct);
         Product product = service.registerProduct(productServiceDto);
         //then
