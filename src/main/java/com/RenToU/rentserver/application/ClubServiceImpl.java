@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Transactional(readOnly = true)
@@ -65,6 +66,19 @@ public class ClubServiceImpl implements ClubService{
         ClubMember.createClubMember(club, member, ClubRole.WAIT);
         clubRepository.save(club);
     }
+
+    @Override
+    @Transactional
+    public List<ClubMember> getClubJoin(Long clubId, Long memberId) {
+        // TODO validate OWNER
+        Member member = findMember(memberId);
+        Club club = findClub(clubId);
+        
+        return club.getMemberList().stream()
+        .filter((clubMember)->clubMember.getRole()==ClubRole.WAIT)
+        .collect(Collectors.toList());
+    }
+
     @Override
     @Transactional
     public void acceptClubJoin(Long clubId, Long ownerId,Long joinMemberId){

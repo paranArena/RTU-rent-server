@@ -1,6 +1,7 @@
 package com.RenToU.rentserver.application;
 
 import com.RenToU.rentserver.domain.Club;
+import com.RenToU.rentserver.domain.ClubMember;
 
 import java.util.List;
 
@@ -12,6 +13,7 @@ public interface ClubService {
     public Club createClub(Long memberId, String clubName, String clubIntro, String thumbnailPath, List<String> clubHashtags);
 
     public void requestClubJoin(Long clubId, Long memberId);
+    public List<ClubMember> getClubJoin(Long clubId, Long memberId);
     public void acceptClubJoin(Long clubId, Long ownerId, Long joinMemberId);
 
 }
