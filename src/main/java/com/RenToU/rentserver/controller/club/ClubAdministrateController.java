@@ -1,7 +1,11 @@
 package com.RenToU.rentserver.controller.club;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,7 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.RenToU.rentserver.application.ClubService;
 import com.RenToU.rentserver.application.MemberService;
+import com.RenToU.rentserver.domain.ClubMember;
 import com.RenToU.rentserver.dto.StatusCode;
+import com.RenToU.rentserver.dto.response.ClubMemberDto;
 import com.RenToU.rentserver.dto.response.ResponseDto;
 import com.RenToU.rentserver.dto.response.ResponseMessage;
 
@@ -38,4 +44,12 @@ public class ClubAdministrateController {
         return new ResponseEntity<>(ResponseDto.res(StatusCode.OK, ResponseMessage.ACCEPT_CLUB_JOIN, null), HttpStatus.OK);
     }
     
+    @GetMapping("/join")
+    public ResponseEntity<?> getClubJoin(@PathVariable Long clubId){
+        List<ClubMember> awaitClubMembers = clubService.getClubJoin(clubId, memberService.getMyIdWithAuthorities());
+        List<ClubMemberDto> clubMemberDtos = awaitClubMembers.stream()
+                                                .map((cm)->ClubMemberDto.from(cm))
+                                                .collect(Collectors.toList());
+        return new ResponseEntity<>(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_CLUB_JOIN, clubMemberDtos), HttpStatus.OK);
+    }
 }
