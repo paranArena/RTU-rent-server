@@ -21,7 +21,7 @@ public class HashtagService {
     private final HashtagRepository hashtagRepository;
     private final ClubHashtagRepository clubHashtagRepository;
 
-    public List<Club> findGroupsWithHashtag(String hashtagName){
+    public List<Club> findClubsWithHashtag(String hashtagName){
         Hashtag hashtag = findHashtagByName(hashtagName);
         List<ClubHashtag> clubs = clubHashtagRepository.findByHashtag(hashtag);
         return clubs.stream().map(clubHashtag -> {

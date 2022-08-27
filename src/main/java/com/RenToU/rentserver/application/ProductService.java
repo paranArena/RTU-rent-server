@@ -1,15 +1,18 @@
 package com.RenToU.rentserver.application;
 
+import com.RenToU.rentserver.dto.service.ProductServiceDto;
 import com.RenToU.rentserver.domain.Club;
 import com.RenToU.rentserver.domain.Item;
 import com.RenToU.rentserver.domain.Member;
 import com.RenToU.rentserver.domain.Product;
+import com.RenToU.rentserver.domain.RentalPolicy;
 import com.RenToU.rentserver.exceptions.ClubNotFoundException;
 import com.RenToU.rentserver.exceptions.MemberNotFoundException;
 import com.RenToU.rentserver.exceptions.ProductNotFoundException;
 import com.RenToU.rentserver.infrastructure.ClubRepository;
 import com.RenToU.rentserver.infrastructure.MemberRepository;
 import com.RenToU.rentserver.infrastructure.ProductRepository;
+import com.github.dozermapper.core.Mapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,25 +20,27 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Service
 public class ProductService {
+    private final Mapper mapper;
     private final ClubRepository clubRepository;
     private final MemberRepository memberRepository;
     private final ProductRepository productRepository;
     @Transactional
-    public void registerProduct(Long clubId, Product product, Long memberId){
-        Club club = findClub(clubId);
-        Member requester = findMember(memberId);
+    public void registerProduct(ProductServiceDto dto){
+        Club club = findClub(dto.getClubId());
+        Member requester = findMember(dto.getMemberId());
         club.findClubMemberByMember(requester).validateAdmin();
-        club.addProduct(product);
+        Product product = mapper.map(dto,Product.class);
+        product.initialSetting(club, dto.getRentalPolicies());
         clubRepository.save(club);
     }
     @Transactional
-    public void registerItem(Long productId, Long memberId){
+    public void registerItem(Long productId, Long memberId, RentalPolicy rentalPolicy, int numbering){
         Product product = findProduct(productId);
         Member requester = findMember(memberId);
         Club club = product.getClub();
         club.findClubMemberByMember(requester).validateAdmin();
-        product.addSeq();
-        Item item = Item.createItem(product);
+        Item item = Item.createItem(product,rentalPolicy,numbering);
+        product.addQuantity();
         product.addItem(item);
         productRepository.save(product);
     }

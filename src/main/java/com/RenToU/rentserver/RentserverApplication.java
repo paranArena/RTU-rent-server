@@ -15,7 +15,7 @@ public class RentserverApplication {
 		SpringApplication.run(RentserverApplication.class, args);
 	}
 	@Bean
-	public Mapper dozerMapper() {
+	public Mapper mapper() {
 		return DozerBeanMapperBuilder.buildDefault();
 	}
 }
