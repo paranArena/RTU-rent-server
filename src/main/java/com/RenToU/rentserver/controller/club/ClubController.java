@@ -27,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -75,13 +76,20 @@ public class ClubController {
     }
 
     @GetMapping("")
-    public ResponseEntity<?> searchlubWithHashtag(@RequestParam List<String> hashtag) {
-        // TODO generalization: if no param, if multiple param
-        List<Club> clubs = hashtagService.findClubsWithHashtag(hashtag.get(0));
-        List<ClubDto> clubDtos = clubs.stream()
-        .map(club->ClubDto.from(club))
-        .collect(Collectors.toList());
-        return new ResponseEntity<>(ResponseDto.res(StatusCode.OK, ResponseMessage.SEARCH_CLUB_SUCCESS, clubDtos), HttpStatus.OK);
+    public ResponseEntity<?> searchlubWithHashtag(@RequestParam Map<String,String> searchMap) {
+        if(searchMap.containsKey("name")){
+            String clubName = searchMap.get("name");
+            Club club = clubService.findClubByName(clubName);
+            return new ResponseEntity<>(ResponseDto.res(StatusCode.OK, ResponseMessage.SEARCH_CLUB_SUCCESS, ClubDto.from(club)), HttpStatus.OK);
+        }
+        else if (searchMap.containsKey("hashtag")){
+            String hashtag = searchMap.get("hashtag");
+            List<Club> clubs = hashtagService.findClubsWithHashtag(hashtag);
+            List<ClubDto> clubDtos = clubs.stream()
+            .map(club->ClubDto.from(club))
+            .collect(Collectors.toList());
+            return new ResponseEntity<>(ResponseDto.res(StatusCode.OK, ResponseMessage.SEARCH_CLUB_SUCCESS, clubDtos), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(ResponseDto.res(StatusCode.BAD_REQUEST, ResponseMessage.SEARCH_CLUB_FAIL), HttpStatus.BAD_REQUEST);
     }
-
 }
