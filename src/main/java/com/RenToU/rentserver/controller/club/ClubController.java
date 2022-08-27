@@ -77,7 +77,7 @@ public class ClubController {
     @GetMapping("")
     public ResponseEntity<?> searchlubWithHashtag(@RequestParam List<String> hashtag) {
         // TODO generalization: if no param, if multiple param
-        List<Club> clubs = hashtagService.findGroupsWithHashtag(hashtag.get(0));
+        List<Club> clubs = hashtagService.findClubsWithHashtag(hashtag.get(0));
         List<ClubDto> clubDtos = clubs.stream()
         .map(club->ClubDto.from(club))
         .collect(Collectors.toList());
