@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.RenToU.rentserver.application.MemberService;
 import com.RenToU.rentserver.dto.StatusCode;
 import com.RenToU.rentserver.dto.request.CreateNotificationDto;
+import com.RenToU.rentserver.dto.response.NotificationDto;
 import com.RenToU.rentserver.dto.response.ResponseDto;
 import com.RenToU.rentserver.dto.response.ResponseMessage;
 import com.RenToU.rentserver.dto.service.NotificationServiceDto;
