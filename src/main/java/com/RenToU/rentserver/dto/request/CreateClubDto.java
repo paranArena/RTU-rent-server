@@ -1,11 +1,11 @@
-package com.RenToU.rentserver.DTO.request;
+package com.RenToU.rentserver.dto.request;
 
 import java.util.List;
 
 import javax.validation.constraints.NotBlank;
 
-import com.RenToU.rentserver.DTO.response.ClubMemberDto;
-import com.RenToU.rentserver.DTO.response.NotificationDto;
+import com.RenToU.rentserver.dto.response.ClubMemberDto;
+import com.RenToU.rentserver.dto.response.NotificationDto;
 
 
 import lombok.AllArgsConstructor;

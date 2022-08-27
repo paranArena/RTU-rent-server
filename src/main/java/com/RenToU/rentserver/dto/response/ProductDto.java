@@ -1,4 +1,4 @@
-package com.RenToU.rentserver.DTO.response;
+package com.RenToU.rentserver.dto.response;
 
 import com.RenToU.rentserver.domain.Product;
 

@@ -4,10 +4,10 @@ import com.RenToU.rentserver.application.ClubServiceImpl;
 import com.RenToU.rentserver.application.MemberService;
 import com.RenToU.rentserver.application.S3Service;
 import com.RenToU.rentserver.domain.Club;
-import com.RenToU.rentserver.DTO.*;
-import com.RenToU.rentserver.DTO.response.ClubDto;
-import com.RenToU.rentserver.DTO.response.ResponseDto;
-import com.RenToU.rentserver.DTO.response.ResponseMessage;
+import com.RenToU.rentserver.dto.*;
+import com.RenToU.rentserver.dto.response.ClubDto;
+import com.RenToU.rentserver.dto.response.ResponseDto;
+import com.RenToU.rentserver.dto.response.ResponseMessage;
 
 import lombok.RequiredArgsConstructor;
 

@@ -2,7 +2,7 @@ package com.RenToU.rentserver.controller.club;
 
 import javax.validation.Valid;
 
-import com.RenToU.rentserver.DTO.response.NotificationDto;
+import com.RenToU.rentserver.dto.response.NotificationDto;
 import com.RenToU.rentserver.application.NotificationService;
 import com.RenToU.rentserver.domain.Notification;
 
@@ -14,13 +14,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.RenToU.rentserver.application.ClubServiceImpl;
 import com.RenToU.rentserver.application.MemberService;
-import com.RenToU.rentserver.DTO.StatusCode;
-import com.RenToU.rentserver.DTO.request.CreateNotificationDto;
-import com.RenToU.rentserver.DTO.response.ResponseDto;
-import com.RenToU.rentserver.DTO.response.ResponseMessage;
-import com.RenToU.rentserver.DTO.service.NotificationServiceDto;
+import com.RenToU.rentserver.dto.StatusCode;
+import com.RenToU.rentserver.dto.request.CreateNotificationDto;
+import com.RenToU.rentserver.dto.response.ResponseDto;
+import com.RenToU.rentserver.dto.response.ResponseMessage;
+import com.RenToU.rentserver.dto.service.NotificationServiceDto;
 import com.github.dozermapper.core.Mapper;
 
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package com.RenToU.rentserver.DTO.request;
+package com.RenToU.rentserver.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

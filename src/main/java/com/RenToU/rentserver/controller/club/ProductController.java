@@ -13,15 +13,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.RenToU.rentserver.application.ClubServiceImpl;
 import com.RenToU.rentserver.application.MemberService;
 import com.RenToU.rentserver.application.ProductService;
 import com.RenToU.rentserver.application.S3Service;
-import com.RenToU.rentserver.DTO.StatusCode;
-import com.RenToU.rentserver.DTO.request.CreateProductDto;
-import com.RenToU.rentserver.DTO.response.ResponseDto;
-import com.RenToU.rentserver.DTO.response.ResponseMessage;
-import com.RenToU.rentserver.DTO.service.ProductServiceDto;
+import com.RenToU.rentserver.dto.StatusCode;
+import com.RenToU.rentserver.dto.request.CreateProductDto;
+import com.RenToU.rentserver.dto.response.ResponseDto;
+import com.RenToU.rentserver.dto.response.ResponseMessage;
+import com.RenToU.rentserver.dto.service.ProductServiceDto;
 import com.github.dozermapper.core.Mapper;
 
 import lombok.RequiredArgsConstructor;

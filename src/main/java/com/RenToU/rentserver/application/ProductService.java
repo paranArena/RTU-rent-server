@@ -1,6 +1,6 @@
 package com.RenToU.rentserver.application;
 
-import com.RenToU.rentserver.DTO.service.ProductServiceDto;
+import com.RenToU.rentserver.dto.service.ProductServiceDto;
 import com.RenToU.rentserver.domain.Club;
 import com.RenToU.rentserver.domain.Item;
 import com.RenToU.rentserver.domain.Member;

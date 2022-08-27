@@ -1,4 +1,4 @@
-package com.RenToU.rentserver.DTO.service;
+package com.RenToU.rentserver.dto.service;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

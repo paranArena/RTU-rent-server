@@ -1,4 +1,4 @@
-package com.RenToU.rentserver.DTO.response;
+package com.RenToU.rentserver.dto.response;
 
 import java.util.ArrayList;
 import java.util.List;

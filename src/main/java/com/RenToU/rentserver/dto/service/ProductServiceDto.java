@@ -1,7 +1,5 @@
-package com.RenToU.rentserver.DTO.service;
+package com.RenToU.rentserver.dto.service;
 
-import com.RenToU.rentserver.domain.Club;
-import com.RenToU.rentserver.domain.Product;
 import com.RenToU.rentserver.domain.RentalPolicy;
 import com.github.dozermapper.core.Mapping;
 import lombok.AllArgsConstructor;

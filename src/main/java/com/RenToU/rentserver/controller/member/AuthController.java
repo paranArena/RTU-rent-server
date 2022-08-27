@@ -1,12 +1,12 @@
 package com.RenToU.rentserver.controller.member;
 
-import com.RenToU.rentserver.DTO.StatusCode;
-import com.RenToU.rentserver.DTO.request.LoginDto;
-import com.RenToU.rentserver.DTO.request.SignupDto;
-import com.RenToU.rentserver.DTO.response.MemberDto;
-import com.RenToU.rentserver.DTO.response.ResponseDto;
-import com.RenToU.rentserver.DTO.response.ResponseMessage;
-import com.RenToU.rentserver.DTO.response.TokenDto;
+import com.RenToU.rentserver.dto.StatusCode;
+import com.RenToU.rentserver.dto.request.LoginDto;
+import com.RenToU.rentserver.dto.request.SignupDto;
+import com.RenToU.rentserver.dto.response.MemberDto;
+import com.RenToU.rentserver.dto.response.ResponseDto;
+import com.RenToU.rentserver.dto.response.ResponseMessage;
+import com.RenToU.rentserver.dto.response.TokenDto;
 import com.RenToU.rentserver.application.MemberService;
 import com.RenToU.rentserver.domain.Member;
 import com.RenToU.rentserver.jwt.JwtFilter;
