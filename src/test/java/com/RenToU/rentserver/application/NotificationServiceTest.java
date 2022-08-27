@@ -1,39 +1,27 @@
 package com.RenToU.rentserver.application;
 
-import com.RenToU.rentserver.DTO.service.NotificationServiceDto;
+import com.RenToU.rentserver.dto.service.NotificationServiceDto;
 import com.RenToU.rentserver.domain.Club;
 import com.RenToU.rentserver.domain.ClubMember;
 import com.RenToU.rentserver.domain.ClubRole;
-import com.RenToU.rentserver.domain.Hashtag;
 import com.RenToU.rentserver.domain.Member;
 import com.RenToU.rentserver.domain.Notification;
 import com.RenToU.rentserver.exceptions.MemberNotFoundException;
 import com.RenToU.rentserver.exceptions.NoAdminPermissionException;
 import com.RenToU.rentserver.infrastructure.ClubRepository;
-import com.RenToU.rentserver.infrastructure.HashtagRepository;
 import com.RenToU.rentserver.infrastructure.MemberRepository;
-import com.github.dozermapper.core.inject.Inject;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.util.Assert.isInstanceOf;

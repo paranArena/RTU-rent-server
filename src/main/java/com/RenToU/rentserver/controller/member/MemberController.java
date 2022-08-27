@@ -1,7 +1,7 @@
 package com.RenToU.rentserver.controller.member;
 
 
-import com.RenToU.rentserver.DTO.response.MemberDto;
+import com.RenToU.rentserver.dto.response.MemberDto;
 import com.RenToU.rentserver.application.MemberService;
 import com.RenToU.rentserver.domain.Member;
 

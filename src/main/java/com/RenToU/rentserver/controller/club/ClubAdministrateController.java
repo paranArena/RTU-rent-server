@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.RenToU.rentserver.application.ClubService;
 import com.RenToU.rentserver.application.MemberService;
-import com.RenToU.rentserver.DTO.StatusCode;
-import com.RenToU.rentserver.DTO.response.ResponseDto;
-import com.RenToU.rentserver.DTO.response.ResponseMessage;
+import com.RenToU.rentserver.dto.StatusCode;
+import com.RenToU.rentserver.dto.response.ResponseDto;
+import com.RenToU.rentserver.dto.response.ResponseMessage;
 
 import lombok.RequiredArgsConstructor;
 

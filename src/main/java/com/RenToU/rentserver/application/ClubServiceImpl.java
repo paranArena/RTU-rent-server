@@ -4,20 +4,11 @@ import com.RenToU.rentserver.domain.Club;
 import com.RenToU.rentserver.domain.ClubMember;
 import com.RenToU.rentserver.domain.ClubRole;
 import com.RenToU.rentserver.domain.Hashtag;
-import com.RenToU.rentserver.domain.Item;
 import com.RenToU.rentserver.domain.Member;
-import com.RenToU.rentserver.domain.Notification;
-import com.RenToU.rentserver.domain.Product;
-import com.RenToU.rentserver.DTO.request.CreateNotificationDto;
-import com.RenToU.rentserver.DTO.request.CreateProductDto;
-import com.RenToU.rentserver.DTO.response.ClubDto;
-import com.RenToU.rentserver.DTO.response.NotificationDto;
-import com.RenToU.rentserver.DTO.service.ProductServiceDto;
 import com.RenToU.rentserver.exceptions.CannotJoinClubException;
 import com.RenToU.rentserver.exceptions.ClubNotFoundException;
 import com.RenToU.rentserver.exceptions.DuplicateMemberException;
 import com.RenToU.rentserver.exceptions.MemberNotFoundException;
-import com.RenToU.rentserver.exceptions.ProductNotFoundException;
 import com.RenToU.rentserver.infrastructure.ClubRepository;
 import com.RenToU.rentserver.infrastructure.HashtagRepository;
 import com.RenToU.rentserver.infrastructure.MemberRepository;
@@ -28,7 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Transactional(readOnly = true)

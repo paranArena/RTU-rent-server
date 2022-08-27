@@ -1,4 +1,4 @@
-package com.RenToU.rentserver.DTO;
+package com.RenToU.rentserver.dto;
 
 import com.RenToU.rentserver.domain.Rental;
 

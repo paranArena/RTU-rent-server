@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.RenToU.rentserver.DTO.response.ErrorDto;
+import com.RenToU.rentserver.dto.response.ErrorDto;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice

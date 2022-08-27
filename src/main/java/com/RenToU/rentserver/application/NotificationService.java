@@ -1,6 +1,6 @@
 package com.RenToU.rentserver.application;
 
-import com.RenToU.rentserver.DTO.service.NotificationServiceDto;
+import com.RenToU.rentserver.dto.service.NotificationServiceDto;
 import com.RenToU.rentserver.domain.Club;
 import com.RenToU.rentserver.domain.Member;
 import com.RenToU.rentserver.domain.Notification;
