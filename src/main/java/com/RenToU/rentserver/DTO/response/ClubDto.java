@@ -8,8 +8,6 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.validation.constraints.NotBlank;
-
 import com.RenToU.rentserver.domain.Club;
 
 @Getter
@@ -20,10 +18,8 @@ public class ClubDto {
 
     private Long id;
 
-    @NotBlank
     private String name;
 
-    @NotBlank
     private String introduction;
 
     private String thumbnailPath;
