@@ -25,7 +25,6 @@ public class ProductService {
     private final ClubRepository clubRepository;
     private final MemberRepository memberRepository;
     private final ProductRepository productRepository;
-    private final Mapper mapper;
 
     @Transactional
     public void registerProduct(ProductServiceDto dto){
