@@ -2,6 +2,7 @@ package com.RenToU.rentserver.controller.club;
 
 import javax.validation.Valid;
 
+import com.RenToU.rentserver.dto.response.NotificationDto;
 import com.RenToU.rentserver.application.NotificationService;
 import com.RenToU.rentserver.domain.Notification;
 
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.RenToU.rentserver.application.ClubServiceImpl;
 import com.RenToU.rentserver.application.MemberService;
 import com.RenToU.rentserver.dto.StatusCode;
 import com.RenToU.rentserver.dto.request.CreateNotificationDto;

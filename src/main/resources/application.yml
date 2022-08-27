@@ -1,18 +1,18 @@
 logging.level:
-    org.hibernate.SQL: debug
-    org.hibernate.type: trace
+  org.hibernate.SQL: debug
+  org.hibernate.type: trace
 
 spring:
-    jpa:
-        hibernate.ddl-auto: create
-        properties:
-            hibernate:
-                show_sql: true
-                format_sql: true
-        # use data.sql
-        defer-datasource-initialization: true
+  jpa:
+    hibernate.ddl-auto: create
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
     # use data.sql
-    sql.init.mode: always
+    defer-datasource-initialization: true
+  # use data.sql
+  sql.init.mode: always
 
 # import other properties
 spring.profiles.include: jwt, rds, s3

@@ -1,5 +1,6 @@
 package com.RenToU.rentserver.domain;
 
+import com.RenToU.rentserver.exceptions.CannotRentException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -30,15 +31,18 @@ public class Item extends BaseTimeEntity{
 
     private int numbering;
 
+    private RentalPolicy rentalPolicy;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
     @OneToOne(mappedBy = "item", fetch = LAZY)
     private Rental rental;
 
-    public static Item createItem(Product product) {
+    public static Item createItem(Product product,RentalPolicy rentalPolicy, int numbering) {
        Item item = Item.builder()
-               .numbering(product.getSequence())
+               .numbering(numbering)
+               .rentalPolicy(rentalPolicy)
                .product(product)
                .build();
        return item;
@@ -46,5 +50,18 @@ public class Item extends BaseTimeEntity{
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    /**
+     * 비즈니스 로직
+     */
+    public void validateRentable(){
+        if(this.rental != null){
+            throw new CannotRentException(this.id);
+        }
+    }
+
+    public void finishRental() {
+        this.rental = null;
     }
 }
