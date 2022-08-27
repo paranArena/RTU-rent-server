@@ -83,7 +83,11 @@ public class ClubServiceImpl implements ClubService{
     public Club findClubByName(String clubName){
         return clubRepository.findByName(clubName)
                 .orElseThrow(() -> new ClubNotFoundException(clubName));
-
+    }
+    @Override
+    public Club findClubById(long clubId){
+        return clubRepository.findById(clubId)
+                .orElseThrow(() -> new ClubNotFoundException(clubId));
     }
 
 
