@@ -26,12 +26,9 @@ public class Notification extends BaseTimeEntity{
     @Column(name = "notification_id")
     private Long id;
 
-    @NotNull
     private String title;
 
-    @NotNull
     private String content;
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member writer;

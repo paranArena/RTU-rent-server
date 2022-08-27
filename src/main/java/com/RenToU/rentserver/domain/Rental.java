@@ -89,7 +89,11 @@ public class Rental {
     }
 
     private void setExpDate() {
-        this.expDate = LocalDateTime.now().plusDays(this.getItem().getProduct().getRentTerm());
+        if(this.getItem().getRentalPolicy() == RentalPolicy.FIFO) {
+            this.expDate = LocalDateTime.now().plusDays(this.getItem().getProduct().getFifoRentalPeriod());
+        }else{
+            this.expDate = LocalDateTime.now().plusDays(this.getItem().getProduct().getReserveRentalPeriod());
+        }
     }
 
     public void validateRent() {
