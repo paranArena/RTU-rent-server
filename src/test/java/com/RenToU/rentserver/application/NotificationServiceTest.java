@@ -10,6 +10,7 @@ import com.RenToU.rentserver.exceptions.MemberNotFoundException;
 import com.RenToU.rentserver.exceptions.NoAdminPermissionException;
 import com.RenToU.rentserver.infrastructure.ClubRepository;
 import com.RenToU.rentserver.infrastructure.MemberRepository;
+import com.RenToU.rentserver.infrastructure.NotificationRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,6 +33,8 @@ class NotificationServiceTest {
     private NotificationService service;
     @Mock
     private MemberRepository memberRepository;
+    @Mock
+    private NotificationRepository notificationRepository;
     @Mock
     private ClubRepository clubRepository;
 

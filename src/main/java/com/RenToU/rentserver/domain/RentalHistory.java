@@ -28,7 +28,6 @@ import static javax.persistence.FetchType.LAZY;
 @Builder
 @RequiredArgsConstructor
 @AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RentalHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

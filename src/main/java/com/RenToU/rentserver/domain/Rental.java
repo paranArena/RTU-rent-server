@@ -33,7 +33,6 @@ import static javax.persistence.FetchType.LAZY;
 @Builder
 @RequiredArgsConstructor
 @AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Rental {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="rental_id")
