@@ -2,6 +2,7 @@ package com.RenToU.rentserver.dto.service;
 
 import com.RenToU.rentserver.domain.Location;
 import com.RenToU.rentserver.domain.RentalPolicy;
+import com.RenToU.rentserver.dto.request.CreateItemDto;
 import com.github.dozermapper.core.Mapping;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,7 +30,7 @@ public class ProductServiceDto {
     @Mapping("category")
     private String category;
     @Mapping("quantity")
-    private int quantity;
+    private List<CreateItemDto> items;
     @Mapping("location")
     private Location location;
     @Mapping("fifoRentalPeriod")
