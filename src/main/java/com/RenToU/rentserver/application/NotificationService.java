@@ -3,6 +3,7 @@ package com.RenToU.rentserver.application;
 import com.RenToU.rentserver.domain.Club;
 import com.RenToU.rentserver.domain.Member;
 import com.RenToU.rentserver.domain.Notification;
+import com.RenToU.rentserver.dto.service.NotificationServiceDto;
 import com.RenToU.rentserver.exceptions.ClubNotFoundException;
 import com.RenToU.rentserver.exceptions.MemberNotFoundException;
 import com.RenToU.rentserver.infrastructure.ClubRepository;
@@ -17,18 +18,20 @@ public class NotificationService {
     private final MemberRepository memberRepository;
     private final ClubRepository clubRepository;
     @Transactional
-    public Notification createNotification(Long clubId, Long writerId, String title, String content) {
-         Club club = findClub(clubId);
-         Member writer = findMember(writerId);
+    public Notification createNotification(NotificationServiceDto notificationServiceDto) {
+         Club club = findClub(notificationServiceDto.getClubId());
+         Member writer = findMember(notificationServiceDto.getMemberId());
          club.findClubMemberByMember(writer).validateAdmin();
-         Notification notification = Notification.createNotification(title,content,writer,club);
+         Notification notification = Notification.createNotification(notificationServiceDto.getTitle(),notificationServiceDto.getContent(),writer,club);
          clubRepository.save(club);
          return notification;
     }
+
     private Member findMember(Long id){
         return memberRepository.findById(id)
                 .orElseThrow(() -> new MemberNotFoundException(id));
     }
+
     private Club findClub(Long id){
         return clubRepository.findById(id)
                 .orElseThrow(() -> new ClubNotFoundException(id));

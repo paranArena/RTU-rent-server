@@ -4,12 +4,15 @@ import com.RenToU.rentserver.domain.Club;
 import com.RenToU.rentserver.domain.Item;
 import com.RenToU.rentserver.domain.Member;
 import com.RenToU.rentserver.domain.Product;
+import com.RenToU.rentserver.dto.service.ProductServiceDto;
 import com.RenToU.rentserver.exceptions.ClubNotFoundException;
 import com.RenToU.rentserver.exceptions.MemberNotFoundException;
 import com.RenToU.rentserver.exceptions.ProductNotFoundException;
 import com.RenToU.rentserver.infrastructure.ClubRepository;
 import com.RenToU.rentserver.infrastructure.MemberRepository;
 import com.RenToU.rentserver.infrastructure.ProductRepository;
+import com.github.dozermapper.core.Mapper;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,11 +23,14 @@ public class ProductService {
     private final ClubRepository clubRepository;
     private final MemberRepository memberRepository;
     private final ProductRepository productRepository;
+    private final Mapper mapper;
+
     @Transactional
-    public void registerProduct(Long clubId, Product product, Long memberId){
-        Club club = findClub(clubId);
-        Member requester = findMember(memberId);
+    public void registerProduct(ProductServiceDto productServiceDto){
+        Club club = findClub(productServiceDto.getClubId());
+        Member requester = findMember(productServiceDto.getMemberId());
         club.findClubMemberByMember(requester).validateAdmin();
+        Product product = mapper.map(productServiceDto, Product.class);
         club.addProduct(product);
         clubRepository.save(club);
     }
