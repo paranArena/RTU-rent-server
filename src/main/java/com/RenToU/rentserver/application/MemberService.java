@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.RenToU.rentserver.domain.Authority;
 import com.RenToU.rentserver.domain.Member;
 import com.RenToU.rentserver.dto.request.SignupDto;
-import com.RenToU.rentserver.dto.response.MemberDto;
 import com.RenToU.rentserver.exceptions.DuplicateMemberException;
 import com.RenToU.rentserver.exceptions.NotFoundMemberException;
 import com.RenToU.rentserver.infrastructure.MemberRepository;

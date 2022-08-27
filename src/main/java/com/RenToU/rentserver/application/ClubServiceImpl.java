@@ -4,20 +4,11 @@ import com.RenToU.rentserver.domain.Club;
 import com.RenToU.rentserver.domain.ClubMember;
 import com.RenToU.rentserver.domain.ClubRole;
 import com.RenToU.rentserver.domain.Hashtag;
-import com.RenToU.rentserver.domain.Item;
 import com.RenToU.rentserver.domain.Member;
-import com.RenToU.rentserver.domain.Notification;
-import com.RenToU.rentserver.domain.Product;
-import com.RenToU.rentserver.dto.request.CreateNotificationDto;
-import com.RenToU.rentserver.dto.request.CreateProductDto;
-import com.RenToU.rentserver.dto.response.ClubDto;
-import com.RenToU.rentserver.dto.response.NotificationDto;
-import com.RenToU.rentserver.dto.service.ProductServiceDto;
 import com.RenToU.rentserver.exceptions.CannotJoinClubException;
 import com.RenToU.rentserver.exceptions.ClubNotFoundException;
 import com.RenToU.rentserver.exceptions.DuplicateMemberException;
 import com.RenToU.rentserver.exceptions.MemberNotFoundException;
-import com.RenToU.rentserver.exceptions.ProductNotFoundException;
 import com.RenToU.rentserver.infrastructure.ClubRepository;
 import com.RenToU.rentserver.infrastructure.HashtagRepository;
 import com.RenToU.rentserver.infrastructure.MemberRepository;
@@ -87,6 +78,12 @@ public class ClubServiceImpl implements ClubService{
         //가입
         clubMember.acceptJoin();
         clubRepository.save(club);
+    }
+    @Override
+    public Club findClubByName(String clubName){
+        return clubRepository.findByName(clubName)
+                .orElseThrow(() -> new ClubNotFoundException(clubName));
+
     }
 
 

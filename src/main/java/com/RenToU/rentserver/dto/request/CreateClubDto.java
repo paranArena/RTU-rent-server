@@ -7,6 +7,7 @@ import javax.validation.constraints.NotBlank;
 import com.RenToU.rentserver.dto.response.ClubMemberDto;
 import com.RenToU.rentserver.dto.response.NotificationDto;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

@@ -3,6 +3,7 @@ package com.RenToU.rentserver.domain;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.geo.Point;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -18,7 +19,6 @@ import java.util.List;
 //물품 ex) 책, 우산
 @Entity
 @Getter
-@Setter
 public class Product extends BaseTimeEntity{
     @GeneratedValue @Id
     @Column(name = "product_id")
@@ -26,9 +26,21 @@ public class Product extends BaseTimeEntity{
 
     private String name;
 
-    private int sequence;
+    private String category;
 
-    private RentalPolicy rentalPolicy;
+    private int quantity;
+
+    private Point location;
+
+    private int fifoRentalPeriod;
+
+    private int reserveRentalPeriod;
+
+    private int price;
+
+    private String caution;
+
+    private String imagePath;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "club_id")
@@ -44,13 +56,27 @@ public class Product extends BaseTimeEntity{
         items.add(item);
         item.setProduct(this);
     }
+    public void setClub(Club club){
+        this.club = club;
+        club.addProduct(this);
+
+    }
+    //클럽과의 관계 생성, item 생성
+    public void initialSetting(Club club,List<RentalPolicy> policies ) {
+        this.setClub(club);
+        for(int i = 1; i <= quantity; i++){
+            Item item = Item.createItem(this,policies.get(i-1),i);
+            this.addItem(item);
+        }
+    }
+
+    public void addQuantity() {
+        this.quantity++;
+    }
+
 
     /**
      * 비즈니스 로직
      */
-    public void addSeq() {
-        this.sequence++;
-    }
-
 
 }
