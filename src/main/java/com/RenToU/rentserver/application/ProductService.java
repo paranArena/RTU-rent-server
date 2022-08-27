@@ -27,13 +27,14 @@ public class ProductService {
     private final ProductRepository productRepository;
 
     @Transactional
-    public void registerProduct(ProductServiceDto dto){
+    public Product registerProduct(ProductServiceDto dto){
         Club club = findClub(dto.getClubId());
         Member requester = findMember(dto.getMemberId());
         club.findClubMemberByMember(requester).validateAdmin();
         Product product = mapper.map(dto,Product.class);
         product.initialSetting(club, dto.getRentalPolicies());
         clubRepository.save(club);
+        return product;
     }
     @Transactional
     public void registerItem(Long productId, Long memberId, RentalPolicy rentalPolicy, int numbering){

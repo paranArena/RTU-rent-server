@@ -1,11 +1,13 @@
 package com.RenToU.rentserver.dto.service;
 
+import com.RenToU.rentserver.domain.Location;
 import com.RenToU.rentserver.domain.RentalPolicy;
 import com.github.dozermapper.core.Mapping;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.geo.Point;
 
@@ -29,7 +31,7 @@ public class ProductServiceDto {
     @Mapping("quantity")
     private int quantity;
     @Mapping("location")
-    private Point location;
+    private Location location;
     @Mapping("fifoRentalPeriod")
     private int fifoRentalPeriod;
     @Mapping("reserveRentalPeriod")
