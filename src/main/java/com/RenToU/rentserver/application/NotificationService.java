@@ -30,8 +30,8 @@ public class NotificationService {
          String title = notificationServiceDto.getTitle();
          String content = notificationServiceDto.getContent();
          Notification notification = Notification.createNotification(title,content,writer,club);
-         clubRepository.save(club);
          notificationRepository.save(notification);
+         clubRepository.save(club);
          return notification;
     }
 
