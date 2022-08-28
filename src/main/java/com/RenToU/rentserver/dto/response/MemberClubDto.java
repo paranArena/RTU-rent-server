@@ -4,34 +4,31 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import com.RenToU.rentserver.domain.ClubMember;
+import com.RenToU.rentserver.domain.ClubRole;
+import com.RenToU.rentserver.dto.response.preview.ClubPreviewDto;
+import com.github.dozermapper.core.Mapping;
 
-@Getter
+@Getter @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class MemberClubDto {
     
-    private long id;
+    private Long id;
 
-    private long clubId;
+    private ClubPreviewDto club;
 
-    private String name;
-
-    private String introduction;
-    
-    private String thumbnailPath;
-
+    private ClubRole role;
     public static MemberClubDto from(ClubMember clubMember) {
         if(clubMember == null) return null;
 
         return MemberClubDto.builder()
             .id(clubMember.getId())
-            .clubId(clubMember.getClub().getId())
-            .name(clubMember.getClub().getName())
-            .introduction(clubMember.getClub().getIntroduction())
-            .thumbnailPath(clubMember.getClub().getThumbnailPath())
+            .club(ClubPreviewDto.from(clubMember.getClub()))
+            .role(clubMember.getRole())
             .build();
     }
 }
