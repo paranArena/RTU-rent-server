@@ -10,8 +10,8 @@ import java.util.Set;
 @Entity
 @Getter @Setter
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class Member extends BaseTimeEntity{
 
     @Id
@@ -58,10 +58,6 @@ public class Member extends BaseTimeEntity{
     /**
      *연관관계 편의 메소드
      */
-    // public void addMemberAuth(MemberAuthority memberAuthority) {
-    //     this.authorities.add(memberAuthority);
-    //     memberAuthority.setMember(this);
-    // }
     public void addClubList(ClubMember clubMember) {
         this.clubList.add(clubMember);
         clubMember.setMember(this);
