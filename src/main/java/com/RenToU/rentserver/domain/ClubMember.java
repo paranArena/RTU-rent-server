@@ -20,8 +20,8 @@ import javax.persistence.ManyToOne;
 @Entity
 @Getter
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class ClubMember extends BaseTimeEntity {
     @Id @GeneratedValue
     @Column(name = "club_member_id")

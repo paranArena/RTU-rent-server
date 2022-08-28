@@ -35,6 +35,12 @@ public class NotificationService {
          return notification;
     }
 
+    @Transactional
+    public void deleteNotification(long memberId, Long notificationId) {
+        //TODO member 권한 체크
+        notificationRepository.deleteById(notificationId);
+    }
+
     private Notification findNotification(Long id) {
         return notificationRepository.findById(id)
                 .orElseThrow(()->new NotificationNotFoundException(id));
