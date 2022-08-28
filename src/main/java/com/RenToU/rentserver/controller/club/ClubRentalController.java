@@ -1,6 +1,6 @@
 package com.RenToU.rentserver.controller.club;
 
-import com.RenToU.rentserver.application.ClubServiceImpl;
+import com.RenToU.rentserver.application.ClubService;
 import com.RenToU.rentserver.application.HashtagService;
 import com.RenToU.rentserver.application.MemberService;
 import com.RenToU.rentserver.application.S3Service;
@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/clubs/{clubId}/rentals")
 public class ClubRentalController {
 
-    private final ClubServiceImpl clubService;
+    private final ClubService clubService;
     private final Mapper mapper;
 
     @GetMapping("/search/all")
