@@ -46,7 +46,7 @@ public class ClubRequestController {
     
     @GetMapping("/join/search/all")
     public ResponseEntity<?> searchClubJoinsAll(@PathVariable Long clubId){
-        List<ClubMember> awaitClubMembers = clubService.getClubJoin(clubId, memberService.getMyIdWithAuthorities());
+        List<ClubMember> awaitClubMembers = clubService.searchClubJoinsAll(clubId, memberService.getMyIdWithAuthorities());
         List<ClubMemberDto> resData = 
             awaitClubMembers.stream()
             .map((cm)->ClubMemberDto.from(cm))

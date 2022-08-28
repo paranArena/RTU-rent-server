@@ -1,6 +1,6 @@
 package com.RenToU.rentserver.controller.club;
 
-import com.RenToU.rentserver.application.ClubServiceImpl;
+import com.RenToU.rentserver.application.ClubService;
 import com.RenToU.rentserver.application.HashtagService;
 import com.RenToU.rentserver.domain.Club;
 import com.RenToU.rentserver.dto.*;
@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/clubs/search")
 public class ClubSearchController {
 
-    private final ClubServiceImpl clubService;
+    private final ClubService clubService;
     private final HashtagService hashtagService;
 
     @GetMapping("")

@@ -76,7 +76,7 @@ public class ClubServiceImpl implements ClubService{
 
     @Override
     @Transactional
-    public List<ClubMember> getClubJoin(Long clubId, Long memberId) {
+    public List<ClubMember> searchClubJoinsAll(Long clubId, Long memberId) {
         // TODO validate OWNER
         Member member = findMember(memberId);
         Club club = findClub(clubId);
