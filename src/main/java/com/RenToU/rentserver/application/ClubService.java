@@ -10,7 +10,8 @@ public interface ClubService {
     public Club findClubByName(String clubName);
 
     public Club createClub(Long memberId, String clubName, String clubIntro, String thumbnailPath, List<String> clubHashtags);
-
+    public void deleteClub(long memberId, long clubId);
+    
     public void requestClubJoin(Long clubId, Long memberId);
     public void acceptClubJoin(Long clubId, Long ownerId, Long joinMemberId);
 

@@ -3,7 +3,7 @@ package com.RenToU.rentserver.controller.member;
 import com.RenToU.rentserver.dto.StatusCode;
 import com.RenToU.rentserver.dto.request.LoginDto;
 import com.RenToU.rentserver.dto.request.SignupDto;
-import com.RenToU.rentserver.dto.response.MemberDto;
+import com.RenToU.rentserver.dto.response.MemberInfoDto;
 import com.RenToU.rentserver.dto.response.ResponseDto;
 import com.RenToU.rentserver.dto.response.ResponseMessage;
 import com.RenToU.rentserver.dto.response.TokenDto;
@@ -11,6 +11,7 @@ import com.RenToU.rentserver.application.MemberService;
 import com.RenToU.rentserver.domain.Member;
 import com.RenToU.rentserver.jwt.JwtFilter;
 import com.RenToU.rentserver.jwt.TokenProvider;
+import com.github.dozermapper.core.Mapper;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,6 +23,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,26 +39,28 @@ public class AuthController {
     private final TokenProvider tokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final MemberService memberService;
+    private final Mapper mapper;
 
     @GetMapping("/")
     public ResponseEntity<String> hello(HttpServletRequest request) {
         return ResponseEntity.ok("<h1> Server is Running :) </h1>");
     }
 
-//    @PostMapping("/test-redirect")
-//    public void testRedirect(HttpServletResponse response) throws IOException {
-//        response.sendRedirect("/api/user");
-//    }
+    @GetMapping("/members/{email}/exists")
+    public ResponseEntity<Boolean> checkEmailDuplicate(@PathVariable("email") String email) {
+
+        return ResponseEntity.ok(memberService.checkEmailDuplicate(email));
+    }
 
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@Valid @RequestBody SignupDto signupDTO) {
         Member member = memberService.signup(signupDTO);
-        return new ResponseEntity<>(ResponseDto.res(StatusCode.OK, ResponseMessage.CREATE_USER, MemberDto.from(member) ), HttpStatus.OK);
+        MemberInfoDto resData = mapper.map(member, MemberInfoDto.class);
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.CREATE_USER, resData));
     }
 
     @PostMapping("/authenticate")
     public ResponseEntity<TokenDto> login(@Valid @RequestBody LoginDto loginDto) {
-
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword());
 
