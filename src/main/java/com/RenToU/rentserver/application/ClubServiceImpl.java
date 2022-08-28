@@ -58,6 +58,13 @@ public class ClubServiceImpl implements ClubService{
 
     @Override
     @Transactional
+    public void deleteClub(long memberId, long clubId) {
+        //TODO member 권한 체크
+        clubRepository.deleteById(clubId);
+    }
+
+    @Override
+    @Transactional
     public void requestClubJoin(Long clubId, Long memberId) {
         //회원 조회
         Member member = findMember(memberId);

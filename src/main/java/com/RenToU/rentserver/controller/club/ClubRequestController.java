@@ -24,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/clubs/{clubId}/requests")
-public class ClubAdministrateController {
+public class ClubRequestController {
 
     private final MemberService memberService;
     private final ClubService clubService;
@@ -32,7 +32,7 @@ public class ClubAdministrateController {
     @PostMapping("/join")
     public ResponseEntity<?> requestClubJoin(@PathVariable Long clubId) {
         clubService.requestClubJoin(clubId, memberService.getMyIdWithAuthorities());
-        return new ResponseEntity<>(ResponseDto.res(StatusCode.OK, ResponseMessage.REQUEST_CLUB_JOIN, null), HttpStatus.OK);
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.REQUEST_CLUB_JOIN, null));
     }
 
     @PostMapping("/join/{joinMemberId}")
@@ -41,7 +41,7 @@ public class ClubAdministrateController {
         @PathVariable Long joinMemberId
         ) {
         clubService.acceptClubJoin(clubId, memberService.getMyIdWithAuthorities(), joinMemberId);
-        return new ResponseEntity<>(ResponseDto.res(StatusCode.OK, ResponseMessage.ACCEPT_CLUB_JOIN, null), HttpStatus.OK);
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.ACCEPT_CLUB_JOIN, null));
     }
     
     @GetMapping("/join")
