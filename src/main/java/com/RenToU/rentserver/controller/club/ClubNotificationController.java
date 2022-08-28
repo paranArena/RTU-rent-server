@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.RenToU.rentserver.application.ClubService;
-import com.RenToU.rentserver.application.ClubServiceImpl;
+import com.RenToU.rentserver.application.ClubService;
 import com.RenToU.rentserver.application.MemberService;
 import com.RenToU.rentserver.dto.StatusCode;
 import com.RenToU.rentserver.dto.request.CreateNotificationDto;
@@ -43,7 +43,7 @@ import lombok.RequiredArgsConstructor;
 public class ClubNotificationController {
     
     private final MemberService memberService;
-    private final ClubServiceImpl clubService;
+    private final ClubService clubService;
     private final NotificationService notificationService;
     private final Mapper mapper;
 

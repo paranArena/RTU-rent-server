@@ -13,6 +13,7 @@ public class ResponseMessage {
     public static final String DB_ERROR = "데이터베이스 에러";
 
     public static final String REQUEST_CLUB_JOIN = "클럽 가입 신청 성공";
+    public static final String GET_CLUB_JOIN = "클럽 가입 조회 성공";
     public static final String ACCEPT_CLUB_JOIN = "클럽 가입 승인 성공";
 
     public static final String CREATE_CLUB = "클럽 생성 성공";

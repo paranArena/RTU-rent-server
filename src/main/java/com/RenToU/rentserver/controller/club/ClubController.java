@@ -1,6 +1,6 @@
 package com.RenToU.rentserver.controller.club;
 
-import com.RenToU.rentserver.application.ClubServiceImpl;
+import com.RenToU.rentserver.application.ClubService;
 import com.RenToU.rentserver.application.HashtagService;
 import com.RenToU.rentserver.application.MemberService;
 import com.RenToU.rentserver.application.S3Service;
@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/clubs")
 public class ClubController {
 
-    private final ClubServiceImpl clubService;
+    private final ClubService clubService;
     private final MemberService memberService;
     private final HashtagService hashtagService;
     private final S3Service s3Service;
