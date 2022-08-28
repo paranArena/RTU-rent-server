@@ -1,5 +1,7 @@
 package com.RenToU.rentserver.dto.request;
 
+import java.util.List;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.AllArgsConstructor;
@@ -18,7 +20,7 @@ public class CreateProductDto {
     private String name;
     private String category;
     private int price;
-    private int quantity;
+    private List<CreateItemDto> itemList;
     private int maxRentalPeriod;
     private String pickupLocation;
     private String caution;

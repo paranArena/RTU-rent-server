@@ -24,15 +24,15 @@ public class NotificationService {
     private final ClubRepository clubRepository;
     @Transactional
     public Notification createNotification(NotificationServiceDto notificationServiceDto) {
-         Club club = findClub(notificationServiceDto.getClubId());
-         Member writer = findMember(notificationServiceDto.getMemberId());
-         club.findClubMemberByMember(writer).validateAdmin();
-         String title = notificationServiceDto.getTitle();
-         String content = notificationServiceDto.getContent();
-         Notification notification = Notification.createNotification(title,content,writer,club);
-         notificationRepository.save(notification);
-         clubRepository.save(club);
-         return notification;
+        Club club = findClub(notificationServiceDto.getClubId());
+        Member writer = findMember(notificationServiceDto.getMemberId());
+        club.findClubMemberByMember(writer).validateAdmin();
+        String title = notificationServiceDto.getTitle();
+        String content = notificationServiceDto.getContent();
+        Notification notification = Notification.createNotification(title,content,writer,club);
+        notificationRepository.save(notification);
+        clubRepository.save(club);
+        return notification;
     }
 
     @Transactional
