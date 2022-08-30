@@ -30,6 +30,9 @@ import static org.junit.jupiter.api.Assertions.*;
 @DisplayName("productService 통합 테스트")
 class ProductServiceWebTest {
     private ProductService service;
+
+    @Autowired
+    private MemberService memberService;
     @Autowired
     private ClubService clubService;
     @Autowired
@@ -64,7 +67,7 @@ class ProductServiceWebTest {
             @DisplayName("새 product를 생성하고 리턴한다.")
             void it_return_new_club() {
                 Location location = new Location(1.0,1.0);
-                ProductServiceDto dto = new ProductServiceDto(club.getId(),owner.getId(),"카메라","전자기기",3,location,3,3,100000,"caution","www.com", List.of(RentalPolicy.FIFO,RentalPolicy.FIFO,RentalPolicy.RESERVE));
+                ProductServiceDto dto = new ProductServiceDto(club.getId(),owner.getId(),"카메라","전자기기",location,3,3,100000,"caution","www.com", List.of(RentalPolicy.FIFO,RentalPolicy.FIFO,RentalPolicy.RESERVE));
                 Product product = service.registerProduct(dto);
                 assertThat(product.getName()).isEqualTo("카메라");
                 assertThat(product.getLocation().getX()).isEqualTo(location.getX());

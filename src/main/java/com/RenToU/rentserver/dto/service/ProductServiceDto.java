@@ -24,13 +24,10 @@ public class ProductServiceDto {
     private long clubId;
     private long memberId;
 
-    //mapped by CreateProductDto
     @Mapping("name")
     private String name;
     @Mapping("category")
     private String category;
-    @Mapping("quantity")
-    private List<CreateItemDto> items;
     @Mapping("location")
     private Location location;
     @Mapping("fifoRentalPeriod")
