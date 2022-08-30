@@ -92,7 +92,7 @@ public class ClubServiceImpl implements ClubService{
      */
     private void validateCanJoin(Club club,Member member) {
         if(club.getMemberList().contains(member)){
-            throw new CannotJoinClubException(club.getId(),club.getName());
+            throw new CannotJoinClubException(club.getId(),club.getName(), "멤버를 찾을 수 없습니다.");
         }
     }
 

@@ -57,7 +57,7 @@ public class ClubMember extends BaseTimeEntity {
         if(this.role == ClubRole.WAIT) {
             this.role = ClubRole.USER;
         }else{
-            throw new CannotJoinClubException(this.club.getId(),this.club.getName());
+            throw new CannotJoinClubException(this.club.getId(),this.club.getName(),"사용자가 대기 상태가 아닙니다.");
         }
     }
 
