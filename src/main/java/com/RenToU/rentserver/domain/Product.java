@@ -73,7 +73,7 @@ public class Product extends BaseTimeEntity{
     public void initialSetting(Club club,List<RentalPolicy> policies ) {
         this.setClub(club);
         this.setLocation(location);
-        for(int i = 1; i <= quantity; i++){
+        for(int i = 1; i <= policies.size(); i++){
             Item item = Item.createItem(this,policies.get(i-1),i);
             this.addItem(item);
         }
@@ -98,9 +98,6 @@ public class Product extends BaseTimeEntity{
         return product;
     }
 
-    public void addQuantity() {
-        this.quantity++;
-    }
 
 
     /**
