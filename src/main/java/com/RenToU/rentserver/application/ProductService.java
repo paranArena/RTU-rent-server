@@ -13,6 +13,7 @@ import com.RenToU.rentserver.infrastructure.ClubRepository;
 import com.RenToU.rentserver.infrastructure.MemberRepository;
 import com.RenToU.rentserver.infrastructure.ProductRepository;
 import com.github.dozermapper.core.Mapper;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +25,7 @@ public class ProductService {
     private final ClubRepository clubRepository;
     private final MemberRepository memberRepository;
     private final ProductRepository productRepository;
+
     @Transactional
     public Product registerProduct(ProductServiceDto dto){
         Club club = findClub(dto.getClubId());
@@ -41,7 +43,6 @@ public class ProductService {
         Club club = product.getClub();
         club.findClubMemberByMember(requester).validateAdmin();
         Item item = Item.createItem(product,rentalPolicy,numbering);
-        product.addQuantity();
         product.addItem(item);
         productRepository.save(product);
     }

@@ -1,13 +1,15 @@
 package com.RenToU.rentserver.controller.club;
 
-import com.RenToU.rentserver.application.ClubServiceImpl;
+import com.RenToU.rentserver.application.ClubService;
+import com.RenToU.rentserver.application.HashtagService;
 import com.RenToU.rentserver.application.MemberService;
 import com.RenToU.rentserver.application.S3Service;
 import com.RenToU.rentserver.domain.Club;
 import com.RenToU.rentserver.dto.*;
-import com.RenToU.rentserver.dto.response.ClubDto;
+import com.RenToU.rentserver.dto.response.ClubInfoDto;
 import com.RenToU.rentserver.dto.response.ResponseDto;
 import com.RenToU.rentserver.dto.response.ResponseMessage;
+import com.github.dozermapper.core.Mapper;
 
 import lombok.RequiredArgsConstructor;
 
@@ -25,15 +27,19 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/clubs")
 public class ClubController {
 
-    private final ClubServiceImpl clubService;
+    private final ClubService clubService;
     private final MemberService memberService;
+    private final HashtagService hashtagService;
     private final S3Service s3Service;
+    private final Mapper mapper;
 
     @PostMapping("")
     public ResponseEntity<?> createClub(@RequestParam("name") String name, @RequestParam("introduction") String intro, @RequestParam("thumbnail") MultipartFile thumbnail,@RequestParam("hashtags") List<String> hashtags) throws IOException {
@@ -44,29 +50,33 @@ public class ClubController {
         }
         
         Club club = clubService.createClub(memberId, name, intro, thumbnailPath, hashtags);
-        return new ResponseEntity<>(ResponseDto.res(StatusCode.OK, ResponseMessage.CREATE_CLUB, ClubDto.from(club)), HttpStatus.OK);
+        ClubInfoDto resData = ClubInfoDto.from(club);
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.CREATE_CLUB, resData));
     }
 
-    @GetMapping("/{clubId}")
-    public ResponseEntity<?> getClubInfo(@PathVariable long clubId) {
-        // Club club = clubService.findClub(clubId);
-        return new ResponseEntity<>(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_CLUB, null), HttpStatus.OK);
+    @GetMapping("/{clubId}/info")
+    public ResponseEntity<?> getClub(@PathVariable long clubId) {
+        Club club = clubService.findClubById(clubId);
+        ClubInfoDto resData = mapper.map(club, ClubInfoDto.class);
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_CLUB, resData));
     }
 
     @PutMapping("/{clubId}")
-    public ResponseEntity<?> updateClubInfo(@RequestParam("name") String name, @RequestParam("introduction") String intro, @RequestParam("thumbnail") MultipartFile thumbnail,@RequestParam("hashtags") List<String> hashtags) throws IOException {
+    public ResponseEntity<?> updateClub(@RequestParam("name") String name, @RequestParam("introduction") String intro, @RequestParam("thumbnail") MultipartFile thumbnail,@RequestParam("hashtags") List<String> hashtags) throws IOException {
         String thumbnailPath = null;
         if(!thumbnail.isEmpty()){
             thumbnailPath = s3Service.upload(thumbnail);
         }
         Club club = clubService.createClub(memberService.getMyIdWithAuthorities(), name, intro, thumbnailPath,hashtags);
-        return new ResponseEntity<>(ResponseDto.res(StatusCode.OK, ResponseMessage.UPDATE_CLUB, ClubDto.from(club)), HttpStatus.OK);
+        ClubInfoDto resData = mapper.map(club, ClubInfoDto.class);
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.UPDATE_CLUB, resData));
     }
 
     @DeleteMapping("/{clubId}")
     public ResponseEntity<?> deleteClub(@PathVariable long clubId) {
-        // clubService.deleteClub(clubId);
-        return new ResponseEntity<>(ResponseDto.res(StatusCode.OK, ResponseMessage.DELETE_CLUB, null), HttpStatus.OK);
+        long memberId = memberService.getMyIdWithAuthorities();
+        clubService.deleteClub(memberId, clubId);
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.DELETE_CLUB, null));
     }
 
 

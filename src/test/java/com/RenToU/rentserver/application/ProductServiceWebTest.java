@@ -31,8 +31,6 @@ import static org.junit.jupiter.api.Assertions.*;
 class ProductServiceWebTest {
     private ProductService service;
     @Autowired
-    private ClubService clubService;
-    @Autowired
     private Mapper mapper;
     @Autowired
     MemberRepository memberRepository;
@@ -48,8 +46,8 @@ class ProductServiceWebTest {
     @BeforeEach
     void setUp() {
         service = new ProductService(mapper, clubRepository, memberRepository, productRepository);
-        owner = memberRepository.findById(1L).get();
-        club = clubService.createClub(owner.getId(),"club","intro","www.com",new ArrayList<>());
+        owner = memberRepository.findById(3L).get();
+        club = clubRepository.findById(1L).get();
 
 
     }
@@ -62,13 +60,23 @@ class ProductServiceWebTest {
         class data_given {
             @Test
             @DisplayName("새 product를 생성하고 리턴한다.")
-            void it_return_new_club() {
-                Location location = new Location(1.0,1.0);
-                ProductServiceDto dto = new ProductServiceDto(club.getId(),owner.getId(),"카메라","전자기기",3,location,3,3,100000,"caution","www.com", List.of(RentalPolicy.FIFO,RentalPolicy.FIFO,RentalPolicy.RESERVE));
+            void it_return_new_product() {
+                Location location = new Location(1.0, 1.0);
+                ProductServiceDto dto = new ProductServiceDto(club.getId(), owner.getId(), "카메라", "전자기기", location, 3, 3, 100000, "caution", "www.com", List.of(RentalPolicy.FIFO, RentalPolicy.FIFO, RentalPolicy.RESERVE));
                 Product product = service.registerProduct(dto);
                 assertThat(product.getName()).isEqualTo("카메라");
                 assertThat(product.getLocation().getX()).isEqualTo(location.getX());
                 assertThat(product.getLocation().getY()).isEqualTo(location.getY());
+            }
+            @Test
+            @DisplayName("item을 rentalPreiod 개수만큼 생성한다.")
+            void it_create_item_based_on_rentalPeriod_size() {
+                Location location = new Location(1.0, 1.0);
+                ProductServiceDto dto = new ProductServiceDto(club.getId(), owner.getId(), "카메라", "전자기기", location, 3, 3, 100000, "caution", "www.com", List.of(RentalPolicy.FIFO, RentalPolicy.FIFO, RentalPolicy.RESERVE));
+                Product product = service.registerProduct(dto);
+                assertThat(product.getItems().size()).isEqualTo(3);
+                assertThat(product.getItems().get(0).getRentalPolicy()).isEqualTo(RentalPolicy.FIFO);
+                assertThat(product.getItems().get(0).getNumbering()).isEqualTo(1);
             }
         }
     }
