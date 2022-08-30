@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Transactional(readOnly = true)
@@ -57,6 +58,13 @@ public class ClubServiceImpl implements ClubService{
 
     @Override
     @Transactional
+    public void deleteClub(long memberId, long clubId) {
+        //TODO member 권한 체크
+        clubRepository.deleteById(clubId);
+    }
+
+    @Override
+    @Transactional
     public void requestClubJoin(Long clubId, Long memberId) {
         //회원 조회
         Member member = findMember(memberId);
@@ -65,6 +73,19 @@ public class ClubServiceImpl implements ClubService{
         ClubMember.createClubMember(club, member, ClubRole.WAIT);
         clubRepository.save(club);
     }
+
+    @Override
+    @Transactional
+    public List<ClubMember> searchClubJoinsAll(Long clubId, Long memberId) {
+        // TODO validate OWNER
+        Member member = findMember(memberId);
+        Club club = findClub(clubId);
+        
+        return club.getMemberList().stream()
+        .filter((clubMember)->clubMember.getRole()==ClubRole.WAIT)
+        .collect(Collectors.toList());
+    }
+
     @Override
     @Transactional
     public void acceptClubJoin(Long clubId, Long ownerId,Long joinMemberId){
@@ -83,7 +104,11 @@ public class ClubServiceImpl implements ClubService{
     public Club findClubByName(String clubName){
         return clubRepository.findByName(clubName)
                 .orElseThrow(() -> new ClubNotFoundException(clubName));
-
+    }
+    @Override
+    public Club findClubById(long clubId){
+        return clubRepository.findById(clubId)
+                .orElseThrow(() -> new ClubNotFoundException(clubId));
     }
 
 

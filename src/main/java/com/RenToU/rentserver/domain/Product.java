@@ -38,8 +38,6 @@ public class Product extends BaseTimeEntity{
 
     private String category;
 
-    private int quantity;
-
     @OneToOne(fetch = LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "location_id")
     private Location location;
@@ -75,7 +73,7 @@ public class Product extends BaseTimeEntity{
     public void initialSetting(Club club,List<RentalPolicy> policies ) {
         this.setClub(club);
         this.setLocation(location);
-        for(int i = 1; i <= quantity; i++){
+        for(int i = 1; i <= policies.size(); i++){
             Item item = Item.createItem(this,policies.get(i-1),i);
             this.addItem(item);
         }
@@ -85,11 +83,10 @@ public class Product extends BaseTimeEntity{
         location.setProduct(this);
     }
 
-    public static Product createProduct(String name, String category, int quantity,Location location,int fifoRentalPeriod, int reserveRentalPeriod,int price, String caution,String imagePath){
+    public static Product createProduct(String name, String category,Location location,int fifoRentalPeriod, int reserveRentalPeriod,int price, String caution,String imagePath){
         Product product = Product.builder()
                 .name(name)
                 .category(category)
-                .quantity(quantity)
                 .location(location)
                 .fifoRentalPeriod(fifoRentalPeriod)
                 .reserveRentalPeriod(reserveRentalPeriod)
@@ -101,9 +98,6 @@ public class Product extends BaseTimeEntity{
         return product;
     }
 
-    public void addQuantity() {
-        this.quantity++;
-    }
 
 
     /**
