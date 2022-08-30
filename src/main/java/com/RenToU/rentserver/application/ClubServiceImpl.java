@@ -9,6 +9,7 @@ import com.RenToU.rentserver.exceptions.CannotJoinClubException;
 import com.RenToU.rentserver.exceptions.ClubNotFoundException;
 import com.RenToU.rentserver.exceptions.DuplicateMemberException;
 import com.RenToU.rentserver.exceptions.MemberNotFoundException;
+import com.RenToU.rentserver.infrastructure.ClubMemberRepository;
 import com.RenToU.rentserver.infrastructure.ClubRepository;
 import com.RenToU.rentserver.infrastructure.HashtagRepository;
 import com.RenToU.rentserver.infrastructure.MemberRepository;
@@ -31,7 +32,7 @@ public class ClubServiceImpl implements ClubService{
     private final MemberRepository memberRepository;
     private final HashtagRepository hashtagRepository;
 
-    private final ProductRepository productRepository;
+    private final ClubMemberRepository clubMemberRepository;
 
     @Override
     public List<Club> findClubs() {
@@ -70,8 +71,8 @@ public class ClubServiceImpl implements ClubService{
         Member member = findMember(memberId);
         Club club = findClub(clubId);
         validateCanJoin(club, member);
-        ClubMember.createClubMember(club, member, ClubRole.WAIT);
-        clubRepository.save(club);
+        ClubMember clubMember = ClubMember.createClubMember(club, member, ClubRole.WAIT);
+        clubMemberRepository.save(clubMember);
     }
 
     @Override
@@ -116,9 +117,11 @@ public class ClubServiceImpl implements ClubService{
      * validation
      */
     private void validateCanJoin(Club club,Member member) {
-        if(club.getMemberList().contains(member)){
-            throw new CannotJoinClubException(club.getId(),club.getName(), "멤버를 찾을 수 없습니다.");
-        }
+        club.getMemberList().stream().forEach(cl -> {
+            if(cl.getMember() == member) {
+                throw new CannotJoinClubException(club.getId(), club.getName(), "멤버가 이미 가입하였거나, 가입 신청 상태입니다.");
+            }
+        });
     }
 
     private Member findMember(Long id){
