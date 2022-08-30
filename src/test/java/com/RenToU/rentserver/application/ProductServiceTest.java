@@ -48,8 +48,8 @@ class ProductServiceTest {
         //when
         when(clubRepository.findById(1L)).thenReturn(Optional.of(club));
         when(memberRepository.findById(1L)).thenReturn(Optional.of(member));
-        ProductServiceDto productServiceDto = new ProductServiceDto(1L,1L,"카메라","전자기기",3,location,3,3,100000,"caution","www.com", List.of(RentalPolicy.FIFO,RentalPolicy.FIFO,RentalPolicy.RESERVE));
-        Product mappedProduct = Product.createProduct("카메라","전자기기",3,location,3,3,100000,"caution","www.com");
+        ProductServiceDto productServiceDto = new ProductServiceDto(1L,1L,"카메라","전자기기",location,3,3,100000,"caution","www.com", List.of(RentalPolicy.FIFO,RentalPolicy.FIFO,RentalPolicy.RESERVE));
+        Product mappedProduct = Product.createProduct("카메라","전자기기",location,3,3,100000,"caution","www.com");
         when(mapper.map(productServiceDto,Product.class)).thenReturn(mappedProduct);
         Product product = service.registerProduct(productServiceDto);
         //then
