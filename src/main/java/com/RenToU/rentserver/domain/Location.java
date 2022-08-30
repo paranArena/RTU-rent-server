@@ -20,7 +20,7 @@ import static javax.persistence.FetchType.LAZY;
 public class Location {
     @Id
     @GeneratedValue
-    @Column(name = "delivery_id")
+    @Column(name = "location_id")
     private Long id;
     @OneToOne(mappedBy = "location", fetch = LAZY)
     private Product product;
