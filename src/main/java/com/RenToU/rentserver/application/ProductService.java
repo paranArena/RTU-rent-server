@@ -43,7 +43,6 @@ public class ProductService {
         Club club = product.getClub();
         club.findClubMemberByMember(requester).validateAdmin();
         Item item = Item.createItem(product,rentalPolicy,numbering);
-        product.addQuantity();
         product.addItem(item);
         productRepository.save(product);
     }

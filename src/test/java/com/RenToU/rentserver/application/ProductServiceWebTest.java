@@ -30,6 +30,9 @@ import static org.junit.jupiter.api.Assertions.*;
 @DisplayName("productService 통합 테스트")
 class ProductServiceWebTest {
     private ProductService service;
+
+    @Autowired
+    private MemberService memberService;
     @Autowired
     private ClubService clubService;
     @Autowired
