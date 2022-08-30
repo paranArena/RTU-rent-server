@@ -1,6 +1,7 @@
 package com.RenToU.rentserver.application;
 
 import com.RenToU.rentserver.domain.Club;
+import com.RenToU.rentserver.domain.ClubRole;
 import com.RenToU.rentserver.domain.Member;
 import com.RenToU.rentserver.infrastructure.ClubRepository;
 import com.RenToU.rentserver.infrastructure.HashtagRepository;
@@ -63,6 +64,27 @@ class ClubServiceImplWebTest {
                 assertThat(club.getIntroduction()).isEqualTo(INITIAL_CLUB_INTRO);
                 assertThat(club.getThumbnailPath()).isEqualTo(INITIAL_CLUB_THUMB);
                 assertThat(club.getHashtagNames()).isEqualTo(INITIAL_CLUB_HASHTAGS);
+
+            }
+        }
+    }
+    @Nested
+    @DisplayName("requestJoin메소드는")
+    class describe_request_join {
+        @Nested
+        @DisplayName("가입 신청을 요청하면")
+        class data_given {
+            @Test
+            @DisplayName("ClubMember를 Wait으로 생성한다.")
+            void it_makes_club_member_with_waiting() {
+                Club club = service.createClub(owner.getId(),INITIAL_CLUB_NAME,INITIAL_CLUB_INTRO,INITIAL_CLUB_THUMB,INITIAL_CLUB_HASHTAGS);
+                Member requester = memberRepository.findById(2L).get();
+                service.requestClubJoin(club.getId(),requester.getId());
+                assertThat(club.getMemberList().get(0).getMember()).isEqualTo(owner);
+                assertThat(club.getMemberList().size()).isEqualTo(2);
+                assertThat(club.getMemberList().get(1).getMember()).isEqualTo(requester);
+                assertThat(club.getMemberList().get(1).getRole()).isEqualTo(ClubRole.WAIT);
+
             }
         }
     }
