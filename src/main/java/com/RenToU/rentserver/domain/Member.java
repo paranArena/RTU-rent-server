@@ -77,5 +77,10 @@ public class Member extends BaseTimeEntity{
                 .build();
         return member;
     }
+
+    public void addRental(Rental rental) {
+        this.rentals.add(rental);
+        rental.setMember(this);
+    }
 }
 

@@ -57,10 +57,11 @@ public class Rental {
     public static Rental createRental(Item item, Member member) {
         Rental rental = Rental.builder()
                 .rentalStatus(RentalStatus.WAIT)
-                .member(member)
                 .item(item)
                 .rentDate(LocalDateTime.now())
                 .build();
+        member.addRental(rental);
+        item.setRental(rental);
         return rental;
     }
     public void cancel(){
@@ -105,5 +106,13 @@ public class Rental {
         if(this.member != member){
             throw new NotRentingException(this.id);
         }
+    }
+
+    public void setMember(Member member) {
+        this.member = member;
+    }
+
+    public void setItem(Item item) {
+        this.item = item;
     }
 }
