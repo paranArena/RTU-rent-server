@@ -60,7 +60,9 @@ public class ClubServiceImpl implements ClubService{
     @Override
     @Transactional
     public void deleteClub(long memberId, long clubId) {
-        //TODO member 권한 체크
+        Club club = findClubById(clubId);
+        Member member = findMember(memberId);
+        club.findClubMemberByMember(member).validateAdmin();
         clubRepository.deleteById(clubId);
     }
 
@@ -78,10 +80,9 @@ public class ClubServiceImpl implements ClubService{
     @Override
     @Transactional
     public List<ClubMember> searchClubJoinsAll(Long clubId, Long memberId) {
-        // TODO validate OWNER
         Member member = findMember(memberId);
         Club club = findClub(clubId);
-        
+        club.findClubMemberByMember(member).validateAdmin();
         return club.getMemberList().stream()
         .filter((clubMember)->clubMember.getRole()==ClubRole.WAIT)
         .collect(Collectors.toList());
