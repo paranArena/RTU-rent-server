@@ -70,7 +70,7 @@ public class Product extends BaseTimeEntity{
         this.club = club;
     }
     //클럽과의 관계 생성, item 생성
-    public void initialSetting(Club club,List<RentalPolicy> policies ) {
+    public void initialSetting(Club club, List<RentalPolicy> policies) {
         this.setClub(club);
         this.setLocation(location);
         for(int i = 1; i <= policies.size(); i++){

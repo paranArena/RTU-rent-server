@@ -18,16 +18,22 @@ import static javax.persistence.FetchType.LAZY;
 @Entity
 @NoArgsConstructor
 public class Location {
+    public Location(Double x, Double y, String name){
+        this.x = x;
+        this.y = y;
+        this.name = name;
+    }
+    public Location(Double x, Double y){
+        this.x = x;
+        this.y = y;
+    }
     @Id
     @GeneratedValue
     @Column(name = "location_id")
     private Long id;
-    @OneToOne(mappedBy = "location", fetch = LAZY)
-    private Product product;
+    private String name;
     private Double x;
     private Double y;
-    public Location(Double x, Double Y){
-        this.x = x;
-        this.y = y;
-    }
+    @OneToOne(mappedBy = "location", fetch = LAZY)
+    private Product product;
 }

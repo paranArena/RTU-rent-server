@@ -18,9 +18,10 @@ import com.RenToU.rentserver.application.ProductService;
 import com.RenToU.rentserver.application.S3Service;
 import com.RenToU.rentserver.dto.StatusCode;
 import com.RenToU.rentserver.dto.request.CreateProductDto;
+import com.RenToU.rentserver.dto.request.LocationDto;
 import com.RenToU.rentserver.dto.response.ResponseDto;
 import com.RenToU.rentserver.dto.response.ResponseMessage;
-import com.RenToU.rentserver.dto.service.ProductServiceDto;
+import com.RenToU.rentserver.dto.service.CreateProductServiceDto;
 import com.github.dozermapper.core.Mapper;
 
 import lombok.RequiredArgsConstructor;
@@ -28,7 +29,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/clubs/{clubId}/products")
-public class ProductController {
+public class ClubProductController {
     
     private final MemberService memberService;
     private final ProductService productService;
@@ -43,7 +44,9 @@ public class ProductController {
         if(!image.isEmpty()){
             imagePath = s3Service.upload(image);
         }
-        ProductServiceDto productServiceDto = mapper.map(createProductDto, ProductServiceDto.class);
+        CreateProductServiceDto productServiceDto = mapper.map(createProductDto, CreateProductServiceDto.class);
+        LocationDto locationDto = new LocationDto(createProductDto.getLocationName(), createProductDto.getLatitude(), createProductDto.getLongitude());
+        productServiceDto.setLocation(locationDto);
         productServiceDto.setImagePath(imagePath);
         productServiceDto.setClubId(clubId);
         productServiceDto.setMemberId(memberId);
