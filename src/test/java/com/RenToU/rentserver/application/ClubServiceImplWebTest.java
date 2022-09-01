@@ -3,6 +3,7 @@ package com.RenToU.rentserver.application;
 import com.RenToU.rentserver.domain.Club;
 import com.RenToU.rentserver.domain.ClubRole;
 import com.RenToU.rentserver.domain.Member;
+import com.RenToU.rentserver.exceptions.CannotRentException;
 import com.RenToU.rentserver.infrastructure.ClubMemberRepository;
 import com.RenToU.rentserver.infrastructure.ClubRepository;
 import com.RenToU.rentserver.infrastructure.HashtagRepository;
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
 @DisplayName("ClubService 클래스")
@@ -44,6 +46,9 @@ class ClubServiceImplWebTest {
     private static String INITIAL_CLUB_THUMB = "www.google.com";
     private static List<String> INITIAL_CLUB_HASHTAGS = List.of("hashtag1","hashtag2");
     private Member owner;
+    private Long memberId;
+    private Long clubId;
+    private Long secondClubId;
 
 
     @BeforeEach
@@ -88,6 +93,30 @@ class ClubServiceImplWebTest {
                 assertThat(club.getMemberList().get(1).getMember()).isEqualTo(requester);
                 assertThat(club.getMemberList().get(1).getRole()).isEqualTo(ClubRole.WAIT);
 
+            }
+        }
+    }
+    @Nested
+    @DisplayName("getMyClubRequests메소드는")
+    class Describe_getMyClubRequests {
+        @Nested
+        @DisplayName("memberId가 주어졌을 때")
+        class memberId_given {
+            @BeforeEach
+            void setup() {
+                memberId = 6L;
+                clubId = 1L;
+                secondClubId = 2L;
+            }
+            @Test
+            @DisplayName(" 가입 대기 상태인 클럽의 리스트를 리턴한다..")
+            void it_return_list_of_waiting_clubs() {
+                service.requestClubJoin(clubId,memberId);
+                service.requestClubJoin(secondClubId,memberId);
+                List<Club> clubs = service.getMyClubRequests(memberId);
+                assertThat(clubs.size()).isEqualTo(2);
+                assertThat(clubs.get(0).getId()).isEqualTo(clubId);
+                assertThat(clubs.get(1).getId()).isEqualTo(secondClubId);
             }
         }
     }
