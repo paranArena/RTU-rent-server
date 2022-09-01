@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import net.bytebuddy.asm.Advice;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -68,7 +69,9 @@ public class Rental {
         if(this.rentalStatus != RentalStatus.WAIT) {
             throw new IllegalStateException("렌탈을 취소할 수 없는 상태입니다.");
         }
-        this.item.finishRental();
+        this.rentalStatus = rentalStatus.CANCEL;
+        this.getItem().finishRental();
+
 
     }
 
@@ -101,6 +104,11 @@ public class Rental {
             throw new NotRentingException(this.id);
         }
     }
+    public void validateWait() {
+        if(this.rentalStatus != RentalStatus.WAIT){
+            throw new NotWaitingException(this.id);
+        }
+    }
 
     public void validateMember(Member member) {
         if(this.member != member){
@@ -115,4 +123,6 @@ public class Rental {
     public void setItem(Item item) {
         this.item = item;
     }
+
+
 }
