@@ -5,7 +5,7 @@ import com.RenToU.rentserver.domain.Location;
 import com.RenToU.rentserver.domain.Member;
 import com.RenToU.rentserver.domain.Product;
 import com.RenToU.rentserver.domain.RentalPolicy;
-import com.RenToU.rentserver.dto.service.ProductServiceDto;
+import com.RenToU.rentserver.dto.service.CreateProductServiceDto;
 import com.RenToU.rentserver.infrastructure.ClubHashtagRepository;
 import com.RenToU.rentserver.infrastructure.ClubRepository;
 import com.RenToU.rentserver.infrastructure.HashtagRepository;
@@ -48,8 +48,8 @@ class ProductServiceTest {
         //when
         when(clubRepository.findById(1L)).thenReturn(Optional.of(club));
         when(memberRepository.findById(1L)).thenReturn(Optional.of(member));
-        ProductServiceDto productServiceDto = new ProductServiceDto(1L,1L,"카메라","전자기기",location,3,3,100000,"caution","www.com", List.of(RentalPolicy.FIFO,RentalPolicy.FIFO,RentalPolicy.RESERVE));
-        Product mappedProduct = Product.createProduct("카메라","전자기기",location,3,3,100000,"caution","www.com");
+        CreateProductServiceDto productServiceDto = new CreateProductServiceDto(1L,1L,"카메라","전자기기",3,location,3,3,100000,"caution","www.com", List.of(RentalPolicy.FIFO,RentalPolicy.FIFO,RentalPolicy.RESERVE));
+        Product mappedProduct = Product.createProduct("카메라","전자기기",3,location,3,3,100000,"caution","www.com");
         when(mapper.map(productServiceDto,Product.class)).thenReturn(mappedProduct);
         Product product = service.registerProduct(productServiceDto);
         //then
