@@ -48,7 +48,7 @@ public class RentalHistory {
         RentalHistory rentalHistory = new RentalHistory();
         rentalHistory.member = rental.getMember();
         rentalHistory.item = rental.getItem();
-        rentalHistory.rentalStatus = RentalStatus.DONE;
+        rentalHistory.rentalStatus = rental.getRentalStatus();
         rentalHistory.rentDate = rental.getRentDate();
         rentalHistory.expDate = rental.getExpDate();
         rentalHistory.returnDate = LocalDateTime.now();
