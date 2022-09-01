@@ -56,7 +56,7 @@ public class ClubNotificationController {
     @PostMapping("")
     public ResponseEntity<?> createNotification(@PathVariable long clubId, @ModelAttribute CreateNotificationDto createNotificationDto) throws IOException{
         long memberId = memberService.getMyIdWithAuthorities();
-        List<MultipartFile> images = createNotificationDto.getImage();
+        List<MultipartFile> images = createNotificationDto.getImage().stream().filter((img)->!img.isEmpty()).collect(Collectors.toList());
         List<String> imagePaths = new ArrayList<>();
         if(images.size() != 0){
             imagePaths.addAll(
@@ -70,6 +70,8 @@ public class ClubNotificationController {
                     return null;
                 }).collect(Collectors.toList())
                 );
+        }else{
+            imagePaths.add("");
         }
 
         NotificationServiceDto notificationServiceDto = mapper.map(createNotificationDto, NotificationServiceDto.class);
