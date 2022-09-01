@@ -13,14 +13,12 @@ import com.RenToU.rentserver.infrastructure.ClubMemberRepository;
 import com.RenToU.rentserver.infrastructure.ClubRepository;
 import com.RenToU.rentserver.infrastructure.HashtagRepository;
 import com.RenToU.rentserver.infrastructure.MemberRepository;
-import com.RenToU.rentserver.infrastructure.ProductRepository;
 import com.github.dozermapper.core.Mapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Transactional(readOnly = true)
@@ -111,6 +109,16 @@ public class ClubServiceImpl implements ClubService{
     public Club findClubById(long clubId){
         return clubRepository.findById(clubId)
                 .orElseThrow(() -> new ClubNotFoundException(clubId));
+    }
+    @Override
+    public List<Club> getMyClubRequests(long memberId){
+        Member member = findMember(memberId);
+        List<ClubMember> requests = member.getClubList().stream().filter(cm->{
+            return cm.getRole() == ClubRole.WAIT;
+        }).collect(Collectors.toList());
+        return requests.stream().map(cm -> {
+            return cm.getClub();
+        }).collect(Collectors.toList());
     }
 
 
