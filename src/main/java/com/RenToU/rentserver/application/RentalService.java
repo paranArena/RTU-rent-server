@@ -59,12 +59,12 @@ public class RentalService {
     }
 
     @Transactional
-    public Rental applyRental(Long memberId, Long itemId, Location location) {
-        Item item = findItem(itemId);
+    public Rental applyRental(Long memberId, Long rentalId) {
         Member member = findMember(memberId);
-        Rental rental = findRentalByItem(item);
+        Rental rental = findRental(rentalId);
         rental.validateWaiting();
         rental.validateMember(member);
+        validateApplyTimeNotOver(rental);
         rental.startRental();
         rentalRepository.save(rental);
         return rental;
@@ -77,6 +77,17 @@ public class RentalService {
         rental.validateRent();
         rental.validateMember(member);
         rental.finishRental();
+        RentalHistory rentalHistory = RentalHistory.RentalToHistory(rental);
+        rentalHistoryRepository.save(rentalHistory);
+        rentalRepository.deleteById(rental.getId());
+    }
+    @Transactional
+    public void cancelRental(Long memberId, Long rentalId){
+        Member member = findMember(memberId);
+        Rental rental = findRental(rentalId);
+        rental.validateRent();
+        rental.validateMember(member);
+        rental.cancel();
         RentalHistory rentalHistory = RentalHistory.RentalToHistory(rental);
         rentalHistoryRepository.save(rentalHistory);
         rentalRepository.deleteById(rental.getId());
@@ -96,5 +107,15 @@ public class RentalService {
         return rentalRepository.findByItem(item)
                 .orElseThrow(()-> new RentalNotFoundException());
     }
+    private Rental findRental(Long id) {
+        return rentalRepository.findById(id)
+                .orElseThrow(() -> new RentalNotFoundException(id));
+    }
+    public void validateApplyTimeNotOver(Rental rental) {
+        if(rental.getRentDate().plusMinutes(10).isBefore(LocalDateTime.now())){
+            throw new CannotRentException(rental.getId());
+        }
+    }
+
 
 }
