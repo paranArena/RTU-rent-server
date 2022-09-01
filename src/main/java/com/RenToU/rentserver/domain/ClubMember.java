@@ -13,6 +13,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -23,7 +24,7 @@ import javax.persistence.ManyToOne;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ClubMember extends BaseTimeEntity {
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "club_member_id")
     private Long id;
 
@@ -65,5 +66,8 @@ public class ClubMember extends BaseTimeEntity {
         if(this.role != ClubRole.ADMIN && this.role != ClubRole.OWNER){
             throw new NoAdminPermissionException(this.club.getId());
         }
+    }
+    public String toString(){
+        return this.getClub().getId() + " " + this.getMember().getId() + " "  + this.getRole().toString();
     }
 }

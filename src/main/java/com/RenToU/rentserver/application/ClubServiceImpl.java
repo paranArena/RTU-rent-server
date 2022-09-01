@@ -13,14 +13,12 @@ import com.RenToU.rentserver.infrastructure.ClubMemberRepository;
 import com.RenToU.rentserver.infrastructure.ClubRepository;
 import com.RenToU.rentserver.infrastructure.HashtagRepository;
 import com.RenToU.rentserver.infrastructure.MemberRepository;
-import com.RenToU.rentserver.infrastructure.ProductRepository;
 import com.github.dozermapper.core.Mapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Transactional(readOnly = true)
@@ -73,8 +71,13 @@ public class ClubServiceImpl implements ClubService{
         Member member = findMember(memberId);
         Club club = findClub(clubId);
         validateCanJoin(club, member);
+//        왠지 모르겠는데 print를 빼면 정상 작동을 안합니다... 추후에 해결해야 할 부분.
+        member.getClubList().forEach(cm->{
+            System.out.println(cm.toString());
+        });
         ClubMember clubMember = ClubMember.createClubMember(club, member, ClubRole.WAIT);
         clubMemberRepository.save(clubMember);
+        System.out.println("size"+member.getClubList().size()+",clubId "+club.getId() );
     }
 
     @Override
@@ -111,6 +114,12 @@ public class ClubServiceImpl implements ClubService{
     public Club findClubById(long clubId){
         return clubRepository.findById(clubId)
                 .orElseThrow(() -> new ClubNotFoundException(clubId));
+    }
+    @Override
+    public List<Club> getMyClubRequests(long memberId){
+        Member member = findMember(memberId);
+        List<ClubMember> requests = member.getClubList().stream().filter(cm->cm.getRole().equals(ClubRole.WAIT)).collect(Collectors.toList());
+        return requests.stream().map(cm -> cm.getClub()).collect(Collectors.toList());
     }
 
 

@@ -46,7 +46,7 @@ class ProductServiceWebTest {
     @BeforeEach
     void setUp() {
         service = new ProductService(mapper, clubRepository, memberRepository, productRepository);
-        owner = memberRepository.findById(3L).get();
+        owner = memberRepository.findById(2L).get();
         club = clubRepository.findById(1L).get();
 
 

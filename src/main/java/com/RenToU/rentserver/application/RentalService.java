@@ -8,6 +8,7 @@ import com.RenToU.rentserver.domain.Member;
 import com.RenToU.rentserver.domain.Product;
 import com.RenToU.rentserver.domain.Rental;
 import com.RenToU.rentserver.domain.RentalHistory;
+import com.RenToU.rentserver.exceptions.CannotRentException;
 import com.RenToU.rentserver.exceptions.MemberNotFoundException;
 import com.RenToU.rentserver.exceptions.NotInRangeException;
 import com.RenToU.rentserver.exceptions.ProductNotFoundException;
@@ -27,12 +28,13 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.management.Query;
 import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
 public class RentalService {
-    private final EntityManager em;
     private final Mapper mapper;
     private final RentalRepository rentalRepository;
     private final MemberRepository memberRepository;
@@ -42,35 +44,55 @@ public class RentalService {
     public Rental requestRental(Long memberId, Long itemId) {
         Item item = findItem(itemId);
         Member member = findMember(memberId);
+        checkIsInSameClub(member,item);
         item.validateRentable();
         Rental rental = Rental.createRental(item,member);
         rentalRepository.save(rental);
         return rental;
     }
+
+    private void checkIsInSameClub(Member member, Item item) {
+        List<Club> clubs = member.getClubList().stream().map(cm->cm.getClub()).collect(Collectors.toList());
+        if(!clubs.contains(item.getProduct().getClub())){
+            throw new CannotRentException(item.getId());
+        }
+    }
+
     @Transactional
-    public Rental applyRental(Long memberId, Long itemId, Location location) {
-        Item item = findItem(itemId);
+    public Rental applyRental(Long memberId, Long rentalId) {
         Member member = findMember(memberId);
-        Rental rental = findRentalByItem(item);
-        rental.validateWaiting();
+        Rental rental = findRental(rentalId);
+        rental.validateWait();
         rental.validateMember(member);
-        isInTheRange(location,item.getProduct());
+        validateApplyTimeNotOver(rental);
         rental.startRental();
         rentalRepository.save(rental);
         return rental;
     }
     @Transactional
-    public void returnRental(Long memberId, Long itemId, Location location){
-        Item item = findItem(itemId);
+    public RentalHistory returnRental(Long memberId, Long rentalId){
         Member member = findMember(memberId);
-        Rental rental = findRentalByItem(item);
+        Rental rental = findRental(rentalId);
         rental.validateRent();
         rental.validateMember(member);
-        isInTheRange(location,item.getProduct());
+        rental.checkLate();
         rental.finishRental();
         RentalHistory rentalHistory = RentalHistory.RentalToHistory(rental);
         rentalHistoryRepository.save(rentalHistory);
         rentalRepository.deleteById(rental.getId());
+        return rentalHistory;
+    }
+    @Transactional
+    public RentalHistory cancelRental(Long memberId, Long rentalId){
+        Member member = findMember(memberId);
+        Rental rental = findRental(rentalId);
+        rental.validateWait();
+        rental.validateMember(member);
+        rental.cancel();
+        RentalHistory rentalHistory = RentalHistory.RentalToHistory(rental);
+        rentalHistoryRepository.save(rentalHistory);
+        rentalRepository.deleteById(rental.getId());
+        return rentalHistory;
     }
 
 
@@ -87,11 +109,16 @@ public class RentalService {
         return rentalRepository.findByItem(item)
                 .orElseThrow(()-> new RentalNotFoundException());
     }
-
-    private void isInTheRange(Location location, Product product){
-        Double distance = GeometryUtil.distance(location.getX(),location.getY(),product.getLocation().getX(),product.getLocation().getY());
-        if(distance > 30){// 인정 거리 30m 로 임의 설정
-            throw new NotInRangeException(distance);
+    private Rental findRental(Long id) {
+        return rentalRepository.findById(id)
+                .orElseThrow(() -> new RentalNotFoundException(id));
+    }
+    public void validateApplyTimeNotOver(Rental rental) {
+        if(rental.getRentDate().plusMinutes(10).isBefore(LocalDateTime.now())){
+            cancelRental(rental.getMember().getId(), rental.getId());
+            throw new CannotRentException(rental.getId());
         }
     }
+
+
 }
