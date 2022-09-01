@@ -62,8 +62,9 @@ public class ClubNotificationController {
     @GetMapping("/{notificationId}")
     public ResponseEntity<?> getNotification(@PathVariable long clubId, @PathVariable long notificationId){
         long memberId = memberService.getMyIdWithAuthorities();
-        // notificationService.getNotification(memberId, notificationId);
-        return null;
+        Notification notification = notificationService.findNotification(notificationId);
+        NotificationDto resData = NotificationDto.from(notification);
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_NOTIFICATION, resData));
     }
 
     @PutMapping("/{notificationId}")
