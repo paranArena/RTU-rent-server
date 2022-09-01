@@ -1,5 +1,7 @@
 package com.RenToU.rentserver.controller.club;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collector;
@@ -9,12 +11,14 @@ import javax.validation.Valid;
 
 import com.RenToU.rentserver.dto.response.NotificationDto;
 import com.RenToU.rentserver.application.NotificationService;
+import com.RenToU.rentserver.application.S3Service;
 import com.RenToU.rentserver.domain.Notification;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -22,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.RenToU.rentserver.application.ClubService;
 import com.RenToU.rentserver.application.ClubService;
@@ -44,13 +49,31 @@ public class ClubNotificationController {
     
     private final MemberService memberService;
     private final ClubService clubService;
+    private final S3Service s3Service;
     private final NotificationService notificationService;
     private final Mapper mapper;
 
     @PostMapping("")
-    public ResponseEntity<?> createNotification(@PathVariable long clubId, @Valid @RequestBody CreateNotificationDto createNotificationDto){
+    public ResponseEntity<?> createNotification(@PathVariable long clubId, @ModelAttribute CreateNotificationDto createNotificationDto) throws IOException{
         long memberId = memberService.getMyIdWithAuthorities();
+        List<MultipartFile> images = createNotificationDto.getImage();
+        List<String> imagePaths = new ArrayList<>();
+        if(images.size() != 0){
+            imagePaths.addAll(
+                images.stream().map((img)->{
+                    try {
+                        return s3Service.upload(img);
+                    } catch (IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    return null;
+                }).collect(Collectors.toList())
+                );
+        }
+
         NotificationServiceDto notificationServiceDto = mapper.map(createNotificationDto, NotificationServiceDto.class);
+        notificationServiceDto.setImagePaths(imagePaths);
         notificationServiceDto.setMemberId(memberId);
         notificationServiceDto.setClubId(clubId);
         Notification notification = notificationService.createNotification(notificationServiceDto);
