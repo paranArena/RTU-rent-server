@@ -27,6 +27,8 @@ public class NotificationDto {
     @Mapping("content")
     private String content;
 
+    private String imagePath;
+
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
@@ -38,6 +40,7 @@ public class NotificationDto {
         .id(notification.getId())
         .title(notification.getTitle())
         .content(notification.getContent())
+        .imagePath(notification.getImagePath())
         .createdAt(notification.getCreatedAt())
         .updatedAt(notification.getUpdatedAt())
         .build();
