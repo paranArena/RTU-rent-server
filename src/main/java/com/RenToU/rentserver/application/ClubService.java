@@ -17,4 +17,5 @@ public interface ClubService {
     public List<ClubMember> searchClubJoinsAll(Long clubId, Long memberId);
     public void acceptClubJoin(Long clubId, Long ownerId, Long joinMemberId);
 
+    List<Club> getMyClubRequests(long memberId);
 }
