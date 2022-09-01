@@ -75,12 +75,6 @@ public class Rental {
 
     }
 
-    public void validateWaiting() {
-        if(this.rentalStatus != RentalStatus.WAIT){
-            throw new NotWaitingException(this.id);
-        }
-    }
-
     public void startRental() {
         this.rentalStatus = rentalStatus.RENT;
         this.rentDate = LocalDateTime.now();
@@ -125,4 +119,13 @@ public class Rental {
     }
 
 
+    public void setRentDateBeforeTenM() {
+        this.rentDate = this.rentDate.minusMinutes(10);
+    }
+
+    public void checkLate() {
+        if(this.expDate.isBefore(LocalDateTime.now())){
+            this.rentalStatus = RentalStatus.LATE;
+        }
+    }
 }
