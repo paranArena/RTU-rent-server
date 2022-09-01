@@ -67,4 +67,9 @@ public class Item extends BaseTimeEntity{
     public void finishRental() {
         this.rental = null;
     }
+
+    public void setRental(Rental rental) {
+        this.rental = rental;
+        rental.setItem(this);
+    }
 }

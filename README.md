@@ -40,8 +40,12 @@ java -version
 
 ec2
 ```
-kill -9 [previous process pid]
-nohup ./gradlew build --exclude-task test && java -jar build/libs/rentserver-0.0.1-SNAPSHOT.jar 1>nohup.out 2>&1 &
+git pull
+ps aux | grep java
+kill -9 [previous pid]
+./gradlew build --exclude-task test 
+java -jar build/libs/rentserver-0.0.1-SNAPSHOT.jar 1>app.log 2>&1 &
+disown [pid]
 ```
 
 테스트 제외 빌드

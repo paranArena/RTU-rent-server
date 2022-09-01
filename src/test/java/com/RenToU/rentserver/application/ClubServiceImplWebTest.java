@@ -3,6 +3,7 @@ package com.RenToU.rentserver.application;
 import com.RenToU.rentserver.domain.Club;
 import com.RenToU.rentserver.domain.ClubRole;
 import com.RenToU.rentserver.domain.Member;
+import com.RenToU.rentserver.infrastructure.ClubMemberRepository;
 import com.RenToU.rentserver.infrastructure.ClubRepository;
 import com.RenToU.rentserver.infrastructure.HashtagRepository;
 import com.RenToU.rentserver.infrastructure.MemberRepository;
@@ -34,6 +35,8 @@ class ClubServiceImplWebTest {
     @Autowired
     ClubRepository clubRepository;
     @Autowired
+    ClubMemberRepository clubMemberRepository;
+    @Autowired
     ProductRepository productRepository;
 
     private static String INITIAL_CLUB_NAME = "NEW CLUB";
@@ -45,7 +48,7 @@ class ClubServiceImplWebTest {
 
     @BeforeEach
     void setUp() {
-        service = new ClubServiceImpl(mapper, clubRepository, memberRepository, hashtagRepository, productRepository);
+        service = new ClubServiceImpl(mapper, clubRepository, memberRepository, hashtagRepository, clubMemberRepository);
         owner = memberRepository.findById(1L).get();
     }
 
