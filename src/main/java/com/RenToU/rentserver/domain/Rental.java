@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import net.bytebuddy.asm.Advice;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -57,24 +58,21 @@ public class Rental {
     public static Rental createRental(Item item, Member member) {
         Rental rental = Rental.builder()
                 .rentalStatus(RentalStatus.WAIT)
-                .member(member)
                 .item(item)
                 .rentDate(LocalDateTime.now())
                 .build();
+        member.addRental(rental);
+        item.setRental(rental);
         return rental;
     }
     public void cancel(){
         if(this.rentalStatus != RentalStatus.WAIT) {
             throw new IllegalStateException("렌탈을 취소할 수 없는 상태입니다.");
         }
-        this.item.finishRental();
+        this.rentalStatus = rentalStatus.CANCEL;
+        this.getItem().finishRental();
 
-    }
 
-    public void validateWaiting() {
-        if(this.rentalStatus != RentalStatus.WAIT){
-            throw new NotWaitingException(this.id);
-        }
     }
 
     public void startRental() {
@@ -100,10 +98,34 @@ public class Rental {
             throw new NotRentingException(this.id);
         }
     }
+    public void validateWait() {
+        if(this.rentalStatus != RentalStatus.WAIT){
+            throw new NotWaitingException(this.id);
+        }
+    }
 
     public void validateMember(Member member) {
         if(this.member != member){
             throw new NotRentingException(this.id);
+        }
+    }
+
+    public void setMember(Member member) {
+        this.member = member;
+    }
+
+    public void setItem(Item item) {
+        this.item = item;
+    }
+
+
+    public void setRentDateBeforeTenM() {
+        this.rentDate = this.rentDate.minusMinutes(10);
+    }
+
+    public void checkLate() {
+        if(this.expDate.isBefore(LocalDateTime.now())){
+            this.rentalStatus = RentalStatus.LATE;
         }
     }
 }
