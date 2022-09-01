@@ -54,7 +54,7 @@ public class ClubNotificationController {
     private final Mapper mapper;
 
     @PostMapping("")
-    public ResponseEntity<?> createNotification(@PathVariable long clubId, @ModelAttribute CreateNotificationDto createNotificationDto) throws IOException{
+    public ResponseEntity<?> createNotification(@PathVariable long clubId, @Valid @ModelAttribute CreateNotificationDto createNotificationDto) throws IOException{
         long memberId = memberService.getMyIdWithAuthorities();
         List<MultipartFile> images = createNotificationDto.getImage().stream().filter((img)->!img.isEmpty()).collect(Collectors.toList());
         List<String> imagePaths = new ArrayList<>();
