@@ -76,7 +76,7 @@ public class MemberController {
         List<RentalDto> resData = clubs.stream()
                                         .map((c)->mapper.map(c, RentalDto.class))
                                         .collect(Collectors.toList());
-        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_RENTAL, resData));
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_RENT, resData));
     }
 
     @GetMapping("/{email}/info")
@@ -84,6 +84,6 @@ public class MemberController {
     public ResponseEntity<?>getMemberInfo(@PathVariable("email") String email) {
         Member member = memberService.getUserWithAuthorities(email);
         MemberInfoDto resData = mapper.map(member, MemberInfoDto.class);
-        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage., resData));
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.OK, resData));
     }
 }
