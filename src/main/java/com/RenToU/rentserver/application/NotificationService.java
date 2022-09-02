@@ -33,7 +33,10 @@ public class NotificationService {
         club.findClubMemberByMember(writer).validateAdmin();
         String title = notificationServiceDto.getTitle();
         String content = notificationServiceDto.getContent();
-        String imagePath = notificationServiceDto.getImagePaths().get(0);
+        String imagePath = null;
+        if(notificationServiceDto.getImagePaths()!= null) {
+            imagePath = notificationServiceDto.getImagePaths().get(0);
+        }
         Notification notification = Notification.createNotification(title,content, imagePath, writer,club);
         notificationRepository.save(notification);
         clubRepository.save(club);

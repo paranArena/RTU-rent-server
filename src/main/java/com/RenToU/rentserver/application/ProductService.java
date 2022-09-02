@@ -25,7 +25,6 @@ public class ProductService {
     private final ClubRepository clubRepository;
     private final MemberRepository memberRepository;
     private final ProductRepository productRepository;
-
     @Transactional
     public Product registerProduct(CreateProductServiceDto dto){
         Club club = findClub(dto.getClubId());

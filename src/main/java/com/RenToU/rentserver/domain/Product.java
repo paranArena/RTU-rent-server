@@ -39,7 +39,7 @@ public class Product extends BaseTimeEntity{
 
     private String category;
 
-    @OneToOne(fetch = LAZY, cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "location_id")
     private Location location;
 
