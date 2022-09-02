@@ -7,10 +7,13 @@ import com.RenToU.rentserver.dto.response.MemberClubDto;
 import com.RenToU.rentserver.dto.response.MemberInfoDto;
 import com.RenToU.rentserver.dto.response.ResponseDto;
 import com.RenToU.rentserver.dto.response.ResponseMessage;
+import com.RenToU.rentserver.dto.response.preview.NotificationPreviewDto;
 import com.github.dozermapper.core.Mapper;
 import com.RenToU.rentserver.application.MemberService;
+import com.RenToU.rentserver.application.NotificationService;
 import com.RenToU.rentserver.domain.ClubMember;
 import com.RenToU.rentserver.domain.Member;
+import com.RenToU.rentserver.domain.Notification;
 import com.RenToU.rentserver.domain.Rental;
 
 import lombok.RequiredArgsConstructor;
@@ -20,6 +23,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,6 +34,7 @@ import javax.servlet.http.HttpServletRequest;
 public class MemberController {
 
     private final MemberService memberService;
+    private final NotificationService notificationService;
     private final Mapper mapper;
 
     @GetMapping("/my/info")
@@ -51,6 +56,19 @@ public class MemberController {
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_MEMBER, resData));
     }
 
+    @GetMapping("/my/notifications")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    public ResponseEntity<?> getMynotifications(HttpServletRequest request) {
+        Long memberId = memberService.getMyUserWithAuthorities().getId();
+        List<Notification> notifications = notificationService.getMyNotifications(memberId);
+        List<NotificationPreviewDto> resData = 
+            notifications.stream()
+            .map((n)->NotificationPreviewDto.from(n))
+            .collect(Collectors.toList());
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_NOTIFICATION, resData));
+    }
+
+
     @GetMapping("/my/rentals")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<?> getMyRentals(HttpServletRequest request) {
@@ -58,7 +76,7 @@ public class MemberController {
         List<RentalDto> resData = clubs.stream()
                                         .map((c)->mapper.map(c, RentalDto.class))
                                         .collect(Collectors.toList());
-        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_MEMBER, resData));
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_RENTAL, resData));
     }
 
     @GetMapping("/{email}/info")
@@ -66,8 +84,6 @@ public class MemberController {
     public ResponseEntity<?>getMemberInfo(@PathVariable("email") String email) {
         Member member = memberService.getUserWithAuthorities(email);
         MemberInfoDto resData = mapper.map(member, MemberInfoDto.class);
-        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_MEMBER, resData));
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage., resData));
     }
-
-
 }
