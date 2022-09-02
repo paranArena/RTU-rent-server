@@ -38,7 +38,7 @@ public class Location {
 
     private Double x;
     private Double y;
-    public Location(String name,Double x, Double Y){
+    public Location(String name,Double x, Double y){
         this.name = name;
         this.x = x;
         this.y = y;

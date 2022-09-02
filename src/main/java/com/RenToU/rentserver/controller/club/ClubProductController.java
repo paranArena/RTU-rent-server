@@ -16,9 +16,12 @@ import org.springframework.web.multipart.MultipartFile;
 import com.RenToU.rentserver.application.MemberService;
 import com.RenToU.rentserver.application.ProductService;
 import com.RenToU.rentserver.application.S3Service;
+import com.RenToU.rentserver.domain.Location;
+import com.RenToU.rentserver.domain.Product;
 import com.RenToU.rentserver.dto.StatusCode;
 import com.RenToU.rentserver.dto.request.CreateProductDto;
 import com.RenToU.rentserver.dto.request.LocationDto;
+import com.RenToU.rentserver.dto.response.ProductDto;
 import com.RenToU.rentserver.dto.response.ResponseDto;
 import com.RenToU.rentserver.dto.response.ResponseMessage;
 import com.RenToU.rentserver.dto.service.CreateProductServiceDto;
@@ -45,13 +48,14 @@ public class ClubProductController {
             imagePath = s3Service.upload(image);
         }
         CreateProductServiceDto productServiceDto = mapper.map(createProductDto, CreateProductServiceDto.class);
-        LocationDto locationDto = new LocationDto(createProductDto.getLocationName(), createProductDto.getLatitude(), createProductDto.getLongitude());
-        productServiceDto.setLocation(locationDto);
+        Location location = new Location(createProductDto.getLocationName(), createProductDto.getLatitude(), createProductDto.getLongitude());
+        productServiceDto.setLocation(location);
         productServiceDto.setImagePath(imagePath);
         productServiceDto.setClubId(clubId);
         productServiceDto.setMemberId(memberId);
+        Product product = productService.registerProduct(productServiceDto);
+        ProductDto resData = ProductDto.from(product);
 
-        productService.registerProduct(productServiceDto);
-        return new ResponseEntity<>(ResponseDto.res(StatusCode.OK, ResponseMessage.UPDATE_CLUB), HttpStatus.OK);
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.CREATE_PRODUCT, resData));
     }
 }
