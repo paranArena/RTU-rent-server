@@ -47,6 +47,7 @@ class ClubServiceImplWebTest {
     private static List<String> INITIAL_CLUB_HASHTAGS = List.of("hashtag1","hashtag2");
     private Member owner;
     private Long memberId;
+    private Long ownerId;
     private Long clubId;
     private Long secondClubId;
 
@@ -117,6 +118,28 @@ class ClubServiceImplWebTest {
                 assertThat(clubs.size()).isEqualTo(2);
                 assertThat(clubs.get(0).getId()).isEqualTo(clubId);
                 assertThat(clubs.get(1).getId()).isEqualTo(secondClubId);
+            }
+        }
+    }
+    @Nested
+    @DisplayName("grantAdmin메소드는")
+    class Describe_grantAdmin {
+        @Nested
+        @DisplayName("memberId가 주어졌을 때")
+        class memberId_given {
+            @BeforeEach
+            void setup() {
+                ownerId = 2L;
+                memberId = 5L;
+                clubId = 1L;
+
+            }
+            @Test
+            @DisplayName("member의 ClubRole을 Admin으로 바꾼다.")
+            void it_change_club_role_to_admin() {
+                service.grantAdmin(clubId,ownerId,memberId);
+                Member member = memberRepository.findById(memberId).get();
+                assertThat(member.getClubList().get(0).getRole()).isEqualTo(ClubRole.ADMIN);
             }
         }
     }

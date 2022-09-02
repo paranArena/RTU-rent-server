@@ -135,6 +135,20 @@ public class ClubServiceImpl implements ClubService{
         List<ClubMember> requests = member.getClubList().stream().filter(cm->!cm.getRole().equals(ClubRole.WAIT)).collect(Collectors.toList());
         return requests.stream().map(cm -> cm.getClub()).collect(Collectors.toList());
     }
+    @Override
+    @Transactional
+    public void grantAdmin(Long clubId, Long ownerId,Long userId){
+        Club club = findClub(clubId);
+        Member owner = findMember(ownerId);
+        //요청자가 가입 허락 권한이 있는지 확인
+        club.findClubMemberByMember(owner).validateOwner();
+        //가입자가 가입 신청 대기 상태인지 확인
+        Member user = findMember(userId);
+        ClubMember clubMember = club.findClubMemberByMember(user);
+        //가입
+        clubMember.grantAdmin();
+        clubRepository.save(club);
+    }
 
     /**
      * validation
