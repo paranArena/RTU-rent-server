@@ -28,7 +28,7 @@ import static javax.persistence.FetchType.LAZY;
 @Builder
 @RequiredArgsConstructor
 @AllArgsConstructor
-public class RentalHistory {
+public class RentalHistory extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "rental_history_id")

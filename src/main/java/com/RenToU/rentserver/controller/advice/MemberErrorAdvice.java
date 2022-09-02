@@ -1,0 +1,31 @@
+package com.RenToU.rentserver.controller.advice;
+
+import com.RenToU.rentserver.dto.ErrorResponse;
+import com.RenToU.rentserver.exceptions.NotAjouEmailException;
+import com.RenToU.rentserver.exceptions.WrongEmailCodeException;
+import com.RenToU.rentserver.exceptions.club.CannotJoinClubException;
+import com.RenToU.rentserver.exceptions.club.ClubNotFoundException;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+@RestControllerAdvice
+public class MemberErrorAdvice {
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler(WrongEmailCodeException.class)
+    public ErrorResponse WrongEmailCode(){
+        return new ErrorResponse("인증번호가 틀렸습니다.");
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(ClubNotFoundException.class)
+    public ErrorResponse ClubNotFound(ClubNotFoundException ex){
+        return new ErrorResponse(ex.getMessage());
+    }
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(NotAjouEmailException.class)
+    public ErrorResponse NotAjouEmail(){
+        return new ErrorResponse("아주대 이메일이 아닙니다.");
+    }
+}
