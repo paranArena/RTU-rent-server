@@ -1,4 +1,4 @@
-package com.RenToU.rentserver.exceptions;
+package com.RenToU.rentserver.exceptions.club;
 
 public class ClubNotFoundException extends RuntimeException{
     public ClubNotFoundException(Long id){
