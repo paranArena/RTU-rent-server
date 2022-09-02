@@ -1,4 +1,4 @@
-package com.RenToU.rentserver.exceptions;
+package com.RenToU.rentserver.exceptions.club;
 
 public class CannotJoinClubException extends RuntimeException {
     public CannotJoinClubException(Long id, String name,String msg) {

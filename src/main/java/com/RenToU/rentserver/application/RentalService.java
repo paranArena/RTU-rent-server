@@ -1,33 +1,24 @@
 package com.RenToU.rentserver.application;
 
 import com.RenToU.rentserver.domain.Club;
-import com.RenToU.rentserver.domain.Direction;
 import com.RenToU.rentserver.domain.Item;
 import com.RenToU.rentserver.domain.Location;
 import com.RenToU.rentserver.domain.Member;
-import com.RenToU.rentserver.domain.Product;
 import com.RenToU.rentserver.domain.Rental;
 import com.RenToU.rentserver.domain.RentalHistory;
 import com.RenToU.rentserver.exceptions.CannotRentException;
 import com.RenToU.rentserver.exceptions.MemberNotFoundException;
-import com.RenToU.rentserver.exceptions.NotInRangeException;
 import com.RenToU.rentserver.exceptions.ProductNotFoundException;
 import com.RenToU.rentserver.exceptions.RentalNotFoundException;
-import com.RenToU.rentserver.infrastructure.ClubRepository;
 import com.RenToU.rentserver.infrastructure.ItemRepository;
 import com.RenToU.rentserver.infrastructure.MemberRepository;
-import com.RenToU.rentserver.infrastructure.ProductRepository;
 import com.RenToU.rentserver.infrastructure.RentalHistoryRepository;
 import com.RenToU.rentserver.infrastructure.RentalRepository;
-import com.RenToU.rentserver.util.GeometryUtil;
 import com.github.dozermapper.core.Mapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.management.Query;
-import javax.persistence.EntityManager;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
