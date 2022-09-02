@@ -1,6 +1,6 @@
 package com.RenToU.rentserver.application;
 
-import com.RenToU.rentserver.dto.service.ProductServiceDto;
+import com.RenToU.rentserver.dto.service.CreateProductServiceDto;
 import com.RenToU.rentserver.domain.Club;
 import com.RenToU.rentserver.domain.Item;
 import com.RenToU.rentserver.domain.Member;
@@ -27,12 +27,13 @@ public class ProductService {
     private final ProductRepository productRepository;
 
     @Transactional
-    public Product registerProduct(ProductServiceDto dto){
+    public Product registerProduct(CreateProductServiceDto dto){
         Club club = findClub(dto.getClubId());
         Member requester = findMember(dto.getMemberId());
         club.findClubMemberByMember(requester).validateAdmin();
         Product product = mapper.map(dto,Product.class);
         product.initialSetting(club, dto.getRentalPolicies());
+        productRepository.save(product);
         clubRepository.save(club);
         return product;
     }
@@ -43,6 +44,7 @@ public class ProductService {
         Club club = product.getClub();
         club.findClubMemberByMember(requester).validateAdmin();
         Item item = Item.createItem(product,rentalPolicy,numbering);
+        // product.addQuantity();
         product.addItem(item);
         productRepository.save(product);
     }

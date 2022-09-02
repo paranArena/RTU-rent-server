@@ -25,7 +25,7 @@ import java.util.List;
 import static javax.persistence.FetchType.LAZY;
 
 //물품 ex) 책, 우산
-@Entity
+@Entity @Setter
 @Getter
 @Builder
 @AllArgsConstructor
@@ -58,6 +58,7 @@ public class Product extends BaseTimeEntity{
     private Club club;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    @Builder.Default
     private List<Item> items = new ArrayList<>();
 
     /**
@@ -71,16 +72,16 @@ public class Product extends BaseTimeEntity{
         this.club = club;
     }
     //클럽과의 관계 생성, item 생성
-    public void initialSetting(Club club,List<RentalPolicy> policies ) {
+    public void initialSetting(Club club, List<RentalPolicy> policies) {
         this.setClub(club);
-        this.setLocation(location);
+        this.setLocationJpa(location);
         for(int i = 1; i <= policies.size(); i++){
             Item item = Item.createItem(this,policies.get(i-1),i);
             this.addItem(item);
         }
     }
 
-    private void setLocation(Location location) {
+    private void setLocationJpa(Location location) {
         location.setProduct(this);
     }
 

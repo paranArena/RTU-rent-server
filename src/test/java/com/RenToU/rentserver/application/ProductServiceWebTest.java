@@ -5,7 +5,7 @@ import com.RenToU.rentserver.domain.Location;
 import com.RenToU.rentserver.domain.Member;
 import com.RenToU.rentserver.domain.Product;
 import com.RenToU.rentserver.domain.RentalPolicy;
-import com.RenToU.rentserver.dto.service.ProductServiceDto;
+import com.RenToU.rentserver.dto.service.CreateProductServiceDto;
 import com.RenToU.rentserver.infrastructure.ClubRepository;
 import com.RenToU.rentserver.infrastructure.HashtagRepository;
 import com.RenToU.rentserver.infrastructure.MemberRepository;
