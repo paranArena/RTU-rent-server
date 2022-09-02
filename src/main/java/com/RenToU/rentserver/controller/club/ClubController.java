@@ -5,6 +5,7 @@ import com.RenToU.rentserver.application.HashtagService;
 import com.RenToU.rentserver.application.MemberService;
 import com.RenToU.rentserver.application.S3Service;
 import com.RenToU.rentserver.domain.Club;
+import com.RenToU.rentserver.domain.Member;
 import com.RenToU.rentserver.dto.*;
 import com.RenToU.rentserver.dto.response.ClubInfoDto;
 import com.RenToU.rentserver.dto.response.ResponseDto;
