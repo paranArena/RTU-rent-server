@@ -4,6 +4,7 @@ import com.RenToU.rentserver.domain.Club;
 import com.RenToU.rentserver.domain.ClubRole;
 import com.RenToU.rentserver.domain.Member;
 import com.RenToU.rentserver.exceptions.CannotRentException;
+import com.RenToU.rentserver.exceptions.MemberNotFoundException;
 import com.RenToU.rentserver.infrastructure.ClubMemberRepository;
 import com.RenToU.rentserver.infrastructure.ClubRepository;
 import com.RenToU.rentserver.infrastructure.HashtagRepository;
@@ -140,6 +141,30 @@ class ClubServiceImplWebTest {
                 service.grantAdmin(clubId,ownerId,memberId);
                 Member member = memberRepository.findById(memberId).get();
                 assertThat(member.getClubList().get(0).getRole()).isEqualTo(ClubRole.ADMIN);
+            }
+        }
+    }
+    @Nested
+    @DisplayName("leaveClub메소드는")
+    class Describe_leaveClub {
+        @Nested
+        @DisplayName("memberId가 주어졌을 때")
+        class memberId_given {
+            @BeforeEach
+            void setup() {
+                memberId = 5L;
+                clubId = 1L;
+
+            }
+            @Test
+            @DisplayName("Clubmember를 삭제한다.")
+            void it_delete_club_member() {
+                service.leaveClub(clubId,memberId);
+                Member member = memberRepository.findById(memberId).get();
+                Club club = clubRepository.findById(clubId).get();
+                assertThat(member.getClubList()).isEmpty();
+                assertThatThrownBy(()->club.findClubMemberByMember(member))
+                        .isInstanceOf(MemberNotFoundException.class);
             }
         }
     }

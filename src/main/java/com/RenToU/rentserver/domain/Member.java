@@ -82,5 +82,9 @@ public class Member extends BaseTimeEntity{
         this.rentals.add(rental);
         rental.setMember(this);
     }
+
+    public void deleteClub(ClubMember clubMember) {
+        this.clubList.remove(clubMember);
+    }
 }
 

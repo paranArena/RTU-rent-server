@@ -85,4 +85,9 @@ public class ClubMember extends BaseTimeEntity {
             throw new NoOwnerPermissionException(this.club.getId());
         }
     }
+
+    public void delete() {
+        member.deleteClub(this);
+        club.deleteMember(this);
+    }
 }
