@@ -130,7 +130,11 @@ public class ClubServiceImpl implements ClubService{
         List<ClubMember> requests = member.getClubList().stream().filter(cm->cm.getRole().equals(ClubRole.WAIT)).collect(Collectors.toList());
         return requests.stream().map(cm -> cm.getClub()).collect(Collectors.toList());
     }
-
+    public List<Club> getMyClubs(long memberId){
+        Member member = findMember(memberId);
+        List<ClubMember> requests = member.getClubList().stream().filter(cm->!cm.getRole().equals(ClubRole.WAIT)).collect(Collectors.toList());
+        return requests.stream().map(cm -> cm.getClub()).collect(Collectors.toList());
+    }
 
     /**
      * validation
