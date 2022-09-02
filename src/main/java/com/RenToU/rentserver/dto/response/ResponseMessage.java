@@ -24,7 +24,7 @@ public class ResponseMessage {
     public static final String DELETE_CLUB = "클럽 삭제 성공";
 
     public static final String CREATE_NOTIFICATION = "공지 생성 성공";
-    public static final String GET_NOTIFICATION = "공지 생성 성공";
+    public static final String GET_NOTIFICATION = "공지 조회 성공";
     public static final String UPDATE_NOTIFICATION = "공지 수정 성공";
     public static final String DELETE_NOTIFICATION = "공지 삭제 성공";
     public static final String SEARCH_NOTIFICATION_SUCCESS = "공지 검색 성공";
