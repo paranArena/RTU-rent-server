@@ -2,6 +2,7 @@ package com.RenToU.rentserver.application;
 
 import com.RenToU.rentserver.domain.Club;
 import com.RenToU.rentserver.domain.ClubMember;
+import com.RenToU.rentserver.domain.ClubRole;
 import com.RenToU.rentserver.domain.Member;
 
 import java.util.List;
@@ -11,6 +12,9 @@ public interface ClubService {
     public Club findClubById(long clubId);
     public Club findClubByName(String clubName);
     public void grantAdmin(Long clubId, Long ownerId,Long userId);
+    public ClubRole getMyRole(long memberId, long clubId);
+    public List<Club> getMyClubs(long memberId);
+    public void leaveClub(Long clubId, Long userId);
     public Club createClub(Long memberId, String clubName, String clubIntro, String thumbnailPath, List<String> clubHashtags);
     public void deleteClub(long memberId, long clubId);
     public List<Member> getAllMembers(long clubId);

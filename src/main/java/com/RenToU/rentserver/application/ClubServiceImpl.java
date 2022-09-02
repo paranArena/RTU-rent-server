@@ -130,10 +130,18 @@ public class ClubServiceImpl implements ClubService{
         List<ClubMember> requests = member.getClubList().stream().filter(cm->cm.getRole().equals(ClubRole.WAIT)).collect(Collectors.toList());
         return requests.stream().map(cm -> cm.getClub()).collect(Collectors.toList());
     }
+    @Override
     public List<Club> getMyClubs(long memberId){
         Member member = findMember(memberId);
         List<ClubMember> requests = member.getClubList().stream().filter(cm->!cm.getRole().equals(ClubRole.WAIT)).collect(Collectors.toList());
         return requests.stream().map(cm -> cm.getClub()).collect(Collectors.toList());
+    }
+    @Override
+    public ClubRole getMyRole(long memberId, long clubId){
+        Club club = findClubById(clubId);
+        Member member = findMember(memberId);
+        ClubMember cm = club.findClubMemberByMember(member);
+        return cm.getRole();
     }
     @Override
     @Transactional
@@ -147,6 +155,17 @@ public class ClubServiceImpl implements ClubService{
         ClubMember clubMember = club.findClubMemberByMember(user);
         //가입
         clubMember.grantAdmin();
+        clubRepository.save(club);
+    }
+    @Override
+    @Transactional
+    public void leaveClub(Long clubId, Long userId){
+        Club club = findClub(clubId);
+        Member user = findMember(userId);
+        ClubMember clubMember = club.findClubMemberByMember(user);
+        //탈퇴
+        clubMember.delete();
+        clubMemberRepository.deleteById(clubMember.getId());
         clubRepository.save(club);
     }
 
