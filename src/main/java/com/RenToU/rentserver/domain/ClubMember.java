@@ -1,6 +1,6 @@
 package com.RenToU.rentserver.domain;
 
-import com.RenToU.rentserver.exceptions.CannotJoinClubException;
+import com.RenToU.rentserver.exceptions.club.CannotJoinClubException;
 import com.RenToU.rentserver.exceptions.NoAdminPermissionException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

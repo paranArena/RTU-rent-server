@@ -38,7 +38,7 @@ class ProductServiceTest {
     private Mapper mapper;
     @Mock
     private ClubRepository clubRepository;
-    Location location = new Location(1.0,1.0);
+    Location location = new Location("TEstLocation",1.0,1.0);
     @Test
     @DisplayName("product 등록 테스트")
     public void registerProductTest() throws Exception {
