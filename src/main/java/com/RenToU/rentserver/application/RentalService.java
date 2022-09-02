@@ -1,12 +1,15 @@
 package com.RenToU.rentserver.application;
 
 import com.RenToU.rentserver.domain.Club;
+import com.RenToU.rentserver.domain.ClubMember;
+import com.RenToU.rentserver.domain.ClubRole;
 import com.RenToU.rentserver.domain.Item;
 import com.RenToU.rentserver.domain.Location;
 import com.RenToU.rentserver.domain.Member;
 import com.RenToU.rentserver.domain.Rental;
 import com.RenToU.rentserver.domain.RentalHistory;
 import com.RenToU.rentserver.exceptions.CannotRentException;
+import com.RenToU.rentserver.exceptions.ItemNotFoundException;
 import com.RenToU.rentserver.exceptions.MemberNotFoundException;
 import com.RenToU.rentserver.exceptions.ProductNotFoundException;
 import com.RenToU.rentserver.exceptions.RentalNotFoundException;
@@ -44,7 +47,8 @@ public class RentalService {
     }
 
     private void checkIsInSameClub(Member member, Item item) {
-        List<Club> clubs = member.getClubList().stream().map(cm->cm.getClub()).collect(Collectors.toList());
+        List<ClubMember> userClubMembers = member.getClubList().stream().filter(cm-> cm.getRole()!= ClubRole.WAIT).collect(Collectors.toList());
+        List<Club> clubs = userClubMembers.stream().map(cm->cm.getClub()).collect(Collectors.toList());
         if(!clubs.contains(item.getProduct().getClub())){
             throw new CannotRentException(item.getId());
         }
@@ -95,7 +99,7 @@ public class RentalService {
     }
     private Item findItem(Long id){
         return itemRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException(id));
+                .orElseThrow(() -> new ItemNotFoundException(id));
     }
     private Rental findRentalByItem(Item item){
         return rentalRepository.findByItem(item)

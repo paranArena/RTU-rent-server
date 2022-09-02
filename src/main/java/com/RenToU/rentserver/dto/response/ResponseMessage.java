@@ -34,5 +34,8 @@ public class ResponseMessage {
     
     public static final String CREATE_PRODUCT = "물품 생성 성공";
 
-
+    public static final String RENT_REQUEST_SUCCESS = "렌탈 요청 성공";
+    public static final String RENT_APPLY_SUCCESS = "렌탈 확정 성공";
+    public static final String RENT_RETURN_SUCCESS = "렌탈 반납 성공";
+    public static final String RENT_CANCEL_SUCCESS = "렌탈 취소 성공";
 }
