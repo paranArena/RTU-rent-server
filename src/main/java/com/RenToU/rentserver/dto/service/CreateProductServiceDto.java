@@ -38,7 +38,8 @@ public class CreateProductServiceDto {
 
     private int reserveRentalPeriod;
 
-    private LocationDto location;
+    // @Mapping("location")
+    private Location location;
 
     private String caution;
 }

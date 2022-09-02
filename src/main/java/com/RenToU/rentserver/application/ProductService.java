@@ -33,6 +33,7 @@ public class ProductService {
         club.findClubMemberByMember(requester).validateAdmin();
         Product product = mapper.map(dto,Product.class);
         product.initialSetting(club, dto.getRentalPolicies());
+        productRepository.save(product);
         clubRepository.save(club);
         return product;
     }
