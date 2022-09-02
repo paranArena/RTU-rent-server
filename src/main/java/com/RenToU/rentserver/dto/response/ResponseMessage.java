@@ -1,6 +1,8 @@
 package com.RenToU.rentserver.dto.response;
 
 public class ResponseMessage {
+    public static final String OK = "요청 성공";
+
     public static final String LOGIN_SUCCESS = "로그인 성공";
     public static final String LOGIN_FAIL = "로그인 실패";
     public static final String GET_MEMBER = "회원 정보 조회 성공";
@@ -38,4 +40,5 @@ public class ResponseMessage {
     public static final String RENT_APPLY_SUCCESS = "렌탈 확정 성공";
     public static final String RENT_RETURN_SUCCESS = "렌탈 반납 성공";
     public static final String RENT_CANCEL_SUCCESS = "렌탈 취소 성공";
+    public static final String GET_RENT = "렌탈 조회 성공";
 }
