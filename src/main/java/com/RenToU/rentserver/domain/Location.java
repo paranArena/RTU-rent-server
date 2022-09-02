@@ -24,9 +24,13 @@ public class Location {
     private Long id;
     @OneToOne(mappedBy = "location", fetch = LAZY)
     private Product product;
+
+    private String name;
+
     private Double x;
     private Double y;
-    public Location(Double x, Double Y){
+    public Location(String name,Double x, Double Y){
+        this.name = name;
         this.x = x;
         this.y = y;
     }

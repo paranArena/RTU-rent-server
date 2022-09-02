@@ -61,7 +61,7 @@ class ProductServiceWebTest {
             @Test
             @DisplayName("새 product를 생성하고 리턴한다.")
             void it_return_new_product() {
-                Location location = new Location(1.0, 1.0);
+                Location location = new Location("Test Location", 1.0, 1.0);
                 ProductServiceDto dto = new ProductServiceDto(club.getId(), owner.getId(), "카메라", "전자기기", location, 3, 3, 100000, "caution", "www.com", List.of(RentalPolicy.FIFO, RentalPolicy.FIFO, RentalPolicy.RESERVE));
                 Product product = service.registerProduct(dto);
                 assertThat(product.getName()).isEqualTo("카메라");
@@ -71,7 +71,7 @@ class ProductServiceWebTest {
             @Test
             @DisplayName("item을 rentalPreiod 개수만큼 생성한다.")
             void it_create_item_based_on_rentalPeriod_size() {
-                Location location = new Location(1.0, 1.0);
+                Location location = new Location("Test Location",1.0, 1.0);
                 ProductServiceDto dto = new ProductServiceDto(club.getId(), owner.getId(), "카메라", "전자기기", location, 3, 3, 100000, "caution", "www.com", List.of(RentalPolicy.FIFO, RentalPolicy.FIFO, RentalPolicy.RESERVE));
                 Product product = service.registerProduct(dto);
                 assertThat(product.getItems().size()).isEqualTo(3);
