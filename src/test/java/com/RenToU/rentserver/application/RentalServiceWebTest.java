@@ -9,7 +9,6 @@ import com.RenToU.rentserver.domain.Rental;
 import com.RenToU.rentserver.domain.RentalHistory;
 import com.RenToU.rentserver.domain.RentalPolicy;
 import com.RenToU.rentserver.domain.RentalStatus;
-import com.RenToU.rentserver.dto.service.ProductServiceDto;
 import com.RenToU.rentserver.exceptions.CannotRentException;
 import com.RenToU.rentserver.infrastructure.ClubRepository;
 import com.RenToU.rentserver.infrastructure.HashtagRepository;

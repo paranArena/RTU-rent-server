@@ -24,7 +24,6 @@ import com.RenToU.rentserver.dto.StatusCode;
 import com.RenToU.rentserver.dto.request.CreateProductDto;
 import com.RenToU.rentserver.dto.response.ResponseDto;
 import com.RenToU.rentserver.dto.response.ResponseMessage;
-import com.RenToU.rentserver.dto.service.ProductServiceDto;
 import com.github.dozermapper.core.Mapper;
 
 import lombok.RequiredArgsConstructor;

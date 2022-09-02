@@ -6,6 +6,7 @@ import com.RenToU.rentserver.domain.Member;
 import com.RenToU.rentserver.domain.Product;
 import com.RenToU.rentserver.domain.RentalPolicy;
 import com.RenToU.rentserver.dto.service.CreateProductServiceDto;
+import com.RenToU.rentserver.dto.service.CreateProductServiceDto;
 import com.RenToU.rentserver.infrastructure.ClubRepository;
 import com.RenToU.rentserver.infrastructure.HashtagRepository;
 import com.RenToU.rentserver.infrastructure.MemberRepository;
@@ -62,7 +63,7 @@ class ProductServiceWebTest {
             @DisplayName("새 product를 생성하고 리턴한다.")
             void it_return_new_product() {
                 Location location = new Location("Test Location", 1.0, 1.0);
-                ProductServiceDto dto = new ProductServiceDto(club.getId(), owner.getId(), "카메라", "전자기기", location, 3, 3, 100000, "caution", "www.com", List.of(RentalPolicy.FIFO, RentalPolicy.FIFO, RentalPolicy.RESERVE));
+                CreateProductServiceDto dto = new CreateProductServiceDto(club.getId(), owner.getId(), null, "카메라", "전자기기", 100000, List.of(RentalPolicy.FIFO, RentalPolicy.FIFO, RentalPolicy.RESERVE),3,3,  location,"caution");
                 Product product = service.registerProduct(dto);
                 assertThat(product.getName()).isEqualTo("카메라");
                 assertThat(product.getLocation().getX()).isEqualTo(location.getX());
@@ -72,7 +73,7 @@ class ProductServiceWebTest {
             @DisplayName("item을 rentalPreiod 개수만큼 생성한다.")
             void it_create_item_based_on_rentalPeriod_size() {
                 Location location = new Location("Test Location",1.0, 1.0);
-                ProductServiceDto dto = new ProductServiceDto(club.getId(), owner.getId(), "카메라", "전자기기", location, 3, 3, 100000, "caution", "www.com", List.of(RentalPolicy.FIFO, RentalPolicy.FIFO, RentalPolicy.RESERVE));
+                CreateProductServiceDto dto = new CreateProductServiceDto(club.getId(), owner.getId(), null, "카메라", "전자기기", 100000, List.of(RentalPolicy.FIFO, RentalPolicy.FIFO, RentalPolicy.RESERVE),3,3, location,"caution");
                 Product product = service.registerProduct(dto);
                 assertThat(product.getItems().size()).isEqualTo(3);
                 assertThat(product.getItems().get(0).getRentalPolicy()).isEqualTo(RentalPolicy.FIFO);
