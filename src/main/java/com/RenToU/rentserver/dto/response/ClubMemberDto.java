@@ -29,7 +29,7 @@ public class ClubMemberDto {
         if(clubMember == null) return null;
 
         return ClubMemberDto.builder()
-            .id(clubMember.getId())
+            .id(clubMember.getMember().getId())
             .email(clubMember.getMember().getEmail())
             .name(clubMember.getMember().getName())
             .phoneNumber(clubMember.getMember().getPhoneNumber())
