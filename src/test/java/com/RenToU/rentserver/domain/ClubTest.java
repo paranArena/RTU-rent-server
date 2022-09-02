@@ -35,14 +35,4 @@ class ClubTest {
         //then
         assertThat(findMember.getMember()).isEqualTo(INITIAL_OWNER);
     }
-    @DisplayName("findClubByMember 예외 테스트")
-    @Test
-    public void findClubMyMemberExceptionTest() {
-        //given
-        Member member = Member.createMember("test","test@test.com");
-        //when,then
-        assertThat(club.findClubMemberByMember(member).getMember().getId()).isEqualTo(member.getId());
-        assertThatThrownBy(()->club.findClubMemberByMember(member))
-                .isInstanceOf(MemberNotFoundException.class);
-    }
 }

@@ -5,22 +5,20 @@ import com.RenToU.rentserver.domain.ClubMember;
 import com.RenToU.rentserver.domain.ClubRole;
 import com.RenToU.rentserver.domain.Hashtag;
 import com.RenToU.rentserver.domain.Member;
-import com.RenToU.rentserver.exceptions.CannotJoinClubException;
-import com.RenToU.rentserver.exceptions.ClubNotFoundException;
+import com.RenToU.rentserver.exceptions.club.CannotJoinClubException;
+import com.RenToU.rentserver.exceptions.club.ClubNotFoundException;
 import com.RenToU.rentserver.exceptions.DuplicateMemberException;
 import com.RenToU.rentserver.exceptions.MemberNotFoundException;
 import com.RenToU.rentserver.infrastructure.ClubMemberRepository;
 import com.RenToU.rentserver.infrastructure.ClubRepository;
 import com.RenToU.rentserver.infrastructure.HashtagRepository;
 import com.RenToU.rentserver.infrastructure.MemberRepository;
-import com.RenToU.rentserver.infrastructure.ProductRepository;
 import com.github.dozermapper.core.Mapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Transactional(readOnly = true)
@@ -68,6 +66,13 @@ public class ClubServiceImpl implements ClubService{
 
     @Override
     @Transactional
+    public List<Member> getAllMembers(long clubId) {
+        Club club = findClubById(clubId);
+        return getAllClubUser(club);
+    }
+
+    @Override
+    @Transactional
     public void requestClubJoin(Long clubId, Long memberId) {
         //회원 조회
         Member member = findMember(memberId);
@@ -87,6 +92,8 @@ public class ClubServiceImpl implements ClubService{
         .filter((clubMember)->clubMember.getRole()==ClubRole.WAIT)
         .collect(Collectors.toList());
     }
+
+
 
     @Override
     @Transactional
@@ -137,5 +144,8 @@ public class ClubServiceImpl implements ClubService{
         return hashtagRepository.findByName(hashtagName)
                 .orElse(Hashtag.createHashtag(hashtagName));
     }
-
+    private List<Member> getAllClubUser(Club club){
+        List<ClubMember> users= club.getMemberList().stream().filter(cm->cm.getRole()!=ClubRole.WAIT).collect(Collectors.toList());
+        return users.stream().map(cm->cm.getMember()).collect(Collectors.toList());
+    }
 }

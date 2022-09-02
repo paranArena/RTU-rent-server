@@ -4,8 +4,7 @@ import com.RenToU.rentserver.dto.service.NotificationServiceDto;
 import com.RenToU.rentserver.domain.Club;
 import com.RenToU.rentserver.domain.Member;
 import com.RenToU.rentserver.domain.Notification;
-import com.RenToU.rentserver.dto.service.NotificationServiceDto;
-import com.RenToU.rentserver.exceptions.ClubNotFoundException;
+import com.RenToU.rentserver.exceptions.club.ClubNotFoundException;
 import com.RenToU.rentserver.exceptions.MemberNotFoundException;
 import com.RenToU.rentserver.exceptions.NotificationNotFoundException;
 import com.RenToU.rentserver.infrastructure.ClubRepository;
@@ -14,6 +13,11 @@ import com.RenToU.rentserver.infrastructure.NotificationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
@@ -33,6 +37,15 @@ public class NotificationService {
         notificationRepository.save(notification);
         clubRepository.save(club);
         return notification;
+    }
+    public List<Notification> getMyNotifications(Long memberId){
+        Member member = findMember(memberId);
+        List<Club> clubs = member.getClubList().stream().map(cm->cm.getClub()).collect(Collectors.toList());
+        List<Notification> notis = new ArrayList<>();
+        clubs.stream().forEach(c->{
+            notis.addAll(c.getNotifications());
+        });
+        return notis;
     }
 
     @Transactional
