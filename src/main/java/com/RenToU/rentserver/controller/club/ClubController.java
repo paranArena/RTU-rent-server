@@ -44,8 +44,8 @@ public class ClubController {
     @PostMapping("")
     public ResponseEntity<?> createClub(@RequestParam("name") String name, @RequestParam("introduction") String intro, @RequestParam("thumbnail") MultipartFile thumbnail,@RequestParam("hashtags") List<String> hashtags) throws IOException {
         long memberId = memberService.getMyIdWithAuthorities();
-        String thumbnailPath = null;
-        if(!thumbnail.isEmpty()){
+        String thumbnailPath = "https://ren2u.s3.ap-northeast-2.amazonaws.com/images.jpg";
+        if(!thumbnail.isEmpty()) {
             thumbnailPath = s3Service.upload(thumbnail);
         }
         
