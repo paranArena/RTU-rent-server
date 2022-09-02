@@ -31,7 +31,8 @@ public class ResponseMessage {
 
     public static final String SEARCH_CLUB_SUCCESS = "클럽 검색 성공";
     public static final String SEARCH_CLUB_FAIL = "클럽 검색 실패";
-
+    
+    public static final String CREATE_PRODUCT = "물품 생성 성공";
 
     public static final String RENT_REQUEST_SUCCESS = "렌탈 요청 성공";
     public static final String RENT_APPLY_SUCCESS = "렌탈 확정 성공";

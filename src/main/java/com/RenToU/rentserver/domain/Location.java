@@ -18,6 +18,15 @@ import static javax.persistence.FetchType.LAZY;
 @Entity
 @NoArgsConstructor
 public class Location {
+    public Location(Double x, Double y, String name){
+        this.x = x;
+        this.y = y;
+        this.name = name;
+    }
+    public Location(Double x, Double y){
+        this.x = x;
+        this.y = y;
+    }
     @Id
     @GeneratedValue
     @Column(name = "location_id")
@@ -29,7 +38,7 @@ public class Location {
 
     private Double x;
     private Double y;
-    public Location(String name,Double x, Double Y){
+    public Location(String name,Double x, Double y){
         this.name = name;
         this.x = x;
         this.y = y;

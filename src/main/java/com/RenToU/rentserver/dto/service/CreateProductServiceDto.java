@@ -3,6 +3,7 @@ package com.RenToU.rentserver.dto.service;
 import com.RenToU.rentserver.domain.Location;
 import com.RenToU.rentserver.domain.RentalPolicy;
 import com.RenToU.rentserver.dto.request.CreateItemDto;
+import com.RenToU.rentserver.dto.request.LocationDto;
 import com.github.dozermapper.core.Mapping;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,33 +15,31 @@ import org.springframework.data.geo.Point;
 
 import java.util.List;
 
-@Getter
-@Setter
+@Getter @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductServiceDto {
+public class CreateProductServiceDto {
     //other request var
     private long clubId;
     private long memberId;
-
-    @Mapping("name")
-    private String name;
-    @Mapping("category")
-    private String category;
-    @Mapping("location")
-    private Location location;
-    @Mapping("fifoRentalPeriod")
-    private int fifoRentalPeriod;
-    @Mapping("reserveRentalPeriod")
-    private int reserveRentalPeriod;
-    @Mapping("price")
-    private int price;
-    @Mapping("caution")
-    private String caution;
-    @Mapping("imagePath")
     private String imagePath;
+
+    //mapped by CreateProductDto
+    private String name;
+
+    private String category;
+
+    private int price;
+
     private List<RentalPolicy> rentalPolicies;
 
+    private int fifoRentalPeriod;
 
+    private int reserveRentalPeriod;
+
+    // @Mapping("location")
+    private Location location;
+
+    private String caution;
 }
