@@ -29,7 +29,8 @@ public class NotificationService {
         club.findClubMemberByMember(writer).validateAdmin();
         String title = notificationServiceDto.getTitle();
         String content = notificationServiceDto.getContent();
-        Notification notification = Notification.createNotification(title,content,writer,club);
+        String imagePath = notificationServiceDto.getImagePaths().get(0);
+        Notification notification = Notification.createNotification(title,content, imagePath, writer,club);
         notificationRepository.save(notification);
         clubRepository.save(club);
         return notification;
@@ -37,11 +38,12 @@ public class NotificationService {
 
     @Transactional
     public void deleteNotification(long memberId, Long notificationId) {
-        //TODO member 권한 체크
+        //TODO member 클럽장 권한 체크
         notificationRepository.deleteById(notificationId);
     }
 
-    private Notification findNotification(Long id) {
+    public Notification findNotification(Long id) {
+        //TODO member 클럽회원 권한 체크
         return notificationRepository.findById(id)
                 .orElseThrow(()->new NotificationNotFoundException(id));
     }
