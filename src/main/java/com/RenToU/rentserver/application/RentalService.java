@@ -1,6 +1,8 @@
 package com.RenToU.rentserver.application;
 
 import com.RenToU.rentserver.domain.Club;
+import com.RenToU.rentserver.domain.ClubMember;
+import com.RenToU.rentserver.domain.ClubRole;
 import com.RenToU.rentserver.domain.Item;
 import com.RenToU.rentserver.domain.Location;
 import com.RenToU.rentserver.domain.Member;
@@ -43,7 +45,8 @@ public class RentalService {
     }
 
     private void checkIsInSameClub(Member member, Item item) {
-        List<Club> clubs = member.getClubList().stream().map(cm->cm.getClub()).collect(Collectors.toList());
+        List<ClubMember> userClubMembers = member.getClubList().stream().filter(cm-> cm.getRole()!= ClubRole.WAIT).collect(Collectors.toList());
+        List<Club> clubs = userClubMembers.stream().map(cm->cm.getClub()).collect(Collectors.toList());
         if(!clubs.contains(item.getProduct().getClub())){
             throw new CannotRentException(item.getId());
         }
