@@ -38,10 +38,21 @@ javac -version
 java -version
 ```
 
-ec2
+### ec2
 ```
-kill -9 [previous process pid]
-nohup ./gradlew build --exclude-task test && java -jar build/libs/rentserver-0.0.1-SNAPSHOT.jar 1>nohup.out 2>&1 &
+git pull
+ps aux | grep java
+kill -9 [previous pid]
+./gradlew build --exclude-task test 
+java -jar build/libs/rentserver-0.0.1-SNAPSHOT.jar 1>app.log 2>&1 &
+disown [pid]
+```
+### Docker
+```
+# test실패할 시 build가 안됨. --exclude 옵션은 선택사항
+./gradlew build --exclude-task test
+# tag는 배포 단위마다 0.0.1씩 증가 시키려고 합니다. develop branch에도 같은 태그를 달아서 docker image와 맞춰주세요!
+docker build -t ren2u-spring-boot-docker:1.1.3 .
 ```
 
 테스트 제외 빌드
