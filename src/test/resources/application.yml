@@ -21,6 +21,9 @@ logging:
         type:
           descriptor:
             sql: trace
+redis:
+  host: 127.0.0.1
+  port: 6379
 
 # import other properties
 spring.profiles.include: jwt, rds, s3
