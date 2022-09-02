@@ -6,6 +6,7 @@ import com.RenToU.rentserver.domain.Location;
 import com.RenToU.rentserver.domain.Member;
 import com.RenToU.rentserver.domain.Product;
 import com.RenToU.rentserver.domain.Rental;
+import com.RenToU.rentserver.domain.RentalHistory;
 import com.RenToU.rentserver.domain.RentalPolicy;
 import com.RenToU.rentserver.domain.RentalStatus;
 import com.RenToU.rentserver.dto.service.ProductServiceDto;
@@ -29,13 +30,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @Transactional
-@DisplayName("productService 통합 테스트")
+@DisplayName("rentalService 통합 테스트")
 class RentalServiceWebTest {
     private RentalService service;
     @Autowired
@@ -52,6 +54,8 @@ class RentalServiceWebTest {
     private Long itemId;
     private Long anotherMemberId;
 
+    private Long rentalId;
+
     @BeforeEach
     void setUp() {
         service = new RentalService(mapper,rentalRepository,memberRepository,itemRepository,rentalHistoryRepository);
@@ -59,7 +63,7 @@ class RentalServiceWebTest {
 
     @Nested
     @DisplayName("requestRentalt메소드는")
-    class Describe_registerProduct {
+    class Describe_requestRental {
         @Nested
         @DisplayName("member와 item이 같은 그룹내에 있지 않을 때")
         class not_in_same_club {
@@ -112,6 +116,123 @@ class RentalServiceWebTest {
                 assertThatThrownBy(()->service.requestRental(anotherMemberId,itemId))
                         .isInstanceOf(CannotRentException.class);
             }
+        }
+    }
+    @Nested
+    @DisplayName("applyRentalt메소드는")
+    class Describe_applyRental {
+        @Nested
+        @DisplayName("wait상태인 rental이 주어졌을 때")
+        class data_given {
+            @BeforeEach
+            void setup(){
+                memberId = 4L;
+                itemId = 1L;
+                rentalId = service.requestRental(memberId,itemId).getId();
+            }
+            @Test
+            @DisplayName("rentalStatus를 CANCEL로 바꾼 뒤 렌탈을 삭제하고 rentalHistory를 리턴한다.")
+            void it_changes_rentalStatus_To_Cancel_and_delete_rental() {
+                RentalHistory rentalHistory = service.cancelRental(memberId,rentalId);
+                assertThat(rentalHistory.getItem().getId()).isEqualTo(itemId);
+                assertThat(rentalHistory.getRentalStatus()).isEqualTo(RentalStatus.CANCEL);
+                assertThat(rentalHistory.getMember().getId()).isEqualTo(memberId);
+                assertThat(rentalHistory.getItem().getRental()).isNull();
+            }
+        }
+        @Nested
+        @DisplayName("렌탈 대기 시간이 끝나고 요청되었을 때")
+        class if_WaitTime_is_over {
+            @BeforeEach
+            void setup(){
+                memberId = 4L;
+                itemId = 1L;
+                Rental rental = service.requestRental(memberId,itemId);
+                rental.setRentDateBeforeTenM();
+                rentalRepository.save(rental);
+                rentalId = rental.getId();
+            }
+            @Test
+            @DisplayName("CannotRentException을 던진다.")
+            void it_throws_cannotRentException() {
+                assertThatThrownBy(()->service.applyRental(memberId,rentalId))
+                        .isInstanceOf(CannotRentException.class);
+                assertThatThrownBy(()->rentalRepository.findById(rentalId).get())
+                        .isInstanceOf(NoSuchElementException.class);
+            }
+        }
+    }
+    @Nested
+    @DisplayName("cancelRental메소드는")
+    class Describe_cancelRental {
+        @Nested
+        @DisplayName("wait상태인 rental이 주어졌을 때")
+        class data_given {
+            @BeforeEach
+            void setup(){
+                memberId = 4L;
+                itemId = 1L;
+                rentalId = service.requestRental(memberId,itemId).getId();
+            }
+            @Test
+            @DisplayName("rentalStatus를 CANCEL로 바꾼 뒤 렌탈을 삭제하고 rentalHistory를 리턴한다.")
+            void it_changes_rentalStatus_To_Cancel_and_delete_rental() {
+                RentalHistory rentalHistory = service.cancelRental(memberId,rentalId);
+                assertThat(rentalHistory.getItem().getId()).isEqualTo(itemId);
+                assertThat(rentalHistory.getRentalStatus()).isEqualTo(RentalStatus.CANCEL);
+                assertThat(rentalHistory.getMember().getId()).isEqualTo(memberId);
+                assertThat(rentalHistory.getItem().getRental()).isNull();
+                assertThatThrownBy(()->rentalRepository.findById(rentalId).get())
+                        .isInstanceOf(NoSuchElementException.class);
+            }
+        }
+    }
+    @Nested
+    @DisplayName("returnRental메소드는")
+    class Describe_returnRental {
+        @Nested
+        @DisplayName("RENT상태인 rental이 주어지고, 제한 시간 안에 요청했을 때")
+        class data_given_in_time {
+            @BeforeEach
+            void setup(){
+                memberId = 4L;
+                itemId = 1L;
+                rentalId = service.requestRental(memberId,itemId).getId();
+                service.applyRental(memberId,rentalId);
+            }
+            @Test
+            @DisplayName("rentalStatus를 DONE으로 바꾼 뒤 렌탈을 삭제하고 rentalHistory를 리턴한다.")
+            void it_changes_rentalStatus_To_Cancel_and_delete_rental() {
+                RentalHistory rentalHistory = service.returnRental(memberId,rentalId);
+                assertThat(rentalHistory.getItem().getId()).isEqualTo(itemId);
+                assertThat(rentalHistory.getRentalStatus()).isEqualTo(RentalStatus.DONE);
+                assertThat(rentalHistory.getMember().getId()).isEqualTo(memberId);
+                assertThat(rentalHistory.getItem().getRental()).isNull();
+                assertThatThrownBy(()->rentalRepository.findById(rentalId).get())
+                        .isInstanceOf(NoSuchElementException.class);
+            }
+        }
+    }
+    @Nested
+    @DisplayName("RENT상태인 rental이 주어지고, 제한 시간 안에 요청했을 때")
+    class data_given_in_time {
+        @BeforeEach
+        void setup(){
+            memberId = 4L;
+            itemId = 1L;
+            rentalId = service.requestRental(memberId,itemId).getId();
+            service.applyRental(memberId,rentalId);
+        }
+        @Test
+        @DisplayName("rentalStatus를 DONE으로 바꾼 뒤 렌탈을 삭제하고 rentalHistory를 리턴한다.")
+        void it_changes_rentalStatus_To_Cancel_and_delete_rental() {
+            RentalHistory rentalHistory = service.returnRental(memberId,rentalId);
+            assertThat(rentalHistory.getItem().getId()).isEqualTo(itemId);
+            assertThat(rentalHistory.getRentalStatus()).isEqualTo(RentalStatus.DONE);
+            assertThat(rentalHistory.getMember().getId()).isEqualTo(memberId);
+            assertThat(rentalHistory.getItem().getRental()).isNull();
+            assertThatThrownBy(()->rentalRepository.findById(rentalId).get())
+                    .isInstanceOf(NoSuchElementException.class);
         }
     }
 }

@@ -67,4 +67,7 @@ public class ClubMember extends BaseTimeEntity {
             throw new NoAdminPermissionException(this.club.getId());
         }
     }
+    public String toString(){
+        return this.getClub().getId() + " " + this.getMember().getId() + " "  + this.getRole().toString();
+    }
 }

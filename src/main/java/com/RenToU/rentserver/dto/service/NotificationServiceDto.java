@@ -1,5 +1,7 @@
 package com.RenToU.rentserver.dto.service;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,4 +22,5 @@ public class NotificationServiceDto {
     // mapped by CreateNotifiationDto 
     private String title;
     private String content;
+    private List<String> imagePaths;
 }

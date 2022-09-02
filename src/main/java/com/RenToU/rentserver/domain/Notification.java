@@ -30,6 +30,9 @@ public class Notification extends BaseTimeEntity{
     private String title;
 
     private String content;
+
+    private String imagePath;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member writer;
@@ -38,10 +41,11 @@ public class Notification extends BaseTimeEntity{
     @JoinColumn(name = "club_id")
     private Club club;
 
-    public static Notification createNotification(String title, String content,Member writer,Club club) {
+    public static Notification createNotification(String title, String content, String imagePath, Member writer,Club club) {
          Notification notification =  Notification.builder()
                  .title(title)
                  .content(content)
+                 .imagePath(imagePath)
                  .writer(writer)
                  .build();
          club.addNotification(notification);

@@ -7,7 +7,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 import javax.validation.constraints.NotBlank;
+
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
@@ -24,6 +28,6 @@ public class CreateNotificationDto {
     @Mapping("content")
     private String content;
 
-    //TODO image
+    private List<MultipartFile> image;
 }
 
