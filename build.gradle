@@ -45,3 +45,6 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+bootJar {
+	archiveFileName = 'application.war'
+}

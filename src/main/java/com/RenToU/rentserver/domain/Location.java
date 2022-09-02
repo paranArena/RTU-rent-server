@@ -31,9 +31,16 @@ public class Location {
     @GeneratedValue
     @Column(name = "location_id")
     private Long id;
-    private String name;
-    private Double x;
-    private Double y;
     @OneToOne(mappedBy = "location", fetch = LAZY)
     private Product product;
+
+    private String name;
+
+    private Double x;
+    private Double y;
+    public Location(String name,Double x, Double Y){
+        this.name = name;
+        this.x = x;
+        this.y = y;
+    }
 }
