@@ -5,6 +5,7 @@ import com.RenToU.rentserver.domain.ClubMember;
 import com.RenToU.rentserver.domain.ClubRole;
 import com.RenToU.rentserver.domain.Hashtag;
 import com.RenToU.rentserver.domain.Member;
+import com.RenToU.rentserver.exceptions.club.CannotCancelJoinClubException;
 import com.RenToU.rentserver.exceptions.club.CannotJoinClubException;
 import com.RenToU.rentserver.exceptions.club.ClubNotFoundException;
 import com.RenToU.rentserver.exceptions.DuplicateMemberException;
@@ -78,13 +79,32 @@ public class ClubServiceImpl implements ClubService{
         Member member = findMember(memberId);
         Club club = findClub(clubId);
         validateCanJoin(club, member);
-//        왠지 모르겠는데 print를 빼면 정상 작동을 안합니다... 추후에 해결해야 할 부분.
+//        TODO 왠지 모르겠는데 print를 빼면 정상 작동을 안합니다... 추후에 해결해야 할 부분.
         member.getClubList().forEach(cm->{
             System.out.println(cm.toString());
         });
         ClubMember clubMember = ClubMember.createClubMember(club, member, ClubRole.WAIT);
         clubMemberRepository.save(clubMember);
         System.out.println("size"+member.getClubList().size()+",clubId "+club.getId() );
+    }
+
+    @Override
+    @Transactional
+    public void cancelClubJoin(Long clubId, Long memberId){
+        //회원 조회
+        Member member = findMember(memberId);
+        Club club = findClub(clubId);
+        // TODO member not found error 발생할 수도 있음
+        try {
+            ClubMember clubMember = findClub(clubId).findClubMemberByMember(member);
+            if(clubMember.getRole() != ClubRole.WAIT){
+                throw new CannotCancelJoinClubException(club.getId(), club.getName(), "멤버가 가입 대기 상태가 아닙니다.");
+            }
+            clubMemberRepository.delete(clubMember);
+            return;
+        } catch (MemberNotFoundException e) {
+            throw new CannotCancelJoinClubException(club.getId(), club.getName(), "멤버가 가입 대기 상태가 아닙니다.");
+        }
     }
 
     @Override
@@ -184,6 +204,7 @@ public class ClubServiceImpl implements ClubService{
             }
         });
     }
+
 
     private Member findMember(Long id){
         return memberRepository.findById(id)

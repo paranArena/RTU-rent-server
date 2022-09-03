@@ -54,4 +54,6 @@ public class ResponseMessage {
     public static final String GET_MY_CLUB = "내가 가입한 클럽 조회 성공";
 
     public static final String GET_MY_INFO = "내 정보 조회 성공";
+
+    public static final String CANCEL_CLUB_JOIN = "클럽 신청 취소";
 }
