@@ -16,7 +16,11 @@ public class NotificationPreviewDto {
 
     private Long id;
 
+    private Long clubId;
+
     private String title;
+
+    private String imagePath;
 
     private LocalDateTime createdAt;
 
@@ -27,7 +31,9 @@ public class NotificationPreviewDto {
 
         return NotificationPreviewDto.builder()
         .id(notification.getId())
+        .clubId(notification.getClub().getId())
         .title(notification.getTitle())
+        .imagePath(notification.getImagePath())
         .createdAt(notification.getCreatedAt())
         .updatedAt(notification.getUpdatedAt())
         .build();
