@@ -9,9 +9,11 @@ import com.RenToU.rentserver.dto.response.ResponseDto;
 import com.RenToU.rentserver.dto.response.ResponseMessage;
 import com.RenToU.rentserver.dto.response.preview.NotificationPreviewDto;
 import com.github.dozermapper.core.Mapper;
+import com.RenToU.rentserver.application.ClubService;
 import com.RenToU.rentserver.application.MemberService;
 import com.RenToU.rentserver.application.NotificationService;
 import com.RenToU.rentserver.domain.ClubMember;
+import com.RenToU.rentserver.domain.ClubRole;
 import com.RenToU.rentserver.domain.Member;
 import com.RenToU.rentserver.domain.Notification;
 import com.RenToU.rentserver.domain.Rental;
@@ -33,6 +35,7 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/members/my")
 public class MyController {
     private final MemberService memberService;
+    private final ClubService clubService;
     private final NotificationService notificationService;
     private final Mapper mapper;
 
@@ -80,6 +83,9 @@ public class MyController {
     @GetMapping("/clubs/{clubId}/role")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<?> getMyClubRole(@PathVariable Long clubId) {
-        return ResponseEntity.ok("");
+        Long memberId = memberService.getMyIdWithAuthorities();
+        ClubRole clubRole = clubService.getMyRole(memberId, clubId);
+
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_MY_CLUB_ROLE, clubRole));
     }
 }
