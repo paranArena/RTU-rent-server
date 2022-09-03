@@ -9,7 +9,6 @@ import lombok.Setter;
 import com.RenToU.rentserver.domain.ClubMember;
 import com.RenToU.rentserver.domain.ClubRole;
 import com.RenToU.rentserver.dto.response.preview.ClubPreviewDto;
-import com.github.dozermapper.core.Mapping;
 
 @Getter @Setter
 @Builder
@@ -21,14 +20,14 @@ public class MemberClubDto {
 
     private ClubPreviewDto club;
 
-    private ClubRole role;
+    private ClubRole clubRole;
     public static MemberClubDto from(ClubMember clubMember) {
         if(clubMember == null) return null;
 
         return MemberClubDto.builder()
             .id(clubMember.getId())
             .club(ClubPreviewDto.from(clubMember.getClub()))
-            .role(clubMember.getRole())
+            .clubRole(clubMember.getRole())
             .build();
     }
 }
