@@ -1,9 +1,6 @@
 package com.RenToU.rentserver.controller.club;
 
 import com.RenToU.rentserver.application.ClubService;
-import com.RenToU.rentserver.application.HashtagService;
-import com.RenToU.rentserver.application.MemberService;
-import com.RenToU.rentserver.application.S3Service;
 import com.RenToU.rentserver.domain.Club;
 import com.RenToU.rentserver.dto.*;
 import com.RenToU.rentserver.dto.response.ClubInfoDto;

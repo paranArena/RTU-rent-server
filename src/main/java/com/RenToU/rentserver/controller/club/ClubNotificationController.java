@@ -3,8 +3,6 @@ package com.RenToU.rentserver.controller.club;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -14,7 +12,6 @@ import com.RenToU.rentserver.application.NotificationService;
 import com.RenToU.rentserver.application.S3Service;
 import com.RenToU.rentserver.domain.Notification;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,18 +19,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.RenToU.rentserver.application.ClubService;
-import com.RenToU.rentserver.application.ClubService;
 import com.RenToU.rentserver.application.MemberService;
 import com.RenToU.rentserver.dto.StatusCode;
 import com.RenToU.rentserver.dto.request.CreateNotificationDto;
-import com.RenToU.rentserver.dto.response.NotificationDto;
 import com.RenToU.rentserver.dto.response.ResponseDto;
 import com.RenToU.rentserver.dto.response.ResponseMessage;
 import com.RenToU.rentserver.dto.response.preview.NotificationPreviewDto;
@@ -86,7 +79,7 @@ public class ClubNotificationController {
 
     @GetMapping("/{notificationId}")
     public ResponseEntity<?> getNotification(@PathVariable long clubId, @PathVariable long notificationId){
-        long memberId = memberService.getMyIdWithAuthorities();
+        // long memberId = memberService.getMyIdWithAuthorities();
         Notification notification = notificationService.findNotification(notificationId);
         NotificationDto resData = NotificationDto.from(notification);
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_NOTIFICATION, resData));
@@ -94,7 +87,7 @@ public class ClubNotificationController {
 
     @PutMapping("/{notificationId}")
     public ResponseEntity<?> updateNotification(@PathVariable long clubId, @PathVariable long notificationId){
-        long memberId = memberService.getMyIdWithAuthorities();
+        // long memberId = memberService.getMyIdWithAuthorities();
         // notificationService.updateNotification(memberId, notificationId);
         return null;
     }
