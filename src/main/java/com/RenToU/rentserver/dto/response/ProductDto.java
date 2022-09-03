@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.RenToU.rentserver.domain.Product;
-import com.RenToU.rentserver.dto.request.LocationDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -20,7 +20,6 @@ import com.RenToU.rentserver.domain.Location;
 import com.RenToU.rentserver.domain.Product;
 import com.RenToU.rentserver.dto.StatusCode;
 import com.RenToU.rentserver.dto.request.CreateProductDto;
-import com.RenToU.rentserver.dto.request.LocationDto;
 import com.RenToU.rentserver.dto.response.ProductDto;
 import com.RenToU.rentserver.dto.response.ResponseDto;
 import com.RenToU.rentserver.dto.response.ResponseMessage;

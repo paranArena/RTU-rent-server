@@ -37,7 +37,7 @@ import com.RenToU.rentserver.dto.response.NotificationDto;
 import com.RenToU.rentserver.dto.response.ResponseDto;
 import com.RenToU.rentserver.dto.response.ResponseMessage;
 import com.RenToU.rentserver.dto.response.preview.NotificationPreviewDto;
-import com.RenToU.rentserver.dto.service.NotificationServiceDto;
+import com.RenToU.rentserver.dto.service.CreateNotificationServiceDto;
 import com.github.dozermapper.core.Mapper;
 
 import lombok.RequiredArgsConstructor;
@@ -74,7 +74,7 @@ public class ClubNotificationController {
             imagePaths.add("");
         }
 
-        NotificationServiceDto notificationServiceDto = mapper.map(createNotificationDto, NotificationServiceDto.class);
+        CreateNotificationServiceDto notificationServiceDto = mapper.map(createNotificationDto, CreateNotificationServiceDto.class);
         notificationServiceDto.setImagePaths(imagePaths);
         notificationServiceDto.setMemberId(memberId);
         notificationServiceDto.setClubId(clubId);
