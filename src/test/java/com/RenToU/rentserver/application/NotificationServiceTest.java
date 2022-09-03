@@ -1,6 +1,6 @@
 package com.RenToU.rentserver.application;
 
-import com.RenToU.rentserver.dto.service.NotificationServiceDto;
+import com.RenToU.rentserver.dto.service.CreateNotificationServiceDto;
 import com.RenToU.rentserver.domain.Club;
 import com.RenToU.rentserver.domain.ClubMember;
 import com.RenToU.rentserver.domain.ClubRole;
@@ -50,7 +50,7 @@ class NotificationServiceTest {
         Club club = Club.createClub("ClubName","ClubIntro","ClubThumb",member,new ArrayList<>());
         when(clubRepository.findById(1L)).thenReturn(Optional.of(club));
         //when
-        NotificationServiceDto dto = new NotificationServiceDto();
+        CreateNotificationServiceDto dto = new CreateNotificationServiceDto();
         dto.setClubId(1L);
         dto.setMemberId(1L);
         dto.setTitle(INITIAL_NOTI_TITLE);
@@ -72,7 +72,7 @@ class NotificationServiceTest {
 
         Club club = Club.createClub("ClubName","ClubIntro","ClubThumb",admin,new ArrayList<>());
         when(clubRepository.findById(1L)).thenReturn(Optional.of(club));
-        NotificationServiceDto dto = new NotificationServiceDto();
+        CreateNotificationServiceDto dto = new CreateNotificationServiceDto();
         dto.setClubId(1L);
         dto.setMemberId(2L);
         dto.setTitle(INITIAL_NOTI_TITLE);
@@ -94,7 +94,7 @@ class NotificationServiceTest {
         Club club = Club.createClub("ClubName","ClubIntro","ClubThumb",admin,new ArrayList<>());
         when(clubRepository.findById(1L)).thenReturn(Optional.of(club));
         club.addClubMember(ClubMember.createClubMember(club,writer, ClubRole.USER));
-        NotificationServiceDto dto = new NotificationServiceDto();
+        CreateNotificationServiceDto dto = new CreateNotificationServiceDto();
         dto.setClubId(1L);
         dto.setMemberId(2L);
         dto.setTitle(INITIAL_NOTI_TITLE);

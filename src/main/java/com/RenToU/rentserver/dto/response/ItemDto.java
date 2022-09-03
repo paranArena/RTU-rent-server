@@ -2,7 +2,6 @@ package com.RenToU.rentserver.dto.response;
 
 import com.RenToU.rentserver.domain.Item;
 import com.RenToU.rentserver.domain.RentalPolicy;
-import com.RenToU.rentserver.dto.RentalDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
