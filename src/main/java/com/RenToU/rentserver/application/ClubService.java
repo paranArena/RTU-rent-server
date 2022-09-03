@@ -17,7 +17,7 @@ public interface ClubService {
     public void leaveClub(Long clubId, Long userId);
     public Club createClub(Long memberId, String clubName, String clubIntro, String thumbnailPath, List<String> clubHashtags);
     public void deleteClub(long memberId, long clubId);
-    public List<Member> getAllMembers(long clubId);
+    public List<ClubMember> getAllMembers(long clubId);
     public void requestClubJoin(Long clubId, Long memberId);
     public List<ClubMember> searchClubJoinsAll(Long clubId, Long memberId);
     public void acceptClubJoin(Long clubId, Long ownerId, Long joinMemberId);
