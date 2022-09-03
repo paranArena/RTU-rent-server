@@ -141,8 +141,12 @@ public class ClubServiceImpl implements ClubService{
     public ClubRole getMyRole(long memberId, long clubId){
         Club club = findClubById(clubId);
         Member member = findMember(memberId);
-        ClubMember cm = club.findClubMemberByMember(member);
-        return cm.getRole();
+        try {
+            ClubMember cm = club.findClubMemberByMember(member);
+            return cm.getRole();
+        } catch (MemberNotFoundException e) {
+            return ClubRole.NONE;
+        }
     }
     @Override
     @Transactional

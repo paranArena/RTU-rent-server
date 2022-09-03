@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
 import com.RenToU.rentserver.domain.Club;
-import com.github.dozermapper.core.Mapping;
+import com.RenToU.rentserver.domain.ClubRole;
 
 import java.util.List;
 
@@ -27,6 +27,8 @@ public class ClubPreviewDto {
 
     private List<String> hashtags;
 
+    private ClubRole clubRole;
+    
     public static ClubPreviewDto from(Club club){
         if(club == null) return null;
 
