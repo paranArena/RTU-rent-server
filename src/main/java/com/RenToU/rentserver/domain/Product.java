@@ -53,7 +53,7 @@ public class Product extends BaseTimeEntity{
 
     private String imagePath;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "club_id")
     private Club club;
 
