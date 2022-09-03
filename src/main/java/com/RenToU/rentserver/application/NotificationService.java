@@ -1,6 +1,6 @@
 package com.RenToU.rentserver.application;
 
-import com.RenToU.rentserver.dto.service.NotificationServiceDto;
+import com.RenToU.rentserver.dto.service.CreateNotificationServiceDto;
 import com.RenToU.rentserver.domain.Club;
 import com.RenToU.rentserver.domain.Member;
 import com.RenToU.rentserver.domain.Notification;
@@ -27,7 +27,7 @@ public class NotificationService {
     private final MemberRepository memberRepository;
     private final ClubRepository clubRepository;
     @Transactional
-    public Notification createNotification(NotificationServiceDto notificationServiceDto) {
+    public Notification createNotification(CreateNotificationServiceDto notificationServiceDto) {
         Club club = findClub(notificationServiceDto.getClubId());
         Member writer = findMember(notificationServiceDto.getMemberId());
         club.findClubMemberByMember(writer).validateAdmin();

@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.RenToU.rentserver.domain.RentalPolicy;
-import com.github.dozermapper.core.Mapping;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
