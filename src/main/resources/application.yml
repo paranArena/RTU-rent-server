@@ -3,6 +3,13 @@ logging.level:
   org.hibernate.type: trace
 
 spring:
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 10MB
+  redis:
+    host: 127.0.0.1
+    port: 6379
   jpa:
     hibernate.ddl-auto: update
     properties:
@@ -21,5 +28,6 @@ logging:
         type:
           descriptor:
             sql: trace
+
 # import other properties
-spring.profiles.include: jwt, rds, s3
+spring.profiles.include: jwt, rds, s3, mail
