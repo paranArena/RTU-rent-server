@@ -3,6 +3,7 @@ package com.RenToU.rentserver.controller.member;
 
 import com.RenToU.rentserver.dto.RentalDto;
 import com.RenToU.rentserver.dto.StatusCode;
+import com.RenToU.rentserver.dto.response.ClubRoleDto;
 import com.RenToU.rentserver.dto.response.MemberClubDto;
 import com.RenToU.rentserver.dto.response.MemberInfoDto;
 import com.RenToU.rentserver.dto.response.ResponseDto;
@@ -85,7 +86,8 @@ public class MyController {
     public ResponseEntity<?> getMyClubRole(@PathVariable Long clubId) {
         Long memberId = memberService.getMyIdWithAuthorities();
         ClubRole clubRole = clubService.getMyRole(memberId, clubId);
-
-        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_MY_CLUB_ROLE, clubRole));
+        ClubRoleDto resData = new ClubRoleDto(clubRole);
+        
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_MY_CLUB_ROLE, resData));
     }
 }
