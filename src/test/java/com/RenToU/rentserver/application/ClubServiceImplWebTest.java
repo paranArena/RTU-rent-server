@@ -5,6 +5,7 @@ import com.RenToU.rentserver.domain.ClubRole;
 import com.RenToU.rentserver.domain.Member;
 import com.RenToU.rentserver.exceptions.CannotRentException;
 import com.RenToU.rentserver.exceptions.MemberNotFoundException;
+import com.RenToU.rentserver.exceptions.clubMember.ClubMemberNotFoundException;
 import com.RenToU.rentserver.infrastructure.ClubMemberRepository;
 import com.RenToU.rentserver.infrastructure.ClubRepository;
 import com.RenToU.rentserver.infrastructure.HashtagRepository;
@@ -164,7 +165,7 @@ class ClubServiceImplWebTest {
                 Club club = clubRepository.findById(clubId).get();
                 assertThat(member.getClubList()).isEmpty();
                 assertThatThrownBy(()->club.findClubMemberByMember(member))
-                        .isInstanceOf(MemberNotFoundException.class);
+                        .isInstanceOf(ClubMemberNotFoundException.class);
             }
         }
     }

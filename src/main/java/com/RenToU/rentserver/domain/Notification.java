@@ -34,6 +34,8 @@ public class Notification extends BaseTimeEntity{
 
     private String imagePath;
 
+    private Boolean isPublic;
+
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "member_id")
     private Member writer;
@@ -48,9 +50,21 @@ public class Notification extends BaseTimeEntity{
                  .content(content)
                  .imagePath(imagePath)
                  .writer(writer)
+                 .isPublic(true)
                  .build();
          club.addNotification(notification);
          notification.setClub(club);
          return notification;
+    }
+
+    public void changeIsPublic() {
+        this.isPublic = !isPublic;
+    }
+
+    public void update(String title, String content, String imagePath, Boolean isPublic) {
+        this.title = title;
+        this.content = content;
+        this.imagePath = imagePath;
+        this. isPublic = isPublic;
     }
 }

@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import com.RenToU.rentserver.dto.request.UpdateNotificationDto;
 import com.RenToU.rentserver.dto.response.NotificationDto;
 import com.RenToU.rentserver.application.NotificationService;
 import com.RenToU.rentserver.application.S3Service;
@@ -35,6 +36,8 @@ import com.github.dozermapper.core.Mapper;
 
 import lombok.RequiredArgsConstructor;
 
+import static java.util.Objects.isNull;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/clubs/{clubId}/notifications")
@@ -49,24 +52,7 @@ public class ClubNotificationController {
     @PostMapping("")
     public ResponseEntity<?> createNotification(@PathVariable long clubId, @Valid @ModelAttribute CreateNotificationDto createNotificationDto) throws IOException{
         long memberId = memberService.getMyIdWithAuthorities();
-        List<MultipartFile> images = createNotificationDto.getImage().stream().filter((img)->!img.isEmpty()).collect(Collectors.toList());
-        List<String> imagePaths = new ArrayList<>();
-        if(images.size() != 0){
-            imagePaths.addAll(
-                images.stream().map((img)->{
-                    try {
-                        return s3Service.upload(img);
-                    } catch (IOException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                    return null;
-                }).collect(Collectors.toList())
-                );
-        }else{
-            imagePaths.add("");
-        }
-
+        List<String> imagePaths = s3Service.imageToPath(createNotificationDto.getImage());
         CreateNotificationServiceDto notificationServiceDto = mapper.map(createNotificationDto, CreateNotificationServiceDto.class);
         notificationServiceDto.setImagePaths(imagePaths);
         notificationServiceDto.setMemberId(memberId);
@@ -86,23 +72,27 @@ public class ClubNotificationController {
     }
 
     @PutMapping("/{notificationId}")
-    public ResponseEntity<?> updateNotification(@PathVariable long clubId, @PathVariable long notificationId){
-        // long memberId = memberService.getMyIdWithAuthorities();
-        // notificationService.updateNotification(memberId, notificationId);
-        return null;
+    public ResponseEntity<?> updateNotification(@PathVariable long clubId, @PathVariable long notificationId,@Valid @ModelAttribute UpdateNotificationDto updateNotificationDto){
+        long memberId = memberService.getMyIdWithAuthorities();
+        List<String> imagePaths = s3Service.imageToPath(updateNotificationDto.getImage());
+        updateNotificationDto.setImagePath(imagePaths);
+        Notification notification = notificationService.updateNotification(memberId,clubId,updateNotificationDto);
+        NotificationDto resData = NotificationDto.from(notification);
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.UPDATE_NOTIFICATION, resData));
     }
 
     @DeleteMapping("/{notificationId}")
     public ResponseEntity<?> deleteNotification(@PathVariable long clubId, @PathVariable long notificationId){
         long memberId = memberService.getMyIdWithAuthorities();
-        notificationService.deleteNotification(memberId, notificationId);
+        notificationService.deleteNotification(memberId,clubId, notificationId);
 
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.DELETE_NOTIFICATION));
     }
-
+    //Deprecated예정
     @GetMapping("/search/all")
-    public ResponseEntity<?> searchNotificationsAll(@PathVariable long clubId){
-        List<Notification> notifications = clubService.findClubById(clubId).getNotifications();
+    public ResponseEntity<?> searchNotificationsByClub(@PathVariable long clubId){
+        long memberId = memberService.getMyIdWithAuthorities();
+        List<Notification> notifications = notificationService.getClubNotifications(memberId, clubId);
         List<NotificationPreviewDto> resData =
             notifications.stream()
             .map(n->NotificationPreviewDto.from(n))

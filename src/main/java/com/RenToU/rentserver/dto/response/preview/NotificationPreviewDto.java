@@ -22,6 +22,8 @@ public class NotificationPreviewDto {
 
     private String imagePath;
 
+    private Boolean isPublic;
+
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
@@ -33,6 +35,7 @@ public class NotificationPreviewDto {
         .id(notification.getId())
         .clubId(notification.getClub().getId())
         .title(notification.getTitle())
+        .isPublic(notification.getIsPublic())
         .imagePath(notification.getImagePath())
         .createdAt(notification.getCreatedAt())
         .updatedAt(notification.getUpdatedAt())
