@@ -2,6 +2,8 @@ package com.RenToU.rentserver.controller.member;
 
 
 import com.RenToU.rentserver.dto.StatusCode;
+import com.RenToU.rentserver.dto.request.EmailDto;
+import com.RenToU.rentserver.dto.request.EmailVerifyDto;
 import com.RenToU.rentserver.dto.response.MemberInfoDto;
 import com.RenToU.rentserver.dto.response.ResponseDto;
 import com.RenToU.rentserver.dto.response.ResponseMessage;
@@ -14,6 +16,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,5 +33,15 @@ public class MemberController {
         Member member = memberService.getUserWithAuthorities(email);
         MemberInfoDto resData = mapper.map(member, MemberInfoDto.class);
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.OK, resData));
+    }
+    @PostMapping("/email/requestCode")
+    public ResponseEntity<Void> authEmail(@RequestBody @Valid EmailDto request) {
+        memberService.authEmail(request);
+        return ResponseEntity.ok().build();
+    }
+    @PostMapping("/email/verifyCode")
+    public ResponseEntity<Void> verifyCode(@RequestBody @Valid EmailVerifyDto request) {
+        memberService.verifyCode(request);
+        return ResponseEntity.ok().build();
     }
 }
