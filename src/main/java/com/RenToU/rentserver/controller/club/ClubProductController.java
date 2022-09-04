@@ -37,22 +37,24 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RequestMapping("/clubs/{clubId}/products")
 public class ClubProductController {
-    
+
     private final MemberService memberService;
     private final ProductService productService;
     private final S3Service s3Service;
     private final Mapper mapper;
 
     @PostMapping("")
-    public ResponseEntity<?> createProduct(@PathVariable Long clubId, @Valid @ModelAttribute CreateProductDto createProductDto) throws IOException{
+    public ResponseEntity<?> createProduct(@PathVariable Long clubId,
+            @Valid @ModelAttribute CreateProductDto createProductDto) throws IOException {
         long memberId = memberService.getMyIdWithAuthorities();
         MultipartFile image = createProductDto.getImage();
         String imagePath = null;
-        if(!image.isEmpty()){
+        if (!image.isEmpty()) {
             imagePath = s3Service.upload(image);
         }
         CreateProductServiceDto productServiceDto = mapper.map(createProductDto, CreateProductServiceDto.class);
-        Location location = new Location(createProductDto.getLocationName(), createProductDto.getLatitude(), createProductDto.getLongitude());
+        Location location = new Location(createProductDto.getLocationName(), createProductDto.getLatitude(),
+                createProductDto.getLongitude());
         productServiceDto.setLocation(location);
         productServiceDto.setImagePath(imagePath);
         productServiceDto.setClubId(clubId);
@@ -62,14 +64,14 @@ public class ClubProductController {
 
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.CREATE_PRODUCT, resData));
     }
+
     @GetMapping("/search/all")
-    public ResponseEntity<?> searchProductByClub(@PathVariable long clubId){
+    public ResponseEntity<?> searchProductByClub(@PathVariable long clubId) {
         long memberId = memberService.getMyIdWithAuthorities();
         List<Product> products = productService.getProductsByClub(memberId, clubId);
-        List<ProductPreviewDto> resData =
-                products.stream()
-                        .map(n-> ProductPreviewDto.from(n))
-                        .collect(Collectors.toList());
+        List<ProductPreviewDto> resData = products.stream()
+                .map(n -> ProductPreviewDto.from(n))
+                .collect(Collectors.toList());
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.SEARCH_NOTIFICATION_SUCCESS, resData));
     }
 }

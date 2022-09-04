@@ -46,17 +46,17 @@ class ClubServiceImplWebTest {
     private static String INITIAL_CLUB_NAME = "NEW CLUB";
     private static String INITIAL_CLUB_INTRO = "새로 생성한 클럽입니다.";
     private static String INITIAL_CLUB_THUMB = "www.google.com";
-    private static List<String> INITIAL_CLUB_HASHTAGS = List.of("hashtag1","hashtag2");
+    private static List<String> INITIAL_CLUB_HASHTAGS = List.of("hashtag1", "hashtag2");
     private Member owner;
     private Long memberId;
     private Long ownerId;
     private Long clubId;
     private Long secondClubId;
 
-
     @BeforeEach
     void setUp() {
-        service = new ClubServiceImpl(mapper, clubRepository, memberRepository, hashtagRepository, clubMemberRepository);
+        service = new ClubServiceImpl(mapper, clubRepository, memberRepository, hashtagRepository,
+                clubMemberRepository);
         owner = memberRepository.findById(1L).get();
     }
 
@@ -69,7 +69,8 @@ class ClubServiceImplWebTest {
             @Test
             @DisplayName("새 클럽을 생성하고 리턴한다.")
             void it_return_new_club() {
-                Club club = service.createClub(owner.getId(),INITIAL_CLUB_NAME,INITIAL_CLUB_INTRO,INITIAL_CLUB_THUMB,INITIAL_CLUB_HASHTAGS);
+                Club club = service.createClub(owner.getId(), INITIAL_CLUB_NAME, INITIAL_CLUB_INTRO, INITIAL_CLUB_THUMB,
+                        INITIAL_CLUB_HASHTAGS);
                 assertThat(club.getMemberList().get(0).getMember().getId()).isEqualTo(owner.getId());
                 assertThat(club.getName()).isEqualTo(INITIAL_CLUB_NAME);
                 assertThat(club.getIntroduction()).isEqualTo(INITIAL_CLUB_INTRO);
@@ -79,6 +80,7 @@ class ClubServiceImplWebTest {
             }
         }
     }
+
     @Nested
     @DisplayName("requestJoin메소드는")
     class describe_request_join {
@@ -88,9 +90,10 @@ class ClubServiceImplWebTest {
             @Test
             @DisplayName("ClubMember를 Wait으로 생성한다.")
             void it_makes_club_member_with_waiting() {
-                Club club = service.createClub(owner.getId(),INITIAL_CLUB_NAME,INITIAL_CLUB_INTRO,INITIAL_CLUB_THUMB,INITIAL_CLUB_HASHTAGS);
+                Club club = service.createClub(owner.getId(), INITIAL_CLUB_NAME, INITIAL_CLUB_INTRO, INITIAL_CLUB_THUMB,
+                        INITIAL_CLUB_HASHTAGS);
                 Member requester = memberRepository.findById(2L).get();
-                service.requestClubJoin(club.getId(),requester.getId());
+                service.requestClubJoin(club.getId(), requester.getId());
                 assertThat(club.getMemberList().get(0).getMember()).isEqualTo(owner);
                 assertThat(club.getMemberList().size()).isEqualTo(2);
                 assertThat(club.getMemberList().get(1).getMember()).isEqualTo(requester);
@@ -99,6 +102,7 @@ class ClubServiceImplWebTest {
             }
         }
     }
+
     @Nested
     @DisplayName("getMyClubRequests메소드는")
     class Describe_getMyClubRequests {
@@ -111,11 +115,12 @@ class ClubServiceImplWebTest {
                 clubId = 1L;
                 secondClubId = 2L;
             }
+
             @Test
             @DisplayName(" 가입 대기 상태인 클럽의 리스트를 리턴한다..")
             void it_return_list_of_waiting_clubs() {
-                service.requestClubJoin(clubId,memberId);
-                service.requestClubJoin(secondClubId,memberId);
+                service.requestClubJoin(clubId, memberId);
+                service.requestClubJoin(secondClubId, memberId);
                 List<Club> clubs = service.getMyClubRequests(memberId);
                 assertThat(clubs.size()).isEqualTo(2);
                 assertThat(clubs.get(0).getId()).isEqualTo(clubId);
@@ -123,6 +128,7 @@ class ClubServiceImplWebTest {
             }
         }
     }
+
     @Nested
     @DisplayName("grantAdmin메소드는")
     class Describe_grantAdmin {
@@ -136,15 +142,17 @@ class ClubServiceImplWebTest {
                 clubId = 1L;
 
             }
+
             @Test
             @DisplayName("member의 ClubRole을 Admin으로 바꾼다.")
             void it_change_club_role_to_admin() {
-                service.grantAdmin(clubId,ownerId,memberId);
+                service.grantAdmin(clubId, ownerId, memberId);
                 Member member = memberRepository.findById(memberId).get();
                 assertThat(member.getClubList().get(0).getRole()).isEqualTo(ClubRole.ADMIN);
             }
         }
     }
+
     @Nested
     @DisplayName("leaveClub메소드는")
     class Describe_leaveClub {
@@ -157,14 +165,15 @@ class ClubServiceImplWebTest {
                 clubId = 1L;
 
             }
+
             @Test
             @DisplayName("Clubmember를 삭제한다.")
             void it_delete_club_member() {
-                service.leaveClub(clubId,memberId);
+                service.leaveClub(clubId, memberId);
                 Member member = memberRepository.findById(memberId).get();
                 Club club = clubRepository.findById(clubId).get();
                 assertThat(member.getClubList()).isEmpty();
-                assertThatThrownBy(()->club.findClubMemberByMember(member))
+                assertThatThrownBy(() -> club.findClubMemberByMember(member))
                         .isInstanceOf(ClubMemberNotFoundException.class);
             }
         }

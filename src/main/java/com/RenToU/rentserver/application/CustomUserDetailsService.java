@@ -25,8 +25,8 @@ public class CustomUserDetailsService implements UserDetailsService {
    @Transactional
    public UserDetails loadUserByUsername(final String email) {
       return memberRepository.findOneWithAuthoritiesByEmail(email)
-         .map(member -> createMember(email, member))
-         .orElseThrow(() -> new UsernameNotFoundException(email + " -> 데이터베이스에서 찾을 수 없습니다."));
+            .map(member -> createMember(email, member))
+            .orElseThrow(() -> new UsernameNotFoundException(email + " -> 데이터베이스에서 찾을 수 없습니다."));
    }
 
    private org.springframework.security.core.userdetails.User createMember(String email, Member member) {
@@ -35,11 +35,11 @@ public class CustomUserDetailsService implements UserDetailsService {
       }
 
       List<GrantedAuthority> grantedAuthorities = member.getAuthorities().stream()
-              .map(authority -> new SimpleGrantedAuthority(authority.getAuthorityName()))
-              .collect(Collectors.toList());
+            .map(authority -> new SimpleGrantedAuthority(authority.getAuthorityName()))
+            .collect(Collectors.toList());
 
       return new org.springframework.security.core.userdetails.User(member.getEmail(),
-              member.getPassword(),
-              grantedAuthorities);
+            member.getPassword(),
+            grantedAuthorities);
    }
 }

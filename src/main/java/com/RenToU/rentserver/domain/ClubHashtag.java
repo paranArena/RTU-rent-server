@@ -1,4 +1,5 @@
 package com.RenToU.rentserver.domain;
+
 import com.RenToU.rentserver.domain.BaseTimeEntity;
 import com.RenToU.rentserver.domain.Club;
 import com.RenToU.rentserver.domain.ClubRole;
@@ -39,14 +40,16 @@ public class ClubHashtag extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "club_id")
     private Club club;
+
     public void setClub(Club club) {
         this.club = club;
     }
+
     public void setHashtag(Hashtag hashtag) {
         this.hashtag = hashtag;
     }
 
-    public static ClubHashtag createClubHashtag(Club club, Hashtag hashtag){
+    public static ClubHashtag createClubHashtag(Club club, Hashtag hashtag) {
         ClubHashtag clubHashtag = new ClubHashtag();
         club.addHashtag(clubHashtag);
         hashtag.addClubs(clubHashtag);

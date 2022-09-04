@@ -5,7 +5,8 @@ import lombok.*;
 import javax.persistence.*;
 
 @Entity
-@Getter @Setter
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -14,6 +15,3 @@ public class Authority {
     @Column(name = "authority_name", length = 50)
     private String authorityName;
 }
-
-
-

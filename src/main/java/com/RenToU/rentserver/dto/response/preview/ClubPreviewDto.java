@@ -11,7 +11,8 @@ import com.RenToU.rentserver.domain.ClubRole;
 
 import java.util.List;
 
-@Getter @Setter
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -28,18 +29,17 @@ public class ClubPreviewDto {
     private List<String> hashtags;
 
     private ClubRole clubRole;
-    
-    public static ClubPreviewDto from(Club club){
-        if(club == null) return null;
+
+    public static ClubPreviewDto from(Club club) {
+        if (club == null)
+            return null;
 
         return ClubPreviewDto.builder()
-            .id(club.getId())
-            .name(club.getName())
-            .introduction(club.getIntroduction())
-            .thumbnailPath(club.getThumbnailPath())
-            .hashtags(club.getHashtagNames())
-            .build();
+                .id(club.getId())
+                .name(club.getName())
+                .introduction(club.getIntroduction())
+                .thumbnailPath(club.getThumbnailPath())
+                .hashtags(club.getHashtagNames())
+                .build();
     }
 }
-
-

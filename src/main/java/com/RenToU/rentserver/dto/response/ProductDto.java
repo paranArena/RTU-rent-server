@@ -32,19 +32,20 @@ public class ProductDto {
     private List<ItemDto> items;
 
     public static ProductDto from(Product product) {
-        if(product == null) return null;
+        if (product == null)
+            return null;
 
         return ProductDto.builder()
-        .id(product.getId())
-        .name(product.getName())
-        .category(product.getCategory())
-        .location(LocationDto.from(product.getLocation()))
-        .fifoRentalPeriod(product.getFifoRentalPeriod())
-        .reserveRentalPeriod(product.getReserveRentalPeriod())
-        .price(product.getPrice())
-        .caution(product.getCaution())
-        .imagePath(product.getImagePath())
-        .items(product.getItems().stream().map((i)->ItemDto.from(i)).collect(Collectors.toList()))
-        .build();
+                .id(product.getId())
+                .name(product.getName())
+                .category(product.getCategory())
+                .location(LocationDto.from(product.getLocation()))
+                .fifoRentalPeriod(product.getFifoRentalPeriod())
+                .reserveRentalPeriod(product.getReserveRentalPeriod())
+                .price(product.getPrice())
+                .caution(product.getCaution())
+                .imagePath(product.getImagePath())
+                .items(product.getItems().stream().map((i) -> ItemDto.from(i)).collect(Collectors.toList()))
+                .build();
     }
 }
