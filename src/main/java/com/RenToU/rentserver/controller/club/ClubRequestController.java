@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,6 +42,13 @@ public class ClubRequestController {
         ) {
         clubService.acceptClubJoin(clubId, memberService.getMyIdWithAuthorities(), joinMemberId);
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.ACCEPT_CLUB_JOIN));
+    }
+    @DeleteMapping("/join/cancel")
+    public ResponseEntity<?> cancelClubJoin(
+            @PathVariable Long clubId
+    ) {
+        clubService.cancelClubJoin(clubId, memberService.getMyIdWithAuthorities());
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.CANCEL_CLUB_JOIN));
     }
     
     @GetMapping("/join/search/all")
