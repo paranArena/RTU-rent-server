@@ -40,66 +40,69 @@ class NotificationServiceTest {
 
     private static String INITIAL_NOTI_TITLE = "NEW NOTIFICATION";
     private static String INITIAL_NOTI_CONTENT = "공지사항 내용입니다.";
+
     @Test
     @DisplayName("공지사항이 제대로 등록됩니다.")
-    void createNotification(){
-        //given
-        Member member = Member.createMember("test","test@test.com");
+    void createNotification() {
+        // given
+        Member member = Member.createMember("test", "test@test.com");
         when(memberRepository.findById(1L)).thenReturn(Optional.ofNullable(member));
 
-        Club club = Club.createClub("ClubName","ClubIntro","ClubThumb",member,new ArrayList<>());
+        Club club = Club.createClub("ClubName", "ClubIntro", "ClubThumb", member, new ArrayList<>());
         when(clubRepository.findById(1L)).thenReturn(Optional.of(club));
-        //when
+        // when
         CreateNotificationServiceDto dto = new CreateNotificationServiceDto();
         dto.setClubId(1L);
         dto.setMemberId(1L);
         dto.setTitle(INITIAL_NOTI_TITLE);
         dto.setContent(INITIAL_NOTI_CONTENT);
         Notification notification = service.createNotification(dto);
-        //then
+        // then
         assertThat(notification.getTitle()).isEqualTo(INITIAL_NOTI_TITLE);
         assertThat(notification.getContent()).isEqualTo(INITIAL_NOTI_CONTENT);
         assertThat(notification.getWriter()).isEqualTo(member);
         assertThat(notification.getClub()).isEqualTo(club);
     }
+
     @Test
     @DisplayName("그룹에 가입되지 않은 유저가 공지사항을 작성하면 NoAdminPermissionException 발생.")
-    void notJoiningUserWriteNotification(){
-        //given
-        Member admin = Member.createMemberWithId(1L,"test","test@test.com");
-        Member writer = Member.createMemberWithId(2L,"writer","writer@test.com");
+    void notJoiningUserWriteNotification() {
+        // given
+        Member admin = Member.createMemberWithId(1L, "test", "test@test.com");
+        Member writer = Member.createMemberWithId(2L, "writer", "writer@test.com");
         when(memberRepository.findById(2L)).thenReturn(Optional.ofNullable(writer));
 
-        Club club = Club.createClub("ClubName","ClubIntro","ClubThumb",admin,new ArrayList<>());
+        Club club = Club.createClub("ClubName", "ClubIntro", "ClubThumb", admin, new ArrayList<>());
         when(clubRepository.findById(1L)).thenReturn(Optional.of(club));
         CreateNotificationServiceDto dto = new CreateNotificationServiceDto();
         dto.setClubId(1L);
         dto.setMemberId(2L);
         dto.setTitle(INITIAL_NOTI_TITLE);
         dto.setContent(INITIAL_NOTI_CONTENT);
-        //when,then
+        // when,then
 
         assertThatThrownBy(() -> service.createNotification(dto))
                 .isInstanceOf(MemberNotFoundException.class);
 
     }
+
     @Test
     @DisplayName("그룹 관리자가 아니면 일반 유저면 NoAdminPermissionException 발생.")
-    void noPermissionForWritingNotification(){
-        //given
-        Member admin = Member.createMemberWithId(1L,"test","test@test.com");
-        Member writer = Member.createMemberWithId(2L,"writer","writer@test.com");
+    void noPermissionForWritingNotification() {
+        // given
+        Member admin = Member.createMemberWithId(1L, "test", "test@test.com");
+        Member writer = Member.createMemberWithId(2L, "writer", "writer@test.com");
         when(memberRepository.findById(2L)).thenReturn(Optional.ofNullable(writer));
 
-        Club club = Club.createClub("ClubName","ClubIntro","ClubThumb",admin,new ArrayList<>());
+        Club club = Club.createClub("ClubName", "ClubIntro", "ClubThumb", admin, new ArrayList<>());
         when(clubRepository.findById(1L)).thenReturn(Optional.of(club));
-        club.addClubMember(ClubMember.createClubMember(club,writer, ClubRole.USER));
+        club.addClubMember(ClubMember.createClubMember(club, writer, ClubRole.USER));
         CreateNotificationServiceDto dto = new CreateNotificationServiceDto();
         dto.setClubId(1L);
         dto.setMemberId(2L);
         dto.setTitle(INITIAL_NOTI_TITLE);
         dto.setContent(INITIAL_NOTI_CONTENT);
-        //when,then
+        // when,then
         assertThatThrownBy(() -> service.createNotification(dto))
                 .isInstanceOf(NoAdminPermissionException.class);
 

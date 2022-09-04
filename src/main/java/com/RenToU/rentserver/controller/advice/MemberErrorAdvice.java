@@ -14,18 +14,19 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class MemberErrorAdvice {
     @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler(WrongEmailCodeException.class)
-    public ErrorResponse WrongEmailCode(){
+    public ErrorResponse WrongEmailCode() {
         return new ErrorResponse("인증번호가 틀렸습니다.");
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(ClubNotFoundException.class)
-    public ErrorResponse ClubNotFound(ClubNotFoundException ex){
+    public ErrorResponse ClubNotFound(ClubNotFoundException ex) {
         return new ErrorResponse(ex.getMessage());
     }
+
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(NotAjouEmailException.class)
-    public ErrorResponse NotAjouEmail(){
+    public ErrorResponse NotAjouEmail() {
         return new ErrorResponse("아주대 이메일이 아닙니다.");
     }
 }

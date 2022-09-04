@@ -1,6 +1,5 @@
 package com.RenToU.rentserver.controller.member;
 
-
 import com.RenToU.rentserver.dto.StatusCode;
 import com.RenToU.rentserver.dto.request.EmailDto;
 import com.RenToU.rentserver.dto.request.EmailVerifyDto;
@@ -29,19 +28,21 @@ public class MemberController {
 
     @GetMapping("/{email}/info")
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<?>getMemberInfo(@PathVariable("email") String email) {
+    public ResponseEntity<?> getMemberInfo(@PathVariable("email") String email) {
         Member member = memberService.getUserWithAuthorities(email);
         MemberInfoDto resData = mapper.map(member, MemberInfoDto.class);
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.OK, resData));
     }
+
     @PostMapping("/email/requestCode")
     public ResponseEntity<Void> authEmail(@RequestBody @Valid EmailDto request) {
         memberService.authEmail(request);
         return ResponseEntity.ok().build();
     }
+
     @PostMapping("/email/verifyCode")
     public ResponseEntity<?> verifyCode(@RequestBody @Valid EmailVerifyDto request) {
         memberService.verifyCode(request);
-        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.EMAIL_VERIFIED,null));
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.EMAIL_VERIFIED, null));
     }
 }

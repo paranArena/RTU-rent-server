@@ -21,7 +21,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Hashtag extends BaseTimeEntity{
+public class Hashtag extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "club_id")
@@ -30,7 +30,6 @@ public class Hashtag extends BaseTimeEntity{
     @NotNull
     @Column(unique = true)
     private String name;
-
 
     @Builder.Default
     @OneToMany(mappedBy = "hashtag", cascade = CascadeType.ALL)

@@ -37,27 +37,26 @@ public class ClubRequestController {
 
     @PostMapping("/join/{joinMemberId}")
     public ResponseEntity<?> acceptClubJoin(
-        @PathVariable Long clubId,
-        @PathVariable Long joinMemberId
-        ) {
+            @PathVariable Long clubId,
+            @PathVariable Long joinMemberId) {
         clubService.acceptClubJoin(clubId, memberService.getMyIdWithAuthorities(), joinMemberId);
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.ACCEPT_CLUB_JOIN));
     }
+
     @DeleteMapping("/join/cancel")
     public ResponseEntity<?> cancelClubJoin(
-            @PathVariable Long clubId
-    ) {
+            @PathVariable Long clubId) {
         clubService.cancelClubJoin(clubId, memberService.getMyIdWithAuthorities());
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.CANCEL_CLUB_JOIN));
     }
-    
+
     @GetMapping("/join/search/all")
-    public ResponseEntity<?> searchClubJoinsAll(@PathVariable Long clubId){
-        List<ClubMember> awaitClubMembers = clubService.searchClubJoinsAll(clubId, memberService.getMyIdWithAuthorities());
-        List<ClubMemberDto> resData = 
-            awaitClubMembers.stream()
-            .map((cm)->ClubMemberDto.from(cm))
-            .collect(Collectors.toList());
+    public ResponseEntity<?> searchClubJoinsAll(@PathVariable Long clubId) {
+        List<ClubMember> awaitClubMembers = clubService.searchClubJoinsAll(clubId,
+                memberService.getMyIdWithAuthorities());
+        List<ClubMemberDto> resData = awaitClubMembers.stream()
+                .map((cm) -> ClubMemberDto.from(cm))
+                .collect(Collectors.toList());
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_CLUB_JOIN, resData));
     }
 }

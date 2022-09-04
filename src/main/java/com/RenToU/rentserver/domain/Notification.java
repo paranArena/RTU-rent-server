@@ -18,11 +18,12 @@ import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Getter @Setter
+@Getter
+@Setter
 @Builder
 @RequiredArgsConstructor
 @AllArgsConstructor
-public class Notification extends BaseTimeEntity{
+public class Notification extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "notification_id")
@@ -44,17 +45,18 @@ public class Notification extends BaseTimeEntity{
     @JoinColumn(name = "club_id")
     private Club club;
 
-    public static Notification createNotification(String title, String content, String imagePath, Member writer,Club club) {
-         Notification notification =  Notification.builder()
-                 .title(title)
-                 .content(content)
-                 .imagePath(imagePath)
-                 .writer(writer)
-                 .isPublic(true)
-                 .build();
-         club.addNotification(notification);
-         notification.setClub(club);
-         return notification;
+    public static Notification createNotification(String title, String content, String imagePath, Member writer,
+            Club club) {
+        Notification notification = Notification.builder()
+                .title(title)
+                .content(content)
+                .imagePath(imagePath)
+                .writer(writer)
+                .isPublic(true)
+                .build();
+        club.addNotification(notification);
+        notification.setClub(club);
+        return notification;
     }
 
     public void changeIsPublic() {
@@ -65,6 +67,6 @@ public class Notification extends BaseTimeEntity{
         this.title = title;
         this.content = content;
         this.imagePath = imagePath;
-        this. isPublic = isPublic;
+        this.isPublic = isPublic;
     }
 }

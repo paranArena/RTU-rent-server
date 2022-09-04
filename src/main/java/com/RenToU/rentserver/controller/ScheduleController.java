@@ -13,9 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/schedule")
 public class ScheduleController {
     private ScheduleService scheduleService;
+
     @PostMapping("/rental/wait")
     public ResponseEntity<Void> checkExpiredRentalWait() {
         scheduleService.checkExpiredRentalWait();
-        return  ResponseEntity.ok().build();
+        return ResponseEntity.ok().build();
     }
 }

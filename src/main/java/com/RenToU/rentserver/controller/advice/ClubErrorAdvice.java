@@ -1,4 +1,5 @@
 package com.RenToU.rentserver.controller.advice;
+
 import com.RenToU.rentserver.dto.ErrorResponse;
 import com.RenToU.rentserver.exceptions.club.ClubNotFoundException;
 import com.RenToU.rentserver.exceptions.club.CannotJoinClubException;

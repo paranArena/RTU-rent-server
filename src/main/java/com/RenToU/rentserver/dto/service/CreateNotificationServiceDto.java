@@ -18,8 +18,8 @@ public class CreateNotificationServiceDto {
     // other request var
     private long memberId;
     private long clubId;
-    
-    // mapped by CreateNotifiationDto 
+
+    // mapped by CreateNotifiationDto
     private String title;
     private String content;
     private List<String> imagePaths;

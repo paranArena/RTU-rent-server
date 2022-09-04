@@ -29,16 +29,17 @@ public class NotificationPreviewDto {
     private LocalDateTime updatedAt;
 
     public static NotificationPreviewDto from(Notification notification) {
-        if(notification == null) return null;
+        if (notification == null)
+            return null;
 
         return NotificationPreviewDto.builder()
-        .id(notification.getId())
-        .clubId(notification.getClub().getId())
-        .title(notification.getTitle())
-        .isPublic(notification.getIsPublic())
-        .imagePath(notification.getImagePath())
-        .createdAt(notification.getCreatedAt())
-        .updatedAt(notification.getUpdatedAt())
-        .build();
+                .id(notification.getId())
+                .clubId(notification.getClub().getId())
+                .title(notification.getTitle())
+                .isPublic(notification.getIsPublic())
+                .imagePath(notification.getImagePath())
+                .createdAt(notification.getCreatedAt())
+                .updatedAt(notification.getUpdatedAt())
+                .build();
     }
 }

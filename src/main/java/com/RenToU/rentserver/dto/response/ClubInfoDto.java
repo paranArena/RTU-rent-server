@@ -10,7 +10,8 @@ import java.util.List;
 
 import com.RenToU.rentserver.domain.Club;
 
-@Getter @Setter
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,17 +26,17 @@ public class ClubInfoDto {
     private String thumbnailPath;
 
     private List<String> hashtags;
-    
-    public static ClubInfoDto from(Club club){
-        if(club == null) return null;
+
+    public static ClubInfoDto from(Club club) {
+        if (club == null)
+            return null;
 
         return ClubInfoDto.builder()
-            .id(club.getId())
-            .name(club.getName())
-            .introduction(club.getIntroduction())
-            .thumbnailPath(club.getThumbnailPath())
-            .hashtags(club.getHashtagNames())
-            .build();
+                .id(club.getId())
+                .name(club.getName())
+                .introduction(club.getIntroduction())
+                .thumbnailPath(club.getThumbnailPath())
+                .hashtags(club.getHashtagNames())
+                .build();
     }
 }
-
