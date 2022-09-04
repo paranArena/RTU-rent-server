@@ -20,6 +20,8 @@ import javax.persistence.OneToOne;
 
 import static javax.persistence.FetchType.LAZY;
 
+import javax.persistence.CascadeType;
+
 @Entity
 @Builder
 @NoArgsConstructor
@@ -37,7 +39,7 @@ public class Item extends BaseTimeEntity{
     @Enumerated
     private RentalPolicy rentalPolicy;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "product_id")
     private Product product;
     @OneToOne(mappedBy = "item", fetch = LAZY)

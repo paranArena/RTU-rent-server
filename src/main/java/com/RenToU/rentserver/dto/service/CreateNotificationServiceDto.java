@@ -13,7 +13,7 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class NotificationServiceDto {
+public class CreateNotificationServiceDto {
 
     // other request var
     private long memberId;

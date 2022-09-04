@@ -1,4 +1,4 @@
-package com.RenToU.rentserver.dto;
+package com.RenToU.rentserver.dto.response;
 
 import java.time.LocalDateTime;
 
@@ -7,8 +7,16 @@ import org.springframework.boot.autoconfigure.info.ProjectInfoProperties.Build;
 import com.RenToU.rentserver.domain.ClubMember;
 import com.RenToU.rentserver.domain.Rental;
 import com.RenToU.rentserver.domain.RentalStatus;
-import com.RenToU.rentserver.dto.response.ClubMemberDto;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+@Getter @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class RentalDto {
 
     private Long id;
