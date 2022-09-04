@@ -17,6 +17,9 @@ import com.github.dozermapper.core.Mapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
@@ -58,5 +61,10 @@ public class ProductService {
     private Club findClub(Long id) {
         return clubRepository.findById(id)
                 .orElseThrow(() -> new ClubNotFoundException(id));
+    }
+
+    public List<Product> getProductsByClub(long memberId, long clubId) {
+        Club club = findClub(clubId);
+        return club.getProducts();
     }
 }

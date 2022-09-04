@@ -1,10 +1,16 @@
 package com.RenToU.rentserver.controller.club;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import com.RenToU.rentserver.domain.Notification;
+import com.RenToU.rentserver.dto.response.preview.NotificationPreviewDto;
+import com.RenToU.rentserver.dto.response.preview.ProductPreviewDto;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -55,5 +61,15 @@ public class ClubProductController {
         ProductDto resData = ProductDto.from(product);
 
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.CREATE_PRODUCT, resData));
+    }
+    @GetMapping("/search/all")
+    public ResponseEntity<?> searchProductByClub(@PathVariable long clubId){
+        long memberId = memberService.getMyIdWithAuthorities();
+        List<Product> products = productService.getProductsByClub(memberId, clubId);
+        List<ProductPreviewDto> resData =
+                products.stream()
+                        .map(n-> ProductPreviewDto.from(n))
+                        .collect(Collectors.toList());
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.SEARCH_NOTIFICATION_SUCCESS, resData));
     }
 }
