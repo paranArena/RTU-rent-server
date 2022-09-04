@@ -79,6 +79,12 @@ public class ClubMember extends BaseTimeEntity {
             throw new NoAdminPermissionException(this.club.getId());
         }
     }
+    public boolean isAdmin() {
+        if(this.role != ClubRole.ADMIN && this.role != ClubRole.OWNER){
+            return true;
+        }
+        return false;
+    }
     public String toString(){
         return this.getClub().getId() + " " + this.getMember().getId() + " "  + this.getRole().toString();
     }
@@ -98,5 +104,12 @@ public class ClubMember extends BaseTimeEntity {
         if(this.role != ClubRole.WAIT){
             throw new NotClubRoleWaitingException("사용자가 클럽 가입 대기 상태가 아닙니다.");
         }
+    }
+
+    public boolean isUser() {
+        if(this.role != ClubRole.USER){
+            return true;
+        }
+        return false;
     }
 }

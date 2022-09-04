@@ -30,4 +30,4 @@ logging:
 
 
 # import other properties
-spring.profiles.include: jwt, rds, s3
+spring.profiles.include: jwt, rds, s3, mail

@@ -4,6 +4,7 @@ import com.RenToU.rentserver.domain.Club;
 import com.RenToU.rentserver.domain.ClubMember;
 import com.RenToU.rentserver.domain.ClubRole;
 import com.RenToU.rentserver.domain.Member;
+import com.RenToU.rentserver.domain.Notification;
 
 import java.util.List;
 
@@ -24,4 +25,5 @@ public interface ClubService {
     public void acceptClubJoin(Long clubId, Long ownerId, Long joinMemberId);
 
     List<Club> getMyClubRequests(long memberId);
+
 }
