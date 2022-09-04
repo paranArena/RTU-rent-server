@@ -55,4 +55,5 @@ public class ResponseMessage {
 
     public static final String GET_MY_INFO = "내 정보 조회 성공";
     public static final String CANCEL_CLUB_JOIN = "클럽 가입 신청 대기 취소 성공";
+    public static final String EMAIL_VERIFIED = "이메일 검증 성공";
 }
