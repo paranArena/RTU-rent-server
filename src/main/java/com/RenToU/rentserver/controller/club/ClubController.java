@@ -1,11 +1,9 @@
 package com.RenToU.rentserver.controller.club;
 
 import com.RenToU.rentserver.application.ClubService;
-import com.RenToU.rentserver.application.HashtagService;
 import com.RenToU.rentserver.application.MemberService;
 import com.RenToU.rentserver.application.S3Service;
 import com.RenToU.rentserver.domain.Club;
-import com.RenToU.rentserver.domain.Member;
 import com.RenToU.rentserver.dto.*;
 import com.RenToU.rentserver.dto.response.ClubInfoDto;
 import com.RenToU.rentserver.dto.response.ResponseDto;
@@ -14,7 +12,6 @@ import com.github.dozermapper.core.Mapper;
 
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,8 +25,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -38,7 +33,6 @@ public class ClubController {
 
     private final ClubService clubService;
     private final MemberService memberService;
-    private final HashtagService hashtagService;
     private final S3Service s3Service;
     private final Mapper mapper;
 

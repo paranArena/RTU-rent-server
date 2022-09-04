@@ -32,11 +32,11 @@ public class ClubHashtag extends BaseTimeEntity {
     @Column(name = "club_hashtag_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "hashtag_id")
     private Hashtag hashtag;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "club_id")
     private Club club;
     public void setClub(Club club) {

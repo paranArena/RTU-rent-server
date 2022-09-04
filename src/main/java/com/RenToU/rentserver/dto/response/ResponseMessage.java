@@ -11,6 +11,9 @@ public class ResponseMessage {
     public static final String UPDATE_USER = "회원 정보 수정 성공";
     public static final String DELETE_USER = "회원 탈퇴 성공";
 
+    public static final String GET_MY_CLUB_ROLE = "나의 클럽 역할 조회 성공";
+    public static final String GET_CLUB_MEMBER = "클럽 멤버 조회 성공";
+
     public static final String INTERNAL_SERVER_ERROR = "서버 내부 에러";
     public static final String DB_ERROR = "데이터베이스 에러";
 
@@ -41,4 +44,14 @@ public class ResponseMessage {
     public static final String RENT_RETURN_SUCCESS = "렌탈 반납 성공";
     public static final String RENT_CANCEL_SUCCESS = "렌탈 취소 성공";
     public static final String GET_RENT = "렌탈 조회 성공";
+
+    public static final String GET_MY_CLUB_REQUESTS = "나의 클럽 요청 조회 성공";
+
+    public static final String GET_MY_RENT = "나의 렌트 상황 조회 성공";
+
+    public static final String GET_MY_NOTIFICATION = "나의 공지사항 조회 성공";
+
+    public static final String GET_MY_CLUB = "내가 가입한 클럽 조회 성공";
+
+    public static final String GET_MY_INFO = "내 정보 조회 성공";
 }

@@ -1,6 +1,7 @@
 package com.RenToU.rentserver.dto.response;
 
 import com.RenToU.rentserver.domain.ClubMember;
+import com.RenToU.rentserver.domain.ClubRole;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,6 +26,8 @@ public class ClubMemberDto {
 
     private String major;
 
+    private ClubRole clubRole;
+
     public static ClubMemberDto from(ClubMember clubMember) {
         if(clubMember == null) return null;
 
@@ -35,6 +38,7 @@ public class ClubMemberDto {
             .phoneNumber(clubMember.getMember().getPhoneNumber())
             .studentId(clubMember.getMember().getStudentId())
             .major(clubMember.getMember().getMajor())
+            .clubRole(clubMember.getRole())
             .build();
     }
 }

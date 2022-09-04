@@ -3,7 +3,8 @@ ren2u spring boot server
 
 API SEVER URL:  
 ~~https://rtu-rent-server-uwdjr.run.goorm.io~~  
-http://ec2-13-125-234-225.ap-northeast-2.compute.amazonaws.com:8080
+~~http://ec2-13-125-234-225.ap-northeast-2.compute.amazonaws.com:8080~~.  
+http://ec2-3-35-241-206.ap-northeast-2.compute.amazonaws.com:8080
 - 눌러서 들어갔을 때 "Server is Running :)" 이라고 뜨지 않으면 서버가 다운되어 있는 것. 이해찬에게 DM
 
 API SPECIFICATION:   
@@ -44,7 +45,7 @@ git pull
 ps aux | grep java
 kill -9 [previous pid]
 ./gradlew build --exclude-task test 
-java -jar build/libs/rentserver-0.0.1-SNAPSHOT.jar 1>app.log 2>&1 &
+java -jar build/libs/application.war 1>app.log 2>&1 &
 disown [pid]
 ```
 ### Docker

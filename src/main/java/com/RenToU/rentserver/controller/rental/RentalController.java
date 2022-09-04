@@ -2,26 +2,18 @@ package com.RenToU.rentserver.controller.rental;
 
 import java.io.IOException;
 
-import javax.validation.Valid;
-
 import com.RenToU.rentserver.application.RentalService;
 import com.RenToU.rentserver.domain.Rental;
 import com.RenToU.rentserver.domain.RentalHistory;
 import com.RenToU.rentserver.dto.response.IdDto;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.RenToU.rentserver.application.MemberService;
-import com.RenToU.rentserver.application.ProductService;
-import com.RenToU.rentserver.application.S3Service;
 import com.RenToU.rentserver.dto.StatusCode;
-import com.RenToU.rentserver.dto.request.CreateProductDto;
 import com.RenToU.rentserver.dto.response.ResponseDto;
 import com.RenToU.rentserver.dto.response.ResponseMessage;
 import com.github.dozermapper.core.Mapper;

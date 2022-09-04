@@ -66,7 +66,7 @@ public class ClubServiceImpl implements ClubService{
 
     @Override
     @Transactional
-    public List<Member> getAllMembers(long clubId) {
+    public List<ClubMember> getAllMembers(long clubId) {
         Club club = findClubById(clubId);
         return getAllClubUser(club);
     }
@@ -92,6 +92,7 @@ public class ClubServiceImpl implements ClubService{
     public List<ClubMember> searchClubJoinsAll(Long clubId, Long memberId) {
         Member member = findMember(memberId);
         Club club = findClub(clubId);
+        //FIXME: MemberNotFoundException
         club.findClubMemberByMember(member).validateAdmin();
         return club.getMemberList().stream()
         .filter((clubMember)->clubMember.getRole()==ClubRole.WAIT)
@@ -140,8 +141,12 @@ public class ClubServiceImpl implements ClubService{
     public ClubRole getMyRole(long memberId, long clubId){
         Club club = findClubById(clubId);
         Member member = findMember(memberId);
-        ClubMember cm = club.findClubMemberByMember(member);
-        return cm.getRole();
+        try {
+            ClubMember cm = club.findClubMemberByMember(member);
+            return cm.getRole();
+        } catch (MemberNotFoundException e) {
+            return ClubRole.NONE;
+        }
     }
     @Override
     @Transactional
@@ -192,8 +197,8 @@ public class ClubServiceImpl implements ClubService{
         return hashtagRepository.findByName(hashtagName)
                 .orElse(Hashtag.createHashtag(hashtagName));
     }
-    private List<Member> getAllClubUser(Club club){
-        List<ClubMember> users= club.getMemberList().stream().filter(cm->cm.getRole()!=ClubRole.WAIT).collect(Collectors.toList());
-        return users.stream().map(cm->cm.getMember()).collect(Collectors.toList());
+    private List<ClubMember> getAllClubUser(Club club){
+        return club.getMemberList().stream().filter(cm->cm.getRole()!=ClubRole.WAIT).collect(Collectors.toList());
+        // return users.stream().map(cm->cm.getMember()).collect(Collectors.toList());
     }
 }
