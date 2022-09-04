@@ -40,8 +40,8 @@ public class MemberController {
         return ResponseEntity.ok().build();
     }
     @PostMapping("/email/verifyCode")
-    public ResponseEntity<Void> verifyCode(@RequestBody @Valid EmailVerifyDto request) {
+    public ResponseEntity<?> verifyCode(@RequestBody @Valid EmailVerifyDto request) {
         memberService.verifyCode(request);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.EMAIL_VERIFIED,null));
     }
 }
