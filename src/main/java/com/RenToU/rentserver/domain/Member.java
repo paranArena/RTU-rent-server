@@ -6,6 +6,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter @Setter
@@ -81,6 +82,9 @@ public class Member extends BaseTimeEntity{
     public void addRental(Rental rental) {
         this.rentals.add(rental);
         rental.setMember(this);
+    }
+    public List<ClubMember> getClubListWithoutWait(){
+        return this.clubList.stream().filter(cm-> cm.getRole() != ClubRole.WAIT).collect(Collectors.toList());
     }
 
     public void deleteClub(ClubMember clubMember) {

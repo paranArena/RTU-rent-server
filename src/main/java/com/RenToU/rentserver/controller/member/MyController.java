@@ -82,7 +82,7 @@ public class MyController {
 
     @GetMapping("/notifications")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
-    public ResponseEntity<?> getMynotifications(HttpServletRequest request) {
+    public ResponseEntity<?> getMyNotifications(HttpServletRequest request) {
         Long memberId = memberService.getMyIdWithAuthorities();
         List<Notification> notifications = notificationService.getMyNotifications(memberId);
         List<NotificationPreviewDto> resData = 
