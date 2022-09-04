@@ -44,7 +44,7 @@ public class NotificationService {
     }
     public List<Notification> getMyNotifications(Long memberId){
         Member member = findMember(memberId);
-        List<Club> clubs = member.getClubList().stream().map(cm->cm.getClub()).collect(Collectors.toList());
+        List<Club> clubs = member.getClubListWithoutWait().stream().map(cm->cm.getClub()).collect(Collectors.toList());
         List<Notification> notis = new ArrayList<>();
         clubs.stream().forEach(c->{
             notis.addAll(c.getNotifications());
