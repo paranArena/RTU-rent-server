@@ -1,6 +1,8 @@
 package com.RenToU.rentserver.domain;
 
 import com.RenToU.rentserver.exceptions.NoOwnerPermissionException;
+import com.RenToU.rentserver.exceptions.NotClubRoleWaitingException;
+import com.RenToU.rentserver.exceptions.NotWaitingException;
 import com.RenToU.rentserver.exceptions.club.CannotGrantAdminException;
 import com.RenToU.rentserver.exceptions.club.CannotJoinClubException;
 import com.RenToU.rentserver.exceptions.NoAdminPermissionException;
@@ -61,7 +63,7 @@ public class ClubMember extends BaseTimeEntity {
         if(this.role == ClubRole.WAIT) {
             this.role = ClubRole.USER;
         }else{
-            throw new CannotJoinClubException(this.club.getId(),this.club.getName(),"사용자가 대기 상태가 아닙니다.");
+            throw new NotClubRoleWaitingException("사용자가 대기 상태가 아닙니다.");
         }
     }
     public void grantAdmin(){
@@ -90,5 +92,11 @@ public class ClubMember extends BaseTimeEntity {
     public void delete() {
         member.deleteClub(this);
         club.deleteMember(this);
+    }
+
+    public void validateWait() {
+        if(this.role != ClubRole.WAIT){
+            throw new NotClubRoleWaitingException("사용자가 클럽 가입 대기 상태가 아닙니다.");
+        }
     }
 }

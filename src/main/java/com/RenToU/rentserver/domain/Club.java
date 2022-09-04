@@ -1,6 +1,6 @@
 package com.RenToU.rentserver.domain;
 
-import com.RenToU.rentserver.exceptions.MemberNotFoundException;
+import com.RenToU.rentserver.exceptions.clubMember.ClubMemberNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -87,12 +87,12 @@ public class Club extends BaseTimeEntity{
         return club;
     }
 
-    public ClubMember findClubMemberByMember(Member member) throws MemberNotFoundException{
+    public ClubMember findClubMemberByMember(Member member) throws ClubMemberNotFoundException{
         Optional<ClubMember> clubMember = this.getMemberList().stream().filter(cm -> {
             return cm.getMember().getId() == member.getId();
         }).findFirst();
         if(clubMember.isEmpty()){
-            throw new MemberNotFoundException(member.getId());
+            throw new ClubMemberNotFoundException(member.getId());
         }
         return clubMember.get();
     }

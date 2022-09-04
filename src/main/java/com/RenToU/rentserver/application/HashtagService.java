@@ -4,6 +4,7 @@ import com.RenToU.rentserver.domain.Club;
 import com.RenToU.rentserver.domain.ClubHashtag;
 import com.RenToU.rentserver.domain.Hashtag;
 import com.RenToU.rentserver.exceptions.HashtagNotFoundException;
+import com.RenToU.rentserver.exceptions.club.ClubNotFoundException;
 import com.RenToU.rentserver.infrastructure.ClubHashtagRepository;
 import com.RenToU.rentserver.infrastructure.ClubRepository;
 import com.RenToU.rentserver.infrastructure.HashtagRepository;
@@ -23,10 +24,14 @@ public class HashtagService {
 
     public List<Club> findClubsWithHashtag(String hashtagName){
         Hashtag hashtag = findHashtagByName(hashtagName);
-        List<ClubHashtag> clubs = clubHashtagRepository.findByHashtag(hashtag);
-        return clubs.stream().map(clubHashtag -> {
+        List<ClubHashtag> clubHashtags = clubHashtagRepository.findByHashtag(hashtag);
+        List<Club> clubs =  clubHashtags.stream().map(clubHashtag -> {
             return clubHashtag.getClub();
         }).collect(Collectors.toList());
+//        if(clubs.isEmpty()){
+//            throw new ClubNotFoundException("club not found with hashtag");
+//        }
+        return clubs;
     }
     private Hashtag findHashtagByName(String hashtagName){
         return hashtagRepository.findByName(hashtagName)

@@ -19,6 +19,7 @@ public interface ClubService {
     public void deleteClub(long memberId, long clubId);
     public List<ClubMember> getAllMembers(long clubId);
     public void requestClubJoin(Long clubId, Long memberId);
+    public void cancelClubJoin(Long clubId, Long memberId);
     public List<ClubMember> searchClubJoinsAll(Long clubId, Long memberId);
     public void acceptClubJoin(Long clubId, Long ownerId, Long joinMemberId);
 
