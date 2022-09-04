@@ -48,5 +48,5 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 bootJar {
-	archiveFileName = 'application.jar'
+	archiveFileName = 'application.war'
 }
