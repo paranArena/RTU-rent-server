@@ -1,6 +1,8 @@
 package com.RenToU.rentserver.controller.member;
 
 import com.RenToU.rentserver.dto.StatusCode;
+import com.RenToU.rentserver.dto.request.EmailDto;
+import com.RenToU.rentserver.dto.request.EmailVerifyDto;
 import com.RenToU.rentserver.dto.request.LoginDto;
 import com.RenToU.rentserver.dto.request.SignupDto;
 import com.RenToU.rentserver.dto.response.MemberInfoDto;
@@ -73,6 +75,18 @@ public class AuthController {
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
 
         return new ResponseEntity<>(new TokenDto(jwt), httpHeaders, HttpStatus.OK);
+    }
+
+    @PostMapping("members/email/requestCode")
+    public ResponseEntity<Void> authEmail(@RequestBody @Valid EmailDto request) {
+        memberService.authEmail(request);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("members/email/verifyCode")
+    public ResponseEntity<?> verifyCode(@RequestBody @Valid EmailVerifyDto request) {
+        memberService.verifyCode(request);
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.EMAIL_VERIFIED, null));
     }
 
     @PostMapping("/logout")

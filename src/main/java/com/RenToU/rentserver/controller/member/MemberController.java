@@ -33,16 +33,4 @@ public class MemberController {
         MemberInfoDto resData = mapper.map(member, MemberInfoDto.class);
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.OK, resData));
     }
-
-    @PostMapping("/email/requestCode")
-    public ResponseEntity<Void> authEmail(@RequestBody @Valid EmailDto request) {
-        memberService.authEmail(request);
-        return ResponseEntity.ok().build();
-    }
-
-    @PostMapping("/email/verifyCode")
-    public ResponseEntity<?> verifyCode(@RequestBody @Valid EmailVerifyDto request) {
-        memberService.verifyCode(request);
-        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.EMAIL_VERIFIED, null));
-    }
 }
