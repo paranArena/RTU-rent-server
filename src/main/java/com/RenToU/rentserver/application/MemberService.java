@@ -1,6 +1,7 @@
 package com.RenToU.rentserver.application;
 
 import java.util.Collections;
+import java.util.Optional;
 import java.util.Random;
 
 import com.RenToU.rentserver.dto.request.EmailDto;
@@ -18,6 +19,7 @@ import com.RenToU.rentserver.domain.Authority;
 import com.RenToU.rentserver.domain.Member;
 import com.RenToU.rentserver.dto.request.SignupDto;
 import com.RenToU.rentserver.exceptions.DuplicateMemberException;
+import com.RenToU.rentserver.exceptions.MemberNotFoundException;
 import com.RenToU.rentserver.exceptions.NotFoundMemberException;
 import com.RenToU.rentserver.infrastructure.MemberRepository;
 import com.RenToU.rentserver.util.SecurityUtil;
@@ -101,8 +103,11 @@ public class MemberService {
 
     private void sendAuthEmail(String email, String authKey) {
 
-        String subject = "제목";
-        String text = "회원 가입을 위한 인증번호는 " + authKey + "입니다. <br/>";
+        String subject = "Ren2U - Email Verification";
+        String text = "<h2>Ren2U 이메일 인증 코드</h2>"
+                + "<p>이메일 인증 코드 : <strong>" + authKey
+                + "</strong></p><p>인증 코드는 5분 후에 만료됩니다. 최대한 빠른 시간내에 인증 부탁드리겠습니다.</p>"
+                + "<p>인증이 원활히 이루어지지 않을 시 다시 로그인을 시도해주세요.</p>";
         checkAjouEmail(email);
         try {
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
@@ -128,6 +133,9 @@ public class MemberService {
         if (!userCode.equals(verifyCode)) {
             throw new WrongEmailCodeException();
         }
+        Member member = findMemberByEMail(email);
+        member.setActivated(true);
+        memberRepository.save(member);
     }
 
     private void checkAjouEmail(String email) {
@@ -136,5 +144,11 @@ public class MemberService {
         if (!domain.equals("ajou.ac.kr")) {
             throw new NotAjouEmailException();
         }
+    }
+
+    private Member findMemberByEMail(String email) {
+        Member member = memberRepository.findOneWithAuthoritiesByEmail(email)
+                .orElseThrow(() -> new MemberNotFoundException(-1L));
+        return member;
     }
 }

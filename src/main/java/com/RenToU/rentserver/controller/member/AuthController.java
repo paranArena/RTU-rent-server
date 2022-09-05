@@ -78,9 +78,9 @@ public class AuthController {
     }
 
     @PostMapping("members/email/requestCode")
-    public ResponseEntity<Void> authEmail(@RequestBody @Valid EmailDto request) {
+    public ResponseEntity<?> authEmail(@RequestBody @Valid EmailDto request) {
         memberService.authEmail(request);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.REQUEST_EMAIL_VERIFICATION, null));
     }
 
     @PostMapping("members/email/verifyCode")
