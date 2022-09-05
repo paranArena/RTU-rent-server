@@ -1,6 +1,5 @@
 package com.RenToU.rentserver.handler;
 
-
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 import java.util.List;
@@ -30,7 +29,7 @@ public class MethodArgumentNotValidExceptionHandler {
 
     private ErrorDto processFieldErrors(List<org.springframework.validation.FieldError> fieldErrors) {
         ErrorDto errorDTO = new ErrorDto(BAD_REQUEST.value(), "@Valid Error");
-        for (org.springframework.validation.FieldError fieldError: fieldErrors) {
+        for (org.springframework.validation.FieldError fieldError : fieldErrors) {
             errorDTO.addFieldError(fieldError.getObjectName(), fieldError.getField(), fieldError.getDefaultMessage());
         }
         return errorDTO;

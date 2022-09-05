@@ -1,6 +1,5 @@
 package com.RenToU.rentserver.controller.member;
 
-
 import com.RenToU.rentserver.dto.StatusCode;
 import com.RenToU.rentserver.dto.response.ClubRoleDto;
 import com.RenToU.rentserver.dto.response.MemberInfoDto;
@@ -53,14 +52,13 @@ public class MyController {
     public ResponseEntity<?> getMyClubs(HttpServletRequest request) {
         Long memberId = memberService.getMyIdWithAuthorities();
         List<Club> clubs = clubService.getMyClubs(memberId);
-        List<ClubPreviewDto> resData = 
-            clubs.stream()
-            .map((club)->{
-                ClubPreviewDto dto = ClubPreviewDto.from(club);
-                dto.setClubRole(clubService.getMyRole(memberId, club.getId()));
-                return dto;
-            })
-            .collect(Collectors.toList());
+        List<ClubPreviewDto> resData = clubs.stream()
+                .map((club) -> {
+                    ClubPreviewDto dto = ClubPreviewDto.from(club);
+                    dto.setClubRole(clubService.getMyRole(memberId, club.getId()));
+                    return dto;
+                })
+                .collect(Collectors.toList());
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_MY_CLUB, resData));
     }
 
@@ -69,14 +67,13 @@ public class MyController {
     public ResponseEntity<?> getMyClubRequests() {
         Long memberId = memberService.getMyIdWithAuthorities();
         List<Club> clubs = clubService.getMyClubRequests(memberId);
-        List<ClubPreviewDto> resData = 
-            clubs.stream()
-            .map((club)->{
-                ClubPreviewDto dto = ClubPreviewDto.from(club);
-                dto.setClubRole(clubService.getMyRole(memberId, club.getId()));
-                return dto;
-            })
-            .collect(Collectors.toList());
+        List<ClubPreviewDto> resData = clubs.stream()
+                .map((club) -> {
+                    ClubPreviewDto dto = ClubPreviewDto.from(club);
+                    dto.setClubRole(clubService.getMyRole(memberId, club.getId()));
+                    return dto;
+                })
+                .collect(Collectors.toList());
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_MY_CLUB_REQUESTS, resData));
     }
 
@@ -85,10 +82,9 @@ public class MyController {
     public ResponseEntity<?> getMyNotifications(HttpServletRequest request) {
         Long memberId = memberService.getMyIdWithAuthorities();
         List<Notification> notifications = notificationService.getMyNotifications(memberId);
-        List<NotificationPreviewDto> resData = 
-            notifications.stream()
-            .map((n)->NotificationPreviewDto.from(n))
-            .collect(Collectors.toList());
+        List<NotificationPreviewDto> resData = notifications.stream()
+                .map((n) -> NotificationPreviewDto.from(n))
+                .collect(Collectors.toList());
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_MY_NOTIFICATION, resData));
     }
 
@@ -97,8 +93,8 @@ public class MyController {
     public ResponseEntity<?> getMyRentals(HttpServletRequest request) {
         List<Rental> clubs = memberService.getMyUserWithAuthorities().getRentals();
         List<RentalDto> resData = clubs.stream()
-                                        .map((c)->mapper.map(c, RentalDto.class))
-                                        .collect(Collectors.toList());
+                .map((c) -> mapper.map(c, RentalDto.class))
+                .collect(Collectors.toList());
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_MY_RENT, resData));
     }
 

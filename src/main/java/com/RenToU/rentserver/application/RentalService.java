@@ -35,21 +35,23 @@ public class RentalService {
     private final MemberRepository memberRepository;
     private final ItemRepository itemRepository;
     private final RentalHistoryRepository rentalHistoryRepository;
+
     @Transactional
     public Rental requestRental(Long memberId, Long itemId) {
         Item item = findItem(itemId);
         Member member = findMember(memberId);
-        checkIsInSameClub(member,item);
+        checkIsInSameClub(member, item);
         item.validateRentable();
-        Rental rental = Rental.createRental(item,member);
+        Rental rental = Rental.createRental(item, member);
         rentalRepository.save(rental);
         return rental;
     }
 
     private void checkIsInSameClub(Member member, Item item) {
-        List<ClubMember> userClubMembers = member.getClubList().stream().filter(cm-> cm.getRole()!= ClubRole.WAIT).collect(Collectors.toList());
-        List<Club> clubs = userClubMembers.stream().map(cm->cm.getClub()).collect(Collectors.toList());
-        if(!clubs.contains(item.getProduct().getClub())){
+        List<ClubMember> userClubMembers = member.getClubList().stream().filter(cm -> cm.getRole() != ClubRole.WAIT)
+                .collect(Collectors.toList());
+        List<Club> clubs = userClubMembers.stream().map(cm -> cm.getClub()).collect(Collectors.toList());
+        if (!clubs.contains(item.getProduct().getClub())) {
             throw new CannotRentException(item.getId());
         }
     }
@@ -65,8 +67,9 @@ public class RentalService {
         rentalRepository.save(rental);
         return rental;
     }
+
     @Transactional
-    public RentalHistory returnRental(Long memberId, Long rentalId){
+    public RentalHistory returnRental(Long memberId, Long rentalId) {
         Member member = findMember(memberId);
         Rental rental = findRental(rentalId);
         rental.validateRent();
@@ -78,8 +81,9 @@ public class RentalService {
         rentalRepository.deleteById(rental.getId());
         return rentalHistory;
     }
+
     @Transactional
-    public RentalHistory cancelRental(Long memberId, Long rentalId){
+    public RentalHistory cancelRental(Long memberId, Long rentalId) {
         Member member = findMember(memberId);
         Rental rental = findRental(rentalId);
         rental.validateWait();
@@ -91,30 +95,31 @@ public class RentalService {
         return rentalHistory;
     }
 
-
-
-    private Member findMember(Long id){
+    private Member findMember(Long id) {
         return memberRepository.findById(id)
                 .orElseThrow(() -> new MemberNotFoundException(id));
     }
-    private Item findItem(Long id){
+
+    private Item findItem(Long id) {
         return itemRepository.findById(id)
                 .orElseThrow(() -> new ItemNotFoundException(id));
     }
-    private Rental findRentalByItem(Item item){
+
+    private Rental findRentalByItem(Item item) {
         return rentalRepository.findByItem(item)
-                .orElseThrow(()-> new RentalNotFoundException());
+                .orElseThrow(() -> new RentalNotFoundException());
     }
+
     private Rental findRental(Long id) {
         return rentalRepository.findById(id)
                 .orElseThrow(() -> new RentalNotFoundException(id));
     }
+
     public void validateApplyTimeNotOver(Rental rental) {
-        if(rental.getRentDate().plusMinutes(10).isBefore(LocalDateTime.now())){
+        if (rental.getRentDate().plusMinutes(10).isBefore(LocalDateTime.now())) {
             cancelRental(rental.getMember().getId(), rental.getId());
             throw new CannotRentException(rental.getId());
         }
     }
-
 
 }

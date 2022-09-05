@@ -19,20 +19,21 @@ class ClubTest {
     private static final String INITIAL_NAME = "test club";
     private static final String INITIAL_INTRO = "this is test club";
     private static final String INITIAL_THUMB = "www.thumbnail.com";
-    private static Member INITIAL_OWNER = Member.createMember("admin","admin@admin.com");
+    private static Member INITIAL_OWNER = Member.createMember("admin", "admin@admin.com");
     private static final List<Hashtag> INITIAL_HASHTAG = new ArrayList<>();
 
     @BeforeEach
     void setup() {
-        club = Club.createClub(INITIAL_NAME,INITIAL_INTRO,INITIAL_THUMB,INITIAL_OWNER,INITIAL_HASHTAG);
+        club = Club.createClub(INITIAL_NAME, INITIAL_INTRO, INITIAL_THUMB, INITIAL_OWNER, INITIAL_HASHTAG);
     }
+
     @DisplayName("findClubByMember 동작 테스트")
     @Test
     public void findClubMyMemberTest() {
-        //given
-        //when
+        // given
+        // when
         ClubMember findMember = club.findClubMemberByMember(INITIAL_OWNER);
-        //then
+        // then
         assertThat(findMember.getMember()).isEqualTo(INITIAL_OWNER);
     }
 }

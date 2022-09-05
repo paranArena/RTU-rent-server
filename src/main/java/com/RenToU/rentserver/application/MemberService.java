@@ -1,7 +1,6 @@
 package com.RenToU.rentserver.application;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Random;
 
 import com.RenToU.rentserver.dto.request.EmailDto;
@@ -9,7 +8,6 @@ import com.RenToU.rentserver.dto.request.EmailVerifyDto;
 import com.RenToU.rentserver.exceptions.NotAjouEmailException;
 import com.RenToU.rentserver.exceptions.WrongEmailCodeException;
 import com.RenToU.rentserver.util.RedisUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -49,7 +47,6 @@ public class MemberService {
             throw new DuplicateMemberException("이미 존재하는 학번입니다.");
         }
 
-
         Authority authority = Authority.builder()
                 .authorityName("ROLE_USER")
                 .build();
@@ -61,7 +58,7 @@ public class MemberService {
                 .phoneNumber(signupDTO.getPhoneNumber())
                 .studentId(signupDTO.getStudentId())
                 .major(signupDTO.getMajor())
-                .activated(true)
+                .activated(false)
                 .authorities(Collections.singleton(authority))
                 .build();
 
@@ -83,8 +80,8 @@ public class MemberService {
     @Transactional(readOnly = true)
     public long getMyIdWithAuthorities() {
         Member member = SecurityUtil.getCurrentUsername()
-                        .flatMap(memberRepository::findOneWithAuthoritiesByEmail)
-                        .orElseThrow(() -> new NotFoundMemberException("Member not found"));
+                .flatMap(memberRepository::findOneWithAuthoritiesByEmail)
+                .orElseThrow(() -> new NotFoundMemberException("Member not found"));
         return member.getId();
     }
 
@@ -108,40 +105,36 @@ public class MemberService {
         String text = "회원 가입을 위한 인증번호는 " + authKey + "입니다. <br/>";
         checkAjouEmail(email);
         try {
-                MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-                MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "utf-8");
-                helper.setTo(email);
-                helper.setSubject(subject);
-                helper.setText(text, true);    //포함된 텍스트가 HTML이라는 의미로 true.
-                javaMailSender.send(mimeMessage);
+            MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "utf-8");
+            helper.setTo(email);
+            helper.setSubject(subject);
+            helper.setText(text, true); // 포함된 텍스트가 HTML이라는 의미로 true.
+            javaMailSender.send(mimeMessage);
 
         } catch (MessagingException e) {
-                e.printStackTrace();
+            e.printStackTrace();
         }
 
         // 유효 시간(5분)동안 {email, authKey} 저장
         redisUtil.setDataExpire(email, authKey, 60 * 5L);
     }
 
-
-
     public void verifyCode(EmailVerifyDto request) {
         String userCode = request.getCode();
         String email = request.getEmail();
         String verifyCode = redisUtil.getData(email);
-        System.out.println(userCode +" "+ verifyCode);
-        if(!userCode.equals(verifyCode)){
+        System.out.println(userCode + " " + verifyCode);
+        if (!userCode.equals(verifyCode)) {
             throw new WrongEmailCodeException();
         }
     }
+
     private void checkAjouEmail(String email) {
         int idx = email.indexOf("@");
-        String domain = email.substring(idx+1);
-        if(!domain.equals("ajou.ac.kr")){
+        String domain = email.substring(idx + 1);
+        if (!domain.equals("ajou.ac.kr")) {
             throw new NotAjouEmailException();
         }
-
     }
 }
-
-

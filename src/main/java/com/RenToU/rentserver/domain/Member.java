@@ -9,11 +9,12 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Entity
-@Getter @Setter
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Member extends BaseTimeEntity{
+public class Member extends BaseTimeEntity {
 
     @Id
     @Column(name = "member_id")
@@ -49,28 +50,29 @@ public class Member extends BaseTimeEntity{
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Rental> rentals = new ArrayList<>();
 
-   @ManyToMany
-   @JoinTable(
-           name = "member_authority",
-           joinColumns = {@JoinColumn(name = "member_id", referencedColumnName = "member_id")},
-           inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "authority_name")})
-   private Set<Authority> authorities;
+    @ManyToMany
+    @JoinTable(name = "member_authority", joinColumns = {
+            @JoinColumn(name = "member_id", referencedColumnName = "member_id") }, inverseJoinColumns = {
+                    @JoinColumn(name = "authority_name", referencedColumnName = "authority_name") })
+    private Set<Authority> authorities;
 
     /**
-     *연관관계 편의 메소드
+     * 연관관계 편의 메소드
      */
     public void addClubList(ClubMember clubMember) {
         this.clubList.add(clubMember);
         clubMember.setMember(this);
     }
-    public static Member createMember(String name,String email){
+
+    public static Member createMember(String name, String email) {
         Member member = Member.builder()
                 .name(name)
                 .email(email)
                 .build();
         return member;
     }
-    public static Member createMemberWithId(Long id,String name,String email){
+
+    public static Member createMemberWithId(Long id, String name, String email) {
         Member member = Member.builder()
                 .id(id)
                 .name(name)
@@ -83,12 +85,12 @@ public class Member extends BaseTimeEntity{
         this.rentals.add(rental);
         rental.setMember(this);
     }
-    public List<ClubMember> getClubListWithoutWait(){
-        return this.clubList.stream().filter(cm-> cm.getRole() != ClubRole.WAIT).collect(Collectors.toList());
+
+    public List<ClubMember> getClubListWithoutWait() {
+        return this.clubList.stream().filter(cm -> cm.getRole() != ClubRole.WAIT).collect(Collectors.toList());
     }
 
     public void deleteClub(ClubMember clubMember) {
         this.clubList.remove(clubMember);
     }
 }
-

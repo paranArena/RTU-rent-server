@@ -8,7 +8,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-@Getter @Setter
+
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,14 +24,15 @@ public class ItemDto {
 
     private RentalDto rentalDto;
 
-    public static ItemDto from(Item item){
-        if(item == null) return null;
+    public static ItemDto from(Item item) {
+        if (item == null)
+            return null;
 
         return ItemDto.builder()
-        .id(item.getId())
-        .numbering(item.getNumbering())
-        .rentalPolicy(item.getRentalPolicy())
-        .rentalDto(RentalDto.from(item.getRental()))
-        .build();
+                .id(item.getId())
+                .numbering(item.getNumbering())
+                .rentalPolicy(item.getRentalPolicy())
+                .rentalDto(RentalDto.from(item.getRental()))
+                .build();
     }
 }

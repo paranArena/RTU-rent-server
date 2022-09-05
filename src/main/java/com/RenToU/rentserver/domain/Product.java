@@ -1,6 +1,5 @@
 package com.RenToU.rentserver.domain;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,13 +24,15 @@ import java.util.List;
 import static javax.persistence.FetchType.LAZY;
 
 //물품 ex) 책, 우산
-@Entity @Setter
+@Entity
+@Setter
 @Getter
 @Builder
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class Product extends BaseTimeEntity{
-    @GeneratedValue(strategy = GenerationType.IDENTITY) @Id
+public class Product extends BaseTimeEntity {
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
     @Column(name = "product_id")
     private Long id;
 
@@ -68,15 +69,17 @@ public class Product extends BaseTimeEntity{
         items.add(item);
         item.setProduct(this);
     }
-    public void setClub(Club club){
+
+    public void setClub(Club club) {
         this.club = club;
     }
-    //클럽과의 관계 생성, item 생성
+
+    // 클럽과의 관계 생성, item 생성
     public void initialSetting(Club club, List<RentalPolicy> policies) {
         this.setClub(club);
         this.setLocationJpa(location);
-        for(int i = 1; i <= policies.size(); i++){
-            Item item = Item.createItem(this,policies.get(i-1),i);
+        for (int i = 1; i <= policies.size(); i++) {
+            Item item = Item.createItem(this, policies.get(i - 1), i);
             this.addItem(item);
         }
     }
@@ -85,7 +88,8 @@ public class Product extends BaseTimeEntity{
         location.setProduct(this);
     }
 
-    public static Product createProduct(String name, String category,Location location,int fifoRentalPeriod, int reserveRentalPeriod,int price, String caution,String imagePath){
+    public static Product createProduct(String name, String category, Location location, int fifoRentalPeriod,
+            int reserveRentalPeriod, int price, String caution, String imagePath) {
         Product product = Product.builder()
                 .name(name)
                 .category(category)
@@ -99,8 +103,6 @@ public class Product extends BaseTimeEntity{
         product.items = new ArrayList<>();
         return product;
     }
-
-
 
     /**
      * 비즈니스 로직
