@@ -1,7 +1,6 @@
 package com.RenToU.rentserver.application;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Random;
 
 import com.RenToU.rentserver.dto.request.EmailDto;
@@ -9,7 +8,6 @@ import com.RenToU.rentserver.dto.request.EmailVerifyDto;
 import com.RenToU.rentserver.exceptions.NotAjouEmailException;
 import com.RenToU.rentserver.exceptions.WrongEmailCodeException;
 import com.RenToU.rentserver.util.RedisUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -60,7 +58,7 @@ public class MemberService {
                 .phoneNumber(signupDTO.getPhoneNumber())
                 .studentId(signupDTO.getStudentId())
                 .major(signupDTO.getMajor())
-                .activated(true)
+                .activated(false)
                 .authorities(Collections.singleton(authority))
                 .build();
 
@@ -138,6 +136,5 @@ public class MemberService {
         if (!domain.equals("ajou.ac.kr")) {
             throw new NotAjouEmailException();
         }
-
     }
 }
