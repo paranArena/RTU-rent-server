@@ -13,12 +13,14 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductPreviewDto {
-
+    private Long id;
     private String name;
     private int quantity;
     private int maxQuantity;
     private String clubName;
     private String thumbnailPath;
+    private Long clubId;
+
 
     public static ProductPreviewDto from(Product product) {
         if (product == null)
@@ -30,6 +32,8 @@ public class ProductPreviewDto {
                 .maxQuantity(product.getItems().size())
                 .clubName(product.getClub().getName())
                 .thumbnailPath(product.getImagePath())
+                .clubId(product.getClub().getId())
+                .id(product.getId())
                 .build();
     }
 }

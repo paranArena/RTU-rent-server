@@ -1,5 +1,7 @@
 package com.RenToU.rentserver.controller.member;
 
+import com.RenToU.rentserver.application.ProductService;
+import com.RenToU.rentserver.domain.Product;
 import com.RenToU.rentserver.dto.StatusCode;
 import com.RenToU.rentserver.dto.response.ClubRoleDto;
 import com.RenToU.rentserver.dto.response.MemberInfoDto;
@@ -8,6 +10,7 @@ import com.RenToU.rentserver.dto.response.ResponseDto;
 import com.RenToU.rentserver.dto.response.ResponseMessage;
 import com.RenToU.rentserver.dto.response.preview.ClubPreviewDto;
 import com.RenToU.rentserver.dto.response.preview.NotificationPreviewDto;
+import com.RenToU.rentserver.dto.response.preview.ProductPreviewDto;
 import com.github.dozermapper.core.Mapper;
 import com.RenToU.rentserver.application.ClubService;
 import com.RenToU.rentserver.application.MemberService;
@@ -36,6 +39,8 @@ public class MyController {
     private final MemberService memberService;
     private final ClubService clubService;
     private final NotificationService notificationService;
+
+    private final ProductService productService;
     private final Mapper mapper;
 
     @GetMapping("/info")
@@ -106,5 +111,15 @@ public class MyController {
         ClubRoleDto resData = new ClubRoleDto(clubRole);
 
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_MY_CLUB_ROLE, resData));
+    }
+    @GetMapping("/products")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    public ResponseEntity<?> getMyProducts(HttpServletRequest request) {
+        Long memberId = memberService.getMyIdWithAuthorities();
+        List<Product> products = productService.getMyProducts(memberId);
+        List<ProductPreviewDto> resData = products.stream()
+                .map(product -> ProductPreviewDto.from(product))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_MY_PRODUCT, resData));
     }
 }
