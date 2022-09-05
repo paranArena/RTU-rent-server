@@ -30,6 +30,8 @@ public class ClubPreviewDto {
 
     private ClubRole clubRole;
 
+    private int clubMemberSize;
+
     public static ClubPreviewDto from(Club club) {
         if (club == null)
             return null;
@@ -40,6 +42,7 @@ public class ClubPreviewDto {
                 .introduction(club.getIntroduction())
                 .thumbnailPath(club.getThumbnailPath())
                 .hashtags(club.getHashtagNames())
+                .clubMemberSize(club.getMemberList().size())
                 .build();
     }
 }

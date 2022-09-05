@@ -1,6 +1,7 @@
 package com.RenToU.rentserver.controller.advice;
 
 import com.RenToU.rentserver.dto.ErrorResponse;
+import com.RenToU.rentserver.exceptions.MemberNotActivatedException;
 import com.RenToU.rentserver.exceptions.NotAjouEmailException;
 import com.RenToU.rentserver.exceptions.WrongEmailCodeException;
 import com.RenToU.rentserver.exceptions.club.CannotJoinClubException;
@@ -28,5 +29,10 @@ public class MemberErrorAdvice {
     @ExceptionHandler(NotAjouEmailException.class)
     public ErrorResponse NotAjouEmail() {
         return new ErrorResponse("아주대 이메일이 아닙니다.");
+    }
+
+    @ExceptionHandler(MemberNotActivatedException.class)
+    public ErrorResponse MemberNotActivated(MemberNotActivatedException ex) {
+        return new ErrorResponse(ex.getMessage());
     }
 }
