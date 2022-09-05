@@ -18,11 +18,12 @@ import java.util.List;
 @Service
 public class ScheduleService {
     private final RentalRepository rentalRepository;
+
     @Transactional
     public void checkExpiredRentalWait() {
         List<Rental> rentals = rentalRepository.findAllByRentalStatus(RentalStatus.WAIT);
-        rentals.stream().forEach(rental->{
-            if(rental.getRentDate().plusMinutes(10).isBefore(LocalDateTime.now())){
+        rentals.stream().forEach(rental -> {
+            if (rental.getRentDate().plusMinutes(10).isBefore(LocalDateTime.now())) {
                 rentalRepository.deleteById(rental.getId());
             }
         });

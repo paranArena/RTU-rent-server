@@ -28,11 +28,10 @@ public class ClubMemberController {
     @GetMapping("/{memberId}")
     public ResponseEntity<?> getClubMember(@PathVariable long clubId, @PathVariable long memberId) {
         List<ClubMember> allClubMembers = clubService.getAllMembers(clubId);
-        ClubMember target = 
-            allClubMembers.stream()
-            .filter((cm)->cm.getMember().getId()==memberId)
-            .collect(Collectors.toList())
-            .get(0); // FIXEME: java.lang.IndexOutOfBoundsException
+        ClubMember target = allClubMembers.stream()
+                .filter((cm) -> cm.getMember().getId() == memberId)
+                .collect(Collectors.toList())
+                .get(0); // FIXEME: java.lang.IndexOutOfBoundsException
         ClubMemberDto resData = ClubMemberDto.from(target);
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_CLUB_MEMBER, resData));
     }
@@ -40,11 +39,9 @@ public class ClubMemberController {
     @GetMapping("/search/all")
     public ResponseEntity<?> searchClubMembersAll(@PathVariable Long clubId) {
         List<ClubMember> allClubMembers = clubService.getAllMembers(clubId);
-        List<ClubMemberDto> resData = 
-            allClubMembers.stream()
-            .map((cm)->ClubMemberDto.from(cm))
-            .collect(Collectors.toList());
+        List<ClubMemberDto> resData = allClubMembers.stream()
+                .map((cm) -> ClubMemberDto.from(cm))
+                .collect(Collectors.toList());
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_CLUB_MEMBER, resData));
     }
 }
-

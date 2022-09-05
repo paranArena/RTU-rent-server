@@ -26,6 +26,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+
 @SpringBootTest
 @Transactional
 @DisplayName("productService 통합 테스트")
@@ -42,14 +43,11 @@ class ProductServiceWebTest {
     private Member owner;
     private Club club;
 
-
-
     @BeforeEach
     void setUp() {
         service = new ProductService(mapper, clubRepository, memberRepository, productRepository);
         owner = memberRepository.findById(2L).get();
         club = clubRepository.findById(1L).get();
-
 
     }
 
@@ -63,17 +61,22 @@ class ProductServiceWebTest {
             @DisplayName("새 product를 생성하고 리턴한다.")
             void it_return_new_product() {
                 Location location = new Location("Test Location", 1.0, 1.0);
-                CreateProductServiceDto dto = new CreateProductServiceDto(club.getId(), owner.getId(), null, "카메라", "전자기기", 100000, List.of(RentalPolicy.FIFO, RentalPolicy.FIFO, RentalPolicy.RESERVE),3,3,  location,"caution");
+                CreateProductServiceDto dto = new CreateProductServiceDto(club.getId(), owner.getId(), null, "카메라",
+                        "전자기기", 100000, List.of(RentalPolicy.FIFO, RentalPolicy.FIFO, RentalPolicy.RESERVE), 3, 3,
+                        location, "caution");
                 Product product = service.registerProduct(dto);
                 assertThat(product.getName()).isEqualTo("카메라");
                 assertThat(product.getLocation().getX()).isEqualTo(location.getX());
                 assertThat(product.getLocation().getY()).isEqualTo(location.getY());
             }
+
             @Test
             @DisplayName("item을 rentalPreiod 개수만큼 생성한다.")
             void it_create_item_based_on_rentalPeriod_size() {
-                Location location = new Location("Test Location",1.0, 1.0);
-                CreateProductServiceDto dto = new CreateProductServiceDto(club.getId(), owner.getId(), null, "카메라", "전자기기", 100000, List.of(RentalPolicy.FIFO, RentalPolicy.FIFO, RentalPolicy.RESERVE),3,3, location,"caution");
+                Location location = new Location("Test Location", 1.0, 1.0);
+                CreateProductServiceDto dto = new CreateProductServiceDto(club.getId(), owner.getId(), null, "카메라",
+                        "전자기기", 100000, List.of(RentalPolicy.FIFO, RentalPolicy.FIFO, RentalPolicy.RESERVE), 3, 3,
+                        location, "caution");
                 Product product = service.registerProduct(dto);
                 assertThat(product.getItems().size()).isEqualTo(3);
                 assertThat(product.getItems().get(0).getRentalPolicy()).isEqualTo(RentalPolicy.FIFO);

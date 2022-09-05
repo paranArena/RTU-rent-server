@@ -27,8 +27,8 @@ import javax.persistence.CascadeType;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-//물건 ex:) 1번 우산, 2번 책
-public class Item extends BaseTimeEntity{
+// 물건 ex:) 1번 우산, 2번 책
+public class Item extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "item_id")
@@ -45,13 +45,13 @@ public class Item extends BaseTimeEntity{
     @OneToOne(mappedBy = "item", fetch = LAZY)
     private Rental rental;
 
-    public static Item createItem(Product product,RentalPolicy rentalPolicy, int numbering) {
-       Item item = Item.builder()
-               .numbering(numbering)
-               .rentalPolicy(rentalPolicy)
-               .product(product)
-               .build();
-       return item;
+    public static Item createItem(Product product, RentalPolicy rentalPolicy, int numbering) {
+        Item item = Item.builder()
+                .numbering(numbering)
+                .rentalPolicy(rentalPolicy)
+                .product(product)
+                .build();
+        return item;
     }
 
     public void setProduct(Product product) {
@@ -61,8 +61,8 @@ public class Item extends BaseTimeEntity{
     /**
      * 비즈니스 로직
      */
-    public void validateRentable(){
-        if(this.rental != null){
+    public void validateRentable() {
+        if (this.rental != null) {
             throw new CannotRentException(this.id);
         }
     }

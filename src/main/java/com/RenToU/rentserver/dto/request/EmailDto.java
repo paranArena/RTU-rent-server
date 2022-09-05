@@ -1,4 +1,5 @@
 package com.RenToU.rentserver.dto.request;
+
 import lombok.Data;
 
 import javax.validation.constraints.Email;

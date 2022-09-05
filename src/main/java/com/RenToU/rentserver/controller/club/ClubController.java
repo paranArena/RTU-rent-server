@@ -37,13 +37,15 @@ public class ClubController {
     private final Mapper mapper;
 
     @PostMapping("")
-    public ResponseEntity<?> createClub(@RequestParam("name") String name, @RequestParam("introduction") String intro, @RequestParam("thumbnail") MultipartFile thumbnail,@RequestParam("hashtags") List<String> hashtags) throws IOException {
+    public ResponseEntity<?> createClub(@RequestParam("name") String name, @RequestParam("introduction") String intro,
+            @RequestParam("thumbnail") MultipartFile thumbnail, @RequestParam("hashtags") List<String> hashtags)
+            throws IOException {
         long memberId = memberService.getMyIdWithAuthorities();
         String thumbnailPath = "https://ren2u.s3.ap-northeast-2.amazonaws.com/images.jpg";
-        if(!thumbnail.isEmpty()) {
+        if (!thumbnail.isEmpty()) {
             thumbnailPath = s3Service.upload(thumbnail);
         }
-        
+
         Club club = clubService.createClub(memberId, name, intro, thumbnailPath, hashtags);
         ClubInfoDto resData = ClubInfoDto.from(club);
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.CREATE_CLUB, resData));
@@ -57,12 +59,15 @@ public class ClubController {
     }
 
     @PutMapping("/{clubId}")
-    public ResponseEntity<?> updateClub(@RequestParam("name") String name, @RequestParam("introduction") String intro, @RequestParam("thumbnail") MultipartFile thumbnail,@RequestParam("hashtags") List<String> hashtags) throws IOException {
+    public ResponseEntity<?> updateClub(@RequestParam("name") String name, @RequestParam("introduction") String intro,
+            @RequestParam("thumbnail") MultipartFile thumbnail, @RequestParam("hashtags") List<String> hashtags)
+            throws IOException {
         String thumbnailPath = null;
-        if(!thumbnail.isEmpty()){
+        if (!thumbnail.isEmpty()) {
             thumbnailPath = s3Service.upload(thumbnail);
         }
-        Club club = clubService.createClub(memberService.getMyIdWithAuthorities(), name, intro, thumbnailPath,hashtags);
+        Club club = clubService.createClub(memberService.getMyIdWithAuthorities(), name, intro, thumbnailPath,
+                hashtags);
         ClubInfoDto resData = mapper.map(club, ClubInfoDto.class);
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.UPDATE_CLUB, resData));
     }
@@ -73,6 +78,5 @@ public class ClubController {
         clubService.deleteClub(memberId, clubId);
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.DELETE_CLUB, null));
     }
-
 
 }

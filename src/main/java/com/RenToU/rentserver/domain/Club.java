@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Club extends BaseTimeEntity{
+public class Club extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "club_id")
@@ -36,7 +36,7 @@ public class Club extends BaseTimeEntity{
     private String name;
 
     private String introduction;
-    
+
     private String thumbnailPath;
 
     @Builder.Default
@@ -46,7 +46,7 @@ public class Club extends BaseTimeEntity{
     @Builder.Default
     @OneToMany(mappedBy = "club", cascade = CascadeType.ALL)
     private List<Notification> notifications = new ArrayList<>();
-    
+
     @Builder.Default
     @OneToMany(mappedBy = "club", cascade = CascadeType.ALL)
     private List<Product> products = new ArrayList<>();
@@ -55,53 +55,56 @@ public class Club extends BaseTimeEntity{
     @OneToMany(mappedBy = "club", cascade = CascadeType.ALL)
     private List<ClubHashtag> hashtags = new ArrayList<>();
 
-    //연관관계 편의 메소드
-    public void addClubMember(ClubMember clubMember){
+    // 연관관계 편의 메소드
+    public void addClubMember(ClubMember clubMember) {
         memberList.add(clubMember);
         clubMember.setClub(this);
     }
+
     public void addProduct(Product product) {
         products.add(product);
         product.setClub(this);
     }
-    public void addHashtag(ClubHashtag clubHashtag){
+
+    public void addHashtag(ClubHashtag clubHashtag) {
         hashtags.add(clubHashtag);
         clubHashtag.setClub(this);
     }
-    public void addNotification(Notification notification){
+
+    public void addNotification(Notification notification) {
         notifications.add(notification);
         notification.setClub(this);
     }
 
-
-    public static Club createClub(String clubName, String clubIntro, String thumbnailPath,Member member,List<Hashtag> hashtags) {
+    public static Club createClub(String clubName, String clubIntro, String thumbnailPath, Member member,
+            List<Hashtag> hashtags) {
         Club club = Club.builder()
                 .name(clubName)
                 .introduction(clubIntro)
                 .thumbnailPath(thumbnailPath)
                 .build();
-        for(Hashtag hashtag : hashtags){
-            ClubHashtag.createClubHashtag(club,hashtag);
+        for (Hashtag hashtag : hashtags) {
+            ClubHashtag.createClubHashtag(club, hashtag);
         }
         ClubMember.createClubMember(club, member, ClubRole.OWNER);
         return club;
     }
 
-    public ClubMember findClubMemberByMember(Member member) throws ClubMemberNotFoundException{
+    public ClubMember findClubMemberByMember(Member member) throws ClubMemberNotFoundException {
         Optional<ClubMember> clubMember = this.getMemberList().stream().filter(cm -> {
             return cm.getMember().getId() == member.getId();
         }).findFirst();
-        if(clubMember.isEmpty()){
+        if (clubMember.isEmpty()) {
             throw new ClubMemberNotFoundException(member.getId());
         }
         return clubMember.get();
     }
-    public List<String> getHashtagNames(){
-        return this.hashtags.stream().map(hashtag->{
+
+    public List<String> getHashtagNames() {
+        return this.hashtags.stream().map(hashtag -> {
             return hashtag.getHashtag().getName();
         }).collect(Collectors.toList());
     }
-
 
     public void deleteMember(ClubMember clubMember) {
         this.memberList.remove(clubMember);

@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ClubMemberDto {
-    
+
     private Long id;
 
     private String email;
@@ -29,17 +29,17 @@ public class ClubMemberDto {
     private ClubRole clubRole;
 
     public static ClubMemberDto from(ClubMember clubMember) {
-        if(clubMember == null) return null;
+        if (clubMember == null)
+            return null;
 
         return ClubMemberDto.builder()
-            .id(clubMember.getMember().getId())
-            .email(clubMember.getMember().getEmail())
-            .name(clubMember.getMember().getName())
-            .phoneNumber(clubMember.getMember().getPhoneNumber())
-            .studentId(clubMember.getMember().getStudentId())
-            .major(clubMember.getMember().getMajor())
-            .clubRole(clubMember.getRole())
-            .build();
+                .id(clubMember.getMember().getId())
+                .email(clubMember.getMember().getEmail())
+                .name(clubMember.getMember().getName())
+                .phoneNumber(clubMember.getMember().getPhoneNumber())
+                .studentId(clubMember.getMember().getStudentId())
+                .major(clubMember.getMember().getMajor())
+                .clubRole(clubMember.getRole())
+                .build();
     }
 }
-

@@ -21,7 +21,7 @@ public class UpdateNotificationDto {
     @NotBlank
     @Mapping("title")
     private String title;
-    
+
     @NotBlank
     @Mapping("content")
     private String content;
@@ -36,4 +36,3 @@ public class UpdateNotificationDto {
 
     private List<String> imagePath;
 }
-
