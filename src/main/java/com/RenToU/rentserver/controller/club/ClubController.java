@@ -8,7 +8,6 @@ import com.RenToU.rentserver.dto.*;
 import com.RenToU.rentserver.dto.response.ClubInfoDto;
 import com.RenToU.rentserver.dto.response.ResponseDto;
 import com.RenToU.rentserver.dto.response.ResponseMessage;
-import com.github.dozermapper.core.Mapper;
 
 import lombok.RequiredArgsConstructor;
 
@@ -34,7 +33,6 @@ public class ClubController {
     private final ClubService clubService;
     private final MemberService memberService;
     private final S3Service s3Service;
-    private final Mapper mapper;
 
     @PostMapping("")
     public ResponseEntity<?> createClub(@RequestParam("name") String name, @RequestParam("introduction") String intro,
@@ -52,9 +50,9 @@ public class ClubController {
     }
 
     @GetMapping("/{clubId}/info")
-    public ResponseEntity<?> getClub(@PathVariable long clubId) {
+    public ResponseEntity<?> getClubInfo(@PathVariable long clubId) {
         Club club = clubService.findClubById(clubId);
-        ClubInfoDto resData = mapper.map(club, ClubInfoDto.class);
+        ClubInfoDto resData = ClubInfoDto.from(club);
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_CLUB, resData));
     }
 
@@ -68,7 +66,7 @@ public class ClubController {
         }
         Club club = clubService.createClub(memberService.getMyIdWithAuthorities(), name, intro, thumbnailPath,
                 hashtags);
-        ClubInfoDto resData = mapper.map(club, ClubInfoDto.class);
+        ClubInfoDto resData = ClubInfoDto.from(club);
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.UPDATE_CLUB, resData));
     }
 

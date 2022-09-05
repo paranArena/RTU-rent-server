@@ -24,6 +24,7 @@ public class HashtagService {
 
     public List<Club> findClubsWithHashtag(String hashtagName) {
         Hashtag hashtag = findHashtagByName(hashtagName);
+        // TODO nullpointexception
         List<ClubHashtag> clubHashtags = clubHashtagRepository.findByHashtag(hashtag);
         List<Club> clubs = clubHashtags.stream().map(clubHashtag -> {
             return clubHashtag.getClub();
