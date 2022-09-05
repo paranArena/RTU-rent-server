@@ -28,36 +28,41 @@ public class ProductService {
     private final ClubRepository clubRepository;
     private final MemberRepository memberRepository;
     private final ProductRepository productRepository;
+
     @Transactional
-    public Product registerProduct(CreateProductServiceDto dto){
+    public Product registerProduct(CreateProductServiceDto dto) {
         Club club = findClub(dto.getClubId());
         Member requester = findMember(dto.getMemberId());
         club.findClubMemberByMember(requester).validateAdmin();
-        Product product = mapper.map(dto,Product.class);
+        Product product = mapper.map(dto, Product.class);
         product.initialSetting(club, dto.getRentalPolicies());
         productRepository.save(product);
         clubRepository.save(club);
         return product;
     }
+
     @Transactional
-    public void registerItem(Long productId, Long memberId, RentalPolicy rentalPolicy, int numbering){
+    public void registerItem(Long productId, Long memberId, RentalPolicy rentalPolicy, int numbering) {
         Product product = findProduct(productId);
         Member requester = findMember(memberId);
         Club club = product.getClub();
         club.findClubMemberByMember(requester).validateAdmin();
-        Item item = Item.createItem(product,rentalPolicy,numbering);
+        Item item = Item.createItem(product, rentalPolicy, numbering);
         // product.addQuantity();
         product.addItem(item);
         productRepository.save(product);
     }
-    private Member findMember(Long id){
+
+    private Member findMember(Long id) {
         return memberRepository.findById(id)
                 .orElseThrow(() -> new MemberNotFoundException(id));
     }
-    private Product findProduct(Long id){
+
+    private Product findProduct(Long id) {
         return productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(id));
     }
+
     private Club findClub(Long id) {
         return clubRepository.findById(id)
                 .orElseThrow(() -> new ClubNotFoundException(id));

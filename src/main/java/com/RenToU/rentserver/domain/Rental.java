@@ -35,25 +35,25 @@ import static javax.persistence.FetchType.LAZY;
 @RequiredArgsConstructor
 @AllArgsConstructor
 public class Rental {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="rental_id")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "rental_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinColumn(name="member_id")
+    @JoinColumn(name = "member_id")
     private Member member;
 
     @Enumerated(EnumType.STRING)
     private RentalStatus rentalStatus;
 
-    private LocalDateTime rentDate;//렌탈 시작 시간
+    private LocalDateTime rentDate;// 렌탈 시작 시간
 
-    private LocalDateTime expDate;//렌탈 만료 시간
+    private LocalDateTime expDate;// 렌탈 만료 시간
 
     @OneToOne(fetch = LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "item_id")
     private Item item;
-
 
     public static Rental createRental(Item item, Member member) {
         Rental rental = Rental.builder()
@@ -65,13 +65,13 @@ public class Rental {
         item.setRental(rental);
         return rental;
     }
-    public void cancel(){
-        if(this.rentalStatus != RentalStatus.WAIT) {
+
+    public void cancel() {
+        if (this.rentalStatus != RentalStatus.WAIT) {
             throw new IllegalStateException("렌탈을 취소할 수 없는 상태입니다.");
         }
         this.rentalStatus = rentalStatus.CANCEL;
         this.getItem().finishRental();
-
 
     }
 
@@ -80,32 +80,34 @@ public class Rental {
         this.rentDate = LocalDateTime.now();
         this.setExpDate();
     }
+
     public void finishRental() {
         this.rentalStatus = rentalStatus.DONE;
         this.getItem().finishRental();
     }
 
     private void setExpDate() {
-        if(this.getItem().getRentalPolicy() == RentalPolicy.FIFO) {
+        if (this.getItem().getRentalPolicy() == RentalPolicy.FIFO) {
             this.expDate = LocalDateTime.now().plusDays(this.getItem().getProduct().getFifoRentalPeriod());
-        }else{
+        } else {
             this.expDate = LocalDateTime.now().plusDays(this.getItem().getProduct().getReserveRentalPeriod());
         }
     }
 
     public void validateRent() {
-        if(this.rentalStatus != RentalStatus.RENT){
+        if (this.rentalStatus != RentalStatus.RENT) {
             throw new NotRentingException(this.id);
         }
     }
+
     public void validateWait() {
-        if(this.rentalStatus != RentalStatus.WAIT){
+        if (this.rentalStatus != RentalStatus.WAIT) {
             throw new NotWaitingException(this.id);
         }
     }
 
     public void validateMember(Member member) {
-        if(this.member != member){
+        if (this.member != member) {
             throw new NotRentingException(this.id);
         }
     }
@@ -118,13 +120,12 @@ public class Rental {
         this.item = item;
     }
 
-
     public void setRentDateBeforeTenM() {
         this.rentDate = this.rentDate.minusMinutes(10);
     }
 
     public void checkLate() {
-        if(this.expDate.isBefore(LocalDateTime.now())){
+        if (this.expDate.isBefore(LocalDateTime.now())) {
             this.rentalStatus = RentalStatus.LATE;
         }
     }

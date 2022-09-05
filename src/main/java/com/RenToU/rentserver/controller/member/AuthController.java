@@ -1,6 +1,8 @@
 package com.RenToU.rentserver.controller.member;
 
 import com.RenToU.rentserver.dto.StatusCode;
+import com.RenToU.rentserver.dto.request.EmailDto;
+import com.RenToU.rentserver.dto.request.EmailVerifyDto;
 import com.RenToU.rentserver.dto.request.LoginDto;
 import com.RenToU.rentserver.dto.request.SignupDto;
 import com.RenToU.rentserver.dto.response.MemberInfoDto;
@@ -61,22 +63,34 @@ public class AuthController {
 
     @PostMapping("/authenticate")
     public ResponseEntity<TokenDto> login(@Valid @RequestBody LoginDto loginDto) {
-        UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword());
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+                loginDto.getEmail(), loginDto.getPassword());
 
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String jwt = tokenProvider.createToken(authentication);
-        
+
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
 
         return new ResponseEntity<>(new TokenDto(jwt), httpHeaders, HttpStatus.OK);
     }
 
+    @PostMapping("members/email/requestCode")
+    public ResponseEntity<?> authEmail(@RequestBody @Valid EmailDto request) {
+        memberService.authEmail(request);
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.REQUEST_EMAIL_VERIFICATION, null));
+    }
+
+    @PostMapping("members/email/verifyCode")
+    public ResponseEntity<?> verifyCode(@RequestBody @Valid EmailVerifyDto request) {
+        memberService.verifyCode(request);
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.EMAIL_VERIFIED, null));
+    }
+
     @PostMapping("/logout")
-    public  ResponseEntity<?> logout(){
+    public ResponseEntity<?> logout() {
         // TODO ?
         return new ResponseEntity<>(HttpStatus.OK);
     }

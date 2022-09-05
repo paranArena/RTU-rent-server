@@ -22,19 +22,20 @@ public class HashtagService {
     private final HashtagRepository hashtagRepository;
     private final ClubHashtagRepository clubHashtagRepository;
 
-    public List<Club> findClubsWithHashtag(String hashtagName){
+    public List<Club> findClubsWithHashtag(String hashtagName) {
         Hashtag hashtag = findHashtagByName(hashtagName);
         List<ClubHashtag> clubHashtags = clubHashtagRepository.findByHashtag(hashtag);
-        List<Club> clubs =  clubHashtags.stream().map(clubHashtag -> {
+        List<Club> clubs = clubHashtags.stream().map(clubHashtag -> {
             return clubHashtag.getClub();
         }).collect(Collectors.toList());
-//        if(clubs.isEmpty()){
-//            throw new ClubNotFoundException("club not found with hashtag");
-//        }
+        // if(clubs.isEmpty()){
+        // throw new ClubNotFoundException("club not found with hashtag");
+        // }
         return clubs;
     }
-    private Hashtag findHashtagByName(String hashtagName){
+
+    private Hashtag findHashtagByName(String hashtagName) {
         return hashtagRepository.findByName(hashtagName)
-                .orElseThrow(()-> new HashtagNotFoundException(hashtagName));
+                .orElseThrow(() -> new HashtagNotFoundException(hashtagName));
     }
 }

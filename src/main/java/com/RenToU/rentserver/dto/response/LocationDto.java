@@ -8,7 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter @Setter
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,13 +18,14 @@ public class LocationDto {
     private Double latitude;
     private Double longitude;
 
-    public static LocationDto from(Location location){
-        if(location == null) return null;
+    public static LocationDto from(Location location) {
+        if (location == null)
+            return null;
 
         return LocationDto.builder()
-        .name(location.getName())
-        .latitude(location.getX())
-        .longitude(location.getY())
-        .build();
+                .name(location.getName())
+                .latitude(location.getX())
+                .longitude(location.getY())
+                .build();
     }
 }

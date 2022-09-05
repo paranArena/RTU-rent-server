@@ -19,11 +19,11 @@ public class ResponseDto<T> {
         this.data = null;
     }
 
-    public static<T> ResponseDto<T> res(final int statusCode, final String responseMessage) {
+    public static <T> ResponseDto<T> res(final int statusCode, final String responseMessage) {
         return res(statusCode, responseMessage, null);
     }
 
-    public static<T> ResponseDto<T> res(final int statusCode, final String responseMessage, final T t) {
+    public static <T> ResponseDto<T> res(final int statusCode, final String responseMessage, final T t) {
         return ResponseDto.<T>builder()
                 .data(t)
                 .statusCode(statusCode)
@@ -31,4 +31,3 @@ public class ResponseDto<T> {
                 .build();
     }
 }
-

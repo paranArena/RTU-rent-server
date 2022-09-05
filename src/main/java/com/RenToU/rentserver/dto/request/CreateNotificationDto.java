@@ -23,11 +23,10 @@ public class CreateNotificationDto {
     @NotBlank
     @Mapping("title")
     private String title;
-    
+
     @NotBlank
     @Mapping("content")
     private String content;
 
     private List<MultipartFile> image;
 }
-

@@ -33,10 +33,9 @@ public class ResponseMessage {
     public static final String SEARCH_NOTIFICATION_SUCCESS = "공지 검색 성공";
     public static final String SEARCH_NOTIFICATION_FIAL = "공지 검색 실패";
 
-
     public static final String SEARCH_CLUB_SUCCESS = "클럽 검색 성공";
     public static final String SEARCH_CLUB_FAIL = "클럽 검색 실패";
-    
+
     public static final String CREATE_PRODUCT = "물품 생성 성공";
 
     public static final String RENT_REQUEST_SUCCESS = "렌탈 요청 성공";
@@ -56,5 +55,6 @@ public class ResponseMessage {
     public static final String GET_MY_INFO = "내 정보 조회 성공";
     public static final String CANCEL_CLUB_JOIN = "클럽 가입 신청 대기 취소 성공";
     public static final String EMAIL_VERIFIED = "이메일 검증 성공";
+    public static final String REQUEST_EMAIL_VERIFICATION = "이메일 인증 메일 발송 성공";
     public static final String LEAVE_CLUB_SUCCESS = "클럽 탈퇴 성공";
 }

@@ -35,9 +35,7 @@ public class SecurityConfig {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().antMatchers("/h2-console/**"
-                , "/favicon.ico"
-                , "/error");
+        return (web) -> web.ignoring().antMatchers("/h2-console/**", "/favicon.ico", "/error");
     }
 
     @Bean

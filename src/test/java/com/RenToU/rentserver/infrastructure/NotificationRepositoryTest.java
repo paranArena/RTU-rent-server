@@ -30,25 +30,26 @@ class NotificationRepositoryTest {
     Club club1;
     Club club2;
     Hashtag hashtag1;
+
     @BeforeEach
-    void setup(){
-         member = memberRepository.findById(1L).get();
-         club1 = Club.createClub("TestClub","this is Test","www.com",member,new ArrayList<>());
-         club2 = Club.createClub("TestClub2","this is Test2","www.com",member,new ArrayList<>());
-         hashtag1 = Hashtag.createHashtag("hash1");
+    void setup() {
+        member = memberRepository.findById(1L).get();
+        club1 = Club.createClub("TestClub", "this is Test", "www.com", member, new ArrayList<>());
+        club2 = Club.createClub("TestClub2", "this is Test2", "www.com", member, new ArrayList<>());
+        hashtag1 = Hashtag.createHashtag("hash1");
     }
+
     @Test
     @DisplayName("notification이 저장 될 시 id, created_at, updated_at이 자동 생성됨")
     void notificationSave() {
         // given
-        Notification notification = Notification.createNotification("Test","content", null, member,club1);
+        Notification notification = Notification.createNotification("Test", "content", null, member, club1);
         repository.save(notification);
         // when
 
         // then
         assertThat(notification.getId()).isEqualTo(1L);
         assertThat(notification.getCreatedAt()).isNotNull();
-
 
     }
 

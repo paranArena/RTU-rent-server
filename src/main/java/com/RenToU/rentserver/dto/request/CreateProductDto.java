@@ -30,7 +30,7 @@ public class CreateProductDto {
     private int fifoRentalPeriod;
 
     private int reserveRentalPeriod;
-    
+
     private String locationName;
 
     private Double latitude;
@@ -38,6 +38,6 @@ public class CreateProductDto {
     private Double longitude;
 
     private String caution;
-    
+
     private MultipartFile image;
 }
