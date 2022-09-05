@@ -18,7 +18,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -71,5 +73,13 @@ public class ProductService {
     public List<Product> getProductsByClub(long memberId, long clubId) {
         Club club = findClub(clubId);
         return club.getProducts();
+    }
+
+    public List<Product> getMyProducts(Long memberId) {
+        Member member = findMember(memberId);
+        List<Club> clubs = member.getClubListWithoutWait().stream().map(cm-> cm.getClub()).collect(Collectors.toList());
+        List<Product> products = new ArrayList<>();
+        clubs.stream().forEach(c-> products.addAll(c.getProducts()));
+        return products;
     }
 }

@@ -57,4 +57,5 @@ public class ResponseMessage {
     public static final String EMAIL_VERIFIED = "이메일 검증 성공";
     public static final String REQUEST_EMAIL_VERIFICATION = "이메일 인증 메일 발송 성공";
     public static final String LEAVE_CLUB_SUCCESS = "클럽 탈퇴 성공";
+    public static final String GET_MY_PRODUCT = "내 물품 조회 성공";
 }
