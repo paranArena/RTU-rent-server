@@ -1,13 +1,17 @@
 package com.RenToU.rentserver.controller.advice;
 
 import com.RenToU.rentserver.dto.ErrorResponse;
+import com.RenToU.rentserver.dto.StatusCode;
+import com.RenToU.rentserver.dto.response.ResponseDto;
 import com.RenToU.rentserver.exceptions.MemberNotActivatedException;
 import com.RenToU.rentserver.exceptions.NotAjouEmailException;
 import com.RenToU.rentserver.exceptions.WrongEmailCodeException;
 import com.RenToU.rentserver.exceptions.club.CannotJoinClubException;
 import com.RenToU.rentserver.exceptions.club.ClubNotFoundException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -32,7 +36,7 @@ public class MemberErrorAdvice {
     }
 
     @ExceptionHandler(MemberNotActivatedException.class)
-    public ErrorResponse MemberNotActivated(MemberNotActivatedException ex) {
-        return new ErrorResponse(ex.getMessage());
+    public ResponseEntity<?> MemberNotActivated(MemberNotActivatedException ex) {
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.UNAUTHORIZED, ex.getMessage()));
     }
 }
