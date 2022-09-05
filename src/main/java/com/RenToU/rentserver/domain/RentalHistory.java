@@ -32,16 +32,17 @@ public class RentalHistory extends BaseTimeEntity {
     @Column(name = "rental_history_id")
     private Long id;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinColumn(name="member_id")
+    @JoinColumn(name = "member_id")
     private Member member;
     @Enumerated(EnumType.STRING)
     private RentalStatus rentalStatus;
-    private LocalDateTime rentDate;//렌탈 시작 시간
-    private LocalDateTime expDate;//반납 기한
-    private LocalDateTime returnDate;//렌탈 만료 시간
+    private LocalDateTime rentDate;// 렌탈 시작 시간
+    private LocalDateTime expDate;// 반납 기한
+    private LocalDateTime returnDate;// 렌탈 만료 시간
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "item_id")
     private Item item;
+
     public static RentalHistory RentalToHistory(Rental rental) {
         RentalHistory rentalHistory = new RentalHistory();
         rentalHistory.member = rental.getMember();

@@ -25,22 +25,22 @@ public class S3Service {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    public String upload(MultipartFile file)  throws IOException {
+    public String upload(MultipartFile file) throws IOException {
         String fileName = file.getOriginalFilename();
         s3Client.putObject(new PutObjectRequest(bucket, fileName, file.getInputStream(), null));
 
         return s3Client.getUrl(bucket, fileName).toString();
     }
 
-    public List<String> imageToPath(List<MultipartFile> images){
+    public List<String> imageToPath(List<MultipartFile> images) {
         List<MultipartFile> filteredImages = new ArrayList<>();
         List<String> imagePaths = new ArrayList<>();
-        if(!isNull(images)) {
+        if (!isNull(images)) {
             filteredImages = images.stream().filter((img) -> !img.isEmpty()).collect(Collectors.toList());
         }
-        if(!filteredImages.isEmpty()){
+        if (!filteredImages.isEmpty()) {
             imagePaths.addAll(
-                    filteredImages.stream().map((img)->{
+                    filteredImages.stream().map((img) -> {
                         try {
                             return upload(img);
                         } catch (IOException e) {
@@ -48,12 +48,10 @@ public class S3Service {
                             e.printStackTrace();
                         }
                         return null;
-                    }).collect(Collectors.toList())
-            );
-        }else{
+                    }).collect(Collectors.toList()));
+        } else {
             imagePaths.add("");
         }
         return imagePaths;
     }
 }
-

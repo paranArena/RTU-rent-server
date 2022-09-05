@@ -31,5 +31,4 @@ public class ClubRentalController {
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_CLUB, resData));
     }
 
-
 }

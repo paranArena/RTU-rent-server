@@ -22,7 +22,7 @@ public class NotificationDto {
     @NotBlank
     @Mapping("title")
     private String title;
-    
+
     @NotBlank
     @Mapping("content")
     private String content;
@@ -34,15 +34,16 @@ public class NotificationDto {
     private LocalDateTime updatedAt;
 
     public static NotificationDto from(Notification notification) {
-        if(notification == null) return null;
+        if (notification == null)
+            return null;
 
         return NotificationDto.builder()
-        .id(notification.getId())
-        .title(notification.getTitle())
-        .content(notification.getContent())
-        .imagePath(notification.getImagePath())
-        .createdAt(notification.getCreatedAt())
-        .updatedAt(notification.getUpdatedAt())
-        .build();
+                .id(notification.getId())
+                .title(notification.getTitle())
+                .content(notification.getContent())
+                .imagePath(notification.getImagePath())
+                .createdAt(notification.getCreatedAt())
+                .updatedAt(notification.getUpdatedAt())
+                .build();
     }
 }

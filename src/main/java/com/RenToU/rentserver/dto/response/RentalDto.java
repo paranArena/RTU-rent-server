@@ -13,7 +13,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-@Getter @Setter
+
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -24,14 +26,14 @@ public class RentalDto {
     private ClubMemberDto member;
 
     private RentalStatus rentalStatus;
-    
-    private LocalDateTime rentDate;//렌탈 시작 시간
 
-    private LocalDateTime expDate;//렌탈 만료 시간
+    private LocalDateTime rentDate;// 렌탈 시작 시간
 
+    private LocalDateTime expDate;// 렌탈 만료 시간
 
-    public static RentalDto from(Rental rental){
-        if(rental == null) return null;
+    public static RentalDto from(Rental rental) {
+        if (rental == null)
+            return null;
         return null;
         // return RentalDto.builder()
         // .id(rental.getId())

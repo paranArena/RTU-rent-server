@@ -30,31 +30,34 @@ public class RentalController {
     private final Mapper mapper;
 
     @PostMapping("/{itemId}/request")
-    public ResponseEntity<?> requestRental(@PathVariable Long clubId,@PathVariable Long itemId) throws IOException{
+    public ResponseEntity<?> requestRental(@PathVariable Long clubId, @PathVariable Long itemId) throws IOException {
         long memberId = memberService.getMyIdWithAuthorities();
-        Rental rental  =  rentalService.requestRental(memberId,itemId);
-        IdDto resData = new IdDto("rentalId",rental.getId());
-        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.RENT_REQUEST_SUCCESS,resData));
+        Rental rental = rentalService.requestRental(memberId, itemId);
+        IdDto resData = new IdDto("rentalId", rental.getId());
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.RENT_REQUEST_SUCCESS, resData));
     }
+
     @PostMapping("/{rentId}/apply")
-    public ResponseEntity<?> applyRental(@PathVariable Long clubId,@PathVariable Long rentId) throws IOException{
+    public ResponseEntity<?> applyRental(@PathVariable Long clubId, @PathVariable Long rentId) throws IOException {
         long memberId = memberService.getMyIdWithAuthorities();
-        Rental rental  =  rentalService.applyRental(memberId,rentId);
-        IdDto resData = new IdDto("rentalId",rental.getId());
-        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.RENT_APPLY_SUCCESS,resData));
+        Rental rental = rentalService.applyRental(memberId, rentId);
+        IdDto resData = new IdDto("rentalId", rental.getId());
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.RENT_APPLY_SUCCESS, resData));
     }
+
     @PostMapping("/{rentId}/return")
-    public ResponseEntity<?> returnRental(@PathVariable Long clubId,@PathVariable Long rentId) throws IOException{
+    public ResponseEntity<?> returnRental(@PathVariable Long clubId, @PathVariable Long rentId) throws IOException {
         long memberId = memberService.getMyIdWithAuthorities();
-        RentalHistory rentalHistory  =  rentalService.returnRental(memberId,rentId);
-        IdDto resData = new IdDto("rentalHistoryId",rentalHistory.getId());
-        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.RENT_RETURN_SUCCESS,resData));
+        RentalHistory rentalHistory = rentalService.returnRental(memberId, rentId);
+        IdDto resData = new IdDto("rentalHistoryId", rentalHistory.getId());
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.RENT_RETURN_SUCCESS, resData));
     }
+
     @PostMapping("/{rentId}/cancel")
-    public ResponseEntity<?> cancelRental(@PathVariable Long clubId,@PathVariable Long rentId) throws IOException{
+    public ResponseEntity<?> cancelRental(@PathVariable Long clubId, @PathVariable Long rentId) throws IOException {
         long memberId = memberService.getMyIdWithAuthorities();
-        RentalHistory rentalHistory  =  rentalService.cancelRental(memberId,rentId);
-        IdDto resData = new IdDto("rentalHistoryId",rentalHistory.getId());
-        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.RENT_CANCEL_SUCCESS,resData));
+        RentalHistory rentalHistory = rentalService.cancelRental(memberId, rentId);
+        IdDto resData = new IdDto("rentalHistoryId", rentalHistory.getId());
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.RENT_CANCEL_SUCCESS, resData));
     }
 }
