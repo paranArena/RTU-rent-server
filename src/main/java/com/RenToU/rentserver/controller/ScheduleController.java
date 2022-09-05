@@ -6,9 +6,11 @@ import com.RenToU.rentserver.dto.response.ResponseDto;
 import com.RenToU.rentserver.dto.response.ResponseMessage;
 
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,12 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/schedule")
 public class ScheduleController {
-    private ScheduleService scheduleService;
+    private final ScheduleService scheduleService;
 
-    @PostMapping("/rental/wait")
-    public ResponseEntity<?> checkExpiredRentalWait(@RequestHeader("scretKey") String secretKey) {
-        if (!secretKey.equals("paranajou2022-2")) {
-            return ResponseEntity.badRequest().build();
+    @DeleteMapping("/rental/wait")
+    public ResponseEntity<?> checkExpiredRentalWait(@RequestHeader("secretKey") String secretKey) {
+        if (!secretKey.equals("ajouparan2022-2")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         scheduleService.checkExpiredRentalWait();
         return ResponseEntity.ok(ResponseDto.res(StatusCode.ACCEPT, ResponseMessage.CHECK_EXPIRED_RENTAL_WAIT));

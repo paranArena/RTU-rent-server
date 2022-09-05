@@ -21,6 +21,7 @@ public class ScheduleService {
 
     @Transactional
     public void checkExpiredRentalWait() {
+        // TODO java.lang.NullPointerException: null
         List<Rental> rentals = rentalRepository.findAllByRentalStatus(RentalStatus.WAIT);
         rentals.stream().forEach(rental -> {
             if (rental.getRentDate().plusMinutes(10).isBefore(LocalDateTime.now())) {
