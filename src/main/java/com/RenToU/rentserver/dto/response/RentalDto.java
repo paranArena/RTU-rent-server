@@ -23,8 +23,6 @@ public class RentalDto {
 
     private Long id;
 
-    private ClubMemberDto member;
-
     private RentalStatus rentalStatus;
 
     private LocalDateTime rentDate;// 렌탈 시작 시간
@@ -34,13 +32,11 @@ public class RentalDto {
     public static RentalDto from(Rental rental) {
         if (rental == null)
             return null;
-        return null;
-        // return RentalDto.builder()
-        // .id(rental.getId())
-        // .member(ClubMemberDto.from(rental.getMember()))
-        // .rentalStatus(rental.getRentalStatus())
-        // .rentDate(rental.getRentDate())
-        // .expDate(rental.getExpDate())
-        // .build();
+        return RentalDto.builder()
+        .id(rental.getId())
+        .rentalStatus(rental.getRentalStatus())
+        .rentDate(rental.getRentDate())
+        .expDate(rental.getExpDate())
+        .build();
     }
 }
