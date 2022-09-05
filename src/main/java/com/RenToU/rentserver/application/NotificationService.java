@@ -83,13 +83,10 @@ public class NotificationService {
         Club club =findClub(clubId);
         Member member = findMember(memberId);
         List<Notification> notifications = new ArrayList<>();
-        if(club.findClubMemberByMember(member).isAdmin()){
+        if(club.findClubMemberByMember(member).isAdmin() || club.findClubMemberByMember(member).isUser()){
             notifications = club.getNotifications();
-        }else if(club.findClubMemberByMember(member).isUser()){
-            notifications = club.getNotifications().stream().filter(n->n.getIsPublic() == true).collect(Collectors.toList());
-        }
-        else {
-            throw new NoUserPermissionException(clubId);
+        }else {
+            notifications = club.getNotifications().stream().filter(n -> n.getIsPublic() == true).collect(Collectors.toList());
         }
         return notifications;
     }
