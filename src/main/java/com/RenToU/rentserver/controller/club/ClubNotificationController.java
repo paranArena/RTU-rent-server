@@ -22,9 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
-import com.RenToU.rentserver.application.ClubService;
 import com.RenToU.rentserver.application.MemberService;
 import com.RenToU.rentserver.dto.StatusCode;
 import com.RenToU.rentserver.dto.request.CreateNotificationDto;
@@ -36,15 +34,12 @@ import com.github.dozermapper.core.Mapper;
 
 import lombok.RequiredArgsConstructor;
 
-import static java.util.Objects.isNull;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/clubs/{clubId}/notifications")
 public class ClubNotificationController {
 
     private final MemberService memberService;
-    private final ClubService clubService;
     private final S3Service s3Service;
     private final NotificationService notificationService;
     private final Mapper mapper;

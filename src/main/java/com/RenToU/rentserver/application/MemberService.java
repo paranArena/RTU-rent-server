@@ -69,6 +69,7 @@ public class MemberService {
 
     @Transactional(readOnly = true)
     public Member getUserWithAuthorities(String email) {
+        // TODO nullpoint
         return memberRepository.findOneWithAuthoritiesByEmail(email).orElse(null);
     }
 
@@ -148,7 +149,7 @@ public class MemberService {
 
     private Member findMemberByEMail(String email) {
         Member member = memberRepository.findOneWithAuthoritiesByEmail(email)
-                .orElseThrow(() -> new MemberNotFoundException(-1L));
+                .orElseThrow(() -> new MemberNotFoundException(email));
         return member;
     }
 }

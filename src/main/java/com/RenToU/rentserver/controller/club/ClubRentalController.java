@@ -22,12 +22,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class ClubRentalController {
 
     private final ClubService clubService;
-    private final Mapper mapper;
 
     @GetMapping("/search/all")
     public ResponseEntity<?> getClubRentals(@PathVariable long clubId) {
         Club club = clubService.findClubById(clubId);
-        ClubInfoDto resData = mapper.map(club, ClubInfoDto.class);
+        ClubInfoDto resData = ClubInfoDto.from(club);
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_CLUB, resData));
     }
 
