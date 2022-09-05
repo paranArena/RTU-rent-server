@@ -9,6 +9,7 @@ import com.RenToU.rentserver.exceptions.club.CannotJoinClubException;
 import com.RenToU.rentserver.exceptions.club.ClubNotFoundException;
 import com.RenToU.rentserver.exceptions.DuplicateMemberException;
 import com.RenToU.rentserver.exceptions.MemberNotFoundException;
+import com.RenToU.rentserver.exceptions.clubMember.ClubMemberNotFoundException;
 import com.RenToU.rentserver.infrastructure.ClubMemberRepository;
 import com.RenToU.rentserver.infrastructure.ClubRepository;
 import com.RenToU.rentserver.infrastructure.HashtagRepository;
@@ -159,7 +160,7 @@ public class ClubServiceImpl implements ClubService{
         try {
             ClubMember cm = club.findClubMemberByMember(member);
             return cm.getRole();
-        } catch (MemberNotFoundException e) {
+        } catch (ClubMemberNotFoundException e) {
             return ClubRole.NONE;
         }
     }
