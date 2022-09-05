@@ -72,6 +72,6 @@ public class ClubProductController {
         List<ProductPreviewDto> resData = products.stream()
                 .map(n -> ProductPreviewDto.from(n))
                 .collect(Collectors.toList());
-        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.SEARCH_NOTIFICATION_SUCCESS, resData));
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.SEARCH_CLUB_PRODUCT_SUCCESS, resData));
     }
 }

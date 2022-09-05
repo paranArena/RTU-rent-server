@@ -94,7 +94,6 @@ public class ClubServiceImpl implements ClubService {
     public List<ClubMember> searchClubJoinsAll(Long clubId, Long memberId) {
         Member member = findMember(memberId);
         Club club = findClub(clubId);
-        // FIXME: MemberNotFoundException
         club.findClubMemberByMember(member).validateAdmin();
         return club.getMemberList().stream()
                 .filter((clubMember) -> clubMember.getRole() == ClubRole.WAIT)
