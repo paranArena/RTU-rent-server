@@ -16,18 +16,16 @@ import com.RenToU.rentserver.application.MemberService;
 import com.RenToU.rentserver.dto.StatusCode;
 import com.RenToU.rentserver.dto.response.ResponseDto;
 import com.RenToU.rentserver.dto.response.ResponseMessage;
-import com.github.dozermapper.core.Mapper;
 
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/clubs/{clubId}/rent")
+@RequestMapping("/clubs/{clubId}/rentals")
 public class RentalController {
 
     private final MemberService memberService;
     private final RentalService rentalService;
-    private final Mapper mapper;
 
     @PostMapping("/{itemId}/request")
     public ResponseEntity<?> requestRental(@PathVariable Long clubId, @PathVariable Long itemId) throws IOException {

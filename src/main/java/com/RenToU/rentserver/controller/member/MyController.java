@@ -96,8 +96,8 @@ public class MyController {
     @GetMapping("/rentals")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<?> getMyRentals(HttpServletRequest request) {
-        List<Rental> clubs = memberService.getMyUserWithAuthorities().getRentals();
-        List<RentalDto> resData = clubs.stream()
+        List<Rental> rentals = memberService.getMyUserWithAuthorities().getRentals();
+        List<RentalDto> resData = rentals.stream()
                 .map((c) -> mapper.map(c, RentalDto.class))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_MY_RENT, resData));
@@ -112,6 +112,7 @@ public class MyController {
 
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_MY_CLUB_ROLE, resData));
     }
+
     @GetMapping("/products")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<?> getMyProducts(HttpServletRequest request) {

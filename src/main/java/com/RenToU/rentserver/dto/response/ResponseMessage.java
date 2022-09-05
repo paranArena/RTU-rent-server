@@ -58,4 +58,8 @@ public class ResponseMessage {
     public static final String REQUEST_EMAIL_VERIFICATION = "이메일 인증 메일 발송 성공";
     public static final String LEAVE_CLUB_SUCCESS = "클럽 탈퇴 성공";
     public static final String GET_MY_PRODUCT = "내 물품 조회 성공";
+
+    public static final String SEARCH_CLUB_PRODUCT_SUCCESS = "클럽 물품 조회 성공";
+
+    public static final String CHECK_EXPIRED_RENTAL_WAIT = "10분 초과 렌탈 요청 삭제";
 }

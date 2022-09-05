@@ -69,6 +69,7 @@ public class SecurityConfig {
                 .antMatchers("/signup").permitAll()
                 .antMatchers("/members/email/requestCode").permitAll()
                 .antMatchers("/members/email/verifyCode").permitAll()
+                .antMatchers("/schedule/**").permitAll()
 
                 .anyRequest().authenticated()
 
