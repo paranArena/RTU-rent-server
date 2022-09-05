@@ -44,7 +44,7 @@ public class ClubProductController {
     private final Mapper mapper;
 
     @PostMapping("")
-    public ResponseEntity<?> createProduct(@PathVariable Long clubId, @Valid @ModelAttribute CreateProductDto createProductDto) throws IOException{
+    public ResponseEntity<?> createProduct (@PathVariable Long clubId, @Valid @ModelAttribute CreateProductDto createProductDto) throws IOException{
         long memberId = memberService.getMyIdWithAuthorities();
         MultipartFile image = createProductDto.getImage();
         String imagePath = null;
