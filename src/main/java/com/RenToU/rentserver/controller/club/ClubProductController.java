@@ -25,7 +25,7 @@ import com.RenToU.rentserver.domain.Location;
 import com.RenToU.rentserver.domain.Product;
 import com.RenToU.rentserver.dto.StatusCode;
 import com.RenToU.rentserver.dto.request.CreateProductDto;
-import com.RenToU.rentserver.dto.response.ProductDto;
+import com.RenToU.rentserver.dto.response.ProductInfoDto;
 import com.RenToU.rentserver.dto.response.ResponseDto;
 import com.RenToU.rentserver.dto.response.ResponseMessage;
 import com.RenToU.rentserver.dto.service.CreateProductServiceDto;
@@ -60,7 +60,7 @@ public class ClubProductController {
         productServiceDto.setClubId(clubId);
         productServiceDto.setMemberId(memberId);
         Product product = productService.registerProduct(productServiceDto);
-        ProductDto resData = ProductDto.from(product);
+        ProductInfoDto resData = ProductInfoDto.from(product);
 
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.CREATE_PRODUCT, resData));
     }
@@ -69,8 +69,8 @@ public class ClubProductController {
     public ResponseEntity<?> searchProductByClub(@PathVariable long clubId) {
         long memberId = memberService.getMyIdWithAuthorities();
         List<Product> products = productService.getProductsByClub(memberId, clubId);
-        List<ProductPreviewDto> resData = products.stream()
-                .map(n -> ProductPreviewDto.from(n))
+        List<ProductInfoDto> resData = products.stream()
+                .map(n -> ProductInfoDto.from(n))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.SEARCH_CLUB_PRODUCT_SUCCESS, resData));
     }

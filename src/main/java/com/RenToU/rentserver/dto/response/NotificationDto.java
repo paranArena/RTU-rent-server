@@ -29,6 +29,8 @@ public class NotificationDto {
 
     private String imagePath;
 
+    private Boolean isPublic;
+
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
@@ -42,6 +44,7 @@ public class NotificationDto {
                 .title(notification.getTitle())
                 .content(notification.getContent())
                 .imagePath(notification.getImagePath())
+                .isPublic(notification.getIsPublic())
                 .createdAt(notification.getCreatedAt())
                 .updatedAt(notification.getUpdatedAt())
                 .build();

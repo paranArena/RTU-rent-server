@@ -63,10 +63,10 @@ public class SecurityConfig {
 
                 .and()
                 .authorizeRequests()
+                .antMatchers("/").permitAll()
                 .antMatchers("/signup").permitAll()
                 .antMatchers("/authenticate").permitAll()
                 .antMatchers("/members/{email}/exists").permitAll()
-                .antMatchers("/signup").permitAll()
                 .antMatchers("/members/email/requestCode").permitAll()
                 .antMatchers("/members/email/verifyCode").permitAll()
                 .antMatchers("/schedule/**").permitAll()

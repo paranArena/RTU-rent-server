@@ -22,7 +22,7 @@ public class ItemDto {
 
     private RentalPolicy rentalPolicy;
 
-    private RentalDto rentalDto;
+    private RentalDto rental;
 
     public static ItemDto from(Item item) {
         if (item == null)
@@ -32,7 +32,7 @@ public class ItemDto {
                 .id(item.getId())
                 .numbering(item.getNumbering())
                 .rentalPolicy(item.getRentalPolicy())
-                .rentalDto(RentalDto.from(item.getRental()))
+                .rental(RentalDto.from(item.getRental()))
                 .build();
     }
 }

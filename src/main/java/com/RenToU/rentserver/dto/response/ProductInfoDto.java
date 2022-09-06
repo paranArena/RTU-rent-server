@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.RenToU.rentserver.domain.Product;
+import com.RenToU.rentserver.dto.response.ItemDto;
+import com.RenToU.rentserver.dto.response.LocationDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductDto {
+public class ProductInfoDto {
     private Long id;
     private String name;
     private String category;
@@ -31,11 +33,11 @@ public class ProductDto {
 
     private List<ItemDto> items;
 
-    public static ProductDto from(Product product) {
+    public static ProductInfoDto from(Product product) {
         if (product == null)
             return null;
 
-        return ProductDto.builder()
+        return ProductInfoDto.builder()
                 .id(product.getId())
                 .name(product.getName())
                 .category(product.getCategory())
