@@ -1,6 +1,7 @@
 package com.RenToU.rentserver.domain;
 
 import com.RenToU.rentserver.exceptions.CannotRentException;
+import com.RenToU.rentserver.exceptions.ItemAlreadyExistException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -46,6 +47,9 @@ public class Item extends BaseTimeEntity {
     private Rental rental;
 
     public static Item createItem(Product product, RentalPolicy rentalPolicy, int numbering) {
+        if(product.getItemByNumbering(numbering) != null){
+            throw new ItemAlreadyExistException();
+        }
         Item item = Item.builder()
                 .numbering(numbering)
                 .rentalPolicy(rentalPolicy)
@@ -75,4 +79,16 @@ public class Item extends BaseTimeEntity {
         this.rental = rental;
         rental.setItem(this);
     }
+
+
+    public void deleteRental() {
+        this.rental = null;
+
+    }
+
+    public void deleteProduct() {
+        this.product.deleteItem(this);
+        this.product = null;
+    }
+
 }
