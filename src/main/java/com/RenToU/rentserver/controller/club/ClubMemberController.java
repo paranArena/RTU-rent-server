@@ -59,11 +59,10 @@ public class ClubMemberController {
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GRANT_ADMIN));
     }
 
-    // TODO
     @PutMapping(value = "{memberId}/role/user")
     public ResponseEntity<?> grantUser(@PathVariable Long clubId, @PathVariable Long memberId) {
         Long ownerId = memberService.getMyIdWithAuthorities();
-        // clubService.grantUser(clubId, ownerId, memberId);
+        clubService.grantUser(clubId, ownerId, memberId);
 
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GRANT_USER));
     }
