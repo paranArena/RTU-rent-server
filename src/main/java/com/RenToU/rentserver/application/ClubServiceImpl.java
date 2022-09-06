@@ -228,6 +228,20 @@ public class ClubServiceImpl implements ClubService {
         clubRepository.save(club);
     }
 
+    @Override
+    @Transactional
+    public void removeClubMember(Long clubId, Long ownerId, Long memberId) {
+        Club club = findClub(clubId);
+        Member owner = findMember(ownerId);
+        club.findClubMemberByMember(owner).validateOwner();
+        Member member = findMember(memberId);
+        ClubMember clubMember = club.findClubMemberByMember(member);
+        // 탈퇴
+        clubMember.delete();
+        clubMemberRepository.deleteById(clubMember.getId());
+        clubRepository.save(club);
+    }
+
     /**
      * validation
      */

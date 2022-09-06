@@ -42,6 +42,8 @@ public interface ClubService {
 
     public void leaveClub(Long clubId, Long userId);
 
+    public void removeClubMember(Long clubId, Long ownerId, Long memberId);
+
     List<Club> getMyClubRequests(long memberId);
 
 }
