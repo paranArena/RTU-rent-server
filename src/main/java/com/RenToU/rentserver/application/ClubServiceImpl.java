@@ -203,6 +203,21 @@ public class ClubServiceImpl implements ClubService {
 
     @Override
     @Transactional
+    public void grantUser(Long clubId, Long ownerId, Long userId) {
+        Club club = findClub(clubId);
+        Member owner = findMember(ownerId);
+        // 요청자가 가입 허락 권한이 있는지 확인
+        club.findClubMemberByMember(owner).validateOwner();
+        // 가입자가 가입 신청 대기 상태인지 확인
+        Member user = findMember(userId);
+        ClubMember clubMember = club.findClubMemberByMember(user);
+        // 가입
+        clubMember.grantUser();
+        clubRepository.save(club);
+    }
+
+    @Override
+    @Transactional
     public void leaveClub(Long clubId, Long userId) {
         Club club = findClub(clubId);
         Member user = findMember(userId);

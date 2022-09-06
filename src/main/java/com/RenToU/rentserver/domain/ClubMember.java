@@ -3,7 +3,7 @@ package com.RenToU.rentserver.domain;
 import com.RenToU.rentserver.exceptions.NoOwnerPermissionException;
 import com.RenToU.rentserver.exceptions.NotClubRoleWaitingException;
 import com.RenToU.rentserver.exceptions.NotWaitingException;
-import com.RenToU.rentserver.exceptions.club.CannotGrantAdminException;
+import com.RenToU.rentserver.exceptions.club.CannotGrantException;
 import com.RenToU.rentserver.exceptions.club.CannotJoinClubException;
 import com.RenToU.rentserver.exceptions.NoAdminPermissionException;
 import lombok.AllArgsConstructor;
@@ -74,7 +74,15 @@ public class ClubMember extends BaseTimeEntity {
         if (this.role == ClubRole.USER) {
             this.role = ClubRole.ADMIN;
         } else {
-            throw new CannotGrantAdminException(this.club.getId(), this.club.getName(), "사용자가 클럽 유저가 아닙니다.");
+            throw new CannotGrantException(this.club.getId(), this.club.getName(), "사용자가 클럽 유저가 아닙니다.");
+        }
+    }
+
+    public void grantUser() {
+        if (this.role == ClubRole.ADMIN) {
+            this.role = ClubRole.USER;
+        } else {
+            throw new CannotGrantException(this.club.getId(), this.club.getName(), "사용자가 클럽 관리자가 아닙니다.");
         }
     }
 

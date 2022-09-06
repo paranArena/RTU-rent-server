@@ -17,6 +17,8 @@ public interface ClubService {
 
     public void grantAdmin(Long clubId, Long ownerId, Long userId);
 
+    public void grantUser(Long clubId, Long ownerId, Long userId);
+
     public ClubRole getMyRole(long memberId, long clubId);
 
     public List<Club> getMyClubs(long memberId);

@@ -4,6 +4,7 @@ import com.RenToU.rentserver.dto.ErrorResponse;
 import com.RenToU.rentserver.exceptions.club.ClubNotFoundException;
 import com.RenToU.rentserver.exceptions.NoAdminPermissionException;
 import com.RenToU.rentserver.exceptions.NotClubRoleWaitingException;
+import com.RenToU.rentserver.exceptions.club.CannotGrantException;
 import com.RenToU.rentserver.exceptions.club.CannotJoinClubException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -33,6 +34,12 @@ public class ClubErrorAdvice {
     @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(NotClubRoleWaitingException.class)
     public ErrorResponse notClubWaiting(NotClubRoleWaitingException ex) {
+        return new ErrorResponse(ex.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @ExceptionHandler(CannotGrantException.class)
+    public ErrorResponse cannotGrantAdmin(CannotGrantException ex) {
         return new ErrorResponse(ex.getMessage());
     }
 }
