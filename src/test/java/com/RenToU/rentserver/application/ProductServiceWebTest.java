@@ -9,8 +9,10 @@ import com.RenToU.rentserver.dto.service.CreateProductServiceDto;
 import com.RenToU.rentserver.dto.service.CreateProductServiceDto;
 import com.RenToU.rentserver.infrastructure.ClubRepository;
 import com.RenToU.rentserver.infrastructure.HashtagRepository;
+import com.RenToU.rentserver.infrastructure.ItemRepository;
 import com.RenToU.rentserver.infrastructure.MemberRepository;
 import com.RenToU.rentserver.infrastructure.ProductRepository;
+import com.RenToU.rentserver.infrastructure.RentalRepository;
 import com.github.dozermapper.core.Mapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -40,12 +42,16 @@ class ProductServiceWebTest {
     ClubRepository clubRepository;
     @Autowired
     ProductRepository productRepository;
+    @Autowired
+    RentalRepository rentalRepository;
+    @Autowired
+    ItemRepository itemRepository;
     private Member owner;
     private Club club;
 
     @BeforeEach
     void setUp() {
-        service = new ProductService(mapper, clubRepository, memberRepository, productRepository);
+        service = new ProductService(mapper, clubRepository, memberRepository, productRepository,rentalRepository,itemRepository);
         owner = memberRepository.findById(2L).get();
         club = clubRepository.findById(1L).get();
 
