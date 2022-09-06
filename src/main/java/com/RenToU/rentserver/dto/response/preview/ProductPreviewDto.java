@@ -19,7 +19,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ProductPreviewDto {
     private Long id;
+
     private String name;
+
+    private Long clubId;
+
+    private String clubName;
+
     private String category;
 
     private String imagePath;
@@ -35,6 +41,8 @@ public class ProductPreviewDto {
         return ProductPreviewDto.builder()
                 .id(product.getId())
                 .name(product.getName())
+                .clubId(product.getClub().getId())
+                .clubName(product.getClub().getName())
                 .category(product.getCategory())
                 .imagePath(product.getImagePath())
                 .left(product.getItems().stream()
