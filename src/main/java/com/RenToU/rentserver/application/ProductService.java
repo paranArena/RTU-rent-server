@@ -75,11 +75,17 @@ public class ProductService {
         return club.getProducts();
     }
 
+    public Product getProductById(Long productId) {
+        return productRepository.findById(productId)
+                .orElseThrow(() -> new ProductNotFoundException(productId));
+    }
+
     public List<Product> getMyProducts(Long memberId) {
         Member member = findMember(memberId);
-        List<Club> clubs = member.getClubListWithoutWait().stream().map(cm-> cm.getClub()).collect(Collectors.toList());
+        List<Club> clubs = member.getClubListWithoutWait().stream().map(cm -> cm.getClub())
+                .collect(Collectors.toList());
         List<Product> products = new ArrayList<>();
-        clubs.stream().forEach(c-> products.addAll(c.getProducts()));
+        clubs.stream().forEach(c -> products.addAll(c.getProducts()));
         return products;
     }
 }
