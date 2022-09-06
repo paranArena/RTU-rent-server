@@ -12,22 +12,22 @@ spring:
     port: 6379
   jpa:
     hibernate.ddl-auto: update
-    properties:
-      hibernate:
-        show_sql: true
-        format_sql: true
+#    properties:
+#      hibernate:
+#        show_sql: true
+#        format_sql: true
 #     use data.sql
     defer-datasource-initialization: true
 #   use data.sql
   sql.init.mode: always
 
-logging:
-  level:
-    org:
-      hibernate:
-        type:
-          descriptor:
-            sql: trace
+#logging:
+#  level:
+#    org:
+#      hibernate:
+#        type:
+#          descriptor:
+#            sql: trace
 
 # import other properties
 spring.profiles.include: jwt, rds, s3, mail
