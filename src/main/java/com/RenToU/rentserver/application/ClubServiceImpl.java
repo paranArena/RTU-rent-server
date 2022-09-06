@@ -130,6 +130,23 @@ public class ClubServiceImpl implements ClubService {
     }
 
     @Override
+    @Transactional
+    public void rejectClubJoin(Long clubId, Long ownerId, Long joinMemberId) {
+        Club club = findClub(clubId);
+        Member owner = findMember(ownerId);
+        // 요청자가 가입 허락 권한이 있는지 확인
+        club.findClubMemberByMember(owner).validateAdmin();
+        // 가입자가 가입 신청 대기 상태인지 확인
+        Member joiner = findMember(joinMemberId);
+        ClubMember clubMember = club.findClubMemberByMember(joiner);
+        // 가입
+        clubMember.validateWait();
+        clubMember.delete();
+        clubMemberRepository.deleteById(clubMember.getId());
+        clubRepository.save(club);
+    }
+
+    @Override
     public Club findClubByName(String clubName) {
         return clubRepository.findByName(clubName)
                 .orElseThrow(() -> new ClubNotFoundException(clubName));
@@ -181,6 +198,21 @@ public class ClubServiceImpl implements ClubService {
         ClubMember clubMember = club.findClubMemberByMember(user);
         // 가입
         clubMember.grantAdmin();
+        clubRepository.save(club);
+    }
+
+    @Override
+    @Transactional
+    public void grantUser(Long clubId, Long ownerId, Long userId) {
+        Club club = findClub(clubId);
+        Member owner = findMember(ownerId);
+        // 요청자가 가입 허락 권한이 있는지 확인
+        club.findClubMemberByMember(owner).validateOwner();
+        // 가입자가 가입 신청 대기 상태인지 확인
+        Member user = findMember(userId);
+        ClubMember clubMember = club.findClubMemberByMember(user);
+        // 가입
+        clubMember.grantUser();
         clubRepository.save(club);
     }
 

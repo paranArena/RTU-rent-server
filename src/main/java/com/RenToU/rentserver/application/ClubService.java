@@ -10,19 +10,37 @@ import java.util.List;
 
 public interface ClubService {
     public List<Club> findClubs();
+
     public Club findClubById(long clubId);
+
     public Club findClubByName(String clubName);
-    public void grantAdmin(Long clubId, Long ownerId,Long userId);
+
+    public void grantAdmin(Long clubId, Long ownerId, Long userId);
+
+    public void grantUser(Long clubId, Long ownerId, Long userId);
+
     public ClubRole getMyRole(long memberId, long clubId);
+
     public List<Club> getMyClubs(long memberId);
-    public void leaveClub(Long clubId, Long userId);
-    public Club createClub(Long memberId, String clubName, String clubIntro, String thumbnailPath, List<String> clubHashtags);
+
+    public Club createClub(Long memberId, String clubName, String clubIntro, String thumbnailPath,
+            List<String> clubHashtags);
+
     public void deleteClub(long memberId, long clubId);
+
     public List<ClubMember> getAllMembers(long clubId);
+
     public void requestClubJoin(Long clubId, Long memberId);
+
     public void cancelClubJoin(Long clubId, Long memberId);
+
     public List<ClubMember> searchClubJoinsAll(Long clubId, Long memberId);
+
+    public void rejectClubJoin(Long clubId, Long ownerId, Long joinMemberId);
+
     public void acceptClubJoin(Long clubId, Long ownerId, Long joinMemberId);
+
+    public void leaveClub(Long clubId, Long userId);
 
     List<Club> getMyClubRequests(long memberId);
 

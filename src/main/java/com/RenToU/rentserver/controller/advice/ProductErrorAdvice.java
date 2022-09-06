@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.RenToU.rentserver.dto.ErrorResponse;
+import com.RenToU.rentserver.exceptions.ItemNotFoundException;
 import com.RenToU.rentserver.exceptions.ProductNotFoundException;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -13,7 +14,13 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class ProductErrorAdvice {
     @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(ProductNotFoundException.class)
-    public ErrorResponse ProductNotFound(ProductNotFoundException ex) {
+    public ErrorResponse productNotFound(ProductNotFoundException ex) {
+        return new ErrorResponse(ex.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(ItemNotFoundException.class)
+    public ErrorResponse itemNotFound(ItemNotFoundException ex) {
         return new ErrorResponse(ex.getMessage());
     }
     @ResponseStatus(HttpStatus.OK)
