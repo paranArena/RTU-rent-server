@@ -44,8 +44,7 @@ public class ClubRequestController {
     }
 
     @DeleteMapping("/join/cancel")
-    public ResponseEntity<?> cancelClubJoin(
-            @PathVariable Long clubId) {
+    public ResponseEntity<?> cancelClubJoin(@PathVariable Long clubId) {
         clubService.cancelClubJoin(clubId, memberService.getMyIdWithAuthorities());
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.CANCEL_CLUB_JOIN));
     }
@@ -58,6 +57,12 @@ public class ClubRequestController {
                 .map((cm) -> ClubMemberDto.from(cm))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_CLUB_JOIN, resData));
+    }
+
+    @DeleteMapping("/join/{joinMemberId}")
+    public ResponseEntity<?> rejectClubJoin(@PathVariable Long clubId, @PathVariable Long joinMemberId) {
+        clubService.rejectClubJoin(clubId, memberService.getMyIdWithAuthorities(), joinMemberId);
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.CANCEL_CLUB_JOIN));
     }
 
     @DeleteMapping("/leave")
