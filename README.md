@@ -1,11 +1,11 @@
 # RTU-rent-server
 ren2u spring boot server
 
-API SEVER URL:    
-ec2-15-165-38-225.ap-northeast-2.compute.amazonaws.com
+API SEVER URL:   
+http://ec2-15-165-38-225.ap-northeast-2.compute.amazonaws.com:8080
 - 눌러서 들어갔을 때 "Server is Running :)" 이라고 뜨지 않으면 서버가 다운되어 있는 것. 이해찬에게 DM
 
-API SPECIFICATION:   
+API SPECIFICATION: 
 https://documenter.getpostman.com/view/20800581/UzR1M3qi  
 이 문서에 API 상세 설명 적어놓았습니다.
 
