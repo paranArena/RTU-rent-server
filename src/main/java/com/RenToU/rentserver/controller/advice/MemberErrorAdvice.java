@@ -4,6 +4,7 @@ import com.RenToU.rentserver.dto.ErrorResponse;
 import com.RenToU.rentserver.dto.StatusCode;
 import com.RenToU.rentserver.dto.response.ResponseDto;
 import com.RenToU.rentserver.exceptions.MemberNotActivatedException;
+import com.RenToU.rentserver.exceptions.MemberNotFoundException;
 import com.RenToU.rentserver.exceptions.NotAjouEmailException;
 import com.RenToU.rentserver.exceptions.WrongEmailCodeException;
 import com.RenToU.rentserver.exceptions.club.CannotJoinClubException;
@@ -26,6 +27,12 @@ public class MemberErrorAdvice {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(ClubNotFoundException.class)
     public ErrorResponse ClubNotFound(ClubNotFoundException ex) {
+        return new ErrorResponse(ex.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(MemberNotFoundException.class)
+    public ErrorResponse MemberNotFound(MemberNotFoundException ex) {
         return new ErrorResponse(ex.getMessage());
     }
 
