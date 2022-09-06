@@ -59,10 +59,9 @@ public class ClubRequestController {
                 .collect(Collectors.toList());
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_CLUB_JOIN, resData));
     }
+
     @DeleteMapping("/leave")
-    public ResponseEntity<?> leaveClub(
-            @PathVariable Long clubId
-    ) {
+    public ResponseEntity<?> leaveClub(@PathVariable Long clubId) {
         clubService.leaveClub(clubId, memberService.getMyIdWithAuthorities());
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.LEAVE_CLUB_SUCCESS));
     }
