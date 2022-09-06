@@ -24,15 +24,16 @@ public class ScheduleService {
 
     @Transactional
     public void checkExpiredRentalWait() {
-        // TODO java.lang.NullPointerException: null
         List<Rental> rentals = rentalRepository.findAllByRentalStatus(RentalStatus.WAIT);
-        rentals.stream().forEach(rental -> {
-            if (rental.getRentDate().plusMinutes(10).isBefore(LocalDateTime.now())) {
-                rental.cancel();
-                RentalHistory rentalHistory = RentalHistory.RentalToHistory(rental);
-                rentalHistoryRepository.save(rentalHistory);
-                rentalRepository.deleteById(rental.getId());
-            }
-        });
+        if(rentals != null) {
+            rentals.stream().forEach(rental -> {
+                if (rental.getRentDate().plusMinutes(10).isBefore(LocalDateTime.now())) {
+                    rental.cancel();
+                    RentalHistory rentalHistory = RentalHistory.RentalToHistory(rental);
+                    rentalHistoryRepository.save(rentalHistory);
+                    rentalRepository.deleteById(rental.getId());
+                }
+            });
+        }
     }
 }
