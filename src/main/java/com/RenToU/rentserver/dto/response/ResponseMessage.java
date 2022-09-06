@@ -62,4 +62,8 @@ public class ResponseMessage {
     public static final String SEARCH_CLUB_PRODUCT_SUCCESS = "클럽 물품 조회 성공";
 
     public static final String CHECK_EXPIRED_RENTAL_WAIT = "10분 초과 렌탈 요청 삭제";
+
+    public static final String GRANT_ADMIN = "ADMIN 권한 부여";
+
+    public static final String GRANT_USER = "USER 권한 부여";
 }
