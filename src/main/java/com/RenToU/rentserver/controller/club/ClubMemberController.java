@@ -51,7 +51,7 @@ public class ClubMemberController {
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_CLUB_MEMBER, resData));
     }
 
-    @PutMapping(value = "{memberId}/role/admin")
+    @PutMapping("{memberId}/role/admin")
     public ResponseEntity<?> grantAdmin(@PathVariable Long clubId, @PathVariable Long memberId) {
         Long ownerId = memberService.getMyIdWithAuthorities();
         clubService.grantAdmin(clubId, ownerId, memberId);
@@ -59,11 +59,17 @@ public class ClubMemberController {
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GRANT_ADMIN));
     }
 
-    @PutMapping(value = "{memberId}/role/user")
+    @PutMapping("{memberId}/role/user")
     public ResponseEntity<?> grantUser(@PathVariable Long clubId, @PathVariable Long memberId) {
         Long ownerId = memberService.getMyIdWithAuthorities();
         clubService.grantUser(clubId, ownerId, memberId);
 
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GRANT_USER));
+    }
+
+    @DeleteMapping("{memberId}")
+    public ResponseEntity<?> removeClubMember(@PathVariable Long clubId, @PathVariable Long memberId) {
+        clubService.removeClubMember(clubId, memberService.getMyIdWithAuthorities(), memberId);
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.REMOVE_CLUB_MEMBER));
     }
 }
