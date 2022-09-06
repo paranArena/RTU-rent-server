@@ -1,17 +1,21 @@
 package com.RenToU.rentserver.application;
 
+import com.RenToU.rentserver.domain.Rental;
 import com.RenToU.rentserver.dto.service.CreateProductServiceDto;
 import com.RenToU.rentserver.domain.Club;
 import com.RenToU.rentserver.domain.Item;
 import com.RenToU.rentserver.domain.Member;
 import com.RenToU.rentserver.domain.Product;
 import com.RenToU.rentserver.domain.RentalPolicy;
+import com.RenToU.rentserver.dto.service.UpdateProductInfoServiceDto;
 import com.RenToU.rentserver.exceptions.club.ClubNotFoundException;
 import com.RenToU.rentserver.exceptions.MemberNotFoundException;
 import com.RenToU.rentserver.exceptions.ProductNotFoundException;
 import com.RenToU.rentserver.infrastructure.ClubRepository;
+import com.RenToU.rentserver.infrastructure.ItemRepository;
 import com.RenToU.rentserver.infrastructure.MemberRepository;
 import com.RenToU.rentserver.infrastructure.ProductRepository;
+import com.RenToU.rentserver.infrastructure.RentalRepository;
 import com.github.dozermapper.core.Mapper;
 
 import lombok.RequiredArgsConstructor;
@@ -30,6 +34,8 @@ public class ProductService {
     private final ClubRepository clubRepository;
     private final MemberRepository memberRepository;
     private final ProductRepository productRepository;
+    private final RentalRepository rentalRepository;
+    private final ItemRepository itemRepository;
 
     @Transactional
     public Product registerProduct(CreateProductServiceDto dto) {
@@ -43,17 +49,6 @@ public class ProductService {
         return product;
     }
 
-    @Transactional
-    public void registerItem(Long productId, Long memberId, RentalPolicy rentalPolicy, int numbering) {
-        Product product = findProduct(productId);
-        Member requester = findMember(memberId);
-        Club club = product.getClub();
-        club.findClubMemberByMember(requester).validateAdmin();
-        Item item = Item.createItem(product, rentalPolicy, numbering);
-        // product.addQuantity();
-        product.addItem(item);
-        productRepository.save(product);
-    }
 
     private Member findMember(Long id) {
         return memberRepository.findById(id)
@@ -87,5 +82,60 @@ public class ProductService {
         List<Product> products = new ArrayList<>();
         clubs.stream().forEach(c -> products.addAll(c.getProducts()));
         return products;
+    }
+    @Transactional
+    public Product updateProductInfo(Long productId, UpdateProductInfoServiceDto dto) {
+        Club club = findClub(dto.getClubId());
+        Member requester = findMember(dto.getMemberId());
+        club.findClubMemberByMember(requester).validateAdmin();
+        Product product = findProduct(productId);
+        product.updateInfo(dto);
+        productRepository.save(product);
+        clubRepository.save(club);
+        return product;
+    }
+
+    @Transactional
+    public void deleteItemByNumbering(Long memberId, Long productId, int numbering) {
+        Product product = findProduct(productId);
+        Club club = findClub(product.getClub().getId());//영속성 컨텍스트 등록을 위해 repository로 검색
+        Member requester = findMember(memberId);
+        club.findClubMemberByMember(requester).validateAdmin();
+        Item item = product.getItemByNumbering(numbering);
+        Rental rental = item.getRental();
+        if (rental != null) {
+            rental.deleteRental();
+            rentalRepository.deleteById(rental.getId());
+        }
+        item.deleteProduct();
+        itemRepository.deleteById(item.getId());
+    }
+    @Transactional
+    public void addItem(Long memberId, Long productId, int numbering) {
+        Product product = findProduct(productId);
+        Club club = findClub(product.getClub().getId());//영속성 컨텍스트 등록을 위해 repository로 검색
+        Member requester = findMember(memberId);
+        club.findClubMemberByMember(requester).validateAdmin();
+        Item item = Item.createItem(product,RentalPolicy.FIFO,numbering);
+        itemRepository.save(item);
+    }
+    @Transactional
+    public void deleteProduct(Long memberId, Long productId) {
+        Product product = findProduct(productId);
+        Club club = findClub(product.getClub().getId());//영속성 컨텍스트 등록을 위해 repository로 검색
+        Member requester = findMember(memberId);
+        club.findClubMemberByMember(requester).validateAdmin();
+        List<Long> ids = product.getItems().stream().map(item->item.getId()).collect(Collectors.toList());
+        product.getItems().forEach(item->{
+            Rental rental = item.getRental();
+            if (rental != null) {
+                rental.deleteRental();
+                rentalRepository.deleteById(rental.getId());
+            }
+            item.deleteProduct();
+        });
+        ids.forEach(id->itemRepository.deleteById(id));
+        product.deleteClub();
+        productRepository.deleteById(productId);
     }
 }
