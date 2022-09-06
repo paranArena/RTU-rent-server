@@ -6,8 +6,6 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
-import com.RenToU.rentserver.domain.Notification;
-import com.RenToU.rentserver.dto.response.preview.NotificationPreviewDto;
 import com.RenToU.rentserver.dto.response.preview.ProductPreviewDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -69,8 +67,8 @@ public class ClubProductController {
     public ResponseEntity<?> searchProductByClub(@PathVariable long clubId) {
         long memberId = memberService.getMyIdWithAuthorities();
         List<Product> products = productService.getProductsByClub(memberId, clubId);
-        List<ProductInfoDto> resData = products.stream()
-                .map(n -> ProductInfoDto.from(n))
+        List<ProductPreviewDto> resData = products.stream()
+                .map(n -> ProductPreviewDto.from(n))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.SEARCH_CLUB_PRODUCT_SUCCESS, resData));
     }
