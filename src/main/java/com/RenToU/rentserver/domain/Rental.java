@@ -70,19 +70,19 @@ public class Rental {
         if (this.rentalStatus != RentalStatus.WAIT) {
             throw new IllegalStateException("렌탈을 취소할 수 없는 상태입니다.");
         }
-        this.rentalStatus = rentalStatus.CANCEL;
+        this.rentalStatus = RentalStatus.CANCEL;
         this.getItem().finishRental();
 
     }
 
     public void startRental() {
-        this.rentalStatus = rentalStatus.RENT;
+        this.rentalStatus = RentalStatus.RENT;
         this.rentDate = LocalDateTime.now();
         this.setExpDate();
     }
 
     public void finishRental() {
-        this.rentalStatus = rentalStatus.DONE;
+        this.rentalStatus = RentalStatus.DONE;
         this.getItem().finishRental();
     }
 

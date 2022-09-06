@@ -1,12 +1,17 @@
 package com.RenToU.rentserver.dto.response.preview;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.RenToU.rentserver.domain.Product;
+import com.RenToU.rentserver.domain.RentalStatus;
+import com.RenToU.rentserver.dto.response.ItemDto;
+import com.RenToU.rentserver.dto.response.LocationDto;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.stream.Collectors;
 
 @Getter
 @Builder
@@ -15,25 +20,28 @@ import java.util.stream.Collectors;
 public class ProductPreviewDto {
     private Long id;
     private String name;
-    private int quantity;
-    private int maxQuantity;
-    private String clubName;
-    private String thumbnailPath;
-    private Long clubId;
+    private String category;
 
+    private String imagePath;
+
+    private int left;
+
+    private int max;
 
     public static ProductPreviewDto from(Product product) {
         if (product == null)
             return null;
+
         return ProductPreviewDto.builder()
-                .name(product.getName())
-                .quantity(product.getItems().stream().filter(i -> i.getRental() == null).collect(Collectors.toList())
-                        .size())
-                .maxQuantity(product.getItems().size())
-                .clubName(product.getClub().getName())
-                .thumbnailPath(product.getImagePath())
-                .clubId(product.getClub().getId())
                 .id(product.getId())
+                .name(product.getName())
+                .category(product.getCategory())
+                .imagePath(product.getImagePath())
+                .left(product.getItems().stream()
+                        .filter((item) -> item.getRental() == null)
+                        .collect(Collectors.toList())
+                        .size())
+                .max(product.getItems().size())
                 .build();
     }
 }
