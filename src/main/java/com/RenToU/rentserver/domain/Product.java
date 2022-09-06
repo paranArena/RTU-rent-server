@@ -1,5 +1,8 @@
 package com.RenToU.rentserver.domain;
 
+import com.RenToU.rentserver.dto.request.UpdateProductInfoDto;
+import com.RenToU.rentserver.dto.service.CreateProductServiceDto;
+import com.RenToU.rentserver.dto.service.UpdateProductInfoServiceDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,6 +23,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static javax.persistence.FetchType.LAZY;
 
@@ -102,6 +106,37 @@ public class Product extends BaseTimeEntity {
                 .build();
         product.items = new ArrayList<>();
         return product;
+    }
+
+    public void updateInfo(UpdateProductInfoServiceDto dto){
+        this.name = dto.getName();
+        this.category = dto.getCategory();
+        this.fifoRentalPeriod = dto.getFifoRentalPeriod();
+        this.reserveRentalPeriod = dto.getReserveRentalPeriod();
+        this.price = dto.getPrice();
+        this.caution = dto.getCaution();
+        this.category = dto.getCategory();
+        this.location = dto.getLocation();
+        if(imagePath != null){
+            this.imagePath = dto.getImagePath();
+        }
+    }
+    public Item getItemByNumbering(int numbering){
+       List<Item> items =  this.getItems().stream().filter(i-> i.getNumbering() == numbering).collect(Collectors.toList());
+       if(items.size() == 0){
+           return null;
+       }else{
+           return items.get(0);
+       }
+    }
+
+    public void deleteItem(Item item) {
+        this.items.remove(item);
+    }
+
+    public void deleteClub() {
+        this.club.deleteProduct(this);
+        this.club = null;
     }
 
     /**

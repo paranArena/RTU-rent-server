@@ -129,4 +129,11 @@ public class Rental {
             this.rentalStatus = RentalStatus.LATE;
         }
     }
+    public void deleteRental(){
+        this.member.deleteRental(this);
+        this.member = null;
+        this.item.deleteRental();
+        this.item = null;
+
+    }
 }
