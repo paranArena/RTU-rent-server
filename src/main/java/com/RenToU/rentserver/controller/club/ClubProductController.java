@@ -8,10 +8,12 @@ import javax.validation.Valid;
 
 import com.RenToU.rentserver.dto.response.preview.ProductPreviewDto;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -44,7 +46,7 @@ public class ClubProductController {
     @PostMapping("")
     public ResponseEntity<?> createProduct(@PathVariable Long clubId,
             @Valid @ModelAttribute CreateProductDto createProductDto) throws IOException {
-        long memberId = memberService.getMyIdWithAuthorities();
+        Long memberId = memberService.getMyIdWithAuthorities();
         MultipartFile image = createProductDto.getImage();
         String imagePath = null;
         if (!image.isEmpty()) {
@@ -63,9 +65,51 @@ public class ClubProductController {
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.CREATE_PRODUCT, resData));
     }
 
+    @GetMapping("/{productId}")
+    public ResponseEntity<?> getProduct(@PathVariable Long clubId, @PathVariable Long productId) {
+        Product product = productService.getProductById(productId);
+        ProductInfoDto resData = ProductInfoDto.from(product);
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.SEARCH_CLUB_PRODUCT_SUCCESS, resData));
+    }
+
+    @PutMapping("/{productId}")
+    public ResponseEntity<?> updateProduct(@PathVariable Long clubId,
+            @Valid @ModelAttribute CreateProductDto createProductDto) throws IOException {
+        // Long memberId = memberService.getMyIdWithAuthorities();
+        // MultipartFile image = createProductDto.getImage();
+        // String imagePath = null;
+        // if (!image.isEmpty()) {
+        // imagePath = s3Service.upload(image);
+        // }
+        // CreateProductServiceDto productServiceDto = mapper.map(createProductDto,
+        // CreateProductServiceDto.class);
+        // Location location = new Location(createProductDto.getLocationName(),
+        // createProductDto.getLatitude(),
+        // createProductDto.getLongitude());
+        // productServiceDto.setLocation(location);
+        // productServiceDto.setImagePath(imagePath);
+        // productServiceDto.setClubId(clubId);
+        // productServiceDto.setMemberId(memberId);
+        // Product product = productService.registerProduct(productServiceDto);
+        // ProductInfoDto resData = ProductInfoDto.from(product);
+
+        // return ResponseEntity.ok(ResponseDto.res(StatusCode.OK,
+        // ResponseMessage.CREATE_PRODUCT, resData));
+        return null;
+    }
+
+    @DeleteMapping("/{productId}")
+    public ResponseEntity<?> deleteClub(@PathVariable Long productId) {
+        // Long memberId = memberService.getMyIdWithAuthorities();
+        // productService.deleteProduct(productId);
+        // return ResponseEntity.ok(ResponseDto.res(StatusCode.OK,
+        // ResponseMessage.DELETE_CLUB, null));
+        return null;
+    }
+
     @GetMapping("/search/all")
-    public ResponseEntity<?> searchProductByClub(@PathVariable long clubId) {
-        long memberId = memberService.getMyIdWithAuthorities();
+    public ResponseEntity<?> searchProductByClub(@PathVariable Long clubId) {
+        Long memberId = memberService.getMyIdWithAuthorities();
         List<Product> products = productService.getProductsByClub(memberId, clubId);
         List<ProductPreviewDto> resData = products.stream()
                 .map(n -> ProductPreviewDto.from(n))
