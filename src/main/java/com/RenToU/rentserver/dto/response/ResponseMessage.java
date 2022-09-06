@@ -65,4 +65,8 @@ public class ResponseMessage {
     public static final String UPDATE_PRODUCT_INFO = "물품 정보 수정 성공";
     public static final String DELETE_ITEM = "아이템 제거 성공";
     public static final String ADD_ITEM = "아이템 추가 성공";
+
+    public static final String GRANT_ADMIN = "ADMIN 권한 부여";
+
+    public static final String GRANT_USER = "USER 권한 부여";
 }
