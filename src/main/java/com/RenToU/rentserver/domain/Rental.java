@@ -137,4 +137,12 @@ public class Rental {
         this.item = null;
 
     }
+
+    public boolean isMeRental(Long memberId) {
+        if(memberId == member.getId()){
+            return true;
+        }else{
+            return false;
+        }
+    }
 }

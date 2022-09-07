@@ -50,4 +50,21 @@ public class ProductInfoDto {
                 .items(product.getItems().stream().map((i) -> ItemDto.from(i)).collect(Collectors.toList()))
                 .build();
     }
+    public static ProductInfoDto from(Product product, Long memberId) {
+        if (product == null)
+            return null;
+
+        return ProductInfoDto.builder()
+                .id(product.getId())
+                .name(product.getName())
+                .category(product.getCategory())
+                .location(LocationDto.from(product.getLocation()))
+                .fifoRentalPeriod(product.getFifoRentalPeriod())
+                .reserveRentalPeriod(product.getReserveRentalPeriod())
+                .price(product.getPrice())
+                .caution(product.getCaution())
+                .imagePath(product.getImagePath())
+                .items(product.getItems().stream().map((i) -> ItemDto.from(i,memberId)).collect(Collectors.toList()))
+                .build();
+    }
 }

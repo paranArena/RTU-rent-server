@@ -27,6 +27,8 @@ public class RentalInfoDto {
 
     private LocalDateTime expDate;// 렌탈 만료 시간
 
+    private boolean isMeRental;
+
     public static RentalInfoDto from(Rental rental) {
         if (rental == null)
             return null;
@@ -34,6 +36,16 @@ public class RentalInfoDto {
                 .rentalStatus(rental.getRentalStatus())
                 .rentDate(rental.getRentDate())
                 .expDate(rental.getExpDate())
+                .build();
+    }
+    public static RentalInfoDto from(Rental rental,Long memberId) {
+        if (rental == null)
+            return null;
+        return RentalInfoDto.builder()
+                .rentalStatus(rental.getRentalStatus())
+                .rentDate(rental.getRentDate())
+                .expDate(rental.getExpDate())
+                .isMeRental(rental.isMeRental(memberId))
                 .build();
     }
 }

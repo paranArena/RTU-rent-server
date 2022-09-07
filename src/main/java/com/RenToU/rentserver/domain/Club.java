@@ -18,6 +18,7 @@ import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Entity
@@ -113,5 +114,15 @@ public class Club extends BaseTimeEntity {
     public void deleteProduct(Product product) {
         this.products.remove(product);
 
+    }
+
+    public void updateClub(String name, String intro, String thumbnailPath, List<Hashtag> clubHashtags) {
+        this.name = name;
+        this.introduction = intro;
+        this.thumbnailPath = thumbnailPath;
+        this.hashtags = new ArrayList<>();
+        for (Hashtag hashtag : clubHashtags) {
+            ClubHashtag.createClubHashtag(this, hashtag);
+        }
     }
 }

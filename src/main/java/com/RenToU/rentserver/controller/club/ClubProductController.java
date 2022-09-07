@@ -69,8 +69,9 @@ public class ClubProductController {
 
     @GetMapping("/{productId}")
     public ResponseEntity<?> getProduct(@PathVariable Long clubId, @PathVariable Long productId) {
+        Long memberId = memberService.getMyIdWithAuthorities();
         Product product = productService.getProductById(productId);
-        ProductInfoDto resData = ProductInfoDto.from(product);
+        ProductInfoDto resData = ProductInfoDto.from(product,memberId);
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.SEARCH_CLUB_PRODUCT_SUCCESS, resData));
     }
 

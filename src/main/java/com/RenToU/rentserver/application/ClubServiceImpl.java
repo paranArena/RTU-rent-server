@@ -11,6 +11,7 @@ import com.RenToU.rentserver.exceptions.club.ClubNotFoundException;
 import com.RenToU.rentserver.exceptions.DuplicateMemberException;
 import com.RenToU.rentserver.exceptions.MemberNotFoundException;
 import com.RenToU.rentserver.exceptions.clubMember.ClubMemberNotFoundException;
+import com.RenToU.rentserver.infrastructure.ClubHashtagRepository;
 import com.RenToU.rentserver.infrastructure.ClubMemberRepository;
 import com.RenToU.rentserver.infrastructure.ClubRepository;
 import com.RenToU.rentserver.infrastructure.HashtagRepository;
@@ -33,6 +34,8 @@ public class ClubServiceImpl implements ClubService {
     private final HashtagRepository hashtagRepository;
 
     private final ClubMemberRepository clubMemberRepository;
+
+    private final ClubHashtagRepository clubHashtagRepository;
 
     @Override
     public List<Club> findClubs() {
@@ -241,6 +244,24 @@ public class ClubServiceImpl implements ClubService {
         clubMember.delete();
         clubMemberRepository.deleteById(clubMember.getId());
         clubRepository.save(club);
+    }
+    @Override
+    @Transactional
+    public Club updateClubInfo(long memberId,long clubId, String name, String intro, String thumbnailPath, List<String> hashtagNames){
+        Member member = findMember(memberId);
+        Club club = findClub(clubId);
+        club.findClubMemberByMember(member).validateAdmin();
+        List<Hashtag> clubHashtags = hashtagNames.stream().map(hashtagName -> {
+            return findHashtagByNameOrCreate(hashtagName);
+        }).collect(Collectors.toList());
+        eraseBeforeClubHashtag(club);
+        club.updateClub(name, intro, thumbnailPath, clubHashtags);
+        clubRepository.save(club);
+        return club;
+    }
+
+    private void eraseBeforeClubHashtag(Club club) {
+        club.getHashtags().forEach(clubHashtag ->clubHashtagRepository.deleteById(clubHashtag.getId()));
     }
 
     /**
