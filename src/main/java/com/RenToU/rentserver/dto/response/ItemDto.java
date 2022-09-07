@@ -35,4 +35,15 @@ public class ItemDto {
                 .rentalInfo(RentalInfoDto.from(item.getRental()))
                 .build();
     }
+    public static ItemDto from(Item item,Long memberId) {
+        if (item == null)
+            return null;
+
+        return ItemDto.builder()
+                .id(item.getId())
+                .numbering(item.getNumbering())
+                .rentalPolicy(item.getRentalPolicy())
+                .rentalInfo(RentalInfoDto.from(item.getRental(),memberId))
+                .build();
+    }
 }

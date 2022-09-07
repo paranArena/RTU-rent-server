@@ -45,4 +45,5 @@ public interface ClubService {
 
     List<Club> getMyClubRequests(long memberId);
 
+    Club updateClubInfo(long memberId, long clubId,String name, String intro, String thumbnailPath, List<String> hashtags);
 }
