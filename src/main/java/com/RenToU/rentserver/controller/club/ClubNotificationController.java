@@ -97,4 +97,11 @@ public class ClubNotificationController {
                 .collect(Collectors.toList());
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.SEARCH_NOTIFICATION_SUCCESS, resData));
     }
+
+    @PostMapping("/{notificationId}/report")
+    public ResponseEntity<?> reportMember(@PathVariable long clubId, @PathVariable long notificationId) {
+        // TODO: process POST request
+
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.REPORT_NOTIFICATION));
+    }
 }
