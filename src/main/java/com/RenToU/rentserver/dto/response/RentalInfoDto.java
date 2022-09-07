@@ -19,7 +19,7 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RentalDto {
+public class RentalInfoDto {
 
     private RentalStatus rentalStatus;
 
@@ -27,11 +27,10 @@ public class RentalDto {
 
     private LocalDateTime expDate;// 렌탈 만료 시간
 
-
-    public static RentalDto from(Rental rental) {
+    public static RentalInfoDto from(Rental rental) {
         if (rental == null)
             return null;
-        return RentalDto.builder()
+        return RentalInfoDto.builder()
                 .rentalStatus(rental.getRentalStatus())
                 .rentDate(rental.getRentDate())
                 .expDate(rental.getExpDate())
