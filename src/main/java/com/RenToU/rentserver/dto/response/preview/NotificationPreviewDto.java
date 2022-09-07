@@ -22,6 +22,8 @@ public class NotificationPreviewDto {
 
     private String title;
 
+    private String writer;
+
     private String imagePath;
 
     private Boolean isPublic;
@@ -38,6 +40,7 @@ public class NotificationPreviewDto {
                 .id(notification.getId())
                 .clubId(notification.getClub().getId())
                 .title(notification.getTitle())
+                .writer(notification.getWriter().getName())
                 .isPublic(notification.getIsPublic())
                 .imagePath(notification.getImagePath())
                 .createdAt(notification.getCreatedAt())
