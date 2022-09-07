@@ -75,51 +75,53 @@ public class ClubProductController {
     }
 
     @PutMapping("/{productId}")
-    public ResponseEntity<?> updateProduct(@PathVariable Long clubId,@PathVariable Long productId,
+    public ResponseEntity<?> updateProduct(@PathVariable Long clubId, @PathVariable Long productId,
             @Valid @ModelAttribute UpdateProductInfoDto updateProductInfoDto) throws IOException {
-         Long memberId = memberService.getMyIdWithAuthorities();
-         MultipartFile image = updateProductInfoDto.getImage();
-         String imagePath = null;
-         if (!image.isEmpty()) {
-         imagePath = s3Service.upload(image);
-         }
-         UpdateProductInfoServiceDto productServiceDto = mapper.map(updateProductInfoDto,
-         UpdateProductInfoServiceDto.class);
-         Location location = new Location(updateProductInfoDto.getLocationName(),
-         updateProductInfoDto.getLatitude(),
-         updateProductInfoDto.getLongitude());
-         productServiceDto.setLocation(location);
-         productServiceDto.setImagePath(imagePath);
-         productServiceDto.setClubId(clubId);
-         productServiceDto.setMemberId(memberId);
-         Product product = productService.updateProductInfo(productId,productServiceDto);
-         ProductInfoDto resData = ProductInfoDto.from(product);
-         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK,
-         ResponseMessage.UPDATE_PRODUCT_INFO, resData));
+        Long memberId = memberService.getMyIdWithAuthorities();
+        MultipartFile image = updateProductInfoDto.getImage();
+        String imagePath = null;
+        if (!image.isEmpty()) {
+            imagePath = s3Service.upload(image);
+        }
+        UpdateProductInfoServiceDto productServiceDto = mapper.map(updateProductInfoDto,
+                UpdateProductInfoServiceDto.class);
+        Location location = new Location(updateProductInfoDto.getLocationName(),
+                updateProductInfoDto.getLatitude(),
+                updateProductInfoDto.getLongitude());
+        productServiceDto.setLocation(location);
+        productServiceDto.setImagePath(imagePath);
+        productServiceDto.setClubId(clubId);
+        productServiceDto.setMemberId(memberId);
+        Product product = productService.updateProductInfo(productId, productServiceDto);
+        ProductInfoDto resData = ProductInfoDto.from(product);
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK,
+                ResponseMessage.UPDATE_PRODUCT_INFO, resData));
     }
+
     @DeleteMapping("/{productId}/{numbering}")
     public ResponseEntity<?> deleteItem(@PathVariable Long productId, @PathVariable int numbering) {
-         Long memberId = memberService.getMyIdWithAuthorities();
-         productService.deleteItemByNumbering(memberId,productId,numbering);
-         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.DELETE_ITEM, null));
+        Long memberId = memberService.getMyIdWithAuthorities();
+        productService.deleteItemByNumbering(memberId, productId, numbering);
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.DELETE_ITEM, null));
     }
+
     @PostMapping("/{productId}/{numbering}")
     public ResponseEntity<?> addItem(@PathVariable Long productId, @PathVariable int numbering) {
         Long memberId = memberService.getMyIdWithAuthorities();
-        productService.addItem(memberId,productId,numbering);
+        productService.addItem(memberId, productId, numbering);
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.ADD_ITEM, null));
     }
 
     @DeleteMapping("/{productId}")
     public ResponseEntity<?> deleteProduct(@PathVariable Long productId) {
-         Long memberId = memberService.getMyIdWithAuthorities();
-         productService.deleteProduct(memberId,productId);
-         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK,
-         ResponseMessage.DELETE_CLUB, null));
+        Long memberId = memberService.getMyIdWithAuthorities();
+        productService.deleteProduct(memberId, productId);
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK,
+                ResponseMessage.DELETE_CLUB, null));
     }
 
     @GetMapping("/search/all")
-    public ResponseEntity<?> searchProductByClub(@PathVariable Long clubId) {
+    public ResponseEntity<?> searchClubProductsAll(@PathVariable Long clubId) {
         Long memberId = memberService.getMyIdWithAuthorities();
         List<Product> products = productService.getProductsByClub(memberId, clubId);
         List<ProductPreviewDto> resData = products.stream()
