@@ -1,7 +1,8 @@
 package com.RenToU.rentserver.controller.rental;
 
-import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import com.RenToU.rentserver.application.ClubService;
 import com.RenToU.rentserver.application.RentalService;
@@ -12,7 +13,6 @@ import com.RenToU.rentserver.domain.RentalHistory;
 import com.RenToU.rentserver.dto.response.IdDto;
 import com.RenToU.rentserver.dto.response.ItemDto;
 
-import com.RenToU.rentserver.infrastructure.ClubRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +26,8 @@ import com.RenToU.rentserver.application.MemberService;
 import com.RenToU.rentserver.dto.StatusCode;
 import com.RenToU.rentserver.dto.response.ResponseDto;
 import com.RenToU.rentserver.dto.response.ResponseMessage;
+import com.RenToU.rentserver.dto.response.preview.AdminRentalPreviewDto;
+import com.RenToU.rentserver.dto.response.preview.RentalPreviewDto;
 import com.RenToU.rentserver.exceptions.RentalNotFoundException;
 import com.RenToU.rentserver.infrastructure.ItemRepository;
 
@@ -41,8 +43,9 @@ public class RentalController {
     private final ItemRepository itemRepository;
 
     private final ClubService clubService;
+
     @PostMapping("/{itemId}/request")
-    public ResponseEntity<?> requestRental(@PathVariable Long clubId, @PathVariable Long itemId) throws IOException {
+    public ResponseEntity<?> requestRental(@PathVariable Long clubId, @PathVariable Long itemId) {
         long memberId = memberService.getMyIdWithAuthorities();
         Rental rental = rentalService.requestRental(memberId, itemId);
         ItemDto resData = ItemDto.from(rental.getItem());
@@ -53,7 +56,7 @@ public class RentalController {
     // CanNotRentException 처리
 
     @PutMapping("/{itemId}/apply")
-    public ResponseEntity<?> applyRental(@PathVariable Long clubId, @PathVariable Long itemId) throws IOException {
+    public ResponseEntity<?> applyRental(@PathVariable Long clubId, @PathVariable Long itemId) {
         Long memberId = memberService.getMyIdWithAuthorities();
         try {
             Long rentalId = itemRepository.getReferenceById(itemId).getRental().getId();
@@ -65,7 +68,7 @@ public class RentalController {
     }
 
     @PutMapping("/{itemId}/return")
-    public ResponseEntity<?> returnRental(@PathVariable Long clubId, @PathVariable Long itemId) throws IOException {
+    public ResponseEntity<?> returnRental(@PathVariable Long clubId, @PathVariable Long itemId) {
         long memberId = memberService.getMyIdWithAuthorities();
         try {
             Long rentalId = itemRepository.getReferenceById(itemId).getRental().getId();
@@ -78,7 +81,7 @@ public class RentalController {
     }
 
     @DeleteMapping("/{itemId}/cancel")
-    public ResponseEntity<?> cancelRental(@PathVariable Long clubId, @PathVariable Long itemId) throws IOException {
+    public ResponseEntity<?> cancelRental(@PathVariable Long clubId, @PathVariable Long itemId) {
         long memberId = memberService.getMyIdWithAuthorities();
         try {
             Long rentalId = itemRepository.getReferenceById(itemId).getRental().getId();
@@ -93,9 +96,10 @@ public class RentalController {
     @GetMapping("/search/all")
     public ResponseEntity<?> searchClubRentalsAll(@PathVariable long clubId) {
         Long memberId = memberService.getMyIdWithAuthorities();
-        Club club = clubService.findClubById(clubId);
-        List<Item> items = rentalService.getRentalsByClub(clubId,memberId);
-        //TODO dto 변환 부탁드립니다.
-        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_CLUB));
+        List<Item> items = rentalService.getRentalsByClub(clubId, memberId);
+        List<AdminRentalPreviewDto> resData = items.stream()
+                .map((item) -> AdminRentalPreviewDto.from(item))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_CLUB, resData));
     }
 }
