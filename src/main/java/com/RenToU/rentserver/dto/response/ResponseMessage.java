@@ -71,4 +71,6 @@ public class ResponseMessage {
     public static final String GRANT_USER = "USER 권한 부여";
 
     public static final String REMOVE_CLUB_MEMBER = "클럽 멤버 삭제";
+
+    public static final String SEARCH_CLUB_RENTALS = "클럽 렌탈 조회";
 }
