@@ -32,7 +32,7 @@ public class ItemDto {
                 .id(item.getId())
                 .numbering(item.getNumbering())
                 .rentalPolicy(item.getRentalPolicy())
-                .rental(RentalInfoDto.from(item.getRental()))
+                .rentalInfo(RentalInfoDto.from(item.getRental()))
                 .build();
     }
 }
