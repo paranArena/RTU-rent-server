@@ -21,8 +21,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class RentalDto {
 
-    private Long id;
-
     private RentalStatus rentalStatus;
 
     private LocalDateTime rentDate;// 렌탈 시작 시간
@@ -33,10 +31,9 @@ public class RentalDto {
         if (rental == null)
             return null;
         return RentalDto.builder()
-        .id(rental.getId())
-        .rentalStatus(rental.getRentalStatus())
-        .rentDate(rental.getRentDate())
-        .expDate(rental.getExpDate())
-        .build();
+                .rentalStatus(rental.getRentalStatus())
+                .rentDate(rental.getRentDate())
+                .expDate(rental.getExpDate())
+                .build();
     }
 }
