@@ -1,4 +1,4 @@
-package com.RenToU.rentserver.controller.advice;
+package com.RenToU.rentserver.handler;
 
 import com.RenToU.rentserver.dto.ErrorResponse;
 import com.RenToU.rentserver.exceptions.club.ClubNotFoundException;
@@ -37,7 +37,7 @@ public class ClubErrorAdvice {
         return new ErrorResponse(ex.getMessage());
     }
 
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(CannotGrantException.class)
     public ErrorResponse cannotGrantAdmin(CannotGrantException ex) {
         return new ErrorResponse(ex.getMessage());

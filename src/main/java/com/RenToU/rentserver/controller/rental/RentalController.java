@@ -10,7 +10,6 @@ import com.RenToU.rentserver.domain.Club;
 import com.RenToU.rentserver.domain.Item;
 import com.RenToU.rentserver.domain.Rental;
 import com.RenToU.rentserver.domain.RentalHistory;
-import com.RenToU.rentserver.dto.response.IdDto;
 import com.RenToU.rentserver.dto.response.ItemDto;
 
 import org.springframework.http.ResponseEntity;
@@ -73,8 +72,7 @@ public class RentalController {
         try {
             Long rentalId = itemRepository.getReferenceById(itemId).getRental().getId();
             RentalHistory rentalHistory = rentalService.returnRental(memberId, rentalId);
-            IdDto resData = new IdDto("rentalHistoryId", rentalHistory.getId());
-            return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.RENT_RETURN_SUCCESS, resData));
+            return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.RENT_RETURN_SUCCESS));
         } catch (NullPointerException e) {
             throw new RentalNotFoundException();
         }
@@ -86,8 +84,7 @@ public class RentalController {
         try {
             Long rentalId = itemRepository.getReferenceById(itemId).getRental().getId();
             RentalHistory rentalHistory = rentalService.cancelRental(memberId, rentalId);
-            IdDto resData = new IdDto("rentalHistoryId", rentalHistory.getId());
-            return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.RENT_CANCEL_SUCCESS, resData));
+            return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.RENT_CANCEL_SUCCESS));
         } catch (NullPointerException e) {
             throw new RentalNotFoundException();
         }

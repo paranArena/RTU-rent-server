@@ -94,6 +94,7 @@ public class MyController {
                 .collect(Collectors.toList());
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_MY_NOTIFICATION, resData));
     }
+
     @GetMapping("/clubs/{clubId}/role")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<?> getMyClubRole(@PathVariable Long clubId) {
@@ -126,11 +127,12 @@ public class MyController {
                 .collect(Collectors.toList());
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_MY_RENT, resData));
     }
+
     @GetMapping("/quit")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<?> quitService(HttpServletRequest request) {
         Long memberId = memberService.getMyIdWithAuthorities();
         memberService.deleteMember(memberId);
-        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.QUIT_SUCCESS,null));
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.QUIT_SUCCESS));
     }
 }
