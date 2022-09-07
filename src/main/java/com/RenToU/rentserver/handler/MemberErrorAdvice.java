@@ -1,4 +1,4 @@
-package com.RenToU.rentserver.controller.advice;
+package com.RenToU.rentserver.handler;
 
 import com.RenToU.rentserver.dto.ErrorResponse;
 import com.RenToU.rentserver.dto.StatusCode;

@@ -74,4 +74,8 @@ public class ResponseMessage {
 
     public static final String SEARCH_CLUB_RENTALS = "클럽 렌탈 조회";
     public static final String QUIT_SUCCESS = "탈퇴 성공";
+
+    public static final String REPORT_MEMBER = "멤버 신고가 정상적으로 접수되었습니다.";
+
+    public static final String REPORT_NOTIFICATION = "게시글 신고가 정상적으로 접수되었습니다.";
 }

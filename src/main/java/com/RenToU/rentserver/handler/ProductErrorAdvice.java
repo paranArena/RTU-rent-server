@@ -1,4 +1,4 @@
-package com.RenToU.rentserver.controller.advice;
+package com.RenToU.rentserver.handler;
 
 import com.RenToU.rentserver.exceptions.ItemAlreadyExistException;
 import org.springframework.http.HttpStatus;
@@ -23,6 +23,7 @@ public class ProductErrorAdvice {
     public ErrorResponse itemNotFound(ItemNotFoundException ex) {
         return new ErrorResponse(ex.getMessage());
     }
+
     @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(ItemAlreadyExistException.class)
     public ErrorResponse ItemAlreadyExist() {
