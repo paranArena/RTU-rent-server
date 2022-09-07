@@ -6,7 +6,7 @@ import com.RenToU.rentserver.domain.Item;
 import com.RenToU.rentserver.domain.Product;
 import com.RenToU.rentserver.domain.RentalPolicy;
 import com.RenToU.rentserver.dto.response.ItemDto;
-import com.RenToU.rentserver.dto.response.RentalDto;
+import com.RenToU.rentserver.dto.response.RentalInfoDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,7 +34,7 @@ public class RentalPreviewDto {
 
     private RentalPolicy rentalPolicy;
 
-    private RentalDto rentalInfo;
+    private RentalInfoDto rentalInfo;
 
     public static RentalPreviewDto from(Item item) {
         if (item == null)
@@ -48,7 +48,7 @@ public class RentalPreviewDto {
                 .clubName(item.getProduct().getClub().getName())
                 .imagePath(item.getProduct().getImagePath())
                 .rentalPolicy(item.getRentalPolicy())
-                .rentalInfo(RentalDto.from(item.getRental()))
+                .rentalInfo(RentalInfoDto.from(item.getRental()))
                 .build();
     }
 }

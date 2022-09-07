@@ -5,7 +5,7 @@ import com.RenToU.rentserver.domain.Product;
 import com.RenToU.rentserver.dto.StatusCode;
 import com.RenToU.rentserver.dto.response.ClubRoleDto;
 import com.RenToU.rentserver.dto.response.MemberInfoDto;
-import com.RenToU.rentserver.dto.response.RentalDto;
+import com.RenToU.rentserver.dto.response.RentalInfoDto;
 import com.RenToU.rentserver.dto.response.ResponseDto;
 import com.RenToU.rentserver.dto.response.ResponseMessage;
 import com.RenToU.rentserver.dto.response.preview.ClubPreviewDto;
