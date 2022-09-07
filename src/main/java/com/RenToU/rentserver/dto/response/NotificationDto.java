@@ -27,6 +27,8 @@ public class NotificationDto {
     @Mapping("content")
     private String content;
 
+    private String writer;
+
     private String imagePath;
 
     private Boolean isPublic;
@@ -43,6 +45,7 @@ public class NotificationDto {
                 .id(notification.getId())
                 .title(notification.getTitle())
                 .content(notification.getContent())
+                .writer(notification.getWriter().getName())
                 .imagePath(notification.getImagePath())
                 .isPublic(notification.getIsPublic())
                 .createdAt(notification.getCreatedAt())
