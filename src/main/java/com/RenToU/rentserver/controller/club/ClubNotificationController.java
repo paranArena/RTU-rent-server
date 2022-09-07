@@ -97,22 +97,4 @@ public class ClubNotificationController {
                 .collect(Collectors.toList());
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.SEARCH_NOTIFICATION_SUCCESS, resData));
     }
-    // TODO searh notification
-    // @GetMapping("/search")
-    // public ResponseEntity<?> searchNotifications(@PathVariable long clubId,
-    // @RequestParam Map<String,String> searchMap){
-    // List<Notification> notifications =
-    // clubService.findClubById(clubId).getNotifications();
-    // if(searchMap.containsKey("title")){
-    // String notificationTitle = searchMap.get("title");
-    // Notification notification =
-    // notificationService.findNotificationByTitle(notificationTitle);
-    // NotificationPreviewDto resData = NotificationPreviewDto.from(notification);
-    // return ResponseEntity.ok(ResponseDto.res(StatusCode.OK,
-    // ResponseMessage.SEARCH_CLUB_SUCCESS, resData));
-    // }
-
-    // return ResponseEntity.ok(ResponseDto.res(StatusCode.OK,
-    // ResponseMessage.SEARCH_NOTIFICATION_FAIL));
-    // }
 }
