@@ -11,12 +11,14 @@ import com.RenToU.rentserver.dto.response.ResponseMessage;
 import com.RenToU.rentserver.dto.response.preview.ClubPreviewDto;
 import com.RenToU.rentserver.dto.response.preview.NotificationPreviewDto;
 import com.RenToU.rentserver.dto.response.preview.ProductPreviewDto;
+import com.RenToU.rentserver.dto.response.preview.RentalPreviewDto;
 import com.github.dozermapper.core.Mapper;
 import com.RenToU.rentserver.application.ClubService;
 import com.RenToU.rentserver.application.MemberService;
 import com.RenToU.rentserver.application.NotificationService;
 import com.RenToU.rentserver.domain.Club;
 import com.RenToU.rentserver.domain.ClubRole;
+import com.RenToU.rentserver.domain.Item;
 import com.RenToU.rentserver.domain.Member;
 import com.RenToU.rentserver.domain.Notification;
 import com.RenToU.rentserver.domain.Rental;
@@ -28,6 +30,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
@@ -93,16 +96,6 @@ public class MyController {
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_MY_NOTIFICATION, resData));
     }
 
-    @GetMapping("/rentals")
-    @PreAuthorize("hasAnyRole('USER','ADMIN')")
-    public ResponseEntity<?> getMyRentals(HttpServletRequest request) {
-        List<Rental> rentals = memberService.getMyUserWithAuthorities().getRentals();
-        List<RentalDto> resData = rentals.stream()
-                .map((c) -> mapper.map(c, RentalDto.class))
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_MY_RENT, resData));
-    }
-
     @GetMapping("/clubs/{clubId}/role")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<?> getMyClubRole(@PathVariable Long clubId) {
@@ -122,5 +115,17 @@ public class MyController {
                 .map(product -> ProductPreviewDto.from(product))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_MY_PRODUCT, resData));
+    }
+
+    @GetMapping("/rentals")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    public ResponseEntity<?> getMyRentals(HttpServletRequest request) {
+        List<Item> items = memberService.getMyUserWithAuthorities().getRentals().stream()
+                .map((rental) -> rental.getItem())
+                .collect(Collectors.toList());
+        List<RentalPreviewDto> resData = items.stream()
+                .map((item) -> RentalPreviewDto.from(item))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_MY_RENT, resData));
     }
 }
