@@ -57,7 +57,7 @@ public class RentalService {
     }
 
     @Transactional
-    public Rental applyRental(Long memberId, Long rentalId) {
+    public void applyRental(Long memberId, Long rentalId) {
         Member member = findMember(memberId);
         Rental rental = findRental(rentalId);
         rental.validateWait();
@@ -65,10 +65,10 @@ public class RentalService {
         validateApplyTimeNotOver(rental);
         rental.startRental();
         rentalRepository.save(rental);
-        return rental;
     }
 
     @Transactional
+    // TODO void로 바꿔주실 수 있나요? 이 행위를 요청했을 때 resData는 null이 들어가도 될 것 같습니다.
     public RentalHistory returnRental(Long memberId, Long rentalId) {
         Member member = findMember(memberId);
         Rental rental = findRental(rentalId);
@@ -83,6 +83,7 @@ public class RentalService {
     }
 
     @Transactional
+    // TODO void로 바꿔주실 수 있나요? 이 행위를 요청했을 때 resData는 null이 들어가도 될 것 같습니다.
     public RentalHistory cancelRental(Long memberId, Long rentalId) {
         Member member = findMember(memberId);
         Rental rental = findRental(rentalId);
