@@ -17,6 +17,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequiredArgsConstructor
@@ -33,4 +35,12 @@ public class MemberController {
         MemberInfoDto resData = mapper.map(member, MemberInfoDto.class);
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.OK, resData));
     }
+
+    @PostMapping("/{memberId}/report")
+    public ResponseEntity<?> reportMember(@PathVariable Long memberId) {
+        // TODO: process POST request
+
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.REPORT_MEMBER));
+    }
+
 }
