@@ -88,10 +88,4 @@ public class AuthController {
         memberService.verifyCode(request);
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.EMAIL_VERIFIED, null));
     }
-
-    @PostMapping("/logout")
-    public ResponseEntity<?> logout() {
-        // TODO ?
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
 }
