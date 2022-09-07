@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -47,7 +46,7 @@ public class Item extends BaseTimeEntity {
     private Rental rental;
 
     public static Item createItem(Product product, RentalPolicy rentalPolicy, int numbering) {
-        if(product.getItemByNumbering(numbering) != null){
+        if (product.getItemByNumbering(numbering) != null) {
             throw new ItemAlreadyExistException();
         }
         Item item = Item.builder()
@@ -79,7 +78,6 @@ public class Item extends BaseTimeEntity {
         this.rental = rental;
         rental.setItem(this);
     }
-
 
     public void deleteRental() {
         this.rental = null;
