@@ -100,6 +100,6 @@ public class RentalController {
         List<AdminRentalPreviewDto> resData = items.stream()
                 .map((item) -> AdminRentalPreviewDto.from(item))
                 .collect(Collectors.toList());
-        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_CLUB, resData));
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.SEARCH_CLUB_RENTALS, resData));
     }
 }
