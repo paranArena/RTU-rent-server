@@ -56,15 +56,17 @@ public class ClubController {
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_CLUB, resData));
     }
 
-    @PutMapping("/{clubId}")
-    public ResponseEntity<?> updateClub(@PathVariable long clubId,@RequestParam("name") String name, @RequestParam("introduction") String intro,
+    @PutMapping("/{clubId}/info")
+    public ResponseEntity<?> updateClub(@PathVariable long clubId, @RequestParam("name") String name,
+            @RequestParam("introduction") String intro,
             @RequestParam("thumbnail") MultipartFile thumbnail, @RequestParam("hashtags") List<String> hashtags)
             throws IOException {
         String thumbnailPath = null;
         if (!thumbnail.isEmpty()) {
             thumbnailPath = s3Service.upload(thumbnail);
         }
-        Club club = clubService.updateClubInfo(memberService.getMyIdWithAuthorities(), clubId, name, intro, thumbnailPath,
+        Club club = clubService.updateClubInfo(memberService.getMyIdWithAuthorities(), clubId, name, intro,
+                thumbnailPath,
                 hashtags);
         ClubInfoDto resData = ClubInfoDto.from(club);
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.UPDATE_CLUB, resData));
