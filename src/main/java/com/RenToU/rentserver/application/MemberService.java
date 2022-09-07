@@ -72,7 +72,10 @@ public class MemberService {
         // TODO nullpoint
         return memberRepository.findOneWithAuthoritiesByEmail(email).orElse(null);
     }
-
+    private Member findMember(Long memberId){
+        return memberRepository.findById(memberId)
+                .orElseThrow(()-> new MemberNotFoundException(memberId));
+    }
     @Transactional(readOnly = true)
     public Member getMyUserWithAuthorities() {
         return SecurityUtil.getCurrentUsername()
@@ -151,5 +154,9 @@ public class MemberService {
         Member member = memberRepository.findOneWithAuthoritiesByEmail(email)
                 .orElseThrow(() -> new MemberNotFoundException(email));
         return member;
+    }
+    public void deleteMember(Long memberId){
+        Member member = findMember(memberId);
+        memberRepository.deleteById(member.getId());
     }
 }

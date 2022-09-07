@@ -97,4 +97,5 @@ public class Member extends BaseTimeEntity {
     public void deleteRental(Rental rental) {
         rentals.remove(rental);
     }
+
 }

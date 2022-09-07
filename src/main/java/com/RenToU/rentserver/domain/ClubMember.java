@@ -126,4 +126,8 @@ public class ClubMember extends BaseTimeEntity {
         }
         return false;
     }
+
+    public void deleteMember() {
+
+    }
 }
