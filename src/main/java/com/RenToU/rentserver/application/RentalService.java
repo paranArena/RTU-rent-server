@@ -6,6 +6,7 @@ import com.RenToU.rentserver.domain.ClubRole;
 import com.RenToU.rentserver.domain.Item;
 import com.RenToU.rentserver.domain.Location;
 import com.RenToU.rentserver.domain.Member;
+import com.RenToU.rentserver.domain.Product;
 import com.RenToU.rentserver.domain.Rental;
 import com.RenToU.rentserver.domain.RentalHistory;
 import com.RenToU.rentserver.exceptions.CannotRentException;
@@ -13,6 +14,8 @@ import com.RenToU.rentserver.exceptions.ItemNotFoundException;
 import com.RenToU.rentserver.exceptions.MemberNotFoundException;
 import com.RenToU.rentserver.exceptions.ProductNotFoundException;
 import com.RenToU.rentserver.exceptions.RentalNotFoundException;
+import com.RenToU.rentserver.exceptions.club.ClubNotFoundException;
+import com.RenToU.rentserver.infrastructure.ClubRepository;
 import com.RenToU.rentserver.infrastructure.ItemRepository;
 import com.RenToU.rentserver.infrastructure.MemberRepository;
 import com.RenToU.rentserver.infrastructure.RentalHistoryRepository;
@@ -23,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,6 +39,7 @@ public class RentalService {
     private final MemberRepository memberRepository;
     private final ItemRepository itemRepository;
     private final RentalHistoryRepository rentalHistoryRepository;
+    private final ClubRepository clubRepository;
 
     @Transactional
     public Rental requestRental(Long memberId, Long itemId) {
@@ -115,12 +120,33 @@ public class RentalService {
         return rentalRepository.findById(id)
                 .orElseThrow(() -> new RentalNotFoundException(id));
     }
+    private Club findClub(Long id) {
+        return clubRepository.findById(id)
+                .orElseThrow(() -> new ClubNotFoundException(id));
+    }
 
     public void validateApplyTimeNotOver(Rental rental) {
         if (rental.getRentDate().plusMinutes(10).isBefore(LocalDateTime.now())) {
             cancelRental(rental.getMember().getId(), rental.getId());
             throw new CannotRentException(rental.getId());
         }
+    }
+
+    public List<Item> getRentalsByClub(Long clubId, Long memberId) {
+        Club club = findClub(clubId);
+        Member member = findMember(memberId);
+        club.findClubMemberByMember(member).validateAdmin();
+        List<Product> products = findClub(clubId).getProducts();
+        List<Item> items = new ArrayList<>();
+        products.stream().forEach(product -> {
+            if(product.getItems()!= null) {
+                items.addAll(product.getItems());
+            }
+        });
+        List<Item> rentalItems = items.stream()
+                .filter(item-> item.getRental() != null)
+                .collect(Collectors.toList());
+        return rentalItems;
     }
 
 }
