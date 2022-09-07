@@ -5,7 +5,6 @@ import com.RenToU.rentserver.domain.Product;
 import com.RenToU.rentserver.dto.StatusCode;
 import com.RenToU.rentserver.dto.response.ClubRoleDto;
 import com.RenToU.rentserver.dto.response.MemberInfoDto;
-import com.RenToU.rentserver.dto.response.RentalInfoDto;
 import com.RenToU.rentserver.dto.response.ResponseDto;
 import com.RenToU.rentserver.dto.response.ResponseMessage;
 import com.RenToU.rentserver.dto.response.preview.ClubPreviewDto;
@@ -95,7 +94,6 @@ public class MyController {
                 .collect(Collectors.toList());
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_MY_NOTIFICATION, resData));
     }
-
     @GetMapping("/clubs/{clubId}/role")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<?> getMyClubRole(@PathVariable Long clubId) {
@@ -127,5 +125,12 @@ public class MyController {
                 .map((item) -> RentalPreviewDto.from(item))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_MY_RENT, resData));
+    }
+    @GetMapping("/quit")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    public ResponseEntity<?> quitService(HttpServletRequest request) {
+        Long memberId = memberService.getMyIdWithAuthorities();
+        memberService.deleteMember(memberId);
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.QUIT_SUCCESS,null));
     }
 }

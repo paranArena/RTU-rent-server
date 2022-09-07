@@ -73,4 +73,5 @@ public class ResponseMessage {
     public static final String REMOVE_CLUB_MEMBER = "클럽 멤버 삭제";
 
     public static final String SEARCH_CLUB_RENTALS = "클럽 렌탈 조회";
+    public static final String QUIT_SUCCESS = "탈퇴 성공";
 }
