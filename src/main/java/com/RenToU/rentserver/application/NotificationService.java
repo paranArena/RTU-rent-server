@@ -40,7 +40,7 @@ public class NotificationService {
         if(notificationServiceDto.getImagePaths()!= null) {
             imagePath = notificationServiceDto.getImagePaths().get(0);
         }
-        Notification notification = Notification.createNotification(title,content, imagePath, writer,club);
+        Notification notification = Notification.createNotification(title,content, imagePath,club);
         notificationRepository.save(notification);
         clubRepository.save(club);
         return notification;

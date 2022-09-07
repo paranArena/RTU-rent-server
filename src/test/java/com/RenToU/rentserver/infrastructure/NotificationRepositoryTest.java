@@ -43,7 +43,7 @@ class NotificationRepositoryTest {
     @DisplayName("notification이 저장 될 시 id, created_at, updated_at이 자동 생성됨")
     void notificationSave() {
         // given
-        Notification notification = Notification.createNotification("Test", "content", null, member, club1);
+        Notification notification = Notification.createNotification("Test", "content", null, club1);
         repository.save(notification);
         // when
 

@@ -38,20 +38,15 @@ public class Notification extends BaseTimeEntity {
     private Boolean isPublic;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "member_id")
-    private Member writer;
-
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "club_id")
     private Club club;
 
-    public static Notification createNotification(String title, String content, String imagePath, Member writer,
+    public static Notification createNotification(String title, String content, String imagePath,
             Club club) {
         Notification notification = Notification.builder()
                 .title(title)
                 .content(content)
                 .imagePath(imagePath)
-                .writer(writer)
                 .isPublic(true)
                 .build();
         club.addNotification(notification);
