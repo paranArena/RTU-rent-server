@@ -1,13 +1,18 @@
 package com.RenToU.rentserver.controller.rental;
 
 import java.io.IOException;
+import java.util.List;
 
+import com.RenToU.rentserver.application.ClubService;
 import com.RenToU.rentserver.application.RentalService;
+import com.RenToU.rentserver.domain.Club;
+import com.RenToU.rentserver.domain.Item;
 import com.RenToU.rentserver.domain.Rental;
 import com.RenToU.rentserver.domain.RentalHistory;
 import com.RenToU.rentserver.dto.response.IdDto;
 import com.RenToU.rentserver.dto.response.ItemDto;
 
+import com.RenToU.rentserver.infrastructure.ClubRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,6 +40,7 @@ public class RentalController {
     private final RentalService rentalService;
     private final ItemRepository itemRepository;
 
+    private final ClubService clubService;
     @PostMapping("/{itemId}/request")
     public ResponseEntity<?> requestRental(@PathVariable Long clubId, @PathVariable Long itemId) throws IOException {
         long memberId = memberService.getMyIdWithAuthorities();
@@ -86,10 +92,10 @@ public class RentalController {
 
     @GetMapping("/search/all")
     public ResponseEntity<?> searchClubRentalsAll(@PathVariable long clubId) {
-        // Club club = clubService.findClubById(clubId);
-        // ClubInfoDto resData = ClubInfoDto.from(club);
-        // TODO service만 작성해주시면 Dto변환은 제가 하겠습니다
-        // rentalService.searchClubRentalsAll(clubId);
+        Long memberId = memberService.getMyIdWithAuthorities();
+        Club club = clubService.findClubById(clubId);
+        List<Item> items = rentalService.getRentalsByClub(clubId,memberId);
+        //TODO dto 변환 부탁드립니다.
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_CLUB));
     }
 }

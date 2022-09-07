@@ -132,7 +132,7 @@ public class RentalService {
         }
     }
 
-    public List<Rental> getRentalsByClub(Long clubId, Long memberId) {
+    public List<Item> getRentalsByClub(Long clubId, Long memberId) {
         Club club = findClub(clubId);
         Member member = findMember(memberId);
         club.findClubMemberByMember(member).validateAdmin();
@@ -143,11 +143,10 @@ public class RentalService {
                 items.addAll(product.getItems());
             }
         });
-        List<Rental> rentals = items.stream()
+        List<Item> rentalItems = items.stream()
                 .filter(item-> item.getRental() != null)
-                .map(item->item.getRental())
                 .collect(Collectors.toList());
-        return rentals;
+        return rentalItems;
     }
 
 }
