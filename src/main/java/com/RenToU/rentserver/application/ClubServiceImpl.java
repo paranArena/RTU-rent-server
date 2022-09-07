@@ -5,6 +5,7 @@ import com.RenToU.rentserver.domain.ClubMember;
 import com.RenToU.rentserver.domain.ClubRole;
 import com.RenToU.rentserver.domain.Hashtag;
 import com.RenToU.rentserver.domain.Member;
+import com.RenToU.rentserver.domain.Product;
 import com.RenToU.rentserver.exceptions.club.CannotJoinClubException;
 import com.RenToU.rentserver.exceptions.club.ClubNotFoundException;
 import com.RenToU.rentserver.exceptions.DuplicateMemberException;
