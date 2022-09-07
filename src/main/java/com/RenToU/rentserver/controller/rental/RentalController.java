@@ -1,12 +1,14 @@
 package com.RenToU.rentserver.controller.rental;
 
 import java.io.IOException;
+import java.util.List;
 
 import com.RenToU.rentserver.application.RentalService;
 import com.RenToU.rentserver.domain.Rental;
 import com.RenToU.rentserver.domain.RentalHistory;
 import com.RenToU.rentserver.dto.response.IdDto;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -57,5 +59,11 @@ public class RentalController {
         RentalHistory rentalHistory = rentalService.cancelRental(memberId, rentId);
         IdDto resData = new IdDto("rentalHistoryId", rentalHistory.getId());
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.RENT_CANCEL_SUCCESS, resData));
+    }
+    @GetMapping("/searh/all")
+    public ResponseEntity<?> searchRentalByClub(@PathVariable Long clubId) throws IOException {
+        long memberId = memberService.getMyIdWithAuthorities();
+        List<Rental> rentals = rentalService.getRentalsByClub(clubId, memberId);
+        return null;
     }
 }

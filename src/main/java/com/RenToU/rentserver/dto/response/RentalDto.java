@@ -29,6 +29,7 @@ public class RentalDto {
 
     private LocalDateTime expDate;// 렌탈 만료 시간
 
+
     public static RentalDto from(Rental rental) {
         if (rental == null)
             return null;

@@ -50,6 +50,8 @@ class RentalServiceWebTest {
     private ItemRepository itemRepository;
     @Autowired
     private RentalHistoryRepository rentalHistoryRepository;
+    @Autowired
+    private ClubRepository clubRepository;
     private Long memberId;
     private Long itemId;
     private Long anotherMemberId;
@@ -59,7 +61,7 @@ class RentalServiceWebTest {
     @BeforeEach
     void setUp() {
         service = new RentalService(mapper, rentalRepository, memberRepository, itemRepository,
-                rentalHistoryRepository);
+                rentalHistoryRepository,clubRepository);
     }
 
     @Nested
