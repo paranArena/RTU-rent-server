@@ -2,9 +2,7 @@ package com.RenToU.rentserver.domain;
 
 import com.RenToU.rentserver.exceptions.NoOwnerPermissionException;
 import com.RenToU.rentserver.exceptions.NotClubRoleWaitingException;
-import com.RenToU.rentserver.exceptions.NotWaitingException;
 import com.RenToU.rentserver.exceptions.club.CannotGrantException;
-import com.RenToU.rentserver.exceptions.club.CannotJoinClubException;
 import com.RenToU.rentserver.exceptions.NoAdminPermissionException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

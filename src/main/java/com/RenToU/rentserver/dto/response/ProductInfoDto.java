@@ -4,8 +4,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.RenToU.rentserver.domain.Product;
-import com.RenToU.rentserver.dto.response.ItemDto;
-import com.RenToU.rentserver.dto.response.LocationDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -50,6 +48,7 @@ public class ProductInfoDto {
                 .items(product.getItems().stream().map((i) -> ItemDto.from(i)).collect(Collectors.toList()))
                 .build();
     }
+
     public static ProductInfoDto from(Product product, Long memberId) {
         if (product == null)
             return null;
@@ -64,7 +63,7 @@ public class ProductInfoDto {
                 .price(product.getPrice())
                 .caution(product.getCaution())
                 .imagePath(product.getImagePath())
-                .items(product.getItems().stream().map((i) -> ItemDto.from(i,memberId)).collect(Collectors.toList()))
+                .items(product.getItems().stream().map((i) -> ItemDto.from(i, memberId)).collect(Collectors.toList()))
                 .build();
     }
 }

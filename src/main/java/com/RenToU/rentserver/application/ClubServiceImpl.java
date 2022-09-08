@@ -5,10 +5,9 @@ import com.RenToU.rentserver.domain.ClubMember;
 import com.RenToU.rentserver.domain.ClubRole;
 import com.RenToU.rentserver.domain.Hashtag;
 import com.RenToU.rentserver.domain.Member;
-import com.RenToU.rentserver.domain.Product;
-import com.RenToU.rentserver.exceptions.club.CannotJoinClubException;
 import com.RenToU.rentserver.exceptions.club.ClubNotFoundException;
-import com.RenToU.rentserver.exceptions.DuplicateMemberException;
+import com.RenToU.rentserver.exceptions.ClubErrorCode;
+import com.RenToU.rentserver.exceptions.CustomException;
 import com.RenToU.rentserver.exceptions.MemberNotFoundException;
 import com.RenToU.rentserver.exceptions.clubMember.ClubMemberNotFoundException;
 import com.RenToU.rentserver.infrastructure.ClubHashtagRepository;
@@ -16,7 +15,6 @@ import com.RenToU.rentserver.infrastructure.ClubMemberRepository;
 import com.RenToU.rentserver.infrastructure.ClubRepository;
 import com.RenToU.rentserver.infrastructure.HashtagRepository;
 import com.RenToU.rentserver.infrastructure.MemberRepository;
-import com.github.dozermapper.core.Mapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +26,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 public class ClubServiceImpl implements ClubService {
-    private final Mapper mapper;
     private final ClubRepository clubRepository;
     private final MemberRepository memberRepository;
     private final HashtagRepository hashtagRepository;
@@ -48,7 +45,7 @@ public class ClubServiceImpl implements ClubService {
             List<String> hashtagNames) {
         if (clubRepository.findByName(clubName).orElse(null) != null) {
             // TODO DuplicateClubException으로 교체?
-            throw new DuplicateMemberException("이미 존재하는 모임 이름입니다.");
+            throw new CustomException(ClubErrorCode.DUP_CLUB_NAME);
         }
         // 회원 조회
         Member member = findMember(memberId);
@@ -245,9 +242,11 @@ public class ClubServiceImpl implements ClubService {
         clubMemberRepository.deleteById(clubMember.getId());
         clubRepository.save(club);
     }
+
     @Override
     @Transactional
-    public Club updateClubInfo(long memberId,long clubId, String name, String intro, String thumbnailPath, List<String> hashtagNames){
+    public Club updateClubInfo(long memberId, long clubId, String name, String intro, String thumbnailPath,
+            List<String> hashtagNames) {
         Member member = findMember(memberId);
         Club club = findClub(clubId);
         club.findClubMemberByMember(member).validateAdmin();
@@ -261,7 +260,7 @@ public class ClubServiceImpl implements ClubService {
     }
 
     private void eraseBeforeClubHashtag(Club club) {
-        club.getHashtags().forEach(clubHashtag ->clubHashtagRepository.deleteById(clubHashtag.getId()));
+        club.getHashtags().forEach(clubHashtag -> clubHashtagRepository.deleteById(clubHashtag.getId()));
     }
 
     /**
@@ -270,7 +269,7 @@ public class ClubServiceImpl implements ClubService {
     private void validateCanJoin(Club club, Member member) {
         club.getMemberList().stream().forEach(cl -> {
             if (cl.getMember() == member) {
-                throw new CannotJoinClubException(club.getId(), club.getName(), "멤버가 이미 가입하였거나, 가입 신청 상태입니다.");
+                throw new CustomException(ClubErrorCode.CANT_JOIN_CLUB);
             }
         });
     }

@@ -3,13 +3,12 @@ package com.RenToU.rentserver.application;
 import com.RenToU.rentserver.domain.Club;
 import com.RenToU.rentserver.domain.ClubMember;
 import com.RenToU.rentserver.domain.ClubRole;
-import com.RenToU.rentserver.domain.Member;
-import com.RenToU.rentserver.domain.Notification;
 
 import java.util.List;
 
 public interface ClubService {
     public List<Club> findClubs();
+
     public Club findClubById(long clubId);
 
     public Club findClubByName(String clubName);
@@ -45,5 +44,6 @@ public interface ClubService {
 
     List<Club> getMyClubRequests(long memberId);
 
-    Club updateClubInfo(long memberId, long clubId,String name, String intro, String thumbnailPath, List<String> hashtags);
+    Club updateClubInfo(long memberId, long clubId, String name, String intro, String thumbnailPath,
+            List<String> hashtags);
 }
