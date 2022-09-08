@@ -77,11 +77,10 @@ public class RentalController {
         // stduentId 가 존재하지 않으면 임시멤버 생성
 
         try {
-            Long rentalId = itemRepository.findById(itemId)
-                    .orElseThrow(() -> new CustomException(ClubErrorCode.ITEM_NOT_FOUND))
-                    .getRental().getId();
+            // Long rentalId = itemRepository.findById(itemId)
+            // .orElseThrow(() -> new CustomException(ClubErrorCode.ITEM_NOT_FOUND))
+            // .getRental().getId();
 
-            // TODO change service
             rentalService.justRental(clubAdminId, clubId, itemId, dto.getName(), dto.getStudentId());
             return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.RENT_APPLY_SUCCESS));
         } catch (NullPointerException e) {
