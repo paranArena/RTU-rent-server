@@ -182,6 +182,7 @@ public class RentalService {
         rentalRepository.save(rental);
     }
 
+
     private Member findOrCreateTempMember(String studentName,String studentId,Club club) {
         Optional<Member> member = memberRepository.findOneWithAuthoritiesByStudentId(studentId);
         if(member.isPresent()){
@@ -194,6 +195,21 @@ public class RentalService {
             return tmpMember;
         }
 
+    }
+    @Transactional
+    public void returnRentalAdmin(Long adminId,Long clubId, Long rentalId,Long memberId) {
+        Member admin = findMember(adminId);
+        Member member = findMember(memberId);
+        Rental rental = findRental(rentalId);
+        Club club = findClub(clubId);
+        rental.validateRent();
+        club.findClubMemberByMember(admin).validateAdmin();
+        rental.validateMember(member);
+        rental.checkLate();
+        rental.finishRental();
+        RentalHistory rentalHistory = RentalHistory.RentalToHistory(rental);
+        rentalHistoryRepository.save(rentalHistory);
+        rentalRepository.deleteById(rental.getId());
     }
 
     private List<RentalHistory> findHistoriesByItem(Item item) {
