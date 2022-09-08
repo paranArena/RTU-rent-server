@@ -10,6 +10,9 @@ import com.RenToU.rentserver.domain.RentalHistory;
 import com.RenToU.rentserver.domain.RentalPolicy;
 import com.RenToU.rentserver.domain.RentalStatus;
 import com.RenToU.rentserver.exceptions.CannotRentException;
+import com.RenToU.rentserver.exceptions.CustomException;
+import com.RenToU.rentserver.exceptions.MemberErrorCode;
+import com.RenToU.rentserver.exceptions.RentalErrorCode;
 import com.RenToU.rentserver.infrastructure.ClubRepository;
 import com.RenToU.rentserver.infrastructure.HashtagRepository;
 import com.RenToU.rentserver.infrastructure.ItemRepository;
@@ -61,7 +64,7 @@ class RentalServiceWebTest {
     @BeforeEach
     void setUp() {
         service = new RentalService(rentalRepository, memberRepository, itemRepository,
-                rentalHistoryRepository,clubRepository);
+                rentalHistoryRepository, clubRepository);
     }
 
     @Nested
@@ -79,8 +82,11 @@ class RentalServiceWebTest {
             @Test
             @DisplayName(" CannotRent Exception을 던진다.")
             void it_throws_CannotRentException() {
+                // NOTE: 이렇게 예외 테스트하면 될 것 같습니다!
+                // 근데 지금은 MemberErrorCode.MEMBER_NOT_FOUND 가 뜨네요.
                 assertThatThrownBy(() -> service.requestRental(memberId, itemId))
-                        .isInstanceOf(CannotRentException.class);
+                        .isInstanceOf(CustomException.class)
+                        .hasFieldOrPropertyWithValue("errorCode", RentalErrorCode.NOT_CLUB_MEMBER);
             }
         }
 
