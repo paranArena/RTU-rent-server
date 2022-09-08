@@ -1,6 +1,5 @@
 package com.RenToU.rentserver.infrastructure;
 
-import com.RenToU.rentserver.domain.Club;
 import com.RenToU.rentserver.domain.Hashtag;
 import org.springframework.data.jpa.repository.JpaRepository;
 

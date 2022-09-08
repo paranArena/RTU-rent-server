@@ -1,12 +1,9 @@
 package com.RenToU.rentserver.controller.rental;
 
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
-import com.RenToU.rentserver.application.ClubService;
 import com.RenToU.rentserver.application.RentalService;
-import com.RenToU.rentserver.domain.Club;
 import com.RenToU.rentserver.domain.Item;
 import com.RenToU.rentserver.domain.Rental;
 import com.RenToU.rentserver.domain.RentalHistory;
@@ -26,7 +23,6 @@ import com.RenToU.rentserver.dto.StatusCode;
 import com.RenToU.rentserver.dto.response.ResponseDto;
 import com.RenToU.rentserver.dto.response.ResponseMessage;
 import com.RenToU.rentserver.dto.response.preview.AdminRentalPreviewDto;
-import com.RenToU.rentserver.dto.response.preview.RentalPreviewDto;
 import com.RenToU.rentserver.exceptions.RentalNotFoundException;
 import com.RenToU.rentserver.infrastructure.ItemRepository;
 
@@ -40,8 +36,6 @@ public class RentalController {
     private final MemberService memberService;
     private final RentalService rentalService;
     private final ItemRepository itemRepository;
-
-    private final ClubService clubService;
 
     @PostMapping("/{itemId}/request")
     public ResponseEntity<?> requestRental(@PathVariable Long clubId, @PathVariable Long itemId) {

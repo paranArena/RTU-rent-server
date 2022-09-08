@@ -4,11 +4,8 @@ import com.RenToU.rentserver.domain.Club;
 import com.RenToU.rentserver.domain.ClubHashtag;
 import com.RenToU.rentserver.domain.Hashtag;
 import com.RenToU.rentserver.domain.Member;
-import com.RenToU.rentserver.domain.Notification;
 import com.RenToU.rentserver.infrastructure.ClubHashtagRepository;
-import com.RenToU.rentserver.infrastructure.ClubRepository;
 import com.RenToU.rentserver.infrastructure.HashtagRepository;
-import com.RenToU.rentserver.infrastructure.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,12 +13,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)

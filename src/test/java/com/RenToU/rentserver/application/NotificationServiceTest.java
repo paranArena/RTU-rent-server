@@ -60,7 +60,6 @@ class NotificationServiceTest {
         // then
         assertThat(notification.getTitle()).isEqualTo(INITIAL_NOTI_TITLE);
         assertThat(notification.getContent()).isEqualTo(INITIAL_NOTI_CONTENT);
-        assertThat(notification.getWriter()).isEqualTo(member);
         assertThat(notification.getClub()).isEqualTo(club);
     }
 
