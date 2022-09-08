@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.RenToU.rentserver.domain.Member;
-import com.RenToU.rentserver.exceptions.MemberNotActivatedException;
 import com.RenToU.rentserver.infrastructure.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -32,7 +31,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
    private org.springframework.security.core.userdetails.User createMember(String email, Member member) {
       if (!member.isActivated()) {
-         throw new MemberNotActivatedException(email + " -> 활성화되어 있지 않습니다.");
+         throw new RuntimeException("활성화되지 않은 유저입니다.");
       }
 
       List<GrantedAuthority> grantedAuthorities = member.getAuthorities().stream()

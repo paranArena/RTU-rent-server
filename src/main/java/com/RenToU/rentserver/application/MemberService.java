@@ -1,13 +1,10 @@
 package com.RenToU.rentserver.application;
 
 import java.util.Collections;
-import java.util.Optional;
 import java.util.Random;
 
 import com.RenToU.rentserver.dto.request.EmailDto;
 import com.RenToU.rentserver.dto.request.EmailVerifyDto;
-import com.RenToU.rentserver.exceptions.NotAjouEmailException;
-import com.RenToU.rentserver.exceptions.WrongEmailCodeException;
 import com.RenToU.rentserver.util.RedisUtil;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -18,9 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.RenToU.rentserver.domain.Authority;
 import com.RenToU.rentserver.domain.Member;
 import com.RenToU.rentserver.dto.request.SignupDto;
-import com.RenToU.rentserver.exceptions.DuplicateMemberException;
-import com.RenToU.rentserver.exceptions.MemberNotFoundException;
-import com.RenToU.rentserver.exceptions.NotFoundMemberException;
+import com.RenToU.rentserver.exceptions.AuthErrorCode;
+import com.RenToU.rentserver.exceptions.CustomException;
+import com.RenToU.rentserver.exceptions.MemberErrorCode;
 import com.RenToU.rentserver.infrastructure.MemberRepository;
 import com.RenToU.rentserver.util.SecurityUtil;
 
@@ -40,13 +37,13 @@ public class MemberService {
     @Transactional
     public Member signup(SignupDto signupDTO) {
         if (memberRepository.existsByEmail(signupDTO.getEmail())) {
-            throw new DuplicateMemberException("이미 존재하는 이메일입니다.");
+            throw new CustomException(MemberErrorCode.DUP_EMAIL);
         }
         if (memberRepository.existsByPhoneNumber(signupDTO.getPhoneNumber())) {
-            throw new DuplicateMemberException("이미 존재하는 휴대폰 번호입니다.");
+            throw new CustomException(MemberErrorCode.DUP_PHONE);
         }
         if (memberRepository.existsByStudentId(signupDTO.getStudentId())) {
-            throw new DuplicateMemberException("이미 존재하는 학번입니다.");
+            throw new CustomException(MemberErrorCode.DUP_STUDENTID);
         }
 
         Authority authority = Authority.builder()
@@ -70,24 +67,27 @@ public class MemberService {
     @Transactional(readOnly = true)
     public Member getUserWithAuthorities(String email) {
         // TODO nullpoint
-        return memberRepository.findOneWithAuthoritiesByEmail(email).orElse(null);
+        return memberRepository.findOneWithAuthoritiesByEmail(email)
+                .orElseThrow(() -> new CustomException(MemberErrorCode.MEMBER_NOT_FOUND));
     }
-    private Member findMember(Long memberId){
+
+    private Member findMember(Long memberId) {
         return memberRepository.findById(memberId)
-                .orElseThrow(()-> new MemberNotFoundException(memberId));
+                .orElseThrow(() -> new CustomException(MemberErrorCode.MEMBER_NOT_FOUND));
     }
+
     @Transactional(readOnly = true)
     public Member getMyUserWithAuthorities() {
         return SecurityUtil.getCurrentUsername()
                 .flatMap(memberRepository::findOneWithAuthoritiesByEmail)
-                .orElseThrow(() -> new NotFoundMemberException("Member not found"));
+                .orElseThrow(() -> new CustomException(MemberErrorCode.MEMBER_NOT_FOUND));
     }
 
     @Transactional(readOnly = true)
     public long getMyIdWithAuthorities() {
         Member member = SecurityUtil.getCurrentUsername()
                 .flatMap(memberRepository::findOneWithAuthoritiesByEmail)
-                .orElseThrow(() -> new NotFoundMemberException("Member not found"));
+                .orElseThrow(() -> new CustomException(MemberErrorCode.MEMBER_NOT_FOUND));
         return member.getId();
     }
 
@@ -122,6 +122,7 @@ public class MemberService {
             javaMailSender.send(mimeMessage);
 
         } catch (MessagingException e) {
+            // TODO 메일 재전송 or 메일 에러났으니 나중에 다시 요청 부탁
             e.printStackTrace();
         }
 
@@ -135,7 +136,7 @@ public class MemberService {
         String verifyCode = redisUtil.getData(email);
         System.out.println(userCode + " " + verifyCode);
         if (!userCode.equals(verifyCode)) {
-            throw new WrongEmailCodeException();
+            throw new CustomException(AuthErrorCode.WRONG_VERIFICATION_CODE);
         }
         Member member = findMemberByEMail(email);
         member.setActivated(true);
@@ -146,16 +147,17 @@ public class MemberService {
         int idx = email.indexOf("@");
         String domain = email.substring(idx + 1);
         if (!domain.equals("ajou.ac.kr")) {
-            throw new NotAjouEmailException();
+            throw new CustomException(AuthErrorCode.NOT_AJOU_EMAIL);
         }
     }
 
     private Member findMemberByEMail(String email) {
         Member member = memberRepository.findOneWithAuthoritiesByEmail(email)
-                .orElseThrow(() -> new MemberNotFoundException(email));
+                .orElseThrow(() -> new CustomException(MemberErrorCode.MEMBER_NOT_FOUND));
         return member;
     }
-    public void deleteMember(Long memberId){
+
+    public void deleteMember(Long memberId) {
         Member member = findMember(memberId);
         memberRepository.deleteById(member.getId());
     }

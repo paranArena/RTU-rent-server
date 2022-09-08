@@ -9,6 +9,8 @@ import com.RenToU.rentserver.dto.response.MemberInfoDto;
 import com.RenToU.rentserver.dto.response.ResponseDto;
 import com.RenToU.rentserver.dto.response.ResponseMessage;
 import com.RenToU.rentserver.dto.response.TokenDto;
+import com.RenToU.rentserver.exceptions.AuthErrorCode;
+import com.RenToU.rentserver.exceptions.CustomException;
 import com.RenToU.rentserver.application.MemberService;
 import com.RenToU.rentserver.domain.Member;
 import com.RenToU.rentserver.jwt.JwtFilter;
@@ -62,19 +64,26 @@ public class AuthController {
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<TokenDto> login(@Valid @RequestBody LoginDto loginDto) {
+    public ResponseEntity<TokenDto> login(@Valid @RequestBody LoginDto loginDto) throws CustomException {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                 loginDto.getEmail(), loginDto.getPassword());
+        try {
+            Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
-        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        String jwt = tokenProvider.createToken(authentication);
+            String jwt = tokenProvider.createToken(authentication);
 
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
 
-        return new ResponseEntity<>(new TokenDto(jwt), httpHeaders, HttpStatus.OK);
+            return new ResponseEntity<>(new TokenDto(jwt), httpHeaders, HttpStatus.OK);
+        } catch (RuntimeException e) {
+            if (e.getMessage().equals("활성화되지 않은 유저입니다."))
+                throw new CustomException(AuthErrorCode.INACTIVE_USER);
+            else
+                throw e;
+        }
     }
 
     @PostMapping("members/email/requestCode")

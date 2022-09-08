@@ -6,9 +6,7 @@ import com.RenToU.rentserver.domain.Member;
 import com.RenToU.rentserver.domain.Product;
 import com.RenToU.rentserver.domain.RentalPolicy;
 import com.RenToU.rentserver.dto.service.CreateProductServiceDto;
-import com.RenToU.rentserver.dto.service.CreateProductServiceDto;
 import com.RenToU.rentserver.infrastructure.ClubRepository;
-import com.RenToU.rentserver.infrastructure.HashtagRepository;
 import com.RenToU.rentserver.infrastructure.ItemRepository;
 import com.RenToU.rentserver.infrastructure.MemberRepository;
 import com.RenToU.rentserver.infrastructure.ProductRepository;
@@ -20,14 +18,11 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.geo.Point;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -51,7 +46,8 @@ class ProductServiceWebTest {
 
     @BeforeEach
     void setUp() {
-        service = new ProductService(mapper, clubRepository, memberRepository, productRepository,rentalRepository,itemRepository);
+        service = new ProductService(mapper, clubRepository, memberRepository, productRepository, rentalRepository,
+                itemRepository);
         owner = memberRepository.findById(2L).get();
         club = clubRepository.findById(1L).get();
 

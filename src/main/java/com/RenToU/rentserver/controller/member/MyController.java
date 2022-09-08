@@ -20,7 +20,6 @@ import com.RenToU.rentserver.domain.ClubRole;
 import com.RenToU.rentserver.domain.Item;
 import com.RenToU.rentserver.domain.Member;
 import com.RenToU.rentserver.domain.Notification;
-import com.RenToU.rentserver.domain.Rental;
 
 import lombok.RequiredArgsConstructor;
 
@@ -29,7 +28,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;

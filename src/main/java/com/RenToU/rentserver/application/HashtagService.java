@@ -3,10 +3,9 @@ package com.RenToU.rentserver.application;
 import com.RenToU.rentserver.domain.Club;
 import com.RenToU.rentserver.domain.ClubHashtag;
 import com.RenToU.rentserver.domain.Hashtag;
-import com.RenToU.rentserver.exceptions.HashtagNotFoundException;
-import com.RenToU.rentserver.exceptions.club.ClubNotFoundException;
+import com.RenToU.rentserver.exceptions.ClubErrorCode;
+import com.RenToU.rentserver.exceptions.CustomException;
 import com.RenToU.rentserver.infrastructure.ClubHashtagRepository;
-import com.RenToU.rentserver.infrastructure.ClubRepository;
 import com.RenToU.rentserver.infrastructure.HashtagRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -37,6 +36,6 @@ public class HashtagService {
 
     private Hashtag findHashtagByName(String hashtagName) {
         return hashtagRepository.findByName(hashtagName)
-                .orElseThrow(() -> new HashtagNotFoundException(hashtagName));
+                .orElseThrow(() -> new CustomException(ClubErrorCode.HASHTAG_NOT_FOUND));
     }
 }

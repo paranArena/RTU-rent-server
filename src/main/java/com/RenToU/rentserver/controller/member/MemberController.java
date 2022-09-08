@@ -1,8 +1,6 @@
 package com.RenToU.rentserver.controller.member;
 
 import com.RenToU.rentserver.dto.StatusCode;
-import com.RenToU.rentserver.dto.request.EmailDto;
-import com.RenToU.rentserver.dto.request.EmailVerifyDto;
 import com.RenToU.rentserver.dto.response.MemberInfoDto;
 import com.RenToU.rentserver.dto.response.ResponseDto;
 import com.RenToU.rentserver.dto.response.ResponseMessage;
@@ -16,9 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequiredArgsConstructor

@@ -1,11 +1,8 @@
 package com.RenToU.rentserver.application;
 
-import com.RenToU.rentserver.domain.Item;
-import com.RenToU.rentserver.domain.Member;
 import com.RenToU.rentserver.domain.Rental;
 import com.RenToU.rentserver.domain.RentalHistory;
 import com.RenToU.rentserver.domain.RentalStatus;
-import com.RenToU.rentserver.infrastructure.MemberRepository;
 import com.RenToU.rentserver.infrastructure.RentalHistoryRepository;
 import com.RenToU.rentserver.infrastructure.RentalRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +22,7 @@ public class ScheduleService {
     @Transactional
     public void checkExpiredRentalWait() {
         List<Rental> rentals = rentalRepository.findAllByRentalStatus(RentalStatus.WAIT);
-        if(rentals != null) {
+        if (rentals != null) {
             rentals.stream().forEach(rental -> {
                 if (rental.getRentDate().plusMinutes(10).isBefore(LocalDateTime.now())) {
                     rental.cancel();

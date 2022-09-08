@@ -1,15 +1,12 @@
 package com.RenToU.rentserver.domain;
 
-import com.RenToU.rentserver.exceptions.CannotRentException;
-import com.RenToU.rentserver.exceptions.NotRentingException;
-import com.RenToU.rentserver.exceptions.NotWaitingException;
-import lombok.AccessLevel;
+import com.RenToU.rentserver.exceptions.CustomException;
+import com.RenToU.rentserver.exceptions.RentalErrorCode;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import net.bytebuddy.asm.Advice;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -24,7 +21,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import static javax.persistence.FetchType.LAZY;
@@ -96,19 +92,19 @@ public class Rental {
 
     public void validateRent() {
         if (this.rentalStatus != RentalStatus.RENT) {
-            throw new NotRentingException(this.id);
+            throw new CustomException(RentalErrorCode.NOT_RENT_STATUS);
         }
     }
 
     public void validateWait() {
         if (this.rentalStatus != RentalStatus.WAIT) {
-            throw new NotWaitingException(this.id);
+            throw new CustomException(RentalErrorCode.NOT_WAIT_STATUS);
         }
     }
 
     public void validateMember(Member member) {
         if (this.member != member) {
-            throw new NotRentingException(this.id);
+            throw new CustomException(RentalErrorCode.INVALID_MEMBER);
         }
     }
 
@@ -139,9 +135,9 @@ public class Rental {
     }
 
     public boolean isMeRental(Long memberId) {
-        if(memberId == member.getId()){
+        if (memberId == member.getId()) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }

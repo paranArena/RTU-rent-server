@@ -1,7 +1,6 @@
 package com.RenToU.rentserver.infrastructure;
 
 import com.RenToU.rentserver.domain.Club;
-import com.RenToU.rentserver.domain.ClubHashtag;
 import com.RenToU.rentserver.domain.Hashtag;
 import com.RenToU.rentserver.domain.Member;
 import com.RenToU.rentserver.domain.Notification;
@@ -13,7 +12,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

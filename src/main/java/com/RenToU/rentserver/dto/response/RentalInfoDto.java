@@ -2,9 +2,6 @@ package com.RenToU.rentserver.dto.response;
 
 import java.time.LocalDateTime;
 
-import org.springframework.boot.autoconfigure.info.ProjectInfoProperties.Build;
-
-import com.RenToU.rentserver.domain.ClubMember;
 import com.RenToU.rentserver.domain.Rental;
 import com.RenToU.rentserver.domain.RentalStatus;
 
@@ -38,7 +35,8 @@ public class RentalInfoDto {
                 .expDate(rental.getExpDate())
                 .build();
     }
-    public static RentalInfoDto from(Rental rental,Long memberId) {
+
+    public static RentalInfoDto from(Rental rental, Long memberId) {
         if (rental == null)
             return null;
         return RentalInfoDto.builder()
