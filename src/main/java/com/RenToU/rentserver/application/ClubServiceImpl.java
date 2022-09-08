@@ -5,11 +5,9 @@ import com.RenToU.rentserver.domain.ClubMember;
 import com.RenToU.rentserver.domain.ClubRole;
 import com.RenToU.rentserver.domain.Hashtag;
 import com.RenToU.rentserver.domain.Member;
-import com.RenToU.rentserver.exceptions.club.ClubNotFoundException;
 import com.RenToU.rentserver.exceptions.ClubErrorCode;
 import com.RenToU.rentserver.exceptions.CustomException;
-import com.RenToU.rentserver.exceptions.MemberNotFoundException;
-import com.RenToU.rentserver.exceptions.clubMember.ClubMemberNotFoundException;
+import com.RenToU.rentserver.exceptions.MemberErrorCode;
 import com.RenToU.rentserver.infrastructure.ClubHashtagRepository;
 import com.RenToU.rentserver.infrastructure.ClubMemberRepository;
 import com.RenToU.rentserver.infrastructure.ClubRepository;
@@ -44,7 +42,6 @@ public class ClubServiceImpl implements ClubService {
     public Club createClub(Long memberId, String clubName, String clubIntro, String thumbnailPath,
             List<String> hashtagNames) {
         if (clubRepository.findByName(clubName).orElse(null) != null) {
-            // TODO DuplicateClubException으로 교체?
             throw new CustomException(ClubErrorCode.DUP_CLUB_NAME);
         }
         // 회원 조회
@@ -150,13 +147,13 @@ public class ClubServiceImpl implements ClubService {
     @Override
     public Club findClubByName(String clubName) {
         return clubRepository.findByName(clubName)
-                .orElseThrow(() -> new ClubNotFoundException(clubName));
+                .orElseThrow(() -> new CustomException(ClubErrorCode.CLUB_NOT_FOUND));
     }
 
     @Override
     public Club findClubById(long clubId) {
         return clubRepository.findById(clubId)
-                .orElseThrow(() -> new ClubNotFoundException(clubId));
+                .orElseThrow(() -> new CustomException(ClubErrorCode.CLUB_NOT_FOUND));
     }
 
     @Override
@@ -182,8 +179,12 @@ public class ClubServiceImpl implements ClubService {
         try {
             ClubMember cm = club.findClubMemberByMember(member);
             return cm.getRole();
-        } catch (ClubMemberNotFoundException e) {
-            return ClubRole.NONE;
+        } catch (CustomException e) {
+            if (e.getErrorCode() == ClubErrorCode.CLUBMEMBER_NOT_FOUND)
+                return ClubRole.NONE;
+            else {
+                throw e;
+            }
         }
     }
 
@@ -269,19 +270,19 @@ public class ClubServiceImpl implements ClubService {
     private void validateCanJoin(Club club, Member member) {
         club.getMemberList().stream().forEach(cl -> {
             if (cl.getMember() == member) {
-                throw new CustomException(ClubErrorCode.CANT_JOIN_CLUB);
+                throw new CustomException(ClubErrorCode.CANT_REQUEST_JOIN);
             }
         });
     }
 
     private Member findMember(Long id) {
         return memberRepository.findById(id)
-                .orElseThrow(() -> new MemberNotFoundException(id));
+                .orElseThrow(() -> new CustomException(MemberErrorCode.MEMBER_NOT_FOUND));
     }
 
     private Club findClub(Long id) {
         return clubRepository.findById(id)
-                .orElseThrow(() -> new ClubNotFoundException(id));
+                .orElseThrow(() -> new CustomException(ClubErrorCode.CLUB_NOT_FOUND));
     }
 
     private Hashtag findHashtagByNameOrCreate(String hashtagName) {

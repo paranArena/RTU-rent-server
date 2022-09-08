@@ -5,9 +5,9 @@ import com.RenToU.rentserver.dto.service.CreateNotificationServiceDto;
 import com.RenToU.rentserver.domain.Club;
 import com.RenToU.rentserver.domain.Member;
 import com.RenToU.rentserver.domain.Notification;
-import com.RenToU.rentserver.exceptions.club.ClubNotFoundException;
-import com.RenToU.rentserver.exceptions.MemberNotFoundException;
-import com.RenToU.rentserver.exceptions.NotificationNotFoundException;
+import com.RenToU.rentserver.exceptions.ClubErrorCode;
+import com.RenToU.rentserver.exceptions.CustomException;
+import com.RenToU.rentserver.exceptions.MemberErrorCode;
 import com.RenToU.rentserver.infrastructure.ClubRepository;
 import com.RenToU.rentserver.infrastructure.MemberRepository;
 import com.RenToU.rentserver.infrastructure.NotificationRepository;
@@ -67,17 +67,17 @@ public class NotificationService {
     public Notification findNotification(Long id) {
         // TODO member 클럽회원 권한 체크
         return notificationRepository.findById(id)
-                .orElseThrow(() -> new NotificationNotFoundException(id));
+                .orElseThrow(() -> new CustomException(ClubErrorCode.NOTIFICATION_NOT_FOUND));
     }
 
     private Member findMember(Long id) {
         return memberRepository.findById(id)
-                .orElseThrow(() -> new MemberNotFoundException(id));
+                .orElseThrow(() -> new CustomException(MemberErrorCode.MEMBER_NOT_FOUND));
     }
 
     private Club findClub(Long id) {
         return clubRepository.findById(id)
-                .orElseThrow(() -> new ClubNotFoundException(id));
+                .orElseThrow(() -> new CustomException(ClubErrorCode.CLUB_NOT_FOUND));
     }
 
     public List<Notification> getClubNotifications(long memberId, long clubId) {

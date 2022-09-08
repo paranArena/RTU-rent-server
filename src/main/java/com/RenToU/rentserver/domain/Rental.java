@@ -1,7 +1,8 @@
 package com.RenToU.rentserver.domain;
 
-import com.RenToU.rentserver.exceptions.NotRentingException;
-import com.RenToU.rentserver.exceptions.NotWaitingException;
+import com.RenToU.rentserver.exceptions.CustomException;
+import com.RenToU.rentserver.exceptions.RentalErrorCode;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -91,19 +92,19 @@ public class Rental {
 
     public void validateRent() {
         if (this.rentalStatus != RentalStatus.RENT) {
-            throw new NotRentingException(this.id);
+            throw new CustomException(RentalErrorCode.NOT_RENT_STATUS);
         }
     }
 
     public void validateWait() {
         if (this.rentalStatus != RentalStatus.WAIT) {
-            throw new NotWaitingException(this.id);
+            throw new CustomException(RentalErrorCode.NOT_WAIT_STATUS);
         }
     }
 
     public void validateMember(Member member) {
         if (this.member != member) {
-            throw new NotRentingException(this.id);
+            throw new CustomException(RentalErrorCode.INVALID_MEMBER);
         }
     }
 

@@ -18,8 +18,6 @@ import com.RenToU.rentserver.dto.request.SignupDto;
 import com.RenToU.rentserver.exceptions.AuthErrorCode;
 import com.RenToU.rentserver.exceptions.CustomException;
 import com.RenToU.rentserver.exceptions.MemberErrorCode;
-import com.RenToU.rentserver.exceptions.MemberNotFoundException;
-import com.RenToU.rentserver.exceptions.NotFoundMemberException;
 import com.RenToU.rentserver.infrastructure.MemberRepository;
 import com.RenToU.rentserver.util.SecurityUtil;
 
@@ -69,26 +67,27 @@ public class MemberService {
     @Transactional(readOnly = true)
     public Member getUserWithAuthorities(String email) {
         // TODO nullpoint
-        return memberRepository.findOneWithAuthoritiesByEmail(email).orElse(null);
+        return memberRepository.findOneWithAuthoritiesByEmail(email)
+                .orElseThrow(() -> new CustomException(MemberErrorCode.MEMBER_NOT_FOUND));
     }
 
     private Member findMember(Long memberId) {
         return memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberNotFoundException(memberId));
+                .orElseThrow(() -> new CustomException(MemberErrorCode.MEMBER_NOT_FOUND));
     }
 
     @Transactional(readOnly = true)
     public Member getMyUserWithAuthorities() {
         return SecurityUtil.getCurrentUsername()
                 .flatMap(memberRepository::findOneWithAuthoritiesByEmail)
-                .orElseThrow(() -> new NotFoundMemberException("Member not found"));
+                .orElseThrow(() -> new CustomException(MemberErrorCode.MEMBER_NOT_FOUND));
     }
 
     @Transactional(readOnly = true)
     public long getMyIdWithAuthorities() {
         Member member = SecurityUtil.getCurrentUsername()
                 .flatMap(memberRepository::findOneWithAuthoritiesByEmail)
-                .orElseThrow(() -> new NotFoundMemberException("Member not found"));
+                .orElseThrow(() -> new CustomException(MemberErrorCode.MEMBER_NOT_FOUND));
         return member.getId();
     }
 
@@ -154,7 +153,7 @@ public class MemberService {
 
     private Member findMemberByEMail(String email) {
         Member member = memberRepository.findOneWithAuthoritiesByEmail(email)
-                .orElseThrow(() -> new MemberNotFoundException(email));
+                .orElseThrow(() -> new CustomException(MemberErrorCode.MEMBER_NOT_FOUND));
         return member;
     }
 
