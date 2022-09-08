@@ -74,7 +74,7 @@ public class RentalController {
         }
     }
 
-    @PostMapping("/{itemId}/apply/{studentId}")
+    @PostMapping("/{itemId}/apply/admin")
     public ResponseEntity<?> justRental(@PathVariable Long clubId, @PathVariable Long itemId,
             @Valid @RequestBody TmpMemberDto dto) {
         Long clubAdminId = memberService.getMyIdWithAuthorities();
@@ -92,7 +92,7 @@ public class RentalController {
         }
     }
 
-    @PutMapping("/{itemId}/return")
+    @PutMapping("/{itemId}/return/admin")
     public ResponseEntity<?> returnRentalAdmin(@PathVariable Long clubId, @PathVariable Long itemId,
             @Valid @RequestBody TmpMemberDto dto) {
         long clubAdminId = memberService.getMyIdWithAuthorities();
