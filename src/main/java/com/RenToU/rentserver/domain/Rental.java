@@ -47,7 +47,7 @@ public class Rental {
 
     private LocalDateTime expDate;// 렌탈 만료 시간
 
-    @OneToOne(fetch = LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "item_id")
     private Item item;
 
