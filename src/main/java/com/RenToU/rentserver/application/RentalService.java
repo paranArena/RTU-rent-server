@@ -197,7 +197,6 @@ public class RentalService {
 
     }
     @Transactional
-    // TODO void로 바꿔주실 수 있나요? 이 행위를 요청했을 때 resData는 null이 들어가도 될 것 같습니다.
     public void returnRentalAdmin(Long adminId,Long clubId, Long rentalId,Long memberId) {
         Member admin = findMember(adminId);
         Member member = findMember(memberId);
