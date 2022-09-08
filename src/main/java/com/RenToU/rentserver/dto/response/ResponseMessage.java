@@ -78,4 +78,5 @@ public class ResponseMessage {
     public static final String REPORT_MEMBER = "멤버 신고가 정상적으로 접수되었습니다.";
 
     public static final String REPORT_NOTIFICATION = "게시글 신고가 정상적으로 접수되었습니다.";
+    public static final String SEARCH_CLUB_RETURN = "렌탈 반납 조회 성공";
 }

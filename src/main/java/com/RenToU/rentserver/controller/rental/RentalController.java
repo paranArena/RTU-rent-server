@@ -12,6 +12,7 @@ import com.RenToU.rentserver.domain.Rental;
 import com.RenToU.rentserver.domain.RentalHistory;
 import com.RenToU.rentserver.dto.response.ItemDto;
 
+import com.RenToU.rentserver.dto.response.preview.RentalHistoryPreviewDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -98,5 +99,14 @@ public class RentalController {
                 .map((item) -> AdminRentalPreviewDto.from(item))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.SEARCH_CLUB_RENTALS, resData));
+    }
+    @GetMapping("/history/search/all")
+    public ResponseEntity<?> searchClubRentalHistoryAll(@PathVariable long clubId) {
+        Long memberId = memberService.getMyIdWithAuthorities();
+        List<RentalHistory> histories = rentalService.getRentalHistoryByClub(clubId, memberId);
+        List<RentalHistoryPreviewDto> resData = histories.stream()
+                .map((history) -> RentalHistoryPreviewDto.from(history))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.SEARCH_CLUB_RETURN, resData));
     }
 }

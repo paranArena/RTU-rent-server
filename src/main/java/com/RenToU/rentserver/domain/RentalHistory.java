@@ -39,6 +39,7 @@ public class RentalHistory extends BaseTimeEntity {
     private LocalDateTime rentDate;// 렌탈 시작 시간
     private LocalDateTime expDate;// 반납 기한
     private LocalDateTime returnDate;// 렌탈 만료 시간
+
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "item_id")
     private Item item;
