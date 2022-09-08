@@ -61,7 +61,7 @@ public class RentalService {
         }
     }
 
-    @Transactional
+    @Transactional(noRollbackFor={CannotRentException.class})
     public void applyRental(Long memberId, Long rentalId) {
         Member member = findMember(memberId);
         Rental rental = findRental(rentalId);
@@ -149,4 +149,28 @@ public class RentalService {
         return rentalItems;
     }
 
+    public List<RentalHistory> getRentalHistoryByClub(long clubId, Long memberId) {
+        Club club = findClub(clubId);
+        Member member = findMember(memberId);
+        club.findClubMemberByMember(member).validateAdmin();
+        List<Product> products = findClub(clubId).getProducts();
+        List<Item> items = new ArrayList<>();
+        products.stream().forEach(product -> {
+            if(product.getItems()!= null) {
+                items.addAll(product.getItems());
+            }
+        });
+        List<RentalHistory> histories = new ArrayList<>();
+        items.stream().forEach(item -> {
+            List<RentalHistory> searchHistory = findHistoriesByItem(item);
+            if(searchHistory != null) {
+                histories.addAll(searchHistory);
+            }
+        });
+        return histories;
+    }
+
+    private List<RentalHistory> findHistoriesByItem(Item item) {
+        return rentalHistoryRepository.findAllByItem(item);
+    }
 }
