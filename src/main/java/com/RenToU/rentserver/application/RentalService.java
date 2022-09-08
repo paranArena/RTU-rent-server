@@ -182,6 +182,7 @@ public class RentalService {
         rentalRepository.save(rental);
     }
 
+
     private Member findOrCreateTempMember(String studentName,String studentId,Club club) {
         Optional<Member> member = memberRepository.findOneWithAuthoritiesByStudentId(studentId);
         if(member.isPresent()){
@@ -194,6 +195,22 @@ public class RentalService {
             return tmpMember;
         }
 
+    }
+    @Transactional
+    // TODO void로 바꿔주실 수 있나요? 이 행위를 요청했을 때 resData는 null이 들어가도 될 것 같습니다.
+    public void returnRentalAdmin(Long adminId,Long clubId, Long rentalId,Long memberId) {
+        Member admin = findMember(adminId);
+        Member member = findMember(memberId);
+        Rental rental = findRental(rentalId);
+        Club club = findClub(clubId);
+        rental.validateRent();
+        club.findClubMemberByMember(admin).validateAdmin();
+        rental.validateMember(member);
+        rental.checkLate();
+        rental.finishRental();
+        RentalHistory rentalHistory = RentalHistory.RentalToHistory(rental);
+        rentalHistoryRepository.save(rentalHistory);
+        rentalRepository.deleteById(rental.getId());
     }
 
     private List<RentalHistory> findHistoriesByItem(Item item) {
