@@ -1,11 +1,7 @@
 package com.RenToU.rentserver.dto.response.preview;
 
-import java.util.stream.Collectors;
-
 import com.RenToU.rentserver.domain.Item;
-import com.RenToU.rentserver.domain.Product;
 import com.RenToU.rentserver.domain.RentalPolicy;
-import com.RenToU.rentserver.dto.response.ItemDto;
 import com.RenToU.rentserver.dto.response.RentalInfoDto;
 
 import lombok.AllArgsConstructor;

@@ -8,9 +8,9 @@ import com.RenToU.rentserver.domain.Member;
 import com.RenToU.rentserver.domain.Product;
 import com.RenToU.rentserver.domain.RentalPolicy;
 import com.RenToU.rentserver.dto.service.UpdateProductInfoServiceDto;
-import com.RenToU.rentserver.exceptions.club.ClubNotFoundException;
-import com.RenToU.rentserver.exceptions.MemberNotFoundException;
-import com.RenToU.rentserver.exceptions.ProductNotFoundException;
+import com.RenToU.rentserver.exceptions.ClubErrorCode;
+import com.RenToU.rentserver.exceptions.CustomException;
+import com.RenToU.rentserver.exceptions.MemberErrorCode;
 import com.RenToU.rentserver.infrastructure.ClubRepository;
 import com.RenToU.rentserver.infrastructure.ItemRepository;
 import com.RenToU.rentserver.infrastructure.MemberRepository;
@@ -49,20 +49,19 @@ public class ProductService {
         return product;
     }
 
-
     private Member findMember(Long id) {
         return memberRepository.findById(id)
-                .orElseThrow(() -> new MemberNotFoundException(id));
+                .orElseThrow(() -> new CustomException(MemberErrorCode.MEMBER_NOT_FOUND));
     }
 
     private Product findProduct(Long id) {
         return productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException(id));
+                .orElseThrow(() -> new CustomException(ClubErrorCode.PRODUCT_NOT_FOUND));
     }
 
     private Club findClub(Long id) {
         return clubRepository.findById(id)
-                .orElseThrow(() -> new ClubNotFoundException(id));
+                .orElseThrow(() -> new CustomException(ClubErrorCode.CLUB_NOT_FOUND));
     }
 
     public List<Product> getProductsByClub(long memberId, long clubId) {
@@ -72,7 +71,7 @@ public class ProductService {
 
     public Product getProductById(Long productId) {
         return productRepository.findById(productId)
-                .orElseThrow(() -> new ProductNotFoundException(productId));
+                .orElseThrow(() -> new CustomException(ClubErrorCode.PRODUCT_NOT_FOUND));
     }
 
     public List<Product> getMyProducts(Long memberId) {
@@ -83,6 +82,7 @@ public class ProductService {
         clubs.stream().forEach(c -> products.addAll(c.getProducts()));
         return products;
     }
+
     @Transactional
     public Product updateProductInfo(Long productId, UpdateProductInfoServiceDto dto) {
         Club club = findClub(dto.getClubId());
@@ -98,7 +98,7 @@ public class ProductService {
     @Transactional
     public void deleteItemByNumbering(Long memberId, Long productId, int numbering) {
         Product product = findProduct(productId);
-        Club club = findClub(product.getClub().getId());//영속성 컨텍스트 등록을 위해 repository로 검색
+        Club club = findClub(product.getClub().getId());// 영속성 컨텍스트 등록을 위해 repository로 검색
         Member requester = findMember(memberId);
         club.findClubMemberByMember(requester).validateAdmin();
         Item item = product.getItemByNumbering(numbering);
@@ -110,23 +110,25 @@ public class ProductService {
         item.deleteProduct();
         itemRepository.deleteById(item.getId());
     }
+
     @Transactional
     public void addItem(Long memberId, Long productId, int numbering) {
         Product product = findProduct(productId);
-        Club club = findClub(product.getClub().getId());//영속성 컨텍스트 등록을 위해 repository로 검색
+        Club club = findClub(product.getClub().getId());// 영속성 컨텍스트 등록을 위해 repository로 검색
         Member requester = findMember(memberId);
         club.findClubMemberByMember(requester).validateAdmin();
-        Item item = Item.createItem(product,RentalPolicy.FIFO,numbering);
+        Item item = Item.createItem(product, RentalPolicy.FIFO, numbering);
         itemRepository.save(item);
     }
+
     @Transactional
     public void deleteProduct(Long memberId, Long productId) {
         Product product = findProduct(productId);
-        Club club = findClub(product.getClub().getId());//영속성 컨텍스트 등록을 위해 repository로 검색
+        Club club = findClub(product.getClub().getId());// 영속성 컨텍스트 등록을 위해 repository로 검색
         Member requester = findMember(memberId);
         club.findClubMemberByMember(requester).validateAdmin();
-        List<Long> ids = product.getItems().stream().map(item->item.getId()).collect(Collectors.toList());
-        product.getItems().forEach(item->{
+        List<Long> ids = product.getItems().stream().map(item -> item.getId()).collect(Collectors.toList());
+        product.getItems().forEach(item -> {
             Rental rental = item.getRental();
             if (rental != null) {
                 rental.deleteRental();
@@ -134,7 +136,7 @@ public class ProductService {
             }
             item.deleteProduct();
         });
-        ids.forEach(id->itemRepository.deleteById(id));
+        ids.forEach(id -> itemRepository.deleteById(id));
         product.deleteClub();
         productRepository.deleteById(productId);
     }
