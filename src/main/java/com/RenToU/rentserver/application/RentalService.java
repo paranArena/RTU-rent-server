@@ -8,6 +8,7 @@ import com.RenToU.rentserver.domain.Member;
 import com.RenToU.rentserver.domain.Product;
 import com.RenToU.rentserver.domain.Rental;
 import com.RenToU.rentserver.domain.RentalHistory;
+import com.RenToU.rentserver.domain.RentalStatus;
 import com.RenToU.rentserver.exceptions.ClubErrorCode;
 import com.RenToU.rentserver.exceptions.CustomException;
 import com.RenToU.rentserver.exceptions.MemberErrorCode;
@@ -23,7 +24,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Transactional(readOnly = true)
@@ -165,6 +168,32 @@ public class RentalService {
             }
         });
         return histories;
+    }
+    @Transactional(noRollbackFor = { CustomException.class })
+    public void justRental(Long adminId, Long clubId, Long itemId,String studentName, String studentId) {
+        Member admin = findMember(adminId);
+        Club club =findClub(clubId);
+        Member member = findOrCreateTempMember(studentName,studentId,club);
+        Item item = findItem(itemId);
+        club.findClubMemberByMember(admin).validateAdmin();
+        item.validateRentable();
+        Rental rental = Rental.createRental(item, member);
+        rental.startRental();
+        rentalRepository.save(rental);
+    }
+
+    private Member findOrCreateTempMember(String studentName,String studentId,Club club) {
+        Optional<Member> member = memberRepository.findOneWithAuthoritiesByStudentId(studentId);
+        if(member.isPresent()){
+            return member.get();
+        }else{
+            Member tmpMember = Member.createTempMember(studentName,studentId,club);
+
+            ClubMember clubMember = ClubMember.createClubMember(club, tmpMember, ClubRole.USER);
+            memberRepository.save(tmpMember);
+            return tmpMember;
+        }
+
     }
 
     private List<RentalHistory> findHistoriesByItem(Item item) {
