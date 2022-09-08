@@ -128,7 +128,8 @@ public class ProductService {
         Member requester = findMember(memberId);
         club.findClubMemberByMember(requester).validateAdmin();
         List<Long> ids = product.getItems().stream().map(item -> item.getId()).collect(Collectors.toList());
-        product.getItems().forEach(item -> {
+        List<Item> items = product.getItems();
+        items.forEach(item -> {
             Rental rental = item.getRental();
             if (rental != null) {
                 rental.deleteRental();
