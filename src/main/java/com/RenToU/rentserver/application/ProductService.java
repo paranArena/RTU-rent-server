@@ -127,18 +127,25 @@ public class ProductService {
         Club club = findClub(product.getClub().getId());// 영속성 컨텍스트 등록을 위해 repository로 검색
         Member requester = findMember(memberId);
         club.findClubMemberByMember(requester).validateAdmin();
-        List<Long> ids = product.getItems().stream().map(item -> item.getId()).collect(Collectors.toList());
-        List<Item> items = product.getItems();
-        items.forEach(item -> {
-            Rental rental = item.getRental();
-            if (rental != null) {
-                rental.deleteRental();
-                rentalRepository.deleteById(rental.getId());
-            }
-            item.deleteProduct();
-        });
-        ids.forEach(id -> itemRepository.deleteById(id));
+//        List<Long> ids = product.getItems().stream().map(item -> item.getId()).collect(Collectors.toList());
+//        product.getItems().forEach(item -> {
+//            Rental rental = item.getRental();
+//            if (rental != null) {
+//                rental.deleteRental();
+//                rentalRepository.deleteById(rental.getId());
+//            }
+//            item.deleteProduct();
+//        });
+//        ids.forEach(id -> {
+//            findItem(id).deleteProduct();
+//            itemRepository.deleteById(id);
+//        });
         product.deleteClub();
         productRepository.deleteById(productId);
+    }
+
+    private Item findItem(Long id) {
+        return itemRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ClubErrorCode.ITEM_NOT_FOUND));
     }
 }
