@@ -47,9 +47,6 @@ public class RentalController {
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.RENT_REQUEST_SUCCESS, resData));
     }
 
-    // TODO RentalNotFoundException 처리
-    // CanNotRentException 처리
-
     @PutMapping("/{itemId}/apply")
     public ResponseEntity<?> applyRental(@PathVariable Long clubId, @PathVariable Long itemId) {
         Long memberId = memberService.getMyIdWithAuthorities();
@@ -95,6 +92,7 @@ public class RentalController {
                 .collect(Collectors.toList());
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.SEARCH_CLUB_RENTALS, resData));
     }
+
     @GetMapping("/history/search/all")
     public ResponseEntity<?> searchClubRentalHistoryAll(@PathVariable long clubId) {
         Long memberId = memberService.getMyIdWithAuthorities();
