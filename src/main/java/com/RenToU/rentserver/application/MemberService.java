@@ -161,4 +161,9 @@ public class MemberService {
         Member member = findMember(memberId);
         memberRepository.deleteById(member.getId());
     }
+
+    public Member findByStudentId(String studentId) {
+        return memberRepository.findByStudentId(studentId)
+                .orElseThrow(() -> new CustomException(MemberErrorCode.MEMBER_NOT_FOUND));
+    }
 }
