@@ -57,7 +57,7 @@ public class RentalService {
         // TODO 못빌린다 -> 멤버가 클럽에 속해있냐(예외1), 아이템이 클럽에 속해있냐(예외2)
     }
 
-    @Transactional(noRollbackFor={CannotRentException.class})
+    @Transactional(noRollbackFor={CustomException.class})
     public void applyRental(Long memberId, Long rentalId) {
         Member member = findMember(memberId);
         Rental rental = findRental(rentalId);

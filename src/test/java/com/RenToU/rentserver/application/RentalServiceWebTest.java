@@ -60,7 +60,7 @@ class RentalServiceWebTest {
 
     @BeforeEach
     void setUp() {
-        service = new RentalService(mapper, rentalRepository, memberRepository, itemRepository,
+        service = new RentalService(rentalRepository, memberRepository, itemRepository,
                 rentalHistoryRepository,clubRepository);
     }
 
