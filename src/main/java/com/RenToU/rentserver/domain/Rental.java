@@ -63,6 +63,7 @@ public class Rental {
     }
 
     public void cancel() {
+        /** TODO @akaster99 validateWait() 와 중복 */
         if (this.rentalStatus != RentalStatus.WAIT) {
             throw new IllegalStateException("렌탈을 취소할 수 없는 상태입니다.");
         }
@@ -104,7 +105,7 @@ public class Rental {
 
     public void validateMember(Member member) {
         if (this.member != member) {
-            throw new CustomException(RentalErrorCode.INVALID_MEMBER);
+            throw new CustomException(RentalErrorCode.NO_EDIT_PERMISSION);
         }
     }
 

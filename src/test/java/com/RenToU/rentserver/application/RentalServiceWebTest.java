@@ -1,23 +1,15 @@
 package com.RenToU.rentserver.application;
 
-import com.RenToU.rentserver.domain.Club;
 import com.RenToU.rentserver.domain.Item;
-import com.RenToU.rentserver.domain.Location;
 import com.RenToU.rentserver.domain.Member;
-import com.RenToU.rentserver.domain.Product;
 import com.RenToU.rentserver.domain.Rental;
 import com.RenToU.rentserver.domain.RentalHistory;
-import com.RenToU.rentserver.domain.RentalPolicy;
 import com.RenToU.rentserver.domain.RentalStatus;
-import com.RenToU.rentserver.exceptions.CannotRentException;
 import com.RenToU.rentserver.exceptions.CustomException;
-import com.RenToU.rentserver.exceptions.MemberErrorCode;
 import com.RenToU.rentserver.exceptions.RentalErrorCode;
 import com.RenToU.rentserver.infrastructure.ClubRepository;
-import com.RenToU.rentserver.infrastructure.HashtagRepository;
 import com.RenToU.rentserver.infrastructure.ItemRepository;
 import com.RenToU.rentserver.infrastructure.MemberRepository;
-import com.RenToU.rentserver.infrastructure.ProductRepository;
 import com.RenToU.rentserver.infrastructure.RentalHistoryRepository;
 import com.RenToU.rentserver.infrastructure.RentalRepository;
 import com.github.dozermapper.core.Mapper;
@@ -27,16 +19,12 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.geo.Point;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.NoSuchElementException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -86,7 +74,7 @@ class RentalServiceWebTest {
                 // 근데 지금은 MemberErrorCode.MEMBER_NOT_FOUND 가 뜨네요.
                 assertThatThrownBy(() -> service.requestRental(memberId, itemId))
                         .isInstanceOf(CustomException.class)
-                        .hasFieldOrPropertyWithValue("errorCode", RentalErrorCode.NOT_CLUB_MEMBER);
+                        .hasFieldOrPropertyWithValue("errorCode", RentalErrorCode.NOT_IN_SAME_CLUB);
             }
         }
 
@@ -128,7 +116,8 @@ class RentalServiceWebTest {
             void it_throws_CannotRentException() {
                 Rental rental = service.requestRental(memberId, itemId);
                 assertThatThrownBy(() -> service.requestRental(anotherMemberId, itemId))
-                        .isInstanceOf(CannotRentException.class);
+                        .isInstanceOf(CustomException.class)
+                        .hasFieldOrPropertyWithValue("errorCode", RentalErrorCode.ALREADY_USED);
             }
         }
     }
@@ -174,7 +163,8 @@ class RentalServiceWebTest {
             @DisplayName("CannotRentException을 던진다.")
             void it_throws_cannotRentException() {
                 assertThatThrownBy(() -> service.applyRental(memberId, rentalId))
-                        .isInstanceOf(CannotRentException.class);
+                        .isInstanceOf(CustomException.class)
+                        .hasFieldOrPropertyWithValue("errorCode", RentalErrorCode.WAIT_TIME_EXPIRED);
                 assertThatThrownBy(() -> rentalRepository.findById(rentalId).get())
                         .isInstanceOf(NoSuchElementException.class);
             }

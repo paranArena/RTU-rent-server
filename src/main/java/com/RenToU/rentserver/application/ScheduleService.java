@@ -25,6 +25,7 @@ public class ScheduleService {
         if (rentals != null) {
             rentals.stream().forEach(rental -> {
                 if (rental.getRentDate().plusMinutes(10).isBefore(LocalDateTime.now())) {
+                    rental.validateWait();
                     rental.cancel();
                     RentalHistory rentalHistory = RentalHistory.RentalToHistory(rental);
                     rentalHistoryRepository.save(rentalHistory);
