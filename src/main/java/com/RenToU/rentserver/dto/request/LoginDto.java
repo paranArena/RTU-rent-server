@@ -17,7 +17,6 @@ public class LoginDto {
 
     @NotBlank(message = "이메일을 입력해주세요.")
     @Email(message = "이메일 형식을 입력해주세요.")
-    @Size(min = 6, max = 30)
     private String email;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)

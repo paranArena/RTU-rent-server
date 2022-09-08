@@ -4,23 +4,19 @@ import com.RenToU.rentserver.domain.Club;
 import com.RenToU.rentserver.domain.ClubMember;
 import com.RenToU.rentserver.domain.ClubRole;
 import com.RenToU.rentserver.domain.Item;
-import com.RenToU.rentserver.domain.Location;
 import com.RenToU.rentserver.domain.Member;
 import com.RenToU.rentserver.domain.Product;
 import com.RenToU.rentserver.domain.Rental;
 import com.RenToU.rentserver.domain.RentalHistory;
-import com.RenToU.rentserver.exceptions.CannotRentException;
-import com.RenToU.rentserver.exceptions.ItemNotFoundException;
-import com.RenToU.rentserver.exceptions.MemberNotFoundException;
-import com.RenToU.rentserver.exceptions.ProductNotFoundException;
-import com.RenToU.rentserver.exceptions.RentalNotFoundException;
-import com.RenToU.rentserver.exceptions.club.ClubNotFoundException;
+import com.RenToU.rentserver.exceptions.ClubErrorCode;
+import com.RenToU.rentserver.exceptions.CustomException;
+import com.RenToU.rentserver.exceptions.MemberErrorCode;
+import com.RenToU.rentserver.exceptions.RentalErrorCode;
 import com.RenToU.rentserver.infrastructure.ClubRepository;
 import com.RenToU.rentserver.infrastructure.ItemRepository;
 import com.RenToU.rentserver.infrastructure.MemberRepository;
 import com.RenToU.rentserver.infrastructure.RentalHistoryRepository;
 import com.RenToU.rentserver.infrastructure.RentalRepository;
-import com.github.dozermapper.core.Mapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,7 +30,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 public class RentalService {
-    private final Mapper mapper;
     private final RentalRepository rentalRepository;
     private final MemberRepository memberRepository;
     private final ItemRepository itemRepository;
@@ -57,8 +52,9 @@ public class RentalService {
                 .collect(Collectors.toList());
         List<Club> clubs = userClubMembers.stream().map(cm -> cm.getClub()).collect(Collectors.toList());
         if (!clubs.contains(item.getProduct().getClub())) {
-            throw new CannotRentException(item.getId());
+            throw new CustomException(RentalErrorCode.NOT_CLUB_MEMBER); // 유저가 속해있는 클럽의 아이템이 아닙니다.
         }
+        // TODO 못빌린다 -> 멤버가 클럽에 속해있냐(예외1), 아이템이 클럽에 속해있냐(예외2)
     }
 
     @Transactional(noRollbackFor={CannotRentException.class})
@@ -103,32 +99,33 @@ public class RentalService {
 
     private Member findMember(Long id) {
         return memberRepository.findById(id)
-                .orElseThrow(() -> new MemberNotFoundException(id));
+                .orElseThrow(() -> new CustomException(MemberErrorCode.MEMBER_NOT_FOUND));
     }
 
     private Item findItem(Long id) {
         return itemRepository.findById(id)
-                .orElseThrow(() -> new ItemNotFoundException(id));
+                .orElseThrow(() -> new CustomException(ClubErrorCode.ITEM_NOT_FOUND));
     }
 
     private Rental findRentalByItem(Item item) {
         return rentalRepository.findByItem(item)
-                .orElseThrow(() -> new RentalNotFoundException());
+                .orElseThrow(() -> new CustomException(RentalErrorCode.RENTAL_NOT_FOUND));
     }
 
     private Rental findRental(Long id) {
         return rentalRepository.findById(id)
-                .orElseThrow(() -> new RentalNotFoundException(id));
+                .orElseThrow(() -> new CustomException(RentalErrorCode.RENTAL_NOT_FOUND));
     }
+
     private Club findClub(Long id) {
         return clubRepository.findById(id)
-                .orElseThrow(() -> new ClubNotFoundException(id));
+                .orElseThrow(() -> new CustomException(ClubErrorCode.CLUB_NOT_FOUND));
     }
 
     public void validateApplyTimeNotOver(Rental rental) {
         if (rental.getRentDate().plusMinutes(10).isBefore(LocalDateTime.now())) {
             cancelRental(rental.getMember().getId(), rental.getId());
-            throw new CannotRentException(rental.getId());
+            throw new CustomException(RentalErrorCode.WAIT_TIME_OVER);
         }
     }
 
@@ -139,12 +136,12 @@ public class RentalService {
         List<Product> products = findClub(clubId).getProducts();
         List<Item> items = new ArrayList<>();
         products.stream().forEach(product -> {
-            if(product.getItems()!= null) {
+            if (product.getItems() != null) {
                 items.addAll(product.getItems());
             }
         });
         List<Item> rentalItems = items.stream()
-                .filter(item-> item.getRental() != null)
+                .filter(item -> item.getRental() != null)
                 .collect(Collectors.toList());
         return rentalItems;
     }
