@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -55,6 +56,25 @@ public class Member extends BaseTimeEntity {
             @JoinColumn(name = "member_id", referencedColumnName = "member_id") }, inverseJoinColumns = {
                     @JoinColumn(name = "authority_name", referencedColumnName = "authority_name") })
     private Set<Authority> authorities;
+
+    public static Member createTempMember(String studentName, String studentId,Club club) {
+        Authority authority = Authority.builder()
+                .authorityName("ROLE_USER")
+                .build();
+        Member member = Member.builder()
+                .name(studentName)
+                .studentId(studentId)
+                .email(null)
+                .password(null)
+                .clubList(new ArrayList<>())
+                .rentals(new ArrayList<>())
+                .major(null)
+                .phoneNumber(null)
+                .activated(false)
+                .build();
+        member.setAuthorities(Collections.singleton(authority));
+        return member;
+    }
 
     /**
      * 연관관계 편의 메소드
