@@ -30,13 +30,17 @@ import com.RenToU.rentserver.dto.request.TmpMemberDto;
 import com.RenToU.rentserver.dto.response.ResponseDto;
 import com.RenToU.rentserver.dto.response.ResponseMessage;
 import com.RenToU.rentserver.dto.response.preview.AdminRentalPreviewDto;
+import com.RenToU.rentserver.exceptions.AuthErrorCode;
 import com.RenToU.rentserver.exceptions.ClubErrorCode;
 import com.RenToU.rentserver.exceptions.CustomException;
+import com.RenToU.rentserver.exceptions.ErrorCode;
+import com.RenToU.rentserver.exceptions.MemberErrorCode;
 import com.RenToU.rentserver.exceptions.RentalErrorCode;
 import com.RenToU.rentserver.infrastructure.ItemRepository;
 import com.RenToU.rentserver.infrastructure.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
+import net.bytebuddy.implementation.StubMethod;
 
 @RestController
 @RequiredArgsConstructor
@@ -89,15 +93,20 @@ public class RentalController {
     }
 
     @PutMapping("/{itemId}/return")
-    public ResponseEntity<?> forceReturnRental(@PathVariable Long clubId, @PathVariable Long itemId,
+    public ResponseEntity<?> returnRentalAdmin(@PathVariable Long clubId, @PathVariable Long itemId,
             @Valid @RequestBody TmpMemberDto dto) {
-        // TODO 아직 이 아래는 아무것도 건드리지 않았습니다.
-        long memberId = memberService.getMyIdWithAuthorities();
+        long clubAdminId = memberService.getMyIdWithAuthorities();
+        Member member = memberService.findByStudentId(dto.getStudentId());
+        if (!member.getName().equals(dto.getName())) {
+            throw new CustomException(MemberErrorCode.MEMBER_NOT_FOUND);
+        }
+
         try {
+            Long memberId = member.getId();
             Long rentalId = itemRepository.findById(itemId)
                     .orElseThrow(() -> new CustomException(ClubErrorCode.ITEM_NOT_FOUND))
                     .getRental().getId();
-            RentalHistory rentalHistory = rentalService.returnRental(memberId, rentalId);
+            rentalService.returnRentalAdmin(clubAdminId, clubId, rentalId, memberId);
             return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.RENT_RETURN_SUCCESS));
         } catch (NullPointerException e) {
             throw new CustomException(RentalErrorCode.RENTAL_NOT_FOUND);
