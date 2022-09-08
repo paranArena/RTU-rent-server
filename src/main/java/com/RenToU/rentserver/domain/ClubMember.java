@@ -1,9 +1,7 @@
 package com.RenToU.rentserver.domain;
 
-import com.RenToU.rentserver.exceptions.NoOwnerPermissionException;
-import com.RenToU.rentserver.exceptions.NotClubRoleWaitingException;
-import com.RenToU.rentserver.exceptions.club.CannotGrantException;
-import com.RenToU.rentserver.exceptions.NoAdminPermissionException;
+import com.RenToU.rentserver.exceptions.ClubErrorCode;
+import com.RenToU.rentserver.exceptions.CustomException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -64,7 +62,7 @@ public class ClubMember extends BaseTimeEntity {
         if (this.role == ClubRole.WAIT) {
             this.role = ClubRole.USER;
         } else {
-            throw new NotClubRoleWaitingException("사용자가 대기 상태가 아닙니다.");
+            throw new CustomException(ClubErrorCode.NOT_WAIT_USER);
         }
     }
 
@@ -72,7 +70,7 @@ public class ClubMember extends BaseTimeEntity {
         if (this.role == ClubRole.USER) {
             this.role = ClubRole.ADMIN;
         } else {
-            throw new CannotGrantException(this.club.getId(), this.club.getName(), "사용자가 클럽 유저가 아닙니다.");
+            throw new CustomException(ClubErrorCode.CANT_GRANT_ADMIN);
         }
     }
 
@@ -80,13 +78,13 @@ public class ClubMember extends BaseTimeEntity {
         if (this.role == ClubRole.ADMIN) {
             this.role = ClubRole.USER;
         } else {
-            throw new CannotGrantException(this.club.getId(), this.club.getName(), "사용자가 클럽 관리자가 아닙니다.");
+            throw new CustomException(ClubErrorCode.CANT_GRANT_USER);
         }
     }
 
     public void validateAdmin() {
         if (this.role != ClubRole.ADMIN && this.role != ClubRole.OWNER) {
-            throw new NoAdminPermissionException(this.club.getId());
+            throw new CustomException(ClubErrorCode.NO_ADMIN_PERMISSION);
         }
     }
 
@@ -103,7 +101,7 @@ public class ClubMember extends BaseTimeEntity {
 
     public void validateOwner() {
         if (this.role != ClubRole.OWNER) {
-            throw new NoOwnerPermissionException(this.club.getId());
+            throw new CustomException(ClubErrorCode.NO_ADMIN_PERMISSION);
         }
     }
 
@@ -114,7 +112,7 @@ public class ClubMember extends BaseTimeEntity {
 
     public void validateWait() {
         if (this.role != ClubRole.WAIT) {
-            throw new NotClubRoleWaitingException("사용자가 클럽 가입 대기 상태가 아닙니다.");
+            throw new CustomException(ClubErrorCode.NOT_WAIT_USER);
         }
     }
 

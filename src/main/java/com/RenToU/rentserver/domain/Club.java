@@ -1,6 +1,7 @@
 package com.RenToU.rentserver.domain;
 
-import com.RenToU.rentserver.exceptions.clubMember.ClubMemberNotFoundException;
+import com.RenToU.rentserver.exceptions.ClubErrorCode;
+import com.RenToU.rentserver.exceptions.CustomException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,7 +18,6 @@ import javax.validation.constraints.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Entity
@@ -90,14 +90,12 @@ public class Club extends BaseTimeEntity {
         return club;
     }
 
-    public ClubMember findClubMemberByMember(Member member) throws ClubMemberNotFoundException {
-        Optional<ClubMember> clubMember = this.getMemberList().stream().filter(cm -> {
+    public ClubMember findClubMemberByMember(Member member) {
+        ClubMember clubMember = this.getMemberList().stream().filter(cm -> {
             return cm.getMember().getId() == member.getId();
-        }).findFirst();
-        if (clubMember.isEmpty()) {
-            throw new ClubMemberNotFoundException(member.getId());
-        }
-        return clubMember.get();
+        }).findFirst().orElseThrow(() -> new CustomException(ClubErrorCode.CLUBMEMBER_NOT_FOUND));
+
+        return clubMember;
     }
 
     public List<String> getHashtagNames() {
