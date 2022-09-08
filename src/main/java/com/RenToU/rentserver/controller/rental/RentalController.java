@@ -1,12 +1,9 @@
 package com.RenToU.rentserver.controller.rental;
 
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
-import com.RenToU.rentserver.application.ClubService;
 import com.RenToU.rentserver.application.RentalService;
-import com.RenToU.rentserver.domain.Club;
 import com.RenToU.rentserver.domain.Item;
 import com.RenToU.rentserver.domain.Rental;
 import com.RenToU.rentserver.domain.RentalHistory;
@@ -26,8 +23,8 @@ import com.RenToU.rentserver.dto.StatusCode;
 import com.RenToU.rentserver.dto.response.ResponseDto;
 import com.RenToU.rentserver.dto.response.ResponseMessage;
 import com.RenToU.rentserver.dto.response.preview.AdminRentalPreviewDto;
-import com.RenToU.rentserver.dto.response.preview.RentalPreviewDto;
-import com.RenToU.rentserver.exceptions.RentalNotFoundException;
+import com.RenToU.rentserver.exceptions.CustomException;
+import com.RenToU.rentserver.exceptions.RentalErrorCode;
 import com.RenToU.rentserver.infrastructure.ItemRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -40,8 +37,6 @@ public class RentalController {
     private final MemberService memberService;
     private final RentalService rentalService;
     private final ItemRepository itemRepository;
-
-    private final ClubService clubService;
 
     @PostMapping("/{itemId}/request")
     public ResponseEntity<?> requestRental(@PathVariable Long clubId, @PathVariable Long itemId) {
@@ -62,7 +57,7 @@ public class RentalController {
             rentalService.applyRental(memberId, rentalId);
             return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.RENT_APPLY_SUCCESS));
         } catch (NullPointerException e) {
-            throw new RentalNotFoundException();
+            throw new CustomException(RentalErrorCode.RENTAL_NOT_FOUND);
         }
     }
 
@@ -74,7 +69,7 @@ public class RentalController {
             RentalHistory rentalHistory = rentalService.returnRental(memberId, rentalId);
             return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.RENT_RETURN_SUCCESS));
         } catch (NullPointerException e) {
-            throw new RentalNotFoundException();
+            throw new CustomException(RentalErrorCode.RENTAL_NOT_FOUND);
         }
     }
 
@@ -86,7 +81,7 @@ public class RentalController {
             RentalHistory rentalHistory = rentalService.cancelRental(memberId, rentalId);
             return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.RENT_CANCEL_SUCCESS));
         } catch (NullPointerException e) {
-            throw new RentalNotFoundException();
+            throw new CustomException(RentalErrorCode.RENTAL_NOT_FOUND);
         }
     }
 
