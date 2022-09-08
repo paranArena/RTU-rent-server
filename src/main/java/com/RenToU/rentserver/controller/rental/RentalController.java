@@ -24,6 +24,7 @@ import com.RenToU.rentserver.dto.StatusCode;
 import com.RenToU.rentserver.dto.response.ResponseDto;
 import com.RenToU.rentserver.dto.response.ResponseMessage;
 import com.RenToU.rentserver.dto.response.preview.AdminRentalPreviewDto;
+import com.RenToU.rentserver.exceptions.ClubErrorCode;
 import com.RenToU.rentserver.exceptions.CustomException;
 import com.RenToU.rentserver.exceptions.RentalErrorCode;
 import com.RenToU.rentserver.infrastructure.ItemRepository;
@@ -51,7 +52,9 @@ public class RentalController {
     public ResponseEntity<?> applyRental(@PathVariable Long clubId, @PathVariable Long itemId) {
         Long memberId = memberService.getMyIdWithAuthorities();
         try {
-            Long rentalId = itemRepository.getReferenceById(itemId).getRental().getId();
+            Long rentalId = itemRepository.findById(itemId)
+                    .orElseThrow(() -> new CustomException(ClubErrorCode.ITEM_NOT_FOUND))
+                    .getRental().getId();
             rentalService.applyRental(memberId, rentalId);
             return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.RENT_APPLY_SUCCESS));
         } catch (NullPointerException e) {
@@ -63,7 +66,9 @@ public class RentalController {
     public ResponseEntity<?> returnRental(@PathVariable Long clubId, @PathVariable Long itemId) {
         long memberId = memberService.getMyIdWithAuthorities();
         try {
-            Long rentalId = itemRepository.getReferenceById(itemId).getRental().getId();
+            Long rentalId = itemRepository.findById(itemId)
+                    .orElseThrow(() -> new CustomException(ClubErrorCode.ITEM_NOT_FOUND))
+                    .getRental().getId();
             RentalHistory rentalHistory = rentalService.returnRental(memberId, rentalId);
             return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.RENT_RETURN_SUCCESS));
         } catch (NullPointerException e) {
@@ -75,7 +80,9 @@ public class RentalController {
     public ResponseEntity<?> cancelRental(@PathVariable Long clubId, @PathVariable Long itemId) {
         long memberId = memberService.getMyIdWithAuthorities();
         try {
-            Long rentalId = itemRepository.getReferenceById(itemId).getRental().getId();
+            Long rentalId = itemRepository.findById(itemId)
+                    .orElseThrow(() -> new CustomException(ClubErrorCode.ITEM_NOT_FOUND))
+                    .getRental().getId();
             RentalHistory rentalHistory = rentalService.cancelRental(memberId, rentalId);
             return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.RENT_CANCEL_SUCCESS));
         } catch (NullPointerException e) {

@@ -52,12 +52,12 @@ public class RentalService {
                 .collect(Collectors.toList());
         List<Club> clubs = userClubMembers.stream().map(cm -> cm.getClub()).collect(Collectors.toList());
         if (!clubs.contains(item.getProduct().getClub())) {
-            throw new CustomException(RentalErrorCode.NOT_CLUB_MEMBER); // 유저가 속해있는 클럽의 아이템이 아닙니다.
+            throw new CustomException(RentalErrorCode.NOT_IN_SAME_CLUB); // 유저가 속해있는 클럽의 아이템이 아닙니다.
         }
         // TODO 못빌린다 -> 멤버가 클럽에 속해있냐(예외1), 아이템이 클럽에 속해있냐(예외2)
     }
 
-    @Transactional(noRollbackFor={CustomException.class})
+    @Transactional(noRollbackFor = { CustomException.class })
     public void applyRental(Long memberId, Long rentalId) {
         Member member = findMember(memberId);
         Rental rental = findRental(rentalId);
@@ -125,7 +125,7 @@ public class RentalService {
     public void validateApplyTimeNotOver(Rental rental) {
         if (rental.getRentDate().plusMinutes(10).isBefore(LocalDateTime.now())) {
             cancelRental(rental.getMember().getId(), rental.getId());
-            throw new CustomException(RentalErrorCode.WAIT_TIME_OVER);
+            throw new CustomException(RentalErrorCode.WAIT_TIME_EXPIRED);
         }
     }
 
@@ -153,14 +153,14 @@ public class RentalService {
         List<Product> products = findClub(clubId).getProducts();
         List<Item> items = new ArrayList<>();
         products.stream().forEach(product -> {
-            if(product.getItems()!= null) {
+            if (product.getItems() != null) {
                 items.addAll(product.getItems());
             }
         });
         List<RentalHistory> histories = new ArrayList<>();
         items.stream().forEach(item -> {
             List<RentalHistory> searchHistory = findHistoriesByItem(item);
-            if(searchHistory != null) {
+            if (searchHistory != null) {
                 histories.addAll(searchHistory);
             }
         });

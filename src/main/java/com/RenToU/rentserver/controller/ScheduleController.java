@@ -26,6 +26,6 @@ public class ScheduleController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         scheduleService.checkExpiredRentalWait();
-        return ResponseEntity.ok(ResponseDto.res(StatusCode.ACCEPT, ResponseMessage.CHECK_EXPIRED_RENTAL_WAIT));
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.CHECK_EXPIRED_RENTAL_WAIT));
     }
 }
