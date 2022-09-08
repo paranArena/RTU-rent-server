@@ -6,8 +6,6 @@ import com.RenToU.rentserver.domain.ClubMember;
 import com.RenToU.rentserver.domain.ClubRole;
 import com.RenToU.rentserver.domain.Member;
 import com.RenToU.rentserver.domain.Notification;
-import com.RenToU.rentserver.exceptions.MemberNotFoundException;
-import com.RenToU.rentserver.exceptions.NoAdminPermissionException;
 import com.RenToU.rentserver.infrastructure.ClubRepository;
 import com.RenToU.rentserver.infrastructure.MemberRepository;
 import com.RenToU.rentserver.infrastructure.NotificationRepository;

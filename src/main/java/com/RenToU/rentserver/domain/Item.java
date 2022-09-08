@@ -1,7 +1,8 @@
 package com.RenToU.rentserver.domain;
 
-import com.RenToU.rentserver.exceptions.CannotRentException;
-import com.RenToU.rentserver.exceptions.ItemAlreadyExistException;
+import com.RenToU.rentserver.exceptions.CustomException;
+import com.RenToU.rentserver.exceptions.RentalErrorCode;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -47,7 +48,7 @@ public class Item extends BaseTimeEntity {
 
     public static Item createItem(Product product, RentalPolicy rentalPolicy, int numbering) {
         if (product.getItemByNumbering(numbering) != null) {
-            throw new ItemAlreadyExistException();
+            throw new CustomException(RentalErrorCode.DUP_ITEM_NUMBERING);
         }
         Item item = Item.builder()
                 .numbering(numbering)
@@ -66,7 +67,7 @@ public class Item extends BaseTimeEntity {
      */
     public void validateRentable() {
         if (this.rental != null) {
-            throw new CannotRentException(this.id);
+            throw new CustomException(RentalErrorCode.ALREADY_USED);
         }
     }
 
