@@ -3,6 +3,9 @@ package com.RenToU.rentserver.application;
 import com.RenToU.rentserver.domain.Club;
 import com.RenToU.rentserver.domain.ClubRole;
 import com.RenToU.rentserver.domain.Member;
+import com.RenToU.rentserver.exceptions.ClubErrorCode;
+import com.RenToU.rentserver.exceptions.CustomException;
+import com.RenToU.rentserver.infrastructure.ClubHashtagRepository;
 import com.RenToU.rentserver.infrastructure.ClubMemberRepository;
 import com.RenToU.rentserver.infrastructure.ClubRepository;
 import com.RenToU.rentserver.infrastructure.HashtagRepository;
@@ -39,6 +42,8 @@ class ClubServiceImplWebTest {
     ClubMemberRepository clubMemberRepository;
     @Autowired
     ProductRepository productRepository;
+    @Autowired
+    ClubHashtagRepository clubHashtagRepository;
 
     private static String INITIAL_CLUB_NAME = "NEW CLUB";
     private static String INITIAL_CLUB_INTRO = "새로 생성한 클럽입니다.";
@@ -52,8 +57,8 @@ class ClubServiceImplWebTest {
 
     @BeforeEach
     void setUp() {
-        service = new ClubServiceImpl(mapper, clubRepository, memberRepository, hashtagRepository,
-                clubMemberRepository);
+        service = new ClubServiceImpl(clubRepository, memberRepository, hashtagRepository,
+                clubMemberRepository, clubHashtagRepository);
         owner = memberRepository.findById(1L).get();
     }
 
@@ -171,7 +176,8 @@ class ClubServiceImplWebTest {
                 Club club = clubRepository.findById(clubId).get();
                 assertThat(member.getClubList()).isEmpty();
                 assertThatThrownBy(() -> club.findClubMemberByMember(member))
-                        .isInstanceOf(ClubMemberNotFoundException.class);
+                        .isInstanceOf(CustomException.class)
+                        .hasFieldOrPropertyWithValue("errorCode", ClubErrorCode.CLUBMEMBER_NOT_FOUND);
             }
         }
     }
