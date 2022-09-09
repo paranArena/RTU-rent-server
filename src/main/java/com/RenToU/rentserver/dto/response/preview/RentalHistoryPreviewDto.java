@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.stream.Collectors;
+
 @Getter
 @Setter
 @Builder
@@ -25,7 +25,6 @@ public class RentalHistoryPreviewDto {
     private LocalDateTime returnDate;
     private RentalStatus rentalStatus;
     private int numbering;
-
 
     public static RentalHistoryPreviewDto from(RentalHistory history) {
         if (history == null)
