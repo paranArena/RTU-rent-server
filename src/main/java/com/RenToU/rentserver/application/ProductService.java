@@ -100,23 +100,23 @@ public class ProductService {
     }
 
     @Transactional
-    public void deleteItemByNumbering(Long memberId, Long clubId, Long productId, int numbering) {
+    public void deleteItem(Long memberId, Long clubId, Long productId, Long itemId) {
         Product product = findProduct(productId);
         if (clubId != product.getClub().getId())
             throw new CustomException(ClubErrorCode.PRODUCT_NOT_FOUND);
         Club club = findClub(clubId);// 영속성 컨텍스트 등록을 위해 repository로 검색
         Member requester = findMember(memberId);
         club.findClubMemberByMember(requester).validateAdmin();
-        Item item = product.getItemByNumbering(numbering);
+        Item item = findItem(itemId);
         if (item == null)
             throw new CustomException(ClubErrorCode.ITEM_NOT_FOUND);
         Rental rental = item.getRental();
         if (rental != null) {
             rental.deleteRental();
-            rentalRepository.deleteById(rental.getId());
+            rentalRepository.delete(rental);
         }
         item.deleteProduct();
-        itemRepository.deleteById(item.getId());
+        itemRepository.delete(item);
     }
 
     @Transactional

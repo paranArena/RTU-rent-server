@@ -104,12 +104,12 @@ public class ClubProductController {
                 ResponseMessage.UPDATE_PRODUCT_INFO, resData));
     }
 
-    @DeleteMapping("/{productId}/{numbering}")
+    @DeleteMapping("/{productId}/items/{itemId}")
     public ResponseEntity<?> deleteItem(@PathVariable Long clubId, @PathVariable Long productId,
-            @PathVariable int numbering) {
+            @PathVariable Long itemId) {
         Long memberId = memberService.getMyIdWithAuthorities();
-        productService.deleteItemByNumbering(memberId, clubId, productId, numbering);
-        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.DELETE_ITEM, null));
+        productService.deleteItem(memberId, clubId, productId, itemId);
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.DELETE_ITEM));
     }
 
     // TODO POST /productid/items -> itemDto(rentlapolicy, numbering) 받아서 create하기
