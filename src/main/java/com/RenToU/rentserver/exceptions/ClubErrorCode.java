@@ -17,8 +17,9 @@ public enum ClubErrorCode implements ErrorCode {
     CANT_GRANT_ADMIN(HttpStatus.BAD_REQUEST, "관리자로 권한 변경이 불가한 대상입니다."),
     NOT_WAIT_USER(HttpStatus.BAD_REQUEST, "대상이 대기 상태가 아닙니다."),
 
-    NO_ADMIN_PERMISSION(HttpStatus.FORBIDDEN, "관리자 권한이 없습니다."),
-    NO_OWNER_PERMISSION(HttpStatus.FORBIDDEN, "소유자 권한이 없습니다."),
+    NO_ADMIN_PERMISSION(HttpStatus.FORBIDDEN, "해당 클럽에 대한 관리자 권한이 없습니다."),
+    NO_OWNER_PERMISSION(HttpStatus.FORBIDDEN, "해당 클럽에 대한 소유자 권한이 없습니다."),
+    NO_USER_PERMISSION(HttpStatus.FORBIDDEN, "해당 클럽에 대한 접근 권한이 없습니다."),
 
     CLUB_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 클럽을 찾을 수 없습니다."),
     CLUBMEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 클럽에서 해당 멤버를 찾을 수 없습니다."),

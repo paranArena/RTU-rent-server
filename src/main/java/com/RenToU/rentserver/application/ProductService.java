@@ -64,8 +64,11 @@ public class ProductService {
                 .orElseThrow(() -> new CustomException(ClubErrorCode.CLUB_NOT_FOUND));
     }
 
-    public List<Product> getProductsByClub(long memberId, long clubId) {
+    public List<Product> getProductsByClub(Long memberId, Long clubId) {
+        Member member = findMember(memberId);
         Club club = findClub(clubId);
+        club.findClubMemberByMember(member).validateUser();
+
         return club.getProducts();
     }
 
@@ -96,12 +99,16 @@ public class ProductService {
     }
 
     @Transactional
-    public void deleteItemByNumbering(Long memberId, Long productId, int numbering) {
+    public void deleteItemByNumbering(Long memberId, Long clubId, Long productId, int numbering) {
         Product product = findProduct(productId);
-        Club club = findClub(product.getClub().getId());// 영속성 컨텍스트 등록을 위해 repository로 검색
+        if (clubId != product.getClub().getId())
+            throw new CustomException(ClubErrorCode.PRODUCT_NOT_FOUND);
+        Club club = findClub(clubId);// 영속성 컨텍스트 등록을 위해 repository로 검색
         Member requester = findMember(memberId);
         club.findClubMemberByMember(requester).validateAdmin();
         Item item = product.getItemByNumbering(numbering);
+        if (item == null)
+            throw new CustomException(ClubErrorCode.ITEM_NOT_FOUND);
         Rental rental = item.getRental();
         if (rental != null) {
             rental.deleteRental();
@@ -112,9 +119,11 @@ public class ProductService {
     }
 
     @Transactional
-    public void addItem(Long memberId, Long productId, int numbering) {
+    public void addItem(Long memberId, Long clubId, Long productId, int numbering) {
         Product product = findProduct(productId);
-        Club club = findClub(product.getClub().getId());// 영속성 컨텍스트 등록을 위해 repository로 검색
+        if (clubId != product.getClub().getId())
+            throw new CustomException(ClubErrorCode.PRODUCT_NOT_FOUND);
+        Club club = findClub(clubId);// 영속성 컨텍스트 등록을 위해 repository로 검색
         Member requester = findMember(memberId);
         club.findClubMemberByMember(requester).validateAdmin();
         Item item = Item.createItem(product, RentalPolicy.FIFO, numbering);
@@ -122,24 +131,13 @@ public class ProductService {
     }
 
     @Transactional
-    public void deleteProduct(Long memberId, Long productId) {
+    public void deleteProduct(Long memberId, Long clubId, Long productId) {
         Product product = findProduct(productId);
-        Club club = findClub(product.getClub().getId());// 영속성 컨텍스트 등록을 위해 repository로 검색
+        if (clubId != product.getClub().getId())
+            throw new CustomException(ClubErrorCode.PRODUCT_NOT_FOUND);
+        Club club = findClub(clubId);// 영속성 컨텍스트 등록을 위해 repository로 검색
         Member requester = findMember(memberId);
         club.findClubMemberByMember(requester).validateAdmin();
-//        List<Long> ids = product.getItems().stream().map(item -> item.getId()).collect(Collectors.toList());
-//        product.getItems().forEach(item -> {
-//            Rental rental = item.getRental();
-//            if (rental != null) {
-//                rental.deleteRental();
-//                rentalRepository.deleteById(rental.getId());
-//            }
-//            item.deleteProduct();
-//        });
-//        ids.forEach(id -> {
-//            findItem(id).deleteProduct();
-//            itemRepository.deleteById(id);
-//        });
         product.deleteClub();
         productRepository.deleteById(productId);
     }
