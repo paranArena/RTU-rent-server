@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,10 +27,12 @@ import com.RenToU.rentserver.application.S3Service;
 import com.RenToU.rentserver.domain.Location;
 import com.RenToU.rentserver.domain.Product;
 import com.RenToU.rentserver.dto.StatusCode;
+import com.RenToU.rentserver.dto.request.AddItemDto;
 import com.RenToU.rentserver.dto.request.CreateProductDto;
 import com.RenToU.rentserver.dto.response.ProductInfoDto;
 import com.RenToU.rentserver.dto.response.ResponseDto;
 import com.RenToU.rentserver.dto.response.ResponseMessage;
+import com.RenToU.rentserver.dto.service.AddItemServiceDto;
 import com.RenToU.rentserver.dto.service.CreateProductServiceDto;
 import com.github.dozermapper.core.Mapper;
 
@@ -110,12 +113,13 @@ public class ClubProductController {
     }
 
     // TODO POST /productid/items -> itemDto(rentlapolicy, numbering) 받아서 create하기
-    @PostMapping("/{productId}/{numbering}")
+    @PostMapping("/{productId}/items")
     public ResponseEntity<?> addItem(@PathVariable Long clubId, @PathVariable Long productId,
-            @PathVariable int numbering) {
+            @RequestBody AddItemDto dto) {
         Long memberId = memberService.getMyIdWithAuthorities();
-        productService.addItem(memberId, clubId, productId, numbering);
-        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.ADD_ITEM, null));
+        AddItemServiceDto serviceDto = mapper.map(dto, AddItemServiceDto.class);
+        productService.addItem(memberId, clubId, productId, serviceDto);
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.ADD_ITEM));
     }
 
     @DeleteMapping("/{productId}")
