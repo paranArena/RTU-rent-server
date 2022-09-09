@@ -10,17 +10,18 @@ import lombok.Setter;
 
 import java.util.List;
 
-@Getter @Setter
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateProductServiceDto {
-    //other request var
+    // other request var
     private long clubId;
     private long memberId;
     private String imagePath;
 
-    //mapped by CreateProductDto
+    // mapped by CreateProductDto
     private String name;
 
     private String category;
