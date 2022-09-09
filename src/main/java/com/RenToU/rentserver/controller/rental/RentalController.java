@@ -63,33 +63,16 @@ public class RentalController {
     @PutMapping("/{itemId}/apply")
     public ResponseEntity<?> applyRental(@PathVariable Long clubId, @PathVariable Long itemId) {
         Long memberId = memberService.getMyIdWithAuthorities();
-        try {
-            Long rentalId = itemRepository.findById(itemId)
-                    .orElseThrow(() -> new CustomException(ClubErrorCode.ITEM_NOT_FOUND))
-                    .getRental().getId();
-            rentalService.applyRental(memberId, rentalId);
-            return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.RENT_APPLY_SUCCESS));
-        } catch (NullPointerException e) {
-            throw new CustomException(RentalErrorCode.RENTAL_NOT_FOUND);
-        }
+        rentalService.applyRental(memberId, itemId);
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.RENT_APPLY_SUCCESS));
     }
 
     @PostMapping("/{itemId}/apply/admin")
     public ResponseEntity<?> justRental(@PathVariable Long clubId, @PathVariable Long itemId,
             @Valid @RequestBody TmpMemberDto dto) {
         Long clubAdminId = memberService.getMyIdWithAuthorities();
-        // stduentId 가 존재하지 않으면 임시멤버 생성
-
-        try {
-            // Long rentalId = itemRepository.findById(itemId)
-            // .orElseThrow(() -> new CustomException(ClubErrorCode.ITEM_NOT_FOUND))
-            // .getRental().getId();
-
-            rentalService.justRental(clubAdminId, clubId, itemId, dto.getName(), dto.getStudentId());
-            return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.RENT_APPLY_SUCCESS));
-        } catch (NullPointerException e) {
-            throw new CustomException(RentalErrorCode.RENTAL_NOT_FOUND);
-        }
+        rentalService.justRental(clubAdminId, clubId, itemId, dto.getName(), dto.getStudentId());
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.RENT_APPLY_SUCCESS));
     }
 
     @PutMapping("/{itemId}/return/admin")
@@ -100,45 +83,23 @@ public class RentalController {
         if (!member.getName().equals(dto.getName())) {
             throw new CustomException(MemberErrorCode.MEMBER_NOT_FOUND);
         }
-
-        try {
-            Long memberId = member.getId();
-            Long rentalId = itemRepository.findById(itemId)
-                    .orElseThrow(() -> new CustomException(ClubErrorCode.ITEM_NOT_FOUND))
-                    .getRental().getId();
-            rentalService.returnRentalAdmin(clubAdminId, clubId, rentalId, memberId);
-            return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.RENT_RETURN_SUCCESS));
-        } catch (NullPointerException e) {
-            throw new CustomException(RentalErrorCode.RENTAL_NOT_FOUND);
-        }
+        rentalService.returnRentalAdmin(clubAdminId, clubId, itemId, member.getId());
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.RENT_RETURN_SUCCESS));
     }
 
     @PutMapping("/{itemId}/return")
     public ResponseEntity<?> returnRental(@PathVariable Long clubId, @PathVariable Long itemId) {
         long memberId = memberService.getMyIdWithAuthorities();
-        try {
-            Long rentalId = itemRepository.findById(itemId)
-                    .orElseThrow(() -> new CustomException(ClubErrorCode.ITEM_NOT_FOUND))
-                    .getRental().getId();
-            RentalHistory rentalHistory = rentalService.returnRental(memberId, rentalId);
-            return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.RENT_RETURN_SUCCESS));
-        } catch (NullPointerException e) {
-            throw new CustomException(RentalErrorCode.RENTAL_NOT_FOUND);
-        }
+        rentalService.returnRental(memberId, itemId);
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.RENT_RETURN_SUCCESS));
+
     }
 
     @DeleteMapping("/{itemId}/cancel")
     public ResponseEntity<?> cancelRental(@PathVariable Long clubId, @PathVariable Long itemId) {
         long memberId = memberService.getMyIdWithAuthorities();
-        try {
-            Long rentalId = itemRepository.findById(itemId)
-                    .orElseThrow(() -> new CustomException(ClubErrorCode.ITEM_NOT_FOUND))
-                    .getRental().getId();
-            RentalHistory rentalHistory = rentalService.cancelRental(memberId, rentalId);
-            return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.RENT_CANCEL_SUCCESS));
-        } catch (NullPointerException e) {
-            throw new CustomException(RentalErrorCode.RENTAL_NOT_FOUND);
-        }
+        rentalService.cancelRental(memberId, itemId);
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.RENT_CANCEL_SUCCESS));
     }
 
     @GetMapping("/search/all")
@@ -159,5 +120,11 @@ public class RentalController {
                 .map((history) -> RentalHistoryPreviewDto.from(history))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.SEARCH_CLUB_RETURN, resData));
+    }
+    @DeleteMapping("/{itemId}/cancel/admin")
+    public ResponseEntity<?> cancelRentalAdmin(@PathVariable Long clubId, @PathVariable Long itemId) {
+        long memberId = memberService.getMyIdWithAuthorities();
+        rentalService.cancelRentalAdmin(memberId,clubId,itemId);
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.RENT_CANCEL_SUCCESS));
     }
 }
