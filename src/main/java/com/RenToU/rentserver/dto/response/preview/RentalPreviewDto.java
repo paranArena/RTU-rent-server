@@ -64,7 +64,7 @@ public class RentalPreviewDto {
                 .clubName(item.getProduct().getClub().getName())
                 .imagePath(item.getProduct().getImagePath())
                 .rentalPolicy(item.getRentalPolicy())
-                .location(item.getProduct().getLocation())
+                .location(LocationDto.from(item.getProduct().getLocation()))
                 .rentalInfo(RentalInfoDto.from(item.getRental(),memberId))
                 .build();
     }
