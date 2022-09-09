@@ -81,7 +81,7 @@ public class ClubProductController {
     }
 
     @PutMapping("/{productId}")
-    public ResponseEntity<?> updateProduct(@PathVariable Long clubId, @PathVariable Long productId,
+    public ResponseEntity<?> updateProductInfo(@PathVariable Long clubId, @PathVariable Long productId,
             @Valid @ModelAttribute UpdateProductInfoDto updateProductInfoDto) throws IOException {
         Long memberId = memberService.getMyIdWithAuthorities();
         MultipartFile image = updateProductInfoDto.getImage();
