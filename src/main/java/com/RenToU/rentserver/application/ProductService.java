@@ -1,6 +1,7 @@
 package com.RenToU.rentserver.application;
 
 import com.RenToU.rentserver.domain.Rental;
+import com.RenToU.rentserver.dto.service.AddItemServiceDto;
 import com.RenToU.rentserver.dto.service.CreateProductServiceDto;
 import com.RenToU.rentserver.domain.Club;
 import com.RenToU.rentserver.domain.Item;
@@ -119,14 +120,14 @@ public class ProductService {
     }
 
     @Transactional
-    public void addItem(Long memberId, Long clubId, Long productId, int numbering) {
+    public void addItem(Long memberId, Long clubId, Long productId, AddItemServiceDto dto) {
         Product product = findProduct(productId);
         if (clubId != product.getClub().getId())
             throw new CustomException(ClubErrorCode.PRODUCT_NOT_FOUND);
         Club club = findClub(clubId);// 영속성 컨텍스트 등록을 위해 repository로 검색
         Member requester = findMember(memberId);
         club.findClubMemberByMember(requester).validateAdmin();
-        Item item = Item.createItem(product, RentalPolicy.FIFO, numbering);
+        Item item = Item.createItem(product, dto.getRentalPolicy(), dto.getNumbering());
         itemRepository.save(item);
     }
 

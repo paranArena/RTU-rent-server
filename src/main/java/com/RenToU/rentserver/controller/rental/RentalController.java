@@ -25,22 +25,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.RenToU.rentserver.application.MemberService;
 import com.RenToU.rentserver.dto.StatusCode;
-import com.RenToU.rentserver.dto.request.SignupDto;
 import com.RenToU.rentserver.dto.request.TmpMemberDto;
 import com.RenToU.rentserver.dto.response.ResponseDto;
 import com.RenToU.rentserver.dto.response.ResponseMessage;
 import com.RenToU.rentserver.dto.response.preview.AdminRentalPreviewDto;
-import com.RenToU.rentserver.exceptions.AuthErrorCode;
-import com.RenToU.rentserver.exceptions.ClubErrorCode;
 import com.RenToU.rentserver.exceptions.CustomException;
-import com.RenToU.rentserver.exceptions.ErrorCode;
 import com.RenToU.rentserver.exceptions.MemberErrorCode;
-import com.RenToU.rentserver.exceptions.RentalErrorCode;
-import com.RenToU.rentserver.infrastructure.ItemRepository;
-import com.RenToU.rentserver.infrastructure.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
-import net.bytebuddy.implementation.StubMethod;
 
 @RestController
 @RequiredArgsConstructor
@@ -49,8 +41,6 @@ public class RentalController {
 
     private final MemberService memberService;
     private final RentalService rentalService;
-    private final ItemRepository itemRepository;
-    private final MemberRepository memberRepository;
 
     @PostMapping("/{itemId}/request")
     public ResponseEntity<?> requestRental(@PathVariable Long clubId, @PathVariable Long itemId) {
@@ -121,10 +111,11 @@ public class RentalController {
                 .collect(Collectors.toList());
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.SEARCH_CLUB_RETURN, resData));
     }
+
     @DeleteMapping("/{itemId}/cancel/admin")
     public ResponseEntity<?> cancelRentalAdmin(@PathVariable Long clubId, @PathVariable Long itemId) {
         long memberId = memberService.getMyIdWithAuthorities();
-        rentalService.cancelRentalAdmin(memberId,clubId,itemId);
+        rentalService.cancelRentalAdmin(memberId, clubId, itemId);
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.RENT_CANCEL_SUCCESS));
     }
 }
