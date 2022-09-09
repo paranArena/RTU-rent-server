@@ -112,7 +112,7 @@ public class Product extends BaseTimeEntity {
         this.caution = dto.getCaution();
         this.category = dto.getCategory();
         this.location = dto.getLocation();
-        if (imagePath != null) {
+        if (dto.getImagePath() != null) {
             this.imagePath = dto.getImagePath();
         }
     }
