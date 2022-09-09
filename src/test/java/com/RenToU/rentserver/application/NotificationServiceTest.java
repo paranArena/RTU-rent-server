@@ -1,6 +1,8 @@
 package com.RenToU.rentserver.application;
 
 import com.RenToU.rentserver.dto.service.CreateNotificationServiceDto;
+import com.RenToU.rentserver.exceptions.ClubErrorCode;
+import com.RenToU.rentserver.exceptions.CustomException;
 import com.RenToU.rentserver.domain.Club;
 import com.RenToU.rentserver.domain.ClubMember;
 import com.RenToU.rentserver.domain.ClubRole;
@@ -62,7 +64,7 @@ class NotificationServiceTest {
     }
 
     @Test
-    @DisplayName("그룹에 가입되지 않은 유저가 공지사항을 작성하면 NoAdminPermissionException 발생.")
+    @DisplayName("그룹에 가입되지 않은 유저가 공지사항을 작성하면 CLUBMEMBER_NOT_FOUND 발생.")
     void notJoiningUserWriteNotification() {
         // given
         Member admin = Member.createMemberWithId(1L, "test", "test@test.com");
@@ -79,12 +81,13 @@ class NotificationServiceTest {
         // when,then
 
         assertThatThrownBy(() -> service.createNotification(dto))
-                .isInstanceOf(MemberNotFoundException.class);
+                .isInstanceOf(CustomException.class)
+                .hasFieldOrPropertyWithValue("errorCode", ClubErrorCode.CLUBMEMBER_NOT_FOUND);
 
     }
 
     @Test
-    @DisplayName("그룹 관리자가 아니면 일반 유저면 NoAdminPermissionException 발생.")
+    @DisplayName("그룹 관리자가 아니면 일반 유저면 NO_ADMIN_PERMISSION 발생.")
     void noPermissionForWritingNotification() {
         // given
         Member admin = Member.createMemberWithId(1L, "test", "test@test.com");
@@ -101,7 +104,8 @@ class NotificationServiceTest {
         dto.setContent(INITIAL_NOTI_CONTENT);
         // when,then
         assertThatThrownBy(() -> service.createNotification(dto))
-                .isInstanceOf(NoAdminPermissionException.class);
+                .isInstanceOf(CustomException.class)
+                .hasFieldOrPropertyWithValue("errorCode", ClubErrorCode.NO_ADMIN_PERMISSION);
 
     }
 

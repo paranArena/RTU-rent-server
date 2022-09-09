@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,10 +27,12 @@ import com.RenToU.rentserver.application.S3Service;
 import com.RenToU.rentserver.domain.Location;
 import com.RenToU.rentserver.domain.Product;
 import com.RenToU.rentserver.dto.StatusCode;
+import com.RenToU.rentserver.dto.request.AddItemDto;
 import com.RenToU.rentserver.dto.request.CreateProductDto;
 import com.RenToU.rentserver.dto.response.ProductInfoDto;
 import com.RenToU.rentserver.dto.response.ResponseDto;
 import com.RenToU.rentserver.dto.response.ResponseMessage;
+import com.RenToU.rentserver.dto.service.AddItemServiceDto;
 import com.RenToU.rentserver.dto.service.CreateProductServiceDto;
 import com.github.dozermapper.core.Mapper;
 
@@ -51,7 +54,9 @@ public class ClubProductController {
         Long memberId = memberService.getMyIdWithAuthorities();
         MultipartFile image = createProductDto.getImage();
         String imagePath = null;
-        if (!image.isEmpty()) {
+        // TODO registerProduct에서 사진 처리를하거나, 여기서 유저의 권한 체크 필요
+        // 안하면 사진은 업로드되는데 데이터베이스에는 등록되지 않는 현상 발생
+        if (image != null && !image.isEmpty()) {
             imagePath = s3Service.upload(image);
         }
         CreateProductServiceDto productServiceDto = mapper.map(createProductDto, CreateProductServiceDto.class);
@@ -71,7 +76,7 @@ public class ClubProductController {
     public ResponseEntity<?> getProduct(@PathVariable Long clubId, @PathVariable Long productId) {
         Long memberId = memberService.getMyIdWithAuthorities();
         Product product = productService.getProductById(productId);
-        ProductInfoDto resData = ProductInfoDto.from(product,memberId);
+        ProductInfoDto resData = ProductInfoDto.from(product, memberId);
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.SEARCH_CLUB_PRODUCT_SUCCESS, resData));
     }
 
@@ -81,7 +86,7 @@ public class ClubProductController {
         Long memberId = memberService.getMyIdWithAuthorities();
         MultipartFile image = updateProductInfoDto.getImage();
         String imagePath = null;
-        if (!image.isEmpty()) {
+        if (image != null && !image.isEmpty()) {
             imagePath = s3Service.upload(image);
         }
         UpdateProductInfoServiceDto productServiceDto = mapper.map(updateProductInfoDto,
@@ -100,25 +105,29 @@ public class ClubProductController {
     }
 
     @DeleteMapping("/{productId}/{numbering}")
-    public ResponseEntity<?> deleteItem(@PathVariable Long productId, @PathVariable int numbering) {
+    public ResponseEntity<?> deleteItem(@PathVariable Long clubId, @PathVariable Long productId,
+            @PathVariable int numbering) {
         Long memberId = memberService.getMyIdWithAuthorities();
-        productService.deleteItemByNumbering(memberId, productId, numbering);
+        productService.deleteItemByNumbering(memberId, clubId, productId, numbering);
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.DELETE_ITEM, null));
     }
 
-    @PostMapping("/{productId}/{numbering}")
-    public ResponseEntity<?> addItem(@PathVariable Long productId, @PathVariable int numbering) {
+    // TODO POST /productid/items -> itemDto(rentlapolicy, numbering) 받아서 create하기
+    @PostMapping("/{productId}/items")
+    public ResponseEntity<?> addItem(@PathVariable Long clubId, @PathVariable Long productId,
+            @RequestBody AddItemDto dto) {
         Long memberId = memberService.getMyIdWithAuthorities();
-        productService.addItem(memberId, productId, numbering);
-        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.ADD_ITEM, null));
+        AddItemServiceDto serviceDto = mapper.map(dto, AddItemServiceDto.class);
+        productService.addItem(memberId, clubId, productId, serviceDto);
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.ADD_ITEM));
     }
 
     @DeleteMapping("/{productId}")
-    public ResponseEntity<?> deleteProduct(@PathVariable Long productId) {
+    public ResponseEntity<?> deleteProduct(@PathVariable Long clubId, @PathVariable Long productId) {
         Long memberId = memberService.getMyIdWithAuthorities();
-        productService.deleteProduct(memberId, productId);
+        productService.deleteProduct(memberId, clubId, productId);
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK,
-                ResponseMessage.DELETE_CLUB, null));
+                ResponseMessage.DELETE_CLUB_PRODUCT, null));
     }
 
     @GetMapping("/search/all")
