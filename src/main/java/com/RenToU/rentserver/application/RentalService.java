@@ -61,9 +61,10 @@ public class RentalService {
     }
 
     @Transactional(noRollbackFor = { CustomException.class })
-    public void applyRental(Long memberId, Long rentalId) {
+    public void applyRental(Long memberId, Long itemId) {
         Member member = findMember(memberId);
-        Rental rental = findRental(rentalId);
+        Item item = findItem(itemId);
+        Rental rental = findRentalByItem(item);
         rental.validateWait();
         rental.validateMember(member);
         validateApplyTimeNotOver(rental);
@@ -72,10 +73,9 @@ public class RentalService {
     }
 
     @Transactional
-    // TODO void로 바꿔주실 수 있나요? 이 행위를 요청했을 때 resData는 null이 들어가도 될 것 같습니다.
-    public RentalHistory returnRental(Long memberId, Long rentalId) {
+    public void returnRental(Long memberId, Long itemId) {
         Member member = findMember(memberId);
-        Rental rental = findRental(rentalId);
+        Rental rental = findRentalByItem(findItem(itemId));
         rental.validateRent();
         rental.validateMember(member);
         rental.checkLate();
@@ -83,21 +83,18 @@ public class RentalService {
         RentalHistory rentalHistory = RentalHistory.RentalToHistory(rental);
         rentalHistoryRepository.save(rentalHistory);
         rentalRepository.deleteById(rental.getId());
-        return rentalHistory;
     }
 
     @Transactional
-    // TODO void로 바꿔주실 수 있나요? 이 행위를 요청했을 때 resData는 null이 들어가도 될 것 같습니다.
-    public RentalHistory cancelRental(Long memberId, Long rentalId) {
+    public void cancelRental(Long memberId, Long itemId) {
         Member member = findMember(memberId);
-        Rental rental = findRental(rentalId);
+        Rental rental = findRentalByItem(findItem(itemId));
         rental.validateWait();
         rental.validateMember(member);
         rental.cancel();
         RentalHistory rentalHistory = RentalHistory.RentalToHistory(rental);
         rentalHistoryRepository.save(rentalHistory);
         rentalRepository.deleteById(rental.getId());
-        return rentalHistory;
     }
 
     private Member findMember(Long id) {
@@ -197,10 +194,10 @@ public class RentalService {
 
     }
     @Transactional
-    public void returnRentalAdmin(Long adminId,Long clubId, Long rentalId,Long memberId) {
+    public void returnRentalAdmin(Long adminId,Long clubId, Long itemId,Long memberId) {
         Member admin = findMember(adminId);
         Member member = findMember(memberId);
-        Rental rental = findRental(rentalId);
+        Rental rental = findRentalByItem(findItem(itemId));
         Club club = findClub(clubId);
         rental.validateRent();
         club.findClubMemberByMember(admin).validateAdmin();
@@ -214,5 +211,17 @@ public class RentalService {
 
     private List<RentalHistory> findHistoriesByItem(Item item) {
         return rentalHistoryRepository.findAllByItem(item);
+    }
+    @Transactional
+    public void cancelRentalAdmin(Long adminId,Long clubId, Long itemId) {
+        Member admin = findMember(adminId);
+        Rental rental = findRentalByItem(findItem(itemId));
+        Club club = findClub(clubId);
+        club.findClubMemberByMember(admin).validateAdmin();
+        rental.validateWait();
+        rental.cancel();
+        RentalHistory rentalHistory = RentalHistory.RentalToHistory(rental);
+        rentalHistoryRepository.save(rentalHistory);
+        rentalRepository.deleteById(rental.getId());
     }
 }
