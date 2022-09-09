@@ -17,11 +17,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import static javax.persistence.FetchType.LAZY;
 
 import javax.persistence.CascadeType;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Builder
@@ -45,6 +48,9 @@ public class Item extends BaseTimeEntity {
     private Product product;
     @OneToOne(mappedBy = "item", fetch = LAZY,cascade = CascadeType.ALL)
     private Rental rental;
+
+    @OneToMany(mappedBy = "item",fetch = LAZY, cascade = CascadeType.ALL)
+    private List<RentalHistory> rentalHistories = new ArrayList<>();
 
     public static Item createItem(Product product, RentalPolicy rentalPolicy, int numbering) {
         if (product.getItemByNumbering(numbering) != null) {
