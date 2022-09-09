@@ -51,4 +51,20 @@ public class RentalPreviewDto {
                 .rentalInfo(RentalInfoDto.from(item.getRental()))
                 .build();
     }
+    public static RentalPreviewDto from(Item item, Long memberId) {
+        if (item == null)
+            return null;
+
+        return RentalPreviewDto.builder()
+                .id(item.getId())
+                .numbering(item.getNumbering())
+                .name(item.getProduct().getName())
+                .clubId(item.getProduct().getClub().getId())
+                .clubName(item.getProduct().getClub().getName())
+                .imagePath(item.getProduct().getImagePath())
+                .rentalPolicy(item.getRentalPolicy())
+                .location(item.getProduct().getLocation())
+                .rentalInfo(RentalInfoDto.from(item.getRental(),memberId))
+                .build();
+    }
 }

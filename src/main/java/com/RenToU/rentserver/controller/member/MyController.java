@@ -117,11 +117,12 @@ public class MyController {
     @GetMapping("/rentals")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<?> getMyRentals(HttpServletRequest request) {
-        List<Item> items = memberService.getMyUserWithAuthorities().getRentals().stream()
+        Member member = memberService.getMyUserWithAuthorities();
+        List<Item> items = member.getRentals().stream()
                 .map((rental) -> rental.getItem())
                 .collect(Collectors.toList());
         List<RentalPreviewDto> resData = items.stream()
-                .map((item) -> RentalPreviewDto.from(item))
+                .map((item) -> RentalPreviewDto.from(item,member.getId()))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_MY_RENT, resData));
     }
