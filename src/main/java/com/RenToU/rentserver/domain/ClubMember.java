@@ -105,6 +105,12 @@ public class ClubMember extends BaseTimeEntity {
         }
     }
 
+    public void validateUser() {
+        if (this.role != ClubRole.OWNER && this.role != ClubRole.ADMIN && this.role != ClubRole.USER) {
+            throw new CustomException(ClubErrorCode.NO_USER_PERMISSION);
+        }
+    }
+
     public void delete() {
         member.deleteClub(this);
         club.deleteMember(this);
