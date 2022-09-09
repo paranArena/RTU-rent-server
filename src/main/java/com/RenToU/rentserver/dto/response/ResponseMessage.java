@@ -81,4 +81,6 @@ public class ResponseMessage {
     public static final String SEARCH_CLUB_RETURN = "렌탈 반납 조회 성공";
 
     public static final String DELETE_CLUB_PRODUCT = "클럽 물품 삭제 성공";
+
+    public static final String RESET_PASSWORD = "비밀번호 재설정 성공";
 }

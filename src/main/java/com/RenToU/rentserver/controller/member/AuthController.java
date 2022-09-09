@@ -4,6 +4,7 @@ import com.RenToU.rentserver.dto.StatusCode;
 import com.RenToU.rentserver.dto.request.EmailDto;
 import com.RenToU.rentserver.dto.request.EmailVerifyDto;
 import com.RenToU.rentserver.dto.request.LoginDto;
+import com.RenToU.rentserver.dto.request.PasswordDto;
 import com.RenToU.rentserver.dto.request.SignupDto;
 import com.RenToU.rentserver.dto.response.MemberInfoDto;
 import com.RenToU.rentserver.dto.response.ResponseDto;
@@ -29,6 +30,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -97,4 +99,12 @@ public class AuthController {
         memberService.verifyCode(request);
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.EMAIL_VERIFIED, null));
     }
+
+    @PutMapping("/info/password")
+    public ResponseEntity<?> resetPassword(@Valid @RequestBody PasswordDto dto) {
+        Long memberId = memberService.getMyIdWithAuthorities();
+        memberService.resetPassword(memberId, dto.getPassword());
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.RESET_PASSWORD));
+    }
+
 }

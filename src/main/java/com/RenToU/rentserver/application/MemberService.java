@@ -5,6 +5,7 @@ import java.util.Random;
 
 import com.RenToU.rentserver.dto.request.EmailDto;
 import com.RenToU.rentserver.dto.request.EmailVerifyDto;
+import com.RenToU.rentserver.dto.request.PasswordDto;
 import com.RenToU.rentserver.util.RedisUtil;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -62,6 +63,12 @@ public class MemberService {
                 .build();
 
         return memberRepository.save(member);
+    }
+
+    public void resetPassword(Long memberId, String pw) {
+        Member member = findMember(memberId);
+        member.setPassword(passwordEncoder.encode(pw));
+        memberRepository.save(member);
     }
 
     @Transactional(readOnly = true)
