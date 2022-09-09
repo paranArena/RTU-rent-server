@@ -83,7 +83,7 @@ public class ClubProductController {
         Long memberId = memberService.getMyIdWithAuthorities();
         MultipartFile image = updateProductInfoDto.getImage();
         String imagePath = null;
-        if (!image.isEmpty()) {
+        if (image != null && !image.isEmpty()) {
             imagePath = s3Service.upload(image);
         }
         UpdateProductInfoServiceDto productServiceDto = mapper.map(updateProductInfoDto,
