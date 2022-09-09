@@ -108,7 +108,7 @@ public class ProductService {
         Member requester = findMember(memberId);
         club.findClubMemberByMember(requester).validateAdmin();
         Item item = findItem(itemId);
-        if (item == null)
+        if (productId != item.getProduct().getId())
             throw new CustomException(ClubErrorCode.ITEM_NOT_FOUND);
         Rental rental = item.getRental();
         if (rental != null) {
