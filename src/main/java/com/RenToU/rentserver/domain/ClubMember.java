@@ -84,59 +84,25 @@ public class ClubMember extends BaseTimeEntity {
         }
     }
 
-    public void validateAdmin() {
-        if (this.role != ClubRole.ADMIN && this.role != ClubRole.OWNER) {
-            throw new CustomException(ClubErrorCode.NO_ADMIN_PERMISSION);
-        }
-    }
-    public void validateRole(ClubRole... clubRoles) {
-        if (Arrays.stream(clubRoles).noneMatch(role -> role == this.role)) {
+    public void validateRole(Boolean isContaining,ClubRole... clubRoles) {
+        if (isContaining == Arrays.stream(clubRoles).noneMatch(role -> role == this.role)) {
             throw new CustomException(ClubErrorCode.NO_MATCHING_ROLE);
         }
     }
-
-    public boolean isAdmin() {
-        if (this.role != ClubRole.ADMIN && this.role != ClubRole.OWNER) {
+    public boolean isRole(Boolean isContaining,ClubRole... clubRoles) {
+        if (isContaining == Arrays.stream(clubRoles).noneMatch(role -> role == this.role)) {
             return true;
         }
         return false;
     }
+
 
     public String toString() {
         return this.getClub().getId() + " " + this.getMember().getId() + " " + this.getRole().toString();
     }
 
-    public void validateOwner() {
-        if (this.role != ClubRole.OWNER) {
-            throw new CustomException(ClubErrorCode.NO_ADMIN_PERMISSION);
-        }
-    }
-
-    public void validateUser() {
-        if (this.role != ClubRole.OWNER && this.role != ClubRole.ADMIN && this.role != ClubRole.USER) {
-            throw new CustomException(ClubErrorCode.NO_USER_PERMISSION);
-        }
-    }
-
     public void delete() {
         member.deleteClub(this);
         club.deleteMember(this);
-    }
-
-    public void validateWait() {
-        if (this.role != ClubRole.WAIT) {
-            throw new CustomException(ClubErrorCode.NOT_WAIT_USER);
-        }
-    }
-
-    public boolean isUser() {
-        if (this.role != ClubRole.USER) {
-            return true;
-        }
-        return false;
-    }
-
-    public void deleteMember() {
-
     }
 }
