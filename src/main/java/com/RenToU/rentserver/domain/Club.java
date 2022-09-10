@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static javax.persistence.FetchType.LAZY;
+
 @Entity
 @Getter
 @Builder
@@ -40,19 +42,19 @@ public class Club extends BaseTimeEntity {
     private String thumbnailPath;
 
     @Builder.Default
-    @OneToMany(mappedBy = "club", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "club",fetch = LAZY, cascade = CascadeType.ALL)
     private List<ClubMember> memberList = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "club", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "club",fetch = LAZY, cascade = CascadeType.ALL)
     private List<Notification> notifications = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "club", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "club", fetch = LAZY,cascade = CascadeType.ALL)
     private List<Product> products = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "club", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "club",fetch = LAZY, cascade = CascadeType.ALL)
     private List<ClubHashtag> hashtags = new ArrayList<>();
 
     // 연관관계 편의 메소드

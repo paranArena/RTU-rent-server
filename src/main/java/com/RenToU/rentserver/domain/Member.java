@@ -45,11 +45,11 @@ public class Member extends BaseTimeEntity {
     private boolean activated;
 
     @Builder.Default
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "member",fetch = LAZY, cascade = CascadeType.ALL)
     private List<ClubMember> clubList = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "member",fetch = LAZY, cascade = CascadeType.ALL)
     private List<Rental> rentals = new ArrayList<>();
 
     @ManyToMany
