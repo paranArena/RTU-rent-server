@@ -19,8 +19,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import java.util.Arrays;
-import java.util.List;
-
 @Entity
 @Getter
 @Builder
@@ -95,7 +93,6 @@ public class ClubMember extends BaseTimeEntity {
         }
         return false;
     }
-
 
     public String toString() {
         return this.getClub().getId() + " " + this.getMember().getId() + " " + this.getRole().toString();
