@@ -123,4 +123,10 @@ public class Member extends BaseTimeEntity {
         rentals.remove(rental);
     }
 
+    public void toTempMember() {
+        this.email = null;
+        this.password = null;
+        this.major = null;
+        this.phoneNumber = null;
+    }
 }

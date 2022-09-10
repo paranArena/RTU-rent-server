@@ -27,6 +27,10 @@ import lombok.RequiredArgsConstructor;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
+import static com.RenToU.rentserver.domain.ClubRole.ADMIN;
+import static com.RenToU.rentserver.domain.ClubRole.USER;
+import static com.RenToU.rentserver.domain.ClubRole.WAIT;
+
 @Service
 @RequiredArgsConstructor
 public class MemberService {
@@ -163,10 +167,12 @@ public class MemberService {
                 .orElseThrow(() -> new CustomException(MemberErrorCode.MEMBER_NOT_FOUND));
         return member;
     }
-
+    @Transactional
     public void deleteMember(Long memberId) {
         Member member = findMember(memberId);
-        memberRepository.delete(member);
+        member.getClubList().stream().forEach(cm->cm.validateRole(ADMIN,USER,WAIT));//not OWNER
+        member.toTempMember();
+        memberRepository.save(member);
     }
 
     public Member findByStudentId(String studentId) {
