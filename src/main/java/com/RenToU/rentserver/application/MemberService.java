@@ -4,8 +4,6 @@ import java.util.Collections;
 import java.util.Random;
 
 import com.RenToU.rentserver.dto.request.EmailDto;
-import com.RenToU.rentserver.dto.request.EmailVerifyDto;
-import com.RenToU.rentserver.dto.request.PasswordDto;
 import com.RenToU.rentserver.exceptions.ClubErrorCode;
 import com.RenToU.rentserver.util.RedisUtil;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -165,12 +163,13 @@ public class MemberService {
                 .orElseThrow(() -> new CustomException(MemberErrorCode.MEMBER_NOT_FOUND));
         return member;
     }
+
     @Transactional
     public void deleteMember(Long memberId) {
         Member member = findMember(memberId);
         try {
-            member.getClubList().stream().forEach(cm -> cm.validateRole(false,OWNER));//not OWNER
-        }catch(CustomException e){
+            member.getClubList().stream().forEach(cm -> cm.validateRole(false, OWNER));// not OWNER
+        } catch (CustomException e) {
             throw new CustomException(ClubErrorCode.CLUB_OWNER_CANT_QUIT);
         }
         member.toTempMember();
