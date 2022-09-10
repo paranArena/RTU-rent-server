@@ -62,7 +62,7 @@ public class MemberService {
                 .phoneNumber(signupDTO.getPhoneNumber())
                 .studentId(signupDTO.getStudentId())
                 .major(signupDTO.getMajor())
-                .activated(false)
+                .activated(true)
                 .authorities(Collections.singleton(authority))
                 .build();
 
@@ -77,7 +77,6 @@ public class MemberService {
 
     @Transactional(readOnly = true)
     public Member getUserWithAuthorities(String email) {
-        // TODO nullpoint
         return memberRepository.findOneWithAuthoritiesByEmail(email)
                 .orElseThrow(() -> new CustomException(MemberErrorCode.MEMBER_NOT_FOUND));
     }
@@ -113,7 +112,9 @@ public class MemberService {
         String authKey = String.valueOf(random.nextInt(888888) + 111111);// 범위 : 111111 ~ 999999
 
         // 이메일 발송
-        sendAuthEmail(request.getEmail(), authKey);
+        // sendAuthEmail(request.getEmail(), authKey);
+        // TODO for dev
+        sendAuthEmail(request.getEmail(), "111111");
     }
 
     private void sendAuthEmail(String email, String authKey) {
@@ -141,17 +142,12 @@ public class MemberService {
         redisUtil.setDataExpire(email, authKey, 60 * 5L);
     }
 
-    public void verifyCode(EmailVerifyDto request) {
-        String userCode = request.getCode();
-        String email = request.getEmail();
-        String verifyCode = redisUtil.getData(email);
-        System.out.println(userCode + " " + verifyCode);
-        if (!userCode.equals(verifyCode)) {
+    public void verifyCode(String key, String input) {
+        String value = redisUtil.getData(key);
+        System.out.println(input + " " + value);
+        if (!input.equals(value)) {
             throw new CustomException(AuthErrorCode.WRONG_VERIFICATION_CODE);
         }
-        Member member = findMemberByEMail(email);
-        member.setActivated(true);
-        memberRepository.save(member);
     }
 
     private void checkAjouEmail(String email) {

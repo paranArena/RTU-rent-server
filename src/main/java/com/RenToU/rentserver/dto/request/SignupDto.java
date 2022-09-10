@@ -21,6 +21,7 @@ public class SignupDto {
 
     @NotBlank(message = "이메일을 입력해주세요.")
     @Email(message = "이메일 형식을 입력해주세요.")
+    @Pattern(regexp = ".+@ajou.ac.kr", message = "아주대학교 이메일을 입력해주세요.")
     @Size(min = 6, max = 30)
     private String email;
 
@@ -43,4 +44,7 @@ public class SignupDto {
 
     @NotBlank(message = "전공을 입력해주세요.")
     private String major;
+
+    @NotBlank
+    private String verificationCode;
 }
