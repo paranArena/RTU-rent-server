@@ -1,7 +1,6 @@
 package com.RenToU.rentserver.dto.response.preview;
 
 import com.RenToU.rentserver.domain.Item;
-import com.RenToU.rentserver.domain.Location;
 import com.RenToU.rentserver.domain.RentalPolicy;
 import com.RenToU.rentserver.dto.response.LocationDto;
 import com.RenToU.rentserver.dto.response.RentalInfoDto;
@@ -52,6 +51,7 @@ public class RentalPreviewDto {
                 .rentalInfo(RentalInfoDto.from(item.getRental()))
                 .build();
     }
+
     public static RentalPreviewDto from(Item item, Long memberId) {
         if (item == null)
             return null;
@@ -65,7 +65,7 @@ public class RentalPreviewDto {
                 .imagePath(item.getProduct().getImagePath())
                 .rentalPolicy(item.getRentalPolicy())
                 .location(LocationDto.from(item.getProduct().getLocation()))
-                .rentalInfo(RentalInfoDto.from(item.getRental(),memberId))
+                .rentalInfo(RentalInfoDto.from(item.getRental(), memberId))
                 .build();
     }
 }

@@ -2,7 +2,6 @@ package com.RenToU.rentserver.controller.member;
 
 import com.RenToU.rentserver.dto.StatusCode;
 import com.RenToU.rentserver.dto.request.EmailDto;
-import com.RenToU.rentserver.dto.request.EmailVerifyDto;
 import com.RenToU.rentserver.dto.request.LoginDto;
 import com.RenToU.rentserver.dto.request.ResetPasswordDto;
 import com.RenToU.rentserver.dto.request.ResetPasswordWithVerificationDto;

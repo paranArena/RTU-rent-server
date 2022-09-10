@@ -7,7 +7,6 @@ import com.RenToU.rentserver.domain.Club;
 import com.RenToU.rentserver.domain.Item;
 import com.RenToU.rentserver.domain.Member;
 import com.RenToU.rentserver.domain.Product;
-import com.RenToU.rentserver.domain.RentalPolicy;
 import com.RenToU.rentserver.dto.service.UpdateProductInfoServiceDto;
 import com.RenToU.rentserver.exceptions.ClubErrorCode;
 import com.RenToU.rentserver.exceptions.CustomException;
