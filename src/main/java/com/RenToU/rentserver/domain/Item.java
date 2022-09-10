@@ -46,10 +46,11 @@ public class Item extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "product_id")
     private Product product;
-    @OneToOne(mappedBy = "item", fetch = LAZY,cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "item", fetch = LAZY, cascade = CascadeType.ALL)
     private Rental rental;
 
-    @OneToMany(mappedBy = "item",fetch = LAZY, cascade = CascadeType.ALL)
+    @Builder.Default
+    @OneToMany(mappedBy = "item", fetch = LAZY, cascade = CascadeType.ALL)
     private List<RentalHistory> rentalHistories = new ArrayList<>();
 
     public static Item createItem(Product product, RentalPolicy rentalPolicy, int numbering) {
