@@ -1,6 +1,5 @@
 package com.RenToU.rentserver.application;
 
-import com.RenToU.rentserver.domain.ClubRole;
 import com.RenToU.rentserver.dto.request.UpdateNotificationDto;
 import com.RenToU.rentserver.dto.service.CreateNotificationServiceDto;
 import com.RenToU.rentserver.domain.Club;
@@ -37,7 +36,7 @@ public class NotificationService {
     public Notification createNotification(CreateNotificationServiceDto notificationServiceDto) {
         Club club = findClub(notificationServiceDto.getClubId());
         Member writer = findMember(notificationServiceDto.getMemberId());
-        club.findClubMemberByMember(writer).validateRole(true,OWNER,ADMIN);
+        club.findClubMemberByMember(writer).validateRole(true, OWNER, ADMIN);
         String title = notificationServiceDto.getTitle();
         String content = notificationServiceDto.getContent();
         String imagePath = null;
@@ -65,7 +64,7 @@ public class NotificationService {
     public void deleteNotification(long memberId, Long clubId, Long notificationId) {
         Member member = findMember(memberId);
         Club club = findClub(clubId);
-        club.findClubMemberByMember(member).validateRole(true,OWNER,ADMIN);
+        club.findClubMemberByMember(member).validateRole(true, OWNER, ADMIN);
         notificationRepository.deleteById(notificationId);
     }
 
@@ -102,7 +101,7 @@ public class NotificationService {
     public Notification updateNotification(long memberId, long clubId, UpdateNotificationDto dto) {
         Member member = findMember(memberId);
         Club club = findClub(clubId);
-        club.findClubMemberByMember(member).validateRole(true,OWNER,ADMIN);
+        club.findClubMemberByMember(member).validateRole(true, OWNER, ADMIN);
         Notification notification = findNotification(dto.getNotificationId());
         boolean isPublic = false;
         if (dto.getIsPublic() == "true") {
