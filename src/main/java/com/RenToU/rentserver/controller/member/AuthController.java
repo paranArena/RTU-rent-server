@@ -4,7 +4,8 @@ import com.RenToU.rentserver.dto.StatusCode;
 import com.RenToU.rentserver.dto.request.EmailDto;
 import com.RenToU.rentserver.dto.request.EmailVerifyDto;
 import com.RenToU.rentserver.dto.request.LoginDto;
-import com.RenToU.rentserver.dto.request.PasswordDto;
+import com.RenToU.rentserver.dto.request.ResetPasswordDto;
+import com.RenToU.rentserver.dto.request.ResetPasswordWithVerificationDto;
 import com.RenToU.rentserver.dto.request.SignupDto;
 import com.RenToU.rentserver.dto.response.MemberInfoDto;
 import com.RenToU.rentserver.dto.response.ResponseDto;
@@ -95,20 +96,30 @@ public class AuthController {
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.REQUEST_EMAIL_VERIFICATION));
     }
 
-    @PostMapping("members/email/verifyCode")
-    public ResponseEntity<?> activateMember(@RequestBody @Valid EmailVerifyDto request) {
-        memberService.verifyCode(request.getEmail(), request.getCode());
-        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.EMAIL_VERIFIED));
-    }
+    // // 이메일 + 인증코드 받음
+    // // ?? 그냥 템플릿정도
+    // @PostMapping("members/email/verifyCode")
+    // public ResponseEntity<?> activateMember(@RequestBody @Valid EmailVerifyDto
+    // request) {
+    // memberService.verifyCode(request.getEmail(), request.getCode());
+    // return ResponseEntity.ok(ResponseDto.res(StatusCode.OK,
+    // ResponseMessage.EMAIL_VERIFIED));
+    // }
 
+    // 토큰없이 패스워드 변경 가능
+    // 인증코드 + 패스워드
+    // 코드 인증하고 패스워드 변경
     @PostMapping("pawssord/reset/verify")
-    public ResponseEntity<?> resetPasswordWithVerifyCode(@RequestBody @Valid EmailVerifyDto request) {
+    public ResponseEntity<?> resetPasswordWithVerifyCode(@RequestBody @Valid ResetPasswordWithVerificationDto request) {
         memberService.verifyCode(request.getEmail(), request.getCode());
+        Member member = memberService.getUserWithAuthorities(request.getEmail());
+        memberService.resetPassword(member.getId(), request.getPassword());
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.EMAIL_VERIFIED));
     }
 
+    // 그냥 토큰에 해당하는 비밀 번호를 변경
     @PutMapping("/password/reset")
-    public ResponseEntity<?> resetPassword(@Valid @RequestBody PasswordDto dto) {
+    public ResponseEntity<?> resetPassword(@Valid @RequestBody ResetPasswordDto dto) {
         Long memberId = memberService.getMyIdWithAuthorities();
         memberService.resetPassword(memberId, dto.getPassword());
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.RESET_PASSWORD));

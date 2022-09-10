@@ -34,7 +34,6 @@ public class MemberController {
 
     @PostMapping("/{memberId}/report")
     public ResponseEntity<?> reportMember(@PathVariable Long memberId) {
-        // TODO: process POST request
 
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.REPORT_MEMBER));
     }
