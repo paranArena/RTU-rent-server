@@ -36,8 +36,8 @@ public class NotificationService {
     @Transactional
     public Notification createNotification(CreateNotificationServiceDto notificationServiceDto) {
         Club club = findClub(notificationServiceDto.getClubId());
-        Member writer = findMember(notificationServiceDto.getMemberId());
-        club.findClubMemberByMember(writer).validateRole(true,OWNER,ADMIN);
+        Long writerId = notificationServiceDto.getMemberId();
+        club.findClubMemberByMemberId(writerId).validateRole(true,OWNER,ADMIN);
         String title = notificationServiceDto.getTitle();
         String content = notificationServiceDto.getContent();
         String imagePath = null;
@@ -63,9 +63,8 @@ public class NotificationService {
 
     @Transactional
     public void deleteNotification(long memberId, Long clubId, Long notificationId) {
-        Member member = findMember(memberId);
         Club club = findClub(clubId);
-        club.findClubMemberByMember(member).validateRole(true,OWNER,ADMIN);
+        club.findClubMemberByMemberId(memberId).validateRole(true,OWNER,ADMIN);
         notificationRepository.deleteById(notificationId);
     }
 
@@ -87,9 +86,8 @@ public class NotificationService {
 
     public List<Notification> getClubNotifications(long memberId, long clubId) {
         Club club = findClub(clubId);
-        Member member = findMember(memberId);
         List<Notification> notifications = new ArrayList<>();
-        if (club.findClubMemberByMember(member).isRole(false, WAIT)) {
+        if (club.findClubMemberByMemberId(memberId).isRole(false, WAIT)) {
             notifications = club.getNotifications();
         } else {
             notifications = club.getNotifications().stream().filter(n -> n.getIsPublic() == true)
@@ -100,9 +98,8 @@ public class NotificationService {
 
     @Transactional
     public Notification updateNotification(long memberId, long clubId, UpdateNotificationDto dto) {
-        Member member = findMember(memberId);
         Club club = findClub(clubId);
-        club.findClubMemberByMember(member).validateRole(true,OWNER,ADMIN);
+        club.findClubMemberByMemberId(memberId).validateRole(true,OWNER,ADMIN);
         Notification notification = findNotification(dto.getNotificationId());
         boolean isPublic = false;
         if (dto.getIsPublic() == "true") {
