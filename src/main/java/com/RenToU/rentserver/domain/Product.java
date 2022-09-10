@@ -10,7 +10,6 @@ import lombok.Setter;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -41,7 +40,7 @@ public class Product extends BaseTimeEntity {
 
     private String category;
 
-    @OneToOne(cascade = CascadeType.ALL,fetch = LAZY)
+    @OneToOne(cascade = CascadeType.ALL, fetch = LAZY)
     @JoinColumn(name = "location_id")
     private Location location;
 
@@ -59,7 +58,7 @@ public class Product extends BaseTimeEntity {
     @JoinColumn(name = "club_id")
     private Club club;
 
-    @OneToMany(mappedBy = "product",fetch = LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "product", fetch = LAZY, cascade = CascadeType.ALL)
     @Builder.Default
     private List<Item> items = new ArrayList<>();
 
