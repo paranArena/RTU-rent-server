@@ -6,6 +6,7 @@ import java.util.Random;
 import com.RenToU.rentserver.dto.request.EmailDto;
 import com.RenToU.rentserver.dto.request.EmailVerifyDto;
 import com.RenToU.rentserver.dto.request.PasswordDto;
+import com.RenToU.rentserver.exceptions.ClubErrorCode;
 import com.RenToU.rentserver.util.RedisUtil;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -170,7 +171,11 @@ public class MemberService {
     @Transactional
     public void deleteMember(Long memberId) {
         Member member = findMember(memberId);
-        member.getClubList().stream().forEach(cm->cm.validateRole(ADMIN,USER,WAIT));//not OWNER
+        try {
+            member.getClubList().stream().forEach(cm -> cm.validateRole(ADMIN, USER, WAIT));//not OWNER
+        }catch(CustomException e){
+            throw new CustomException(ClubErrorCode.CLUB_OWNER_CANT_QUIT);
+        }
         member.toTempMember();
         memberRepository.save(member);
     }
