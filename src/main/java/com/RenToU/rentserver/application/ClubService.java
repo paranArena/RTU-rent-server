@@ -7,43 +7,45 @@ import com.RenToU.rentserver.domain.ClubRole;
 import java.util.List;
 
 public interface ClubService {
-    public List<Club> findClubs();
+        public List<Club> findClubs();
 
-    public Club findClubById(long clubId);
+        public Club findClubById(long clubId);
 
-    public Club findClubByName(String clubName);
+        public Club findClubByName(String clubName);
 
-    public void grantAdmin(Long clubId, Long ownerId, Long userId);
+        public void grantAdmin(Long clubId, Long ownerId, Long userId);
 
-    public void grantUser(Long clubId, Long ownerId, Long userId);
+        public void grantUser(Long clubId, Long ownerId, Long userId);
 
-    public ClubRole getMyRole(long memberId, long clubId);
+        public ClubRole getMyRole(long memberId, long clubId);
 
-    public List<Club> getMyClubs(long memberId);
+        public ClubMember getClubMember(long memberId, long clubId, long clubMemberId);
 
-    public Club createClub(Long memberId, String clubName, String clubIntro, String thumbnailPath,
-            List<String> clubHashtags);
+        public List<Club> getMyClubs(long memberId);
 
-    public void deleteClub(long memberId, long clubId);
+        public Club createClub(Long memberId, String clubName, String clubIntro, String thumbnailPath,
+                        List<String> clubHashtags);
 
-    public List<ClubMember> getAllMembers(long clubId);
+        public void deleteClub(long memberId, long clubId);
 
-    public void requestClubJoin(Long clubId, Long memberId);
+        public List<ClubMember> getAllMembers(long clubId);
 
-    public void cancelClubJoin(Long clubId, Long memberId);
+        public void requestClubJoin(Long clubId, Long memberId);
 
-    public List<ClubMember> searchClubJoinsAll(Long clubId, Long memberId);
+        public void cancelClubJoin(Long clubId, Long memberId);
 
-    public void rejectClubJoin(Long clubId, Long ownerId, Long joinMemberId);
+        public List<ClubMember> searchClubJoinsAll(Long clubId, Long memberId);
 
-    public void acceptClubJoin(Long clubId, Long ownerId, Long joinMemberId);
+        public void rejectClubJoin(Long clubId, Long ownerId, Long joinMemberId);
 
-    public void leaveClub(Long clubId, Long userId);
+        public void acceptClubJoin(Long clubId, Long ownerId, Long joinMemberId);
 
-    public void removeClubMember(Long clubId, Long ownerId, Long memberId);
+        public void leaveClub(Long clubId, Long userId);
 
-    List<Club> getMyClubRequests(long memberId);
+        public void removeClubMember(Long clubId, Long ownerId, Long memberId);
 
-    Club updateClubInfo(long memberId, long clubId, String name, String intro, String thumbnailPath,
-            List<String> hashtags);
+        List<Club> getMyClubRequests(long memberId);
+
+        Club updateClubInfo(long memberId, long clubId, String name, String intro, String thumbnailPath,
+                        List<String> hashtags);
 }

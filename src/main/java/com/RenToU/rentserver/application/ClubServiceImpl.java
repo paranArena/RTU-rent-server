@@ -189,6 +189,16 @@ public class ClubServiceImpl implements ClubService {
     }
 
     @Override
+    public ClubMember getClubMember(long memberId, long clubId, long clubMemberId) {
+        Member member = findMember(memberId);
+        Member target = findMember(clubMemberId);
+        Club club = findClubById(clubId);
+        club.findClubMemberByMember(member).validateAdmin();
+        ClubMember clubMember = club.findClubMemberByMember(target);
+        return clubMember;
+    }
+
+    @Override
     @Transactional
     public void grantAdmin(Long clubId, Long ownerId, Long userId) {
         Club club = findClub(clubId);
