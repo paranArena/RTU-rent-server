@@ -5,7 +5,7 @@ import java.util.Random;
 
 import com.RenToU.rentserver.dto.request.EmailDto;
 import com.RenToU.rentserver.dto.request.EmailVerifyDto;
-import com.RenToU.rentserver.dto.request.PasswordDto;
+import com.RenToU.rentserver.dto.request.ResetPasswordDto;
 import com.RenToU.rentserver.util.RedisUtil;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
