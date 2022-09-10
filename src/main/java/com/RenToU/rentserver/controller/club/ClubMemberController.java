@@ -31,12 +31,9 @@ public class ClubMemberController {
 
     @GetMapping("/{memberId}")
     public ResponseEntity<?> getClubMember(@PathVariable long clubId, @PathVariable long memberId) {
-        List<ClubMember> allClubMembers = clubService.getAllMembers(clubId);
-        ClubMember target = allClubMembers.stream()
-                .filter((cm) -> cm.getMember().getId() == memberId)
-                .collect(Collectors.toList())
-                .get(0); // TODO FIXEME: java.lang.IndexOutOfBoundsException
-        ClubMemberDto resData = ClubMemberDto.from(target);
+        Long myId = memberService.getMyIdWithAuthorities();
+        ClubMember clubMember = clubService.getClubMember(myId, clubId, memberId);
+        ClubMemberDto resData = ClubMemberDto.from(clubMember);
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_CLUB_MEMBER, resData));
     }
 
