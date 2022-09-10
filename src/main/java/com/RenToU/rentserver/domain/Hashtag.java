@@ -16,6 +16,8 @@ import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.FetchType.LAZY;
+
 @Entity
 @Getter
 @Builder
@@ -32,7 +34,7 @@ public class Hashtag extends BaseTimeEntity {
     private String name;
 
     @Builder.Default
-    @OneToMany(mappedBy = "hashtag", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "hashtag",fetch = LAZY,cascade = CascadeType.ALL)
     private List<ClubHashtag> clubs = new ArrayList<>();
 
     public static Hashtag createHashtag(String hashtagName) {
