@@ -166,7 +166,7 @@ public class MemberService {
 
     public void deleteMember(Long memberId) {
         Member member = findMember(memberId);
-        memberRepository.deleteById(member.getId());
+        memberRepository.delete(member);
     }
 
     public Member findByStudentId(String studentId) {

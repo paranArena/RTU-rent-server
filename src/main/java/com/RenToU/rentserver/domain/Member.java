@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
@@ -57,7 +58,11 @@ public class Member extends BaseTimeEntity {
                     @JoinColumn(name = "authority_name", referencedColumnName = "authority_name") })
     private Set<Authority> authorities;
 
-    public static Member createTempMember(String studentName, String studentId,Club club) {
+    @Builder.Default
+    @OneToMany(mappedBy = "member", fetch = LAZY, cascade = CascadeType.ALL)
+    private List<RentalHistory> rentalHistories = new ArrayList<>();
+
+    public static Member createTempMember(String studentName, String studentId, Club club) {
         Authority authority = Authority.builder()
                 .authorityName("ROLE_USER")
                 .build();
