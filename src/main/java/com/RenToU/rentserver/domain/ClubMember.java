@@ -19,7 +19,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import java.util.Arrays;
-import java.util.List;
 
 @Entity
 @Getter
@@ -89,6 +88,7 @@ public class ClubMember extends BaseTimeEntity {
             throw new CustomException(ClubErrorCode.NO_ADMIN_PERMISSION);
         }
     }
+
     public void validateRole(ClubRole... clubRoles) {
         if (Arrays.stream(clubRoles).noneMatch(role -> role == this.role)) {
             throw new CustomException(ClubErrorCode.NO_MATCHING_ROLE);
