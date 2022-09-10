@@ -1,5 +1,6 @@
 package com.RenToU.rentserver.application;
 
+import com.RenToU.rentserver.domain.ClubRole;
 import com.RenToU.rentserver.dto.request.UpdateNotificationDto;
 import com.RenToU.rentserver.dto.service.CreateNotificationServiceDto;
 import com.RenToU.rentserver.domain.Club;
@@ -19,6 +20,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.RenToU.rentserver.domain.ClubRole.ADMIN;
+import static com.RenToU.rentserver.domain.ClubRole.OWNER;
+import static com.RenToU.rentserver.domain.ClubRole.WAIT;
+
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
@@ -32,7 +37,7 @@ public class NotificationService {
     public Notification createNotification(CreateNotificationServiceDto notificationServiceDto) {
         Club club = findClub(notificationServiceDto.getClubId());
         Member writer = findMember(notificationServiceDto.getMemberId());
-        club.findClubMemberByMember(writer).validateAdmin();
+        club.findClubMemberByMember(writer).validateRole(true,OWNER,ADMIN);
         String title = notificationServiceDto.getTitle();
         String content = notificationServiceDto.getContent();
         String imagePath = null;
@@ -60,7 +65,7 @@ public class NotificationService {
     public void deleteNotification(long memberId, Long clubId, Long notificationId) {
         Member member = findMember(memberId);
         Club club = findClub(clubId);
-        club.findClubMemberByMember(member).validateAdmin();
+        club.findClubMemberByMember(member).validateRole(true,OWNER,ADMIN);
         notificationRepository.deleteById(notificationId);
     }
 
@@ -84,7 +89,7 @@ public class NotificationService {
         Club club = findClub(clubId);
         Member member = findMember(memberId);
         List<Notification> notifications = new ArrayList<>();
-        if (club.findClubMemberByMember(member).isAdmin() || club.findClubMemberByMember(member).isUser()) {
+        if (club.findClubMemberByMember(member).isRole(false, WAIT)) {
             notifications = club.getNotifications();
         } else {
             notifications = club.getNotifications().stream().filter(n -> n.getIsPublic() == true)
@@ -97,7 +102,7 @@ public class NotificationService {
     public Notification updateNotification(long memberId, long clubId, UpdateNotificationDto dto) {
         Member member = findMember(memberId);
         Club club = findClub(clubId);
-        club.findClubMemberByMember(member).validateAdmin();
+        club.findClubMemberByMember(member).validateRole(true,OWNER,ADMIN);
         Notification notification = findNotification(dto.getNotificationId());
         boolean isPublic = false;
         if (dto.getIsPublic() == "true") {

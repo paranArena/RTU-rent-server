@@ -29,6 +29,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.RenToU.rentserver.domain.ClubRole.ADMIN;
+import static com.RenToU.rentserver.domain.ClubRole.OWNER;
+
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
@@ -132,7 +135,7 @@ public class RentalService {
     public List<Item> getRentalsByClub(Long clubId, Long memberId) {
         Club club = findClub(clubId);
         Member member = findMember(memberId);
-        club.findClubMemberByMember(member).validateAdmin();
+        club.findClubMemberByMember(member).validateRole(true,OWNER,ADMIN);
         List<Product> products = findClub(clubId).getProducts();
         List<Item> items = new ArrayList<>();
         products.stream().forEach(product -> {
@@ -149,7 +152,7 @@ public class RentalService {
     public List<RentalHistory> getRentalHistoryByClub(long clubId, Long memberId) {
         Club club = findClub(clubId);
         Member member = findMember(memberId);
-        club.findClubMemberByMember(member).validateAdmin();
+        club.findClubMemberByMember(member).validateRole(true,OWNER,ADMIN);
         List<Product> products = findClub(clubId).getProducts();
         List<Item> items = new ArrayList<>();
         products.stream().forEach(product -> {
@@ -172,7 +175,7 @@ public class RentalService {
         Club club =findClub(clubId);
         Member member = findOrCreateTempMember(studentName,studentId,club);
         Item item = findItem(itemId);
-        club.findClubMemberByMember(admin).validateAdmin();
+        club.findClubMemberByMember(admin).validateRole(true,OWNER,ADMIN);
         item.validateRentable();
         Rental rental = Rental.createRental(item, member);
         rental.startRental();
@@ -200,7 +203,7 @@ public class RentalService {
         Rental rental = findRentalByItem(findItem(itemId));
         Club club = findClub(clubId);
         rental.validateRent();
-        club.findClubMemberByMember(admin).validateAdmin();
+        club.findClubMemberByMember(admin).validateRole(true,OWNER,ADMIN);
         rental.validateMember(member);
         rental.checkLate();
         rental.finishRental();
@@ -217,7 +220,7 @@ public class RentalService {
         Member admin = findMember(adminId);
         Rental rental = findRentalByItem(findItem(itemId));
         Club club = findClub(clubId);
-        club.findClubMemberByMember(admin).validateAdmin();
+        club.findClubMemberByMember(admin).validateRole(true,OWNER,ADMIN);
         rental.validateWait();
         rental.cancel();
         RentalHistory rentalHistory = RentalHistory.RentalToHistory(rental);

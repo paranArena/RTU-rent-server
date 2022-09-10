@@ -29,6 +29,7 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 import static com.RenToU.rentserver.domain.ClubRole.ADMIN;
+import static com.RenToU.rentserver.domain.ClubRole.OWNER;
 import static com.RenToU.rentserver.domain.ClubRole.USER;
 import static com.RenToU.rentserver.domain.ClubRole.WAIT;
 
@@ -168,7 +169,7 @@ public class MemberService {
     public void deleteMember(Long memberId) {
         Member member = findMember(memberId);
         try {
-            member.getClubList().stream().forEach(cm -> cm.validateRole(ADMIN, USER, WAIT));//not OWNER
+            member.getClubList().stream().forEach(cm -> cm.validateRole(false,OWNER));//not OWNER
         }catch(CustomException e){
             throw new CustomException(ClubErrorCode.CLUB_OWNER_CANT_QUIT);
         }
