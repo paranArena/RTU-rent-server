@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static javax.persistence.FetchType.LAZY;
+
 //물품 ex) 책, 우산
 @Entity
 @Setter
@@ -39,7 +41,7 @@ public class Product extends BaseTimeEntity {
 
     private String category;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL,fetch = LAZY)
     @JoinColumn(name = "location_id")
     private Location location;
 
@@ -53,11 +55,11 @@ public class Product extends BaseTimeEntity {
 
     private String imagePath;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "club_id")
     private Club club;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "product",fetch = LAZY, cascade = CascadeType.ALL)
     @Builder.Default
     private List<Item> items = new ArrayList<>();
 
