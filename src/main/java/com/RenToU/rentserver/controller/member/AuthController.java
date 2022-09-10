@@ -59,8 +59,9 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> signup(@Valid @RequestBody SignupDto signupDTO) {
-        Member member = memberService.signup(signupDTO);
+    public ResponseEntity<?> signup(@Valid @RequestBody SignupDto signupDto) {
+        memberService.verifyCode(signupDto.getEmail(), signupDto.getVerificationCode());
+        Member member = memberService.signup(signupDto);
         MemberInfoDto resData = mapper.map(member, MemberInfoDto.class);
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.CREATE_USER, resData));
     }
@@ -91,16 +92,22 @@ public class AuthController {
     @PostMapping("members/email/requestCode")
     public ResponseEntity<?> authEmail(@RequestBody @Valid EmailDto request) {
         memberService.authEmail(request);
-        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.REQUEST_EMAIL_VERIFICATION, null));
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.REQUEST_EMAIL_VERIFICATION));
     }
 
     @PostMapping("members/email/verifyCode")
-    public ResponseEntity<?> verifyCode(@RequestBody @Valid EmailVerifyDto request) {
-        memberService.verifyCode(request);
-        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.EMAIL_VERIFIED, null));
+    public ResponseEntity<?> activateMember(@RequestBody @Valid EmailVerifyDto request) {
+        memberService.verifyCode(request.getEmail(), request.getCode());
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.EMAIL_VERIFIED));
     }
 
-    @PutMapping("/info/password")
+    @PostMapping("pawssord/reset/verify")
+    public ResponseEntity<?> resetPasswordWithVerifyCode(@RequestBody @Valid EmailVerifyDto request) {
+        memberService.verifyCode(request.getEmail(), request.getCode());
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.EMAIL_VERIFIED));
+    }
+
+    @PutMapping("/password/reset")
     public ResponseEntity<?> resetPassword(@Valid @RequestBody PasswordDto dto) {
         Long memberId = memberService.getMyIdWithAuthorities();
         memberService.resetPassword(memberId, dto.getPassword());
