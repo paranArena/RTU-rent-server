@@ -123,4 +123,9 @@ public class Club extends BaseTimeEntity {
             ClubHashtag.createClubHashtag(this, hashtag);
         }
     }
+
+    public void deleteHashtag(ClubHashtag hashtag) {
+        this.getHashtags().remove(hashtag);
+        hashtag.setClub(null);
+    }
 }
