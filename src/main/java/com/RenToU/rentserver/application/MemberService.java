@@ -105,7 +105,8 @@ public class MemberService {
     public boolean checkEmailDuplicate(String email) {
         return memberRepository.existsByEmail(email);
     }
-
+    public boolean checkPhoneDuplicate(String phone) { return memberRepository.existsByPhoneNumber(phone);}
+    public boolean checkStudentIdDuplicate(String studentId) { return memberRepository.existsByStudentId(studentId);}
     public void authEmail(EmailDto request) {
         // 임의의 authKey 생성
         Random random = new Random();
@@ -180,4 +181,5 @@ public class MemberService {
         return memberRepository.findByStudentId(studentId)
                 .orElseThrow(() -> new CustomException(MemberErrorCode.MEMBER_NOT_FOUND));
     }
+
 }

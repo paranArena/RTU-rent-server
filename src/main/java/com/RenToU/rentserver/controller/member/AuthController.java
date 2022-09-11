@@ -52,10 +52,19 @@ public class AuthController {
         return ResponseEntity.ok("<h1> Server is Running :) </h1>");
     }
 
-    @GetMapping("/members/{email}/exists")
+    @GetMapping("/members/email/{email}/exists")
     public ResponseEntity<Boolean> checkEmailDuplicate(@PathVariable("email") String email) {
 
         return ResponseEntity.ok(memberService.checkEmailDuplicate(email));
+    }
+    @GetMapping("/members/phone/{phone}/exists")
+    public ResponseEntity<Boolean> checkPhoneDuplicate(@PathVariable("phone") String phone) {
+        return ResponseEntity.ok(memberService.checkPhoneDuplicate(phone));
+    }
+    @GetMapping("/members/studentId/{studentId}/exists")
+    public ResponseEntity<Boolean> checkStudentIdDuplicate(@PathVariable("studentId") String studentId) {
+
+        return ResponseEntity.ok(memberService.checkStudentIdDuplicate(studentId));
     }
 
     @PostMapping("/signup")
