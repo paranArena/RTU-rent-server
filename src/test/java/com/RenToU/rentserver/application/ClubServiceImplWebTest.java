@@ -175,7 +175,7 @@ class ClubServiceImplWebTest {
                 Member member = memberRepository.findById(memberId).get();
                 Club club = clubRepository.findById(clubId).get();
                 assertThat(member.getClubList()).isEmpty();
-                assertThatThrownBy(() -> club.findClubMemberByMember(member))
+                assertThatThrownBy(() -> club.findClubMemberByMemberId(memberId))
                         .isInstanceOf(CustomException.class)
                         .hasFieldOrPropertyWithValue("errorCode", ClubErrorCode.CLUBMEMBER_NOT_FOUND);
             }

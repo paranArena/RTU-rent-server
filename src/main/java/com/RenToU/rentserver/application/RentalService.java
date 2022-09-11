@@ -132,9 +132,8 @@ public class RentalService {
 
     public List<Item> getRentalsByClub(Long clubId, Long memberId) {
         Club club = findClub(clubId);
-        Member member = findMember(memberId);
-        club.findClubMemberByMember(member).validateRole(true,OWNER,ADMIN);
-        List<Product> products = findClub(clubId).getProducts();
+        club.findClubMemberByMemberId(memberId).validateRole(true,OWNER,ADMIN);
+        List<Product> products = club.getProducts();
         List<Item> items = new ArrayList<>();
         products.stream().forEach(product -> {
             if (product.getItems() != null) {
@@ -149,8 +148,7 @@ public class RentalService {
 
     public List<RentalHistory> getRentalHistoryByClub(long clubId, Long memberId) {
         Club club = findClub(clubId);
-        Member member = findMember(memberId);
-        club.findClubMemberByMember(member).validateRole(true,OWNER,ADMIN);
+        club.findClubMemberByMemberId(memberId).validateRole(true,OWNER,ADMIN);
         List<Product> products = findClub(clubId).getProducts();
         List<Item> items = new ArrayList<>();
         products.stream().forEach(product -> {
@@ -170,11 +168,10 @@ public class RentalService {
 
     @Transactional(noRollbackFor = { CustomException.class })
     public void justRental(Long adminId, Long clubId, Long itemId, String studentName, String studentId) {
-        Member admin = findMember(adminId);
         Club club = findClub(clubId);
         Member member = findOrCreateTempMember(studentName, studentId, club);
         Item item = findItem(itemId);
-        club.findClubMemberByMember(admin).validateRole(true,OWNER,ADMIN);
+        club.findClubMemberByMemberId(adminId).validateRole(true,OWNER,ADMIN);
         item.validateRentable();
         Rental rental = Rental.createRental(item, member);
         rental.startRental();
@@ -197,12 +194,11 @@ public class RentalService {
 
     @Transactional
     public void returnRentalAdmin(Long adminId, Long clubId, Long itemId, Long memberId) {
-        Member admin = findMember(adminId);
         Member member = findMember(memberId);
         Rental rental = findRentalByItem(findItem(itemId));
         Club club = findClub(clubId);
         rental.validateRent();
-        club.findClubMemberByMember(admin).validateRole(true,OWNER,ADMIN);
+        club.findClubMemberByMemberId(adminId).validateRole(true,OWNER,ADMIN);
         rental.validateMember(member);
         rental.checkLate();
         rental.finishRental();
@@ -217,10 +213,9 @@ public class RentalService {
 
     @Transactional
     public void cancelRentalAdmin(Long adminId, Long clubId, Long itemId) {
-        Member admin = findMember(adminId);
         Rental rental = findRentalByItem(findItem(itemId));
         Club club = findClub(clubId);
-        club.findClubMemberByMember(admin).validateRole(true,OWNER,ADMIN);
+        club.findClubMemberByMemberId(adminId).validateRole(true,OWNER,ADMIN);
         rental.validateWait();
         rental.cancel();
         RentalHistory rentalHistory = RentalHistory.RentalToHistory(rental);
