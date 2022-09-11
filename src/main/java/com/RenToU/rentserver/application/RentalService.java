@@ -10,6 +10,7 @@ import com.RenToU.rentserver.domain.Rental;
 import com.RenToU.rentserver.domain.RentalHistory;
 import com.RenToU.rentserver.exceptions.ClubErrorCode;
 import com.RenToU.rentserver.exceptions.CustomException;
+import com.RenToU.rentserver.exceptions.ErrorCode;
 import com.RenToU.rentserver.exceptions.MemberErrorCode;
 import com.RenToU.rentserver.exceptions.RentalErrorCode;
 import com.RenToU.rentserver.infrastructure.ClubRepository;
@@ -181,7 +182,11 @@ public class RentalService {
     private Member findOrCreateTempMember(String studentName, String studentId, Club club) {
         Optional<Member> member = memberRepository.findOneWithAuthoritiesByStudentId(studentId);
         if (member.isPresent()) {
-            return member.get();
+            if(member.get().getName() == studentName) {
+                return member.get();
+            }else{
+                throw new CustomException(RentalErrorCode.SAME_STUDENTID_EXIST);
+            }
         } else {
             Member tmpMember = Member.createTempMember(studentName, studentId, club);
 
