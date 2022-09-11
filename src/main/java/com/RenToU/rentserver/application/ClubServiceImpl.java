@@ -1,6 +1,7 @@
 package com.RenToU.rentserver.application;
 
 import com.RenToU.rentserver.domain.Club;
+import com.RenToU.rentserver.domain.ClubHashtag;
 import com.RenToU.rentserver.domain.ClubMember;
 import com.RenToU.rentserver.domain.ClubRole;
 import com.RenToU.rentserver.domain.Hashtag;
@@ -252,12 +253,17 @@ public class ClubServiceImpl implements ClubService {
         }).collect(Collectors.toList());
         eraseBeforeClubHashtag(club);
         club.updateClub(name, intro, thumbnailPath, clubHashtags);
+        hashtagRepository.saveAll(clubHashtags);
         clubRepository.save(club);
         return club;
     }
 
     private void eraseBeforeClubHashtag(Club club) {
-        club.getHashtags().forEach(clubHashtag -> clubHashtagRepository.deleteById(clubHashtag.getId()));
+        List<ClubHashtag> clubHashtags = club.getHashtags();
+        clubHashtags.forEach(clubHashtag -> {
+            club.deleteHashtag(clubHashtag);
+            clubHashtagRepository.deleteById(clubHashtag.getId());
+        });
     }
 
     /**
