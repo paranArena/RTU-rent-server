@@ -23,6 +23,9 @@ public class NotificationDto {
     @Mapping("title")
     private String title;
 
+
+    private String clubName;
+
     @NotBlank
     @Mapping("content")
     private String content;
@@ -42,6 +45,7 @@ public class NotificationDto {
         return NotificationDto.builder()
                 .id(notification.getId())
                 .title(notification.getTitle())
+                .clubName(notification.getClub().getName())
                 .content(notification.getContent())
                 .imagePath(notification.getImagePath())
                 .isPublic(notification.getIsPublic())
