@@ -182,7 +182,7 @@ public class RentalService {
     private Member findOrCreateTempMember(String studentName, String studentId, Club club) {
         Optional<Member> member = memberRepository.findOneWithAuthoritiesByStudentId(studentId);
         if (member.isPresent()) {
-            if(member.get().getName() == studentName) {
+            if(member.get().getName().equals(studentName)) {
                 return member.get();
             }else{
                 throw new CustomException(RentalErrorCode.SAME_STUDENTID_EXIST);
