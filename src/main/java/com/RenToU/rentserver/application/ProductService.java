@@ -1,5 +1,6 @@
 package com.RenToU.rentserver.application;
 
+import com.RenToU.rentserver.domain.ClubRole;
 import com.RenToU.rentserver.domain.Rental;
 import com.RenToU.rentserver.dto.service.AddItemServiceDto;
 import com.RenToU.rentserver.dto.service.CreateProductServiceDto;
@@ -44,8 +45,8 @@ public class ProductService {
     @Transactional
     public Product registerProduct(CreateProductServiceDto dto) {
         Club club = findClub(dto.getClubId());
-        Member requester = findMember(dto.getMemberId());
-        club.findClubMemberByMember(requester).validateRole(true, OWNER, ADMIN);
+        Long requesterId = dto.getMemberId();
+        club.findClubMemberByMemberId(requesterId).validateRole(true,OWNER,ADMIN);
         Product product = mapper.map(dto, Product.class);
         product.initialSetting(club, dto.getRentalPolicies());
         productRepository.save(product);
@@ -69,9 +70,8 @@ public class ProductService {
     }
 
     public List<Product> getProductsByClub(Long memberId, Long clubId) {
-        Member member = findMember(memberId);
         Club club = findClub(clubId);
-        club.findClubMemberByMember(member).validateRole(false, WAIT);
+        club.findClubMemberByMemberId(memberId).validateRole(false, WAIT);
 
         return club.getProducts();
     }
@@ -93,8 +93,8 @@ public class ProductService {
     @Transactional
     public Product updateProductInfo(Long productId, UpdateProductInfoServiceDto dto) {
         Club club = findClub(dto.getClubId());
-        Member requester = findMember(dto.getMemberId());
-        club.findClubMemberByMember(requester).validateRole(true, OWNER, ADMIN);
+        Long requesterId = dto.getMemberId();
+        club.findClubMemberByMemberId(requesterId).validateRole(true,OWNER,ADMIN);
         Product product = findProduct(productId);
         product.updateInfo(dto);
         productRepository.save(product);
@@ -108,8 +108,7 @@ public class ProductService {
         if (clubId != product.getClub().getId())
             throw new CustomException(ClubErrorCode.PRODUCT_NOT_FOUND);
         Club club = findClub(clubId);// 영속성 컨텍스트 등록을 위해 repository로 검색
-        Member requester = findMember(memberId);
-        club.findClubMemberByMember(requester).validateRole(true, OWNER, ADMIN);
+        club.findClubMemberByMemberId(memberId).validateRole(true,OWNER,ADMIN);
         Item item = findItem(itemId);
         if (productId != item.getProduct().getId())
             throw new CustomException(ClubErrorCode.ITEM_NOT_FOUND);
@@ -128,8 +127,7 @@ public class ProductService {
         if (clubId != product.getClub().getId())
             throw new CustomException(ClubErrorCode.PRODUCT_NOT_FOUND);
         Club club = findClub(clubId);// 영속성 컨텍스트 등록을 위해 repository로 검색
-        Member requester = findMember(memberId);
-        club.findClubMemberByMember(requester).validateRole(true, OWNER, ADMIN);
+        club.findClubMemberByMemberId(memberId).validateRole(true,OWNER,ADMIN);
         Item item = Item.createItem(product, dto.getRentalPolicy(), dto.getNumbering());
         itemRepository.save(item);
     }
@@ -140,8 +138,7 @@ public class ProductService {
         if (clubId != product.getClub().getId())
             throw new CustomException(ClubErrorCode.PRODUCT_NOT_FOUND);
         Club club = findClub(clubId);// 영속성 컨텍스트 등록을 위해 repository로 검색
-        Member requester = findMember(memberId);
-        club.findClubMemberByMember(requester).validateRole(true, OWNER, ADMIN);
+        club.findClubMemberByMemberId(memberId).validateRole(true,OWNER,ADMIN);
         product.deleteClub();
         productRepository.deleteById(productId);
     }
