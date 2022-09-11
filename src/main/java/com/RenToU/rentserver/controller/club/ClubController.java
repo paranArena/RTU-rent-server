@@ -62,7 +62,7 @@ public class ClubController {
             @RequestParam("thumbnail") MultipartFile thumbnail, @RequestParam("hashtags") List<String> hashtags)
             throws IOException {
         String thumbnailPath = null;
-        if (!thumbnail.isEmpty()) {
+        if (!thumbnail.isEmpty() || thumbnail == null) {
             thumbnailPath = s3Service.upload(thumbnail);
         }
         Club club = clubService.updateClubInfo(memberService.getMyIdWithAuthorities(), clubId, name, intro,
