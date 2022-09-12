@@ -7,6 +7,7 @@ import com.RenToU.rentserver.dto.request.ResetPasswordDto;
 import com.RenToU.rentserver.dto.request.ResetPasswordWithVerificationDto;
 import com.RenToU.rentserver.dto.request.SignupDto;
 import com.RenToU.rentserver.dto.response.MemberInfoDto;
+import com.RenToU.rentserver.dto.response.MemberInfoDuplicateDto;
 import com.RenToU.rentserver.dto.response.ResponseDto;
 import com.RenToU.rentserver.dto.response.ResponseMessage;
 import com.RenToU.rentserver.dto.response.TokenDto;
@@ -58,8 +59,9 @@ public class AuthController {
         return ResponseEntity.ok(memberService.checkEmailDuplicate(email));
     }
     @GetMapping("/members/duplicate/{phone}/{studentId}/exists")
-    public ResponseEntity<Boolean> checkMemberInfoDuplicate(@PathVariable("phone") String phone,@PathVariable("studentId") String studentId) {
-        return ResponseEntity.ok(memberService.checkStudentIdDuplicate(studentId) || memberService.checkPhoneDuplicate(phone));
+    public ResponseEntity<?> checkMemberInfoDuplicate(@PathVariable("phone") String phone,@PathVariable("studentId") String studentId) {
+        MemberInfoDuplicateDto resData = new MemberInfoDuplicateDto(memberService.checkPhoneDuplicate(phone),memberService.checkStudentIdDuplicate(studentId));
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK,ResponseMessage.CHECK_SUCCESS,resData));
     }
 
     @PostMapping("/signup")
