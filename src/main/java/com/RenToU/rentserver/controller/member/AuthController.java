@@ -59,7 +59,7 @@ public class AuthController {
     }
     @GetMapping("/members/duplicate/{phone}/{studentId}/exists")
     public ResponseEntity<Boolean> checkMemberInfoDuplicate(@PathVariable("phone") String phone,@PathVariable("studentId") String studentId) {
-        return ResponseEntity.ok(memberService.checkStudentIdDuplicate(studentId)&& memberService.checkPhoneDuplicate(phone));
+        return ResponseEntity.ok(memberService.checkStudentIdDuplicate(studentId) || memberService.checkPhoneDuplicate(phone));
     }
 
     @PostMapping("/signup")
