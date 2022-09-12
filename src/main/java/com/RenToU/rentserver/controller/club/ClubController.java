@@ -8,6 +8,8 @@ import com.RenToU.rentserver.dto.*;
 import com.RenToU.rentserver.dto.response.ClubInfoDto;
 import com.RenToU.rentserver.dto.response.ResponseDto;
 import com.RenToU.rentserver.dto.response.ResponseMessage;
+import com.RenToU.rentserver.exceptions.ClubErrorCode;
+import com.RenToU.rentserver.exceptions.CustomException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -36,12 +38,15 @@ public class ClubController {
 
     @PostMapping("")
     public ResponseEntity<?> createClub(@RequestParam("name") String name, @RequestParam("introduction") String intro,
-            @RequestParam("thumbnail") MultipartFile thumbnail, @RequestParam("hashtags") List<String> hashtags)
-            throws IOException {
+            @RequestParam("thumbnail") MultipartFile thumbnail, @RequestParam("hashtags") List<String> hashtags) {
         long memberId = memberService.getMyIdWithAuthorities();
         String thumbnailPath = "https://ren2u.s3.ap-northeast-2.amazonaws.com/images.jpg";
         if (!thumbnail.isEmpty()) {
-            thumbnailPath = s3Service.upload(thumbnail);
+            try {
+                thumbnailPath = s3Service.upload(thumbnail);
+            } catch (IOException e) {
+                throw new CustomException(ClubErrorCode.IMAGE_UPLOAD_FAILED);
+            }
         }
 
         Club club = clubService.createClub(memberId, name, intro, thumbnailPath, hashtags);
@@ -59,11 +64,14 @@ public class ClubController {
     @PutMapping("/{clubId}/info")
     public ResponseEntity<?> updateClub(@PathVariable long clubId, @RequestParam("name") String name,
             @RequestParam("introduction") String intro,
-            @RequestParam("thumbnail") MultipartFile thumbnail, @RequestParam("hashtags") List<String> hashtags)
-            throws IOException {
+            @RequestParam("thumbnail") MultipartFile thumbnail, @RequestParam("hashtags") List<String> hashtags) {
         String thumbnailPath = null;
         if (thumbnail != null && !thumbnail.isEmpty()) {
-            thumbnailPath = s3Service.upload(thumbnail);
+            try {
+                thumbnailPath = s3Service.upload(thumbnail);
+            } catch (IOException e) {
+                throw new CustomException(ClubErrorCode.IMAGE_UPLOAD_FAILED);
+            }
         }
         Club club = clubService.updateClubInfo(memberService.getMyIdWithAuthorities(), clubId, name, intro,
                 thumbnailPath,

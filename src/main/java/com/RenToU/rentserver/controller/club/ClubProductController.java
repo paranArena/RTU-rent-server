@@ -9,6 +9,9 @@ import javax.validation.Valid;
 import com.RenToU.rentserver.dto.request.UpdateProductInfoDto;
 import com.RenToU.rentserver.dto.response.preview.ProductPreviewDto;
 import com.RenToU.rentserver.dto.service.UpdateProductInfoServiceDto;
+import com.RenToU.rentserver.exceptions.ClubErrorCode;
+import com.RenToU.rentserver.exceptions.CustomException;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -50,14 +53,18 @@ public class ClubProductController {
 
     @PostMapping("")
     public ResponseEntity<?> createProduct(@PathVariable Long clubId,
-            @Valid @ModelAttribute CreateProductDto createProductDto) throws IOException {
+            @Valid @ModelAttribute CreateProductDto createProductDto) {
         Long memberId = memberService.getMyIdWithAuthorities();
         MultipartFile image = createProductDto.getImage();
         String imagePath = null;
         // TODO registerProduct에서 사진 처리를하거나, 여기서 유저의 권한 체크 필요
         // 안하면 사진은 업로드되는데 데이터베이스에는 등록되지 않는 현상 발생
         if (image != null && !image.isEmpty()) {
-            imagePath = s3Service.upload(image);
+            try {
+                imagePath = s3Service.upload(image);
+            } catch (IOException e) {
+                throw new CustomException(ClubErrorCode.IMAGE_UPLOAD_FAILED);
+            }
         }
         CreateProductServiceDto productServiceDto = mapper.map(createProductDto, CreateProductServiceDto.class);
         Location location = new Location(createProductDto.getLocationName(), createProductDto.getLatitude(),
@@ -82,12 +89,16 @@ public class ClubProductController {
 
     @PutMapping("/{productId}")
     public ResponseEntity<?> updateProductInfo(@PathVariable Long clubId, @PathVariable Long productId,
-            @Valid @ModelAttribute UpdateProductInfoDto updateProductInfoDto) throws IOException {
+            @Valid @ModelAttribute UpdateProductInfoDto updateProductInfoDto) {
         Long memberId = memberService.getMyIdWithAuthorities();
         MultipartFile image = updateProductInfoDto.getImage();
         String imagePath = null;
         if (image != null && !image.isEmpty()) {
-            imagePath = s3Service.upload(image);
+            try {
+                imagePath = s3Service.upload(image);
+            } catch (IOException e) {
+                throw new CustomException(ClubErrorCode.IMAGE_UPLOAD_FAILED);
+            }
         }
         UpdateProductInfoServiceDto productServiceDto = mapper.map(updateProductInfoDto,
                 UpdateProductInfoServiceDto.class);
