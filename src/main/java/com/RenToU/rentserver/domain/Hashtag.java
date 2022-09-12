@@ -26,7 +26,7 @@ import static javax.persistence.FetchType.LAZY;
 public class Hashtag extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "club_id")
+    @Column(name = "hashtag_id")
     private Long id;
 
     @NotNull
@@ -34,7 +34,7 @@ public class Hashtag extends BaseTimeEntity {
     private String name;
 
     @Builder.Default
-    @OneToMany(mappedBy = "hashtag",fetch = LAZY,cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "hashtag", fetch = LAZY, cascade = CascadeType.ALL)
     private List<ClubHashtag> clubs = new ArrayList<>();
 
     public static Hashtag createHashtag(String hashtagName) {
