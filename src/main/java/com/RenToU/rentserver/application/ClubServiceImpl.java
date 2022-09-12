@@ -258,11 +258,18 @@ public class ClubServiceImpl implements ClubService {
     }
 
     private void eraseBeforeClubHashtag(Club club) {
-        List<ClubHashtag> clubHashtags = club.getHashtags();
-        clubHashtags.forEach(clubHashtag -> {
-            club.deleteHashtag(clubHashtag);
-            clubHashtagRepository.deleteById(clubHashtag.getId());
+        List<Long> clubHashtagIdList = club.getHashtags().stream()
+                .map((ch) -> ch.getId())
+                .collect(Collectors.toList());
+        clubHashtagIdList.forEach(id -> {
+            club.deleteHashtag(findClubHashtag(id));
+            clubHashtagRepository.deleteById(id);
         });
+    }
+
+    private ClubHashtag findClubHashtag(Long id) {
+        return clubHashtagRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ClubErrorCode.HASHTAG_NOT_FOUND));
     }
 
     /**
