@@ -1,5 +1,7 @@
 package com.RenToU.rentserver.dto.request;
 
+import javax.validation.constraints.NotBlank;
+
 import com.RenToU.rentserver.domain.RentalPolicy;
 
 import lombok.AllArgsConstructor;
@@ -14,7 +16,10 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AddItemDto {
-    private int numbering;
-    private RentalPolicy rentalPolicy;
 
+    @NotBlank(message = "아이템 번호를 입력해주세요.")
+    private int numbering;
+
+    @NotBlank(message = "렌트 정책을 설정해주세요.")
+    private RentalPolicy rentalPolicy;
 }
