@@ -25,6 +25,8 @@ public class RentalPreviewDto {
 
     private Long clubId;
 
+    private Long productId;
+
     private String clubName;
 
     private String imagePath;
@@ -44,6 +46,7 @@ public class RentalPreviewDto {
                 .numbering(item.getNumbering())
                 .name(item.getProduct().getName())
                 .clubId(item.getProduct().getClub().getId())
+                .productId(item.getProduct().getId())
                 .clubName(item.getProduct().getClub().getName())
                 .imagePath(item.getProduct().getImagePath())
                 .rentalPolicy(item.getRentalPolicy())
@@ -61,6 +64,7 @@ public class RentalPreviewDto {
                 .numbering(item.getNumbering())
                 .name(item.getProduct().getName())
                 .clubId(item.getProduct().getClub().getId())
+                .productId(item.getProduct().getId())
                 .clubName(item.getProduct().getClub().getName())
                 .imagePath(item.getProduct().getImagePath())
                 .rentalPolicy(item.getRentalPolicy())
