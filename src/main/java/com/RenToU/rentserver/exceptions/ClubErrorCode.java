@@ -26,7 +26,9 @@ public enum ClubErrorCode implements ErrorCode {
     PRODUCT_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 클럽에서 해당 물품을 찾을 수 없습니다."),
     ITEM_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 클럽에서 해당 아이템을 찾을 수 없습니다."),
     NO_MATCHING_ROLE(HttpStatus.FORBIDDEN, "해당 작업을 수행하기 위한 역할이 없습니다."),
-    CLUB_OWNER_CANT_QUIT(HttpStatus.FORBIDDEN, "클럽장은 회원 탈퇴가 불가능합니다.");
+    CLUB_OWNER_CANT_QUIT(HttpStatus.FORBIDDEN, "클럽장은 회원 탈퇴가 불가능합니다."),
+
+    IMAGE_UPLOAD_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "이미지 업로드에 실패했습니다.");
 
     private final HttpStatus httpStatus;
     private final String message;
