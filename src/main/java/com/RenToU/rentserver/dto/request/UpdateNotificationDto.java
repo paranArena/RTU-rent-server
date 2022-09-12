@@ -18,17 +18,19 @@ import java.util.List;
 @NoArgsConstructor
 public class UpdateNotificationDto {
 
-    @NotBlank
+    @NotBlank(message = "제목을 입력해주세요.")
     @Mapping("title")
     private String title;
 
-    @NotBlank
+    @NotBlank(message = "내용을 입력해주세요.")
     @Mapping("content")
     private String content;
 
-    @NotBlank
+    @NotBlank(message = "공개 여부를 선택해주세요.")
     @Mapping("isPublic")
     private String isPublic;
+
+    @NotBlank(message = "공지사항 id가 없습니다.")
     @Mapping("notification_id")
     private Long notificationId;
 
