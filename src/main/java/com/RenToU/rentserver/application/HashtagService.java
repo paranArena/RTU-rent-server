@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,16 +23,17 @@ public class HashtagService {
     private final ClubHashtagRepository clubHashtagRepository;
 
     public List<Club> findClubsWithHashtag(String hashtagName) {
-        Hashtag hashtag = findHashtagByName(hashtagName);
-        // TODO nullpointexception
-        List<ClubHashtag> clubHashtags = clubHashtagRepository.findByHashtag(hashtag);
-        List<Club> clubs = clubHashtags.stream().map(clubHashtag -> {
-            return clubHashtag.getClub();
-        }).collect(Collectors.toList());
-        // if(clubs.isEmpty()){
-        // throw new ClubNotFoundException("club not found with hashtag");
-        // }
-        return clubs;
+        try {
+            Hashtag hashtag = findHashtagByName(hashtagName);
+
+            List<ClubHashtag> clubHashtags = clubHashtagRepository.findByHashtag(hashtag);
+            List<Club> clubs = clubHashtags.stream().map(clubHashtag -> {
+                return clubHashtag.getClub();
+            }).collect(Collectors.toList());
+            return clubs;
+        } catch (CustomException e) {
+            return Collections.emptyList();
+        }
     }
 
     private Hashtag findHashtagByName(String hashtagName) {
