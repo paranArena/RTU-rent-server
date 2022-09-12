@@ -11,7 +11,7 @@ public interface ClubService {
 
         public Club findClubById(long clubId);
 
-        public Club findClubByName(String clubName);
+        public List<Club> findClubByName(String clubName);
 
         public void grantAdmin(Long clubId, Long ownerId, Long userId);
 

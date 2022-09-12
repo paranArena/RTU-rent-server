@@ -58,10 +58,13 @@ public class AuthController {
 
         return ResponseEntity.ok(memberService.checkEmailDuplicate(email));
     }
+
     @GetMapping("/members/duplicate/{phone}/{studentId}/exists")
-    public ResponseEntity<?> checkMemberInfoDuplicate(@PathVariable("phone") String phone,@PathVariable("studentId") String studentId) {
-        MemberInfoDuplicateDto resData = new MemberInfoDuplicateDto(memberService.checkPhoneDuplicate(phone),memberService.checkStudentIdDuplicate(studentId));
-        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK,ResponseMessage.CHECK_SUCCESS,resData));
+    public ResponseEntity<?> checkMemberInfoDuplicate(@PathVariable("phone") String phone,
+            @PathVariable("studentId") String studentId) {
+        MemberInfoDuplicateDto resData = new MemberInfoDuplicateDto(memberService.checkPhoneDuplicate(phone),
+                memberService.checkStudentIdDuplicate(studentId));
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.CHECK_SUCCESS, resData));
     }
 
     @PostMapping("/signup")
@@ -114,17 +117,17 @@ public class AuthController {
     // 토큰없이 패스워드 변경 가능
     // 인증코드 + 패스워드
     // 코드 인증하고 패스워드 변경
-    @PostMapping("pawssord/reset/verify")
+    @PutMapping("/password/reset/verify")
     public ResponseEntity<?> resetPasswordWithVerifyCode(@RequestBody @Valid ResetPasswordWithVerificationDto request) {
         memberService.verifyCode(request.getEmail(), request.getCode());
         Member member = memberService.getUserWithAuthorities(request.getEmail());
         memberService.resetPassword(member.getId(), request.getPassword());
-        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.EMAIL_VERIFIED));
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.RESET_PASSWORD));
     }
 
     // 그냥 토큰에 해당하는 비밀 번호를 변경
     @PutMapping("/password/reset")
-    public ResponseEntity<?> resetPassword(@Valid @RequestBody ResetPasswordDto dto) {
+    public ResponseEntity<?> resetPasswordWithToken(@Valid @RequestBody ResetPasswordDto dto) {
         Long memberId = memberService.getMyIdWithAuthorities();
         memberService.resetPassword(memberId, dto.getPassword());
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.RESET_PASSWORD));
