@@ -27,6 +27,8 @@ public class ClubInfoDto {
 
     private List<String> hashtags;
 
+    private int memberCount;
+
     public static ClubInfoDto from(Club club) {
         if (club == null)
             return null;
