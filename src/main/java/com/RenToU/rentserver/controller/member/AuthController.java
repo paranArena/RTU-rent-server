@@ -57,14 +57,9 @@ public class AuthController {
 
         return ResponseEntity.ok(memberService.checkEmailDuplicate(email));
     }
-    @GetMapping("/members/phone/{phone}/exists")
-    public ResponseEntity<Boolean> checkPhoneDuplicate(@PathVariable("phone") String phone) {
-        return ResponseEntity.ok(memberService.checkPhoneDuplicate(phone));
-    }
-    @GetMapping("/members/studentId/{studentId}/exists")
-    public ResponseEntity<Boolean> checkStudentIdDuplicate(@PathVariable("studentId") String studentId) {
-
-        return ResponseEntity.ok(memberService.checkStudentIdDuplicate(studentId));
+    @GetMapping("/members/duplicate/{phone}/{studentId}/exists")
+    public ResponseEntity<Boolean> checkMemberInfoDuplicate(@PathVariable("phone") String phone,@PathVariable("studentId") String studentId) {
+        return ResponseEntity.ok(memberService.checkStudentIdDuplicate(studentId)&& memberService.checkPhoneDuplicate(phone));
     }
 
     @PostMapping("/signup")
