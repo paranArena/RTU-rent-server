@@ -1,3 +1,7 @@
+application.yml
+application-*.yml
+dump.rdb
+
 HELP.md
 .gradle
 build/
@@ -35,3 +39,7 @@ out/
 
 ### VS Code ###
 .vscode/
+
+/src/main/resources/application.yml
+serviceAccountKey.json
+
