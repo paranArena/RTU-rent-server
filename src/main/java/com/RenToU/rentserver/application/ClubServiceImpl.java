@@ -88,7 +88,6 @@ public class ClubServiceImpl implements ClubService {
         });
         ClubMember clubMember = ClubMember.createClubMember(club, member, ClubRole.WAIT);
         clubMemberRepository.save(clubMember);
-        System.out.println("size" + member.getClubList().size() + ",clubId " + club.getId());
     }
 
     @Override
