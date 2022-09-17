@@ -105,17 +105,24 @@ public class MemberService {
     public boolean checkEmailDuplicate(String email) {
         return memberRepository.existsByEmail(email);
     }
-    public boolean checkPhoneDuplicate(String phone) { return memberRepository.existsByPhoneNumber(phone);}
-    public boolean checkStudentIdDuplicate(String studentId) { return memberRepository.existsByStudentId(studentId);}
+
+    public boolean checkPhoneDuplicate(String phone) {
+        return memberRepository.existsByPhoneNumber(phone);
+    }
+
+    public boolean checkStudentIdDuplicate(String studentId) {
+        return memberRepository.existsByStudentId(studentId);
+    }
+
     public void authEmail(EmailDto request) {
         // 임의의 authKey 생성
         Random random = new Random();
         String authKey = String.valueOf(random.nextInt(888888) + 111111);// 범위 : 111111 ~ 999999
 
         // 이메일 발송
-        // sendAuthEmail(request.getEmail(), authKey);
+        sendAuthEmail(request.getEmail(), authKey);
         // TODO for dev
-        sendAuthEmail(request.getEmail(), "111111");
+        // sendAuthEmail(request.getEmail(), "111111");
     }
 
     private void sendAuthEmail(String email, String authKey) {
