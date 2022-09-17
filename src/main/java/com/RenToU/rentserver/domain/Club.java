@@ -42,20 +42,25 @@ public class Club extends BaseTimeEntity {
     private String thumbnailPath;
 
     @Builder.Default
-    @OneToMany(mappedBy = "club",fetch = LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "club", fetch = LAZY, cascade = CascadeType.ALL)
     private List<ClubMember> memberList = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "club",fetch = LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "club", fetch = LAZY, cascade = CascadeType.ALL)
     private List<Notification> notifications = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "club", fetch = LAZY,cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "club", fetch = LAZY, cascade = CascadeType.ALL)
     private List<Product> products = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "club",fetch = LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "club", fetch = LAZY, cascade = CascadeType.ALL)
     private List<ClubHashtag> hashtags = new ArrayList<>();
+
+    // Setter
+    public void setThumbnailPath(String thumbnailPath) {
+        this.thumbnailPath = thumbnailPath;
+    }
 
     // 연관관계 편의 메소드
     public void addClubMember(ClubMember clubMember) {
@@ -91,6 +96,7 @@ public class Club extends BaseTimeEntity {
         ClubMember.createClubMember(club, member, ClubRole.OWNER);
         return club;
     }
+
     public ClubMember findClubMemberByMemberId(Long memberId) {
         ClubMember clubMember = this.getMemberList().stream().filter(cm -> {
             return cm.getMember().getId() == memberId;
