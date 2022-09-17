@@ -1,9 +1,12 @@
 package com.RenToU.rentserver.controller.util;
+
 import com.RenToU.rentserver.application.S3Service;
 import com.RenToU.rentserver.dto.StatusCode;
 import com.RenToU.rentserver.dto.response.ResponseDto;
 import com.RenToU.rentserver.dto.response.ResponseMessage;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +21,8 @@ import java.io.IOException;
 public class ImageController {
 
     private final S3Service s3Service;
+    @Value("${external.mode}")
+    private String MODE;
 
     @PostMapping("/upload")
     public ResponseEntity<?> uploadImageS3(@RequestParam("image") MultipartFile image) throws IOException {

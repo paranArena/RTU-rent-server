@@ -13,6 +13,8 @@ import com.RenToU.rentserver.exceptions.CustomException;
 
 import lombok.RequiredArgsConstructor;
 
+import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,15 +37,19 @@ public class ClubController {
     private final ClubService clubService;
     private final MemberService memberService;
     private final S3Service s3Service;
+    @Value("${external.mode}")
+    private String MODE;
 
     @PostMapping("")
     public ResponseEntity<?> createClub(@RequestParam("name") String name, @RequestParam("introduction") String intro,
             @RequestParam("thumbnail") MultipartFile thumbnail, @RequestParam("hashtags") List<String> hashtags) {
         long memberId = memberService.getMyIdWithAuthorities();
-        String thumbnailPath = "https://ren2u.s3.ap-northeast-2.amazonaws.com/images.jpg";
+        String thumbnailPath = "https://ren2u.s3.ap-northeast-2.amazonaws.com/default/club-thumbnail.png";
         if (!thumbnail.isEmpty()) {
             try {
-                thumbnailPath = s3Service.upload(thumbnail);
+                String randomImgFileName = RandomStringUtils.random(20, true, true) + ".png";
+                String filePath = MODE + "/club/" + randomImgFileName;
+                thumbnailPath = s3Service.upload(thumbnail, filePath);
             } catch (IOException e) {
                 throw new CustomException(ClubErrorCode.IMAGE_UPLOAD_FAILED);
             }
@@ -68,7 +74,9 @@ public class ClubController {
         String thumbnailPath = null;
         if (thumbnail != null && !thumbnail.isEmpty()) {
             try {
-                thumbnailPath = s3Service.upload(thumbnail);
+                String randomImgFileName = RandomStringUtils.random(10, true, true) + ".png";
+                String filePath = MODE + "/club/" + clubId + "/" + randomImgFileName;
+                thumbnailPath = s3Service.upload(thumbnail, filePath);
             } catch (IOException e) {
                 throw new CustomException(ClubErrorCode.IMAGE_UPLOAD_FAILED);
             }
