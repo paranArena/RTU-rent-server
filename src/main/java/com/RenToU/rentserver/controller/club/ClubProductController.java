@@ -12,6 +12,8 @@ import com.RenToU.rentserver.dto.service.UpdateProductInfoServiceDto;
 import com.RenToU.rentserver.exceptions.ClubErrorCode;
 import com.RenToU.rentserver.exceptions.CustomException;
 
+import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -50,18 +52,22 @@ public class ClubProductController {
     private final ProductService productService;
     private final S3Service s3Service;
     private final Mapper mapper;
+    @Value("${external.mode}")
+    private String MODE;
 
     @PostMapping("")
     public ResponseEntity<?> createProduct(@PathVariable Long clubId,
             @Valid @ModelAttribute CreateProductDto createProductDto) {
         Long memberId = memberService.getMyIdWithAuthorities();
         MultipartFile image = createProductDto.getImage();
-        String imagePath = null;
+        String imagePath = "https://ren2u.s3.ap-northeast-2.amazonaws.com/default/product-image.png";
         // TODO registerProduct에서 사진 처리를하거나, 여기서 유저의 권한 체크 필요
         // 안하면 사진은 업로드되는데 데이터베이스에는 등록되지 않는 현상 발생
         if (image != null && !image.isEmpty()) {
             try {
-                imagePath = s3Service.upload(image);
+                String randomImgFileName = RandomStringUtils.random(20, true, true) + ".png";
+                String filePath = MODE + "/product/" + randomImgFileName;
+                imagePath = s3Service.upload(image, filePath);
             } catch (IOException e) {
                 throw new CustomException(ClubErrorCode.IMAGE_UPLOAD_FAILED);
             }
@@ -95,7 +101,9 @@ public class ClubProductController {
         String imagePath = null;
         if (image != null && !image.isEmpty()) {
             try {
-                imagePath = s3Service.upload(image);
+                String randomImgFileName = RandomStringUtils.random(20, true, true) + ".png";
+                String filePath = MODE + "/product/" + randomImgFileName;
+                imagePath = s3Service.upload(image, filePath);
             } catch (IOException e) {
                 throw new CustomException(ClubErrorCode.IMAGE_UPLOAD_FAILED);
             }

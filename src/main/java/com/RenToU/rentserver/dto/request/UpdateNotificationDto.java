@@ -30,7 +30,7 @@ public class UpdateNotificationDto {
     @Mapping("isPublic")
     private String isPublic;
 
-    @NotBlank(message = "공지사항 id가 없습니다.")
+    // TODO 삭제 처리
     @Mapping("notification_id")
     private Long notificationId;
 
