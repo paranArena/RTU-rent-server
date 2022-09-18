@@ -27,6 +27,8 @@ public class ClubInfoDto {
 
     private List<String> hashtags;
 
+    private int memberCount;
+
     public static ClubInfoDto from(Club club) {
         if (club == null)
             return null;
@@ -37,6 +39,7 @@ public class ClubInfoDto {
                 .introduction(club.getIntroduction())
                 .thumbnailPath(club.getThumbnailPath())
                 .hashtags(club.getHashtagNames())
+                // TODO add member Count
                 .build();
     }
 }

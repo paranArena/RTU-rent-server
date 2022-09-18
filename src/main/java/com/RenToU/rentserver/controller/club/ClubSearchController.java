@@ -31,14 +31,18 @@ public class ClubSearchController {
     private final HashtagService hashtagService;
 
     @GetMapping("")
-    public ResponseEntity<?> searchlubWithHashtag(@RequestParam Map<String, String> searchMap) {
+    public ResponseEntity<?> searchClubWith(@RequestParam Map<String, String> searchMap) {
         Long memberId = memberService.getMyIdWithAuthorities();
 
         if (searchMap.containsKey("name")) {
             String clubName = searchMap.get("name");
-            Club club = clubService.findClubByName(clubName);
-            ClubPreviewDto resData = ClubPreviewDto.from(club);
-            resData.setClubRole(clubService.getMyRole(memberId, club.getId()));
+            List<Club> clubs = clubService.findClubByName(clubName);
+            List<ClubPreviewDto> resData = clubs.stream()
+                    .map(club -> {
+                        ClubPreviewDto dto = ClubPreviewDto.from(club);
+                        dto.setClubRole(clubService.getMyRole(memberId, club.getId()));
+                        return dto;
+                    }).collect(Collectors.toList());
             return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.SEARCH_CLUB_SUCCESS, resData));
         } else if (searchMap.containsKey("hashtag")) {
             String hashtag = searchMap.get("hashtag");

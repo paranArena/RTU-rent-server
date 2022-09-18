@@ -64,7 +64,7 @@ public class ClubServiceImpl implements ClubService {
     @Transactional
     public void deleteClub(long memberId, long clubId) {
         Club club = findClubById(clubId);
-        club.findClubMemberByMemberId(memberId).validateRole(true,OWNER,ADMIN);
+        club.findClubMemberByMemberId(memberId).validateRole(true, OWNER, ADMIN);
         clubRepository.deleteById(clubId);
     }
 
@@ -88,14 +88,13 @@ public class ClubServiceImpl implements ClubService {
         });
         ClubMember clubMember = ClubMember.createClubMember(club, member, ClubRole.WAIT);
         clubMemberRepository.save(clubMember);
-        System.out.println("size" + member.getClubList().size() + ",clubId " + club.getId());
     }
 
     @Override
     @Transactional
     public List<ClubMember> searchClubJoinsAll(Long clubId, Long memberId) {
         Club club = findClub(clubId);
-        club.findClubMemberByMemberId(memberId).validateRole(true,OWNER,ADMIN);
+        club.findClubMemberByMemberId(memberId).validateRole(true, OWNER, ADMIN);
         return club.getMemberList().stream()
                 .filter((clubMember) -> clubMember.getRole() == ClubRole.WAIT)
                 .collect(Collectors.toList());
@@ -106,7 +105,7 @@ public class ClubServiceImpl implements ClubService {
     public void acceptClubJoin(Long clubId, Long ownerId, Long joinerId) {
         Club club = findClub(clubId);
         // 요청자가 가입 허락 권한이 있는지 확인
-        club.findClubMemberByMemberId(ownerId).validateRole(true,OWNER,ADMIN);
+        club.findClubMemberByMemberId(ownerId).validateRole(true, OWNER, ADMIN);
         // 가입자가 가입 신청 대기 상태인지 확인
         ClubMember clubMember = club.findClubMemberByMemberId(joinerId);
         // 가입
@@ -121,7 +120,7 @@ public class ClubServiceImpl implements ClubService {
         // 가입자가 가입 신청 대기 상태인지 확인
         ClubMember clubMember = club.findClubMemberByMemberId(memberId);
         // 가입
-        clubMember.validateRole(true,WAIT);
+        clubMember.validateRole(true, WAIT);
         clubMember.delete();
         clubMemberRepository.deleteById(clubMember.getId());
         clubRepository.save(club);
@@ -132,20 +131,19 @@ public class ClubServiceImpl implements ClubService {
     public void rejectClubJoin(Long clubId, Long ownerId, Long joinerId) {
         Club club = findClub(clubId);
         // 요청자가 가입 허락 권한이 있는지 확인
-        club.findClubMemberByMemberId(ownerId).validateRole(true,OWNER,ADMIN);
+        club.findClubMemberByMemberId(ownerId).validateRole(true, OWNER, ADMIN);
         // 가입자가 가입 신청 대기 상태인지 확인
         ClubMember clubMember = club.findClubMemberByMemberId(joinerId);
         // 가입
-        clubMember.validateRole(true,WAIT);
+        clubMember.validateRole(true, WAIT);
         clubMember.delete();
         clubMemberRepository.deleteById(clubMember.getId());
         clubRepository.save(club);
     }
 
     @Override
-    public Club findClubByName(String clubName) {
-        return clubRepository.findByName(clubName)
-                .orElseThrow(() -> new CustomException(ClubErrorCode.CLUB_NOT_FOUND));
+    public List<Club> findClubByName(String clubName) {
+        return clubRepository.findByNameContains(clubName);
     }
 
     @Override
@@ -188,7 +186,7 @@ public class ClubServiceImpl implements ClubService {
     @Override
     public ClubMember getClubMember(long memberId, long clubId, long clubMemberId) {
         Club club = findClubById(clubId);
-        club.findClubMemberByMemberId(memberId).validateRole(true,OWNER,ADMIN);
+        club.findClubMemberByMemberId(memberId).validateRole(true, OWNER, ADMIN);
         ClubMember clubMember = club.findClubMemberByMemberId(clubMemberId);
         return clubMember;
     }
@@ -211,7 +209,7 @@ public class ClubServiceImpl implements ClubService {
     public void grantUser(Long clubId, Long ownerId, Long userId) {
         Club club = findClub(clubId);
         // 요청자가 가입 허락 권한이 있는지 확인
-        club.findClubMemberByMemberId(ownerId).validateRole(true,OWNER);
+        club.findClubMemberByMemberId(ownerId).validateRole(true, OWNER);
         // 가입자가 가입 신청 대기 상태인지 확인
         ClubMember clubMember = club.findClubMemberByMemberId(userId);
         // 가입
@@ -234,7 +232,7 @@ public class ClubServiceImpl implements ClubService {
     @Transactional
     public void removeClubMember(Long clubId, Long ownerId, Long memberId) {
         Club club = findClub(clubId);
-        club.findClubMemberByMemberId(ownerId).validateRole(true,OWNER);
+        club.findClubMemberByMemberId(ownerId).validateRole(true, OWNER);
         ClubMember clubMember = club.findClubMemberByMemberId(memberId);
         // 탈퇴
         clubMember.delete();
@@ -247,7 +245,7 @@ public class ClubServiceImpl implements ClubService {
     public Club updateClubInfo(long memberId, long clubId, String name, String intro, String thumbnailPath,
             List<String> hashtagNames) {
         Club club = findClub(clubId);
-        club.findClubMemberByMemberId(memberId).validateRole(true,OWNER,ADMIN);
+        club.findClubMemberByMemberId(memberId).validateRole(true, OWNER, ADMIN);
         List<Hashtag> clubHashtags = hashtagNames.stream().map(hashtagName -> {
             return findHashtagByNameOrCreate(hashtagName);
         }).collect(Collectors.toList());
@@ -259,11 +257,18 @@ public class ClubServiceImpl implements ClubService {
     }
 
     private void eraseBeforeClubHashtag(Club club) {
-        List<ClubHashtag> clubHashtags = club.getHashtags();
-        clubHashtags.forEach(clubHashtag -> {
-            club.deleteHashtag(clubHashtag);
-            clubHashtagRepository.deleteById(clubHashtag.getId());
+        List<Long> clubHashtagIdList = club.getHashtags().stream()
+                .map((ch) -> ch.getId())
+                .collect(Collectors.toList());
+        clubHashtagIdList.forEach(id -> {
+            club.deleteHashtag(findClubHashtag(id));
+            clubHashtagRepository.deleteById(id);
         });
+    }
+
+    private ClubHashtag findClubHashtag(Long id) {
+        return clubHashtagRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ClubErrorCode.HASHTAG_NOT_FOUND));
     }
 
     /**

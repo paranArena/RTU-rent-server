@@ -1,13 +1,24 @@
 package com.RenToU.rentserver.dto.request;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 
-@Data
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class EmailDto {
-        @Email
-        @NotBlank(message = "이메일(필수)")
+        @Email(message = "이메일 형식을 입력해주세요.")
+        @NotBlank(message = "이메일을 입력해주세요.")
+        @Pattern(regexp = ".+@ajou.ac.kr", message = "아주대학교 이메일을 입력해주세요.")
         private String email;
 }
