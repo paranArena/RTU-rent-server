@@ -23,7 +23,6 @@ public class NotificationDto {
     @Mapping("title")
     private String title;
 
-
     private String clubName;
 
     @NotBlank

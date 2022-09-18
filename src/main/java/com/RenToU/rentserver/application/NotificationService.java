@@ -37,7 +37,7 @@ public class NotificationService {
     public Notification createNotification(CreateNotificationServiceDto notificationServiceDto) {
         Club club = findClub(notificationServiceDto.getClubId());
         Long writerId = notificationServiceDto.getMemberId();
-        club.findClubMemberByMemberId(writerId).validateRole(true,OWNER,ADMIN);
+        club.findClubMemberByMemberId(writerId).validateRole(true, OWNER, ADMIN);
         String title = notificationServiceDto.getTitle();
         String content = notificationServiceDto.getContent();
         String imagePath = null;
@@ -64,7 +64,7 @@ public class NotificationService {
     @Transactional
     public void deleteNotification(long memberId, Long clubId, Long notificationId) {
         Club club = findClub(clubId);
-        club.findClubMemberByMemberId(memberId).validateRole(true,OWNER,ADMIN);
+        club.findClubMemberByMemberId(memberId).validateRole(true, OWNER, ADMIN);
         notificationRepository.deleteById(notificationId);
     }
 
@@ -99,10 +99,10 @@ public class NotificationService {
     @Transactional
     public Notification updateNotification(long memberId, long clubId, UpdateNotificationDto dto) {
         Club club = findClub(clubId);
-        club.findClubMemberByMemberId(memberId).validateRole(true,OWNER,ADMIN);
+        club.findClubMemberByMemberId(memberId).validateRole(true, OWNER, ADMIN);
         Notification notification = findNotification(dto.getNotificationId());
         boolean isPublic = false;
-        if (dto.getIsPublic() == "true") {
+        if (dto.getIsPublic().contains("true")) { // equals 쓰면 에러남. dto.getIsPublic() 맨 앞 바이트에 8이 붙어있음
             isPublic = true;
         } else {
             isPublic = false;
