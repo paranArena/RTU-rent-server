@@ -28,7 +28,7 @@ public class ImageController {
     @PostMapping("/upload")
     public ResponseEntity<?> uploadImageS3(@RequestParam("image") MultipartFile image) throws IOException {
         String randomImgFileName = RandomStringUtils.random(20, true, true) + ".png";
-        String filePath = MODE + "/product/" + randomImgFileName;
+        String filePath = MODE + "/images/" + randomImgFileName;
         String resData = s3Service.upload(image, filePath);
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.SEARCH_CLUB_RETURN, resData));
     }
