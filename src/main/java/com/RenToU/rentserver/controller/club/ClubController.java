@@ -44,7 +44,7 @@ public class ClubController {
     public ResponseEntity<?> createClub(@RequestParam("name") String name, @RequestParam("introduction") String intro,
             @RequestParam("thumbnail") MultipartFile thumbnail, @RequestParam("hashtags") List<String> hashtags) {
         long memberId = memberService.getMyIdWithAuthorities();
-        String thumbnailPath = "https://ren2u.s3.ap-northeast-2.amazonaws.com/default/club-thumbnail.png";
+        String thumbnailPath = "https://ren2u.s3.ap-northeast-2.amazonaws.com/1024.png";
         if (!thumbnail.isEmpty()) {
             try {
                 String randomImgFileName = RandomStringUtils.random(20, true, true) + ".png";
