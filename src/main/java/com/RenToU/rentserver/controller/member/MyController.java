@@ -3,6 +3,8 @@ package com.RenToU.rentserver.controller.member;
 import com.RenToU.rentserver.application.ProductService;
 import com.RenToU.rentserver.domain.Product;
 import com.RenToU.rentserver.dto.StatusCode;
+import com.RenToU.rentserver.dto.request.SignupDto;
+import com.RenToU.rentserver.dto.request.UpdateMemberInfoDto;
 import com.RenToU.rentserver.dto.response.ClubRoleDto;
 import com.RenToU.rentserver.dto.response.MemberInfoDto;
 import com.RenToU.rentserver.dto.response.ResponseDto;
@@ -31,6 +33,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
@@ -50,6 +53,15 @@ public class MyController {
         MemberInfoDto resData = mapper.map(member, MemberInfoDto.class);
 
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_MY_INFO, resData));
+    }
+
+    @PutMapping("/info")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    public ResponseEntity<?> updateMyInfo(@Valid @RequestBody UpdateMemberInfoDto info) {
+        Long memberId = memberService.getMyIdWithAuthorities();
+        Member member = memberService.updateMemberInfo(memberId, info);
+        MemberInfoDto resData = mapper.map(member, MemberInfoDto.class);
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.UPDATE_MY_INFO, resData));
     }
 
     @GetMapping("/clubs")
@@ -122,7 +134,7 @@ public class MyController {
                 .map((rental) -> rental.getItem())
                 .collect(Collectors.toList());
         List<RentalPreviewDto> resData = items.stream()
-                .map((item) -> RentalPreviewDto.from(item,member.getId()))
+                .map((item) -> RentalPreviewDto.from(item, member.getId()))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_MY_RENT, resData));
     }

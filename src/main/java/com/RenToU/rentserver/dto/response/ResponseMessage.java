@@ -84,4 +84,6 @@ public class ResponseMessage {
 
     public static final String RESET_PASSWORD = "비밀번호 재설정 성공";
     public static final String CHECK_SUCCESS = "중복 체크 성공";
+
+    public static final String UPDATE_MY_INFO = "내 정보 수정 성공";
 }
