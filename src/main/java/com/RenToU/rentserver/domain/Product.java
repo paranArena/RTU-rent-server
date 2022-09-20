@@ -77,16 +77,16 @@ public class Product extends BaseTimeEntity {
     // 클럽과의 관계 생성, item 생성
     public void initialSetting(Club club, List<RentalPolicy> policies) {
         this.setClub(club);
-        this.setLocationJpa(location);
+//        this.setLocationJpa(location);
         for (int i = 1; i <= policies.size(); i++) {
             Item item = Item.createItem(this, policies.get(i - 1), i);
             this.addItem(item);
         }
     }
 
-    private void setLocationJpa(Location location) {
-        location.setProduct(this);
-    }
+//    private void setLocationJpa(Location location) {
+//        location.setProduct(this);
+//    }
 
     public static Product createProduct(String name, String category, Location location, int fifoRentalPeriod,
             int reserveRentalPeriod, int price, String caution, String imagePath) {
