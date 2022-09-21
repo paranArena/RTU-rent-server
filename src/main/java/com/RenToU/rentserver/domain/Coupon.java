@@ -102,4 +102,13 @@ public class Coupon extends BaseTimeEntity {
     public void removeMember(CouponMember couponMember) {
         this.members.remove(couponMember);
     }
+
+    public void vadlidateDate() {
+        if(this.getActDate().isAfter(LocalDateTime.now())){
+            throw new CustomException(CouponErrorCode.COUPON_NOT_ACTIVATED);
+        }
+        if(this.getExpDate().isBefore(LocalDateTime.now())){
+            throw new CustomException(CouponErrorCode.COUPON_EXPIRED);
+        }
+    }
 }
