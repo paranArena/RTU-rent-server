@@ -97,10 +97,10 @@ public class NotificationService {
     }
 
     @Transactional
-    public Notification updateNotification(long memberId, long clubId, UpdateNotificationDto dto) {
+    public Notification updateNotification(long memberId, long clubId, long notificationId, UpdateNotificationDto dto) {
         Club club = findClub(clubId);
         club.findClubMemberByMemberId(memberId).validateRole(true, OWNER, ADMIN);
-        Notification notification = findNotification(dto.getNotificationId());
+        Notification notification = findNotification(notificationId);
         boolean isPublic = false;
         if (dto.getIsPublic().contains("true")) { // equals 쓰면 에러남. dto.getIsPublic() 맨 앞 바이트에 8이 붙어있음
             isPublic = true;

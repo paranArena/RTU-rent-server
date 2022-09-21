@@ -2,12 +2,10 @@ package com.RenToU.rentserver.controller.member;
 
 import com.RenToU.rentserver.application.CouponService;
 import com.RenToU.rentserver.application.ProductService;
-import com.RenToU.rentserver.domain.Coupon;
 import com.RenToU.rentserver.domain.CouponMember;
 import com.RenToU.rentserver.domain.CouponMemberHistory;
 import com.RenToU.rentserver.domain.Product;
 import com.RenToU.rentserver.dto.StatusCode;
-import com.RenToU.rentserver.dto.request.SignupDto;
 import com.RenToU.rentserver.dto.request.UpdateMemberInfoDto;
 import com.RenToU.rentserver.dto.response.ClubRoleDto;
 import com.RenToU.rentserver.dto.response.MemberInfoDto;
@@ -34,7 +32,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -153,21 +150,26 @@ public class MyController {
         memberService.deleteMember(memberId);
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.QUIT_SUCCESS));
     }
+
     @GetMapping("/coupons/all")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
-    public ResponseEntity<?> getMyCouponsAll(){
+    public ResponseEntity<?> getMyCouponsAll() {
         long memberId = memberService.getMyIdWithAuthorities();
         List<CouponMember> couponMembers = couponService.getMyCouponsAll(memberId);
-        List<CouponPreviewDto> resData = couponMembers.stream().map(c->CouponPreviewDto.from(c.getCoupon())).collect(Collectors.toList());
-        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_MY_COUPON_MEMBER_ALL,resData));
+        List<CouponPreviewDto> resData = couponMembers.stream().map(c -> CouponPreviewDto.from(c.getCoupon()))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_MY_COUPON_MEMBER_ALL, resData));
     }
+
     @GetMapping("/couponHistories/all")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
-    public ResponseEntity<?> getMyCouponHistoriesAll(){
+    public ResponseEntity<?> getMyCouponHistoriesAll() {
         long memberId = memberService.getMyIdWithAuthorities();
         List<CouponMemberHistory> couponMemberHistories = couponService.getMyCouponHistoriesAll(memberId);
-        List<CouponPreviewDto> resData = couponMemberHistories.stream().map(c->CouponPreviewDto.from(c.getCoupon())).collect(Collectors.toList());
-        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_MY_COUPON_MEMBER_HISTORY_ALL,resData));
+        List<CouponPreviewDto> resData = couponMemberHistories.stream().map(c -> CouponPreviewDto.from(c.getCoupon()))
+                .collect(Collectors.toList());
+        return ResponseEntity
+                .ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_MY_COUPON_MEMBER_HISTORY_ALL, resData));
     }
 
 }

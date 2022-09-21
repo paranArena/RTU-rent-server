@@ -39,7 +39,7 @@ public class ClubInfoDto {
                 .introduction(club.getIntroduction())
                 .thumbnailPath(club.getThumbnailPath())
                 .hashtags(club.getHashtagNames())
-                // TODO add member Count
+                .memberCount(club.getMemberList().size())
                 .build();
     }
 }
