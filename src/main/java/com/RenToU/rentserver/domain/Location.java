@@ -32,8 +32,6 @@ public class Location {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "location_id")
     private Long id;
-    @OneToOne(mappedBy = "location", fetch = LAZY)
-    private Product product;
 
     private String name;
 
