@@ -30,10 +30,6 @@ public class UpdateNotificationDto {
     @Mapping("isPublic")
     private String isPublic;
 
-    // TODO 삭제 처리
-    @Mapping("notification_id")
-    private Long notificationId;
-
     private List<MultipartFile> image;
 
     private List<String> imagePath;

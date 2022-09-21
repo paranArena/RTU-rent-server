@@ -10,10 +10,7 @@ import com.RenToU.rentserver.exceptions.ClubErrorCode;
 import com.RenToU.rentserver.exceptions.CommonErrorCode;
 import com.RenToU.rentserver.util.RedisUtil;
 
-import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,10 +21,8 @@ import com.RenToU.rentserver.domain.Authority;
 import com.RenToU.rentserver.domain.Member;
 import com.RenToU.rentserver.dto.request.SignupDto;
 import com.RenToU.rentserver.dto.request.UpdateMemberInfoDto;
-import com.RenToU.rentserver.dto.response.MemberInfoDto;
 import com.RenToU.rentserver.exceptions.AuthErrorCode;
 import com.RenToU.rentserver.exceptions.CustomException;
-import com.RenToU.rentserver.exceptions.ErrorCode;
 import com.RenToU.rentserver.exceptions.MemberErrorCode;
 import com.RenToU.rentserver.infrastructure.MemberRepository;
 import com.RenToU.rentserver.util.SecurityUtil;
@@ -182,8 +177,7 @@ public class MemberService {
             javaMailSender.send(mimeMessage);
 
         } catch (MessagingException e) {
-            // TODO 메일 재전송 or 메일 에러났으니 나중에 다시 요청 부탁
-            e.printStackTrace();
+            throw new CustomException(CommonErrorCode.EMAIL_SEND_FAILED);
         }
 
         // 유효 시간(5분)동안 {email, authKey} 저장

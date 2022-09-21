@@ -131,7 +131,6 @@ public class ClubProductController {
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.DELETE_ITEM));
     }
 
-    // TODO POST /productid/items -> itemDto(rentlapolicy, numbering) 받아서 create하기
     @PostMapping("/{productId}/items")
     public ResponseEntity<?> addItem(@PathVariable Long clubId, @PathVariable Long productId,
             @RequestBody AddItemDto dto) {

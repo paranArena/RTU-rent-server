@@ -73,7 +73,8 @@ public class ClubNotificationController {
         long memberId = memberService.getMyIdWithAuthorities();
         List<String> imagePaths = s3Service.imageToPath(updateNotificationDto.getImage(), "notification");
         updateNotificationDto.setImagePath(imagePaths);
-        Notification notification = notificationService.updateNotification(memberId, clubId, updateNotificationDto);
+        Notification notification = notificationService.updateNotification(memberId, clubId, notificationId,
+                updateNotificationDto);
         NotificationDto resData = NotificationDto.from(notification);
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.UPDATE_NOTIFICATION, resData));
     }
