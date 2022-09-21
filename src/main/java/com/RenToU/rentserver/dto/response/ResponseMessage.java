@@ -84,5 +84,9 @@ public class ResponseMessage {
 
     public static final String RESET_PASSWORD = "비밀번호 재설정 성공";
     public static final String CHECK_SUCCESS = "중복 체크 성공";
-    public static final String CREATE_COUPON = "쿠폰 발행 성공";
+    public static final String CREATE_COUPON_ADMIN = "쿠폰 발행 성공";
+    public static final String GET_CLUB_COUPONS_ADMIN = "그룹 쿠폰 관리자 조회 성공";
+    public static final String GET_COUPON_MEMBERS_ADMIN = "쿠폰 미사용 목록 조회 성공";
+    public static final String GET_COUPON_MEMBER_HISTORIES_ADMIN = "쿠폰 사용 목록 조회 성공";
+    public static final String USE_COUPON_USER = "쿠폰 사용 성공";
 }
