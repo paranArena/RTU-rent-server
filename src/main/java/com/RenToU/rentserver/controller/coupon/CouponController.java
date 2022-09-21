@@ -54,7 +54,7 @@ public class CouponController {
         Location location = new Location(createCouponDto.getLocationName(), createCouponDto.getLatitude(),
                 createCouponDto.getLongitude());
         CouponServiceDto couponServiceDto = CouponServiceDto.from(createCouponDto,clubId,memberId,location);
-        couponService.createCoupon(couponServiceDto);
+        couponService.createCouponAdmin(couponServiceDto);
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.CREATE_COUPON_ADMIN));
     }
     @GetMapping("coupons/admin")
@@ -92,6 +92,17 @@ public class CouponController {
         couponService.useCouponUser(memberId,clubId,couponId);
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.USE_COUPON_USER));
     }
+
+    @PutMapping("coupon/{couponId}/admin")
+    public ResponseEntity<?> updateCouponAdmin(@PathVariable long clubId, @PathVariable long couponId, @Valid @RequestBody CreateCouponDto createCouponDto ) throws IOException {
+        long memberId = memberService.getMyIdWithAuthorities();
+        Location location = new Location(createCouponDto.getLocationName(), createCouponDto.getLatitude(),
+                createCouponDto.getLongitude());
+        CouponServiceDto couponServiceDto = CouponServiceDto.from(createCouponDto,clubId,memberId,location);
+        couponService.updateCouponAdmin(couponId, couponServiceDto);
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.UPDATE_COUPON_ADMIN));
+    }
+
 
 
 
