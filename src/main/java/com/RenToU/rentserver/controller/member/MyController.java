@@ -4,6 +4,7 @@ import com.RenToU.rentserver.application.CouponService;
 import com.RenToU.rentserver.application.ProductService;
 import com.RenToU.rentserver.domain.Coupon;
 import com.RenToU.rentserver.domain.CouponMember;
+import com.RenToU.rentserver.domain.CouponMemberHistory;
 import com.RenToU.rentserver.domain.Product;
 import com.RenToU.rentserver.dto.StatusCode;
 import com.RenToU.rentserver.dto.request.SignupDto;
@@ -153,13 +154,20 @@ public class MyController {
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.QUIT_SUCCESS));
     }
     @GetMapping("/coupons/all")
-    public ResponseEntity<?> getMyCouponMembers(@PathVariable long clubId) throws IOException {
-        System.out.println("test");
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    public ResponseEntity<?> getMyCouponsAll(){
         long memberId = memberService.getMyIdWithAuthorities();
-        System.out.println("test");
-        List<CouponMember> coupons = couponService.getMyCouponMembers(clubId, memberId);
-        List<CouponPreviewDto> resData = coupons.stream().map(c->CouponPreviewDto.from(c.getCoupon())).collect(Collectors.toList());
-        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_CLUB_COUPONS_ADMIN,resData));
+        List<CouponMember> couponMembers = couponService.getMyCouponsAll(memberId);
+        List<CouponPreviewDto> resData = couponMembers.stream().map(c->CouponPreviewDto.from(c.getCoupon())).collect(Collectors.toList());
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_MY_COUPON_MEMBER_ALL,resData));
+    }
+    @GetMapping("/couponHistories/all")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    public ResponseEntity<?> getMyCouponHistoriesAll(){
+        long memberId = memberService.getMyIdWithAuthorities();
+        List<CouponMemberHistory> couponMemberHistories = couponService.getMyCouponHistoriesAll(memberId);
+        List<CouponPreviewDto> resData = couponMemberHistories.stream().map(c->CouponPreviewDto.from(c.getCoupon())).collect(Collectors.toList());
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_MY_COUPON_MEMBER_HISTORY_ALL,resData));
     }
 
 }
