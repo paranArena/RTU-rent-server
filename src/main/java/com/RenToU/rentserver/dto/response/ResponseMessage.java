@@ -94,4 +94,9 @@ public class ResponseMessage {
     public static final String USE_COUPON_USER = "쿠폰 사용 성공";
     public static final String UPDATE_COUPON_ADMIN = "쿠폰 정보 업데이트 성공";
     public static final String GET_COUPON_USER = "쿠폰 정보 조회 성공";
+    public static final String GET_MY_COUPON_MEMBER_ALL = "내 미사용 쿠폰 목록 조회 성공";
+    public static final String GET_MY_COUPON_MEMBER_HISTORY_ALL = "내 사용 쿠폰 목록 조회 성공";
+    public static final String GET_COUPON_ADMIN = "쿠폰 정보 어드민 조회 성공";
+    public static final String DELETE_COUPON_MEMBER_ADMIN = "개별 쿠폰 삭제 성공";
+    public static final String DELETE_COUPON_ADMIN = "쿠폰 삭제 성공";
 }
