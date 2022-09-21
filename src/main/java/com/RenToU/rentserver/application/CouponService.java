@@ -91,6 +91,7 @@ public class CouponService {
         cm.delete();
         couponMemberRepository.delete(cm);
     }
+    @Transactional
     public void updateCouponAdmin(Long couponId, CouponServiceDto dto) {
         Club club = findClub(dto.getClubId());
         club.findClubMemberByMemberId(dto.getMemberId()).validateRole(true,OWNER,ADMIN);
@@ -98,16 +99,39 @@ public class CouponService {
         coupon.update(dto);
         couponRepository.save(coupon);
     }
-    public List<CouponMember> getMyCouponMembers(long clubId, long memberId) {
-        List<CouponMember> cms = couponMemberRepository.findByMemberId(memberId);
+    public List<CouponMember> getMyCouponsAll( long memberId) {
+        List<CouponMember> cms = couponMemberRepository.findAllByMemberId(memberId);
         return cms;
 
+    }
+    public List<CouponMemberHistory> getMyCouponHistoriesAll(long memberId) {
+        List<CouponMemberHistory> cms = couponMemberHistoryRepository.findAllByMemberId(memberId);
+        return cms;
     }
     public Coupon getCouponUser(long clubId, long memberId, long couponId) {
         Club club = findClub(clubId);
         club.findClubMemberByMemberId(memberId).validateRole(true,OWNER,ADMIN,USER);
         return findCoupon(couponId);
-
+    }
+    public Coupon getCouponAdmin(long clubId, long memberId, long couponId) {
+        Club club = findClub(clubId);
+        club.findClubMemberByMemberId(memberId).validateRole(true,OWNER,ADMIN);
+        return findCoupon(couponId);
+    }
+    @Transactional
+    public void deleteCouponMemberAdmin(long clubId, long memberId, long couponMemberId) {
+        Club club = findClub(clubId);
+        club.findClubMemberByMemberId(memberId).validateRole(true,OWNER,ADMIN);
+        CouponMember cm = findCouponMember(couponMemberId);
+        cm.delete();
+        couponMemberRepository.delete(cm);
+    }
+    @Transactional
+    public void deleteCouponAdmin(long clubId, long memberId, long couponId) {
+        Club club = findClub(clubId);
+        club.findClubMemberByMemberId(memberId).validateRole(true,OWNER,ADMIN);
+        Coupon coupon = findCoupon(couponId);
+        couponRepository.delete(coupon);
     }
     private Member findMember(Long id) {
         return memberRepository.findById(id)
@@ -121,5 +145,11 @@ public class CouponService {
         return couponRepository.findById(id)
                 .orElseThrow(() -> new CustomException(CouponErrorCode.COUPON_NOT_FOUND));
     }
+    private CouponMember findCouponMember(Long id) {
+        return couponMemberRepository.findById(id)
+                .orElseThrow(() -> new CustomException(CouponErrorCode.COUPON_MEMBER_NOT_FOUND));
+    }
+
+
 
 }
