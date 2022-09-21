@@ -11,5 +11,5 @@ import java.util.List;
 
 public interface CouponMemberRepository extends JpaRepository<CouponMember, Long> {
     @EntityGraph(attributePaths = {"coupon"})
-    List<CouponMember> findByMemberId(Long member_id);
+    List<CouponMember> findAllByMemberId(Long member_id);
 }
