@@ -56,6 +56,9 @@ public class Club extends BaseTimeEntity {
     @Builder.Default
     @OneToMany(mappedBy = "club", fetch = LAZY, cascade = CascadeType.ALL)
     private List<ClubHashtag> hashtags = new ArrayList<>();
+    @Builder.Default
+    @OneToMany(mappedBy = "club", fetch = LAZY, cascade = CascadeType.ALL)
+    private List<Coupon> coupons = new ArrayList<>();
 
     // Setter
     public void setThumbnailPath(String thumbnailPath) {
@@ -133,5 +136,10 @@ public class Club extends BaseTimeEntity {
     public void deleteHashtag(ClubHashtag hashtag) {
         this.getHashtags().remove(hashtag);
         hashtag.setClub(null);
+    }
+
+    public void addCoupon(Coupon coupon) {
+        coupons.add(coupon);
+        coupon.setClub(this);
     }
 }

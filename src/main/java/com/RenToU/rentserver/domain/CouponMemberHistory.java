@@ -1,7 +1,5 @@
 package com.RenToU.rentserver.domain;
 
-import com.RenToU.rentserver.exceptions.ClubErrorCode;
-import com.RenToU.rentserver.exceptions.CustomException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,7 +21,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CouponMember extends BaseTimeEntity {
+public class CouponMemberHistory extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "coupon_member_id")
@@ -42,38 +40,26 @@ public class CouponMember extends BaseTimeEntity {
     private Member granter;
 
     private LocalDateTime grantDate;
+    private LocalDateTime useDate;
 
-    public static CouponMember createCouponMember(Coupon coupon, Member member, Member granter) {
-        CouponMember couponMember = CouponMember.builder()
-                .grantDate(LocalDateTime.now())
-                .granter(granter)
+    public static CouponMemberHistory createCouponMemberHistory(CouponMember couponMember) {
+        CouponMemberHistory couponMemberHistory = CouponMemberHistory.builder()
+                .member(couponMember.getMember())
+                .granter(couponMember.getGranter())
+                .grantDate(couponMember.getGrantDate())
+                .useDate(LocalDateTime.now())
                 .build();
-
-        coupon.addMember(couponMember);
-        member.addCoupon(couponMember);
-        return couponMember;
+        couponMember.getCoupon().addHistory(couponMemberHistory);
+        return couponMemberHistory;
     }
 
     public void setCoupon(Coupon coupon) {
         this.coupon = coupon;
     }
 
-    public void setMember(Member member) {
-        this.member = member;
-    }
-
-
 
     public String toString() {
         return this.getCoupon().getName() + " " + this.getMember().getName() + " " + this.getGranter();
-    }
-
-    public void delete() {
-        member.removeCoupon(this);
-        this.member = null;
-        coupon.removeMember(this);
-        this.coupon = null;
-
     }
 
 //    public void delete() {
