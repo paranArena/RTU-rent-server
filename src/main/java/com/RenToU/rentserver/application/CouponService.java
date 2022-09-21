@@ -85,6 +85,7 @@ public class CouponService {
         Club club = findClub(clubId);
         club.findClubMemberByMemberId(memberId).validateRole(true,USER,OWNER,ADMIN);
         Coupon coupon = findCoupon(couponId);
+        coupon.vadlidateDate();
         CouponMember cm = coupon.findCouponMemberByMemberId(memberId);
         couponMemberHistoryRepository.save(CouponMemberHistory.createCouponMemberHistory(cm));
         cm.delete();
