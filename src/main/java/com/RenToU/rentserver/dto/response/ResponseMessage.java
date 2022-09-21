@@ -92,4 +92,6 @@ public class ResponseMessage {
     public static final String GET_COUPON_MEMBERS_ADMIN = "쿠폰 미사용 목록 조회 성공";
     public static final String GET_COUPON_MEMBER_HISTORIES_ADMIN = "쿠폰 사용 목록 조회 성공";
     public static final String USE_COUPON_USER = "쿠폰 사용 성공";
+    public static final String UPDATE_COUPON_ADMIN = "쿠폰 정보 업데이트 성공";
+    public static final String GET_COUPON_USER = "쿠폰 정보 조회 성공";
 }

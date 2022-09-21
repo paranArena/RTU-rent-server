@@ -47,7 +47,6 @@ public class Coupon extends BaseTimeEntity {
 
     private LocalDateTime expDate;
 
-    private String caution;
     @OneToOne(cascade = CascadeType.ALL, fetch = LAZY)
     @JoinColumn(name = "location_id")
     private Location location;
@@ -110,5 +109,16 @@ public class Coupon extends BaseTimeEntity {
         if(this.getExpDate().isBefore(LocalDateTime.now())){
             throw new CustomException(CouponErrorCode.COUPON_EXPIRED);
         }
+    }
+
+    public void update(CouponServiceDto dto) {
+        this.name = dto.getName();
+        this.information = dto.getInformation();
+        this.imagePath = dto.getImagePath();
+        this.actDate = dto.getActDate();
+        this.expDate = dto.getExpDate();
+        this.location.setName(dto.getLocation().getName());
+        this.location.setX(dto.getLocation().getX());
+        this.location.setY(dto.getLocation().getY());
     }
 }
