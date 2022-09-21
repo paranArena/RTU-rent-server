@@ -41,7 +41,7 @@ public class CouponService {
     private final ClubRepository clubRepository;
 
     @Transactional
-    public Coupon createCoupon(CouponServiceDto couponServiceDto) {
+    public Coupon createCouponAdmin(CouponServiceDto couponServiceDto) {
         Club club = findClub(couponServiceDto.getClubId());
         Long writerId = couponServiceDto.getMemberId();
         club.findClubMemberByMemberId(writerId).validateRole(true, OWNER, ADMIN);
@@ -91,7 +91,13 @@ public class CouponService {
         cm.delete();
         couponMemberRepository.delete(cm);
     }
-
+    public void updateCouponAdmin(Long couponId, CouponServiceDto dto) {
+        Club club = findClub(dto.getClubId());
+        club.findClubMemberByMemberId(dto.getMemberId()).validateRole(true,OWNER,ADMIN);
+        Coupon coupon = findCoupon(couponId);
+        coupon.update(dto);
+        couponRepository.save(coupon);
+    }
     private Member findMember(Long id) {
         return memberRepository.findById(id)
                 .orElseThrow(() -> new CustomException(MemberErrorCode.MEMBER_NOT_FOUND));
@@ -104,6 +110,7 @@ public class CouponService {
         return couponRepository.findById(id)
                 .orElseThrow(() -> new CustomException(CouponErrorCode.COUPON_NOT_FOUND));
     }
+
 
 
 }
