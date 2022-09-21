@@ -52,8 +52,8 @@ jobs:
         cp build/libs/application.war deploy/application.war  # 빌드 완료 시 .war 파일 복붙
         cp Procfile deploy/Procfile
         cp -r .ebextensions deploy/.ebextensions
-        cp -r .platform deploy/.platform
         cd deploy && zip -r deploy.zip . # Procfile, .ebextensions, .playform 포함하여 zip 생성
+      # cp -r .platform deploy/.platform
 
     
     - name: Beanstalk Deploy
