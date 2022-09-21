@@ -1,6 +1,9 @@
 package com.RenToU.rentserver.controller.member;
 
+import com.RenToU.rentserver.application.CouponService;
 import com.RenToU.rentserver.application.ProductService;
+import com.RenToU.rentserver.domain.Coupon;
+import com.RenToU.rentserver.domain.CouponMember;
 import com.RenToU.rentserver.domain.Product;
 import com.RenToU.rentserver.dto.StatusCode;
 import com.RenToU.rentserver.dto.request.SignupDto;
@@ -10,6 +13,7 @@ import com.RenToU.rentserver.dto.response.MemberInfoDto;
 import com.RenToU.rentserver.dto.response.ResponseDto;
 import com.RenToU.rentserver.dto.response.ResponseMessage;
 import com.RenToU.rentserver.dto.response.preview.ClubPreviewDto;
+import com.RenToU.rentserver.dto.response.preview.CouponPreviewDto;
 import com.RenToU.rentserver.dto.response.preview.NotificationPreviewDto;
 import com.RenToU.rentserver.dto.response.preview.ProductPreviewDto;
 import com.RenToU.rentserver.dto.response.preview.RentalPreviewDto;
@@ -29,6 +33,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,6 +49,7 @@ public class MyController {
     private final NotificationService notificationService;
 
     private final ProductService productService;
+    private final CouponService couponService;
     private final Mapper mapper;
 
     @GetMapping("/info")
@@ -146,4 +152,14 @@ public class MyController {
         memberService.deleteMember(memberId);
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.QUIT_SUCCESS));
     }
+    @GetMapping("/coupons/all")
+    public ResponseEntity<?> getMyCouponMembers(@PathVariable long clubId) throws IOException {
+        System.out.println("test");
+        long memberId = memberService.getMyIdWithAuthorities();
+        System.out.println("test");
+        List<CouponMember> coupons = couponService.getMyCouponMembers(clubId, memberId);
+        List<CouponPreviewDto> resData = coupons.stream().map(c->CouponPreviewDto.from(c.getCoupon())).collect(Collectors.toList());
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_CLUB_COUPONS_ADMIN,resData));
+    }
+
 }
