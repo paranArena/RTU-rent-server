@@ -52,86 +52,99 @@ public class CouponController {
 
     @PostMapping("coupons/admin")
     public ResponseEntity<?> createCouponAdmin(@PathVariable long clubId,
-                                                @Valid @RequestBody CreateCouponDto createCouponDto) throws IOException {
+            @Valid @RequestBody CreateCouponDto createCouponDto) throws IOException {
         long memberId = memberService.getMyIdWithAuthorities();
         Location location = new Location(createCouponDto.getLocationName(), createCouponDto.getLatitude(),
                 createCouponDto.getLongitude());
-        CouponServiceDto couponServiceDto = CouponServiceDto.from(createCouponDto,clubId,memberId,location);
+        CouponServiceDto couponServiceDto = CouponServiceDto.from(createCouponDto, clubId, memberId, location);
         couponService.createCouponAdmin(couponServiceDto);
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.CREATE_COUPON_ADMIN));
     }
+
     @GetMapping("coupons/admin")
-    public ResponseEntity<?> getClubCouponsAdmin(@PathVariable long clubId ) throws IOException {
+    public ResponseEntity<?> getClubCouponsAdmin(@PathVariable long clubId) throws IOException {
         long memberId = memberService.getMyIdWithAuthorities();
         List<Coupon> coupons = couponService.getClubCouponsAdmin(clubId, memberId);
-        List<CouponPreviewDto> resData = coupons.stream().map(c->CouponPreviewDto.from(c)).collect(Collectors.toList());
-        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_CLUB_COUPONS_ADMIN,resData));
+        List<CouponPreviewDto> resData = coupons.stream().map(c -> CouponPreviewDto.from(c))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_CLUB_COUPONS_ADMIN, resData));
     }
+
     @GetMapping("coupons/{couponId}/couponMembers/admin")
-    public ResponseEntity<?> getCouponMembersAdmin(@PathVariable long clubId,@PathVariable long couponId ) throws IOException {
+    public ResponseEntity<?> getCouponMembersAdmin(@PathVariable long clubId, @PathVariable long couponId)
+            throws IOException {
         long memberId = memberService.getMyIdWithAuthorities();
-        List<CouponMember> couponMembers = couponService.getCouponMembersAdmin(clubId, memberId,couponId);
-        List<CouponMemberPreviewDto> resData = couponMembers.stream().map(cm-> CouponMemberPreviewDto.from(cm)).collect(Collectors.toList());
-        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_COUPON_MEMBERS_ADMIN,resData));
+        List<CouponMember> couponMembers = couponService.getCouponMembersAdmin(clubId, memberId, couponId);
+        List<CouponMemberPreviewDto> resData = couponMembers.stream().map(cm -> CouponMemberPreviewDto.from(cm))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_COUPON_MEMBERS_ADMIN, resData));
     }
+
     @GetMapping("coupons/{couponId}/histories/admin")
-    public ResponseEntity<?> getCouponMemberHistoriesAdmin(@PathVariable long clubId,@PathVariable long couponId ) throws IOException {
+    public ResponseEntity<?> getCouponMemberHistoriesAdmin(@PathVariable long clubId, @PathVariable long couponId)
+            throws IOException {
         long memberId = memberService.getMyIdWithAuthorities();
-        List<CouponMemberHistory> histories = couponService.getCouponMemberHistoriesAdmin(clubId, memberId,couponId);
-        List<CouponMemberPreviewDto> resData = histories.stream().map(cmh-> CouponMemberPreviewDto.from(cmh)).collect(Collectors.toList());
-        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_COUPON_MEMBER_HISTORIES_ADMIN,resData));
+        List<CouponMemberHistory> histories = couponService.getCouponMemberHistoriesAdmin(clubId, memberId, couponId);
+        List<CouponMemberPreviewDto> resData = histories.stream().map(cmh -> CouponMemberPreviewDto.from(cmh))
+                .collect(Collectors.toList());
+        return ResponseEntity
+                .ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_COUPON_MEMBER_HISTORIES_ADMIN, resData));
     }
+
     @PostMapping("coupons/{couponId}/admin")
     public ResponseEntity<?> grantCouponAdmin(@PathVariable long clubId, @PathVariable long couponId,
-                                               @Valid @RequestBody GrantCouponDto grantCouponDto) throws IOException {
+            @Valid @RequestBody GrantCouponDto grantCouponDto) throws IOException {
         long memberId = memberService.getMyIdWithAuthorities();
-        couponService.grantCouponAdmin(memberId,clubId,couponId,grantCouponDto.getMemberIds());
+        couponService.grantCouponAdmin(memberId, clubId, couponId, grantCouponDto.getMemberIds());
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.CREATE_COUPON_ADMIN));
     }
 
     @PutMapping("coupons/{couponId}/user")
     public ResponseEntity<?> useCouponUser(@PathVariable long clubId, @PathVariable long couponId) throws IOException {
         long memberId = memberService.getMyIdWithAuthorities();
-        couponService.useCouponUser(memberId,clubId,couponId);
+        couponService.useCouponUser(memberId, clubId, couponId);
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.USE_COUPON_USER));
     }
 
     @PutMapping("coupons/{couponId}/admin")
-    public ResponseEntity<?> updateCouponAdmin(@PathVariable long clubId, @PathVariable long couponId, @Valid @RequestBody CreateCouponDto createCouponDto ) throws IOException {
+    public ResponseEntity<?> updateCouponAdmin(@PathVariable long clubId, @PathVariable long couponId,
+            @Valid @RequestBody CreateCouponDto createCouponDto) throws IOException {
         long memberId = memberService.getMyIdWithAuthorities();
         Location location = new Location(createCouponDto.getLocationName(), createCouponDto.getLatitude(),
                 createCouponDto.getLongitude());
-        CouponServiceDto couponServiceDto = CouponServiceDto.from(createCouponDto,clubId,memberId,location);
+        CouponServiceDto couponServiceDto = CouponServiceDto.from(createCouponDto, clubId, memberId, location);
         couponService.updateCouponAdmin(couponId, couponServiceDto);
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.UPDATE_COUPON_ADMIN));
     }
+
     @GetMapping("coupons/{couponId}/user")
-    public ResponseEntity<?> getCouponUser(@PathVariable long clubId,@PathVariable long couponId ) throws IOException {
+    public ResponseEntity<?> getCouponUser(@PathVariable long clubId, @PathVariable long couponId) throws IOException {
         long memberId = memberService.getMyIdWithAuthorities();
-        Coupon coupon = couponService.getCouponUser(clubId, memberId,couponId);
+        Coupon coupon = couponService.getCouponUser(clubId, memberId, couponId);
         CouponInfoDto resData = CouponInfoDto.from(coupon);
-        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_COUPON_USER,resData));
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_COUPON_USER, resData));
     }
+
     @GetMapping("coupons/{couponId}/admin")
-    public ResponseEntity<?> getCouponAdmin(@PathVariable long clubId,@PathVariable long couponId ) throws IOException {
+    public ResponseEntity<?> getCouponAdmin(@PathVariable long clubId, @PathVariable long couponId) throws IOException {
         long memberId = memberService.getMyIdWithAuthorities();
-        Coupon coupon = couponService.getCouponAdmin(clubId, memberId,couponId);
+        Coupon coupon = couponService.getCouponAdmin(clubId, memberId, couponId);
         CouponInfoAdminDto resData = CouponInfoAdminDto.from(coupon);
-        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_COUPON_ADMIN,resData));
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_COUPON_ADMIN, resData));
     }
+
     @DeleteMapping("couponMembers/{couponMemberId}/admin")
-    public ResponseEntity<?> deleteCouponMemberAdmin(@PathVariable long clubId,@PathVariable long couponMemberId ) {
+    public ResponseEntity<?> deleteCouponMemberAdmin(@PathVariable long clubId, @PathVariable long couponMemberId) {
         long memberId = memberService.getMyIdWithAuthorities();
         couponService.deleteCouponMemberAdmin(clubId, memberId, couponMemberId);
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.DELETE_COUPON_MEMBER_ADMIN));
     }
+
     @DeleteMapping("coupons/{couponId}/admin")
-    public ResponseEntity<?> deleteCouponAdmin(@PathVariable long clubId,@PathVariable long couponId )  {
+    public ResponseEntity<?> deleteCouponAdmin(@PathVariable long clubId, @PathVariable long couponId) {
         long memberId = memberService.getMyIdWithAuthorities();
         couponService.deleteCouponAdmin(clubId, memberId, couponId);
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.DELETE_COUPON_ADMIN));
     }
-
-
 
 }
