@@ -72,6 +72,8 @@ public class SecurityConfig {
                 .antMatchers("/members/email/requestCode").permitAll()
                 .antMatchers("/members/email/verifyCode").permitAll()
                 .antMatchers("/schedule/**").permitAll()
+                .antMatchers("/swagger-ui/**").permitAll()
+                .antMatchers("/swagger-resources/**").permitAll()
 
                 .anyRequest().authenticated()
 
