@@ -8,6 +8,8 @@ import lombok.Setter;
 
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+
 @Getter
 @Setter
 @Builder
@@ -15,5 +17,6 @@ import java.util.List;
 @NoArgsConstructor
 public class GrantCouponDto {
 
+    @NotNull
     private List<Long> memberIds;
 }
