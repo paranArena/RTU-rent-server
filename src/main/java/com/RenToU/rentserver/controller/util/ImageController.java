@@ -6,6 +6,7 @@ import com.RenToU.rentserver.dto.response.ResponseDto;
 import com.RenToU.rentserver.dto.response.ResponseMessage;
 import lombok.RequiredArgsConstructor;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,7 +27,9 @@ public class ImageController {
 
     @PostMapping("/upload")
     public ResponseEntity<?> uploadImageS3(@RequestParam("image") MultipartFile image) throws IOException {
-        String resData = s3Service.upload(image);
+        String randomImgFileName = RandomStringUtils.random(20, true, true) + ".png";
+        String filePath = MODE + "/images/" + randomImgFileName;
+        String resData = s3Service.upload(image, filePath);
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.SEARCH_CLUB_RETURN, resData));
     }
 }

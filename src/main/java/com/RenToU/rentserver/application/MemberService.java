@@ -1,11 +1,16 @@
 package com.RenToU.rentserver.application;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.Collections;
+import java.util.Optional;
 import java.util.Random;
 
 import com.RenToU.rentserver.dto.request.EmailDto;
 import com.RenToU.rentserver.exceptions.ClubErrorCode;
+import com.RenToU.rentserver.exceptions.CommonErrorCode;
 import com.RenToU.rentserver.util.RedisUtil;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.RenToU.rentserver.domain.Authority;
 import com.RenToU.rentserver.domain.Member;
 import com.RenToU.rentserver.dto.request.SignupDto;
+import com.RenToU.rentserver.dto.request.UpdateMemberInfoDto;
 import com.RenToU.rentserver.exceptions.AuthErrorCode;
 import com.RenToU.rentserver.exceptions.CustomException;
 import com.RenToU.rentserver.exceptions.MemberErrorCode;
@@ -38,6 +44,9 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
     private final JavaMailSender javaMailSender;
     private final RedisUtil redisUtil;
+
+    @Value("${external.mode}")
+    private String MODE;
 
     @Transactional
     public Member signup(SignupDto signupDTO) {
@@ -67,6 +76,30 @@ public class MemberService {
                 .build();
 
         return memberRepository.save(member);
+    }
+
+    @Transactional
+    public Member updateMemberInfo(Long memberId, UpdateMemberInfoDto info) {
+        checkPhoneDuplicate(memberId, info.getPhoneNumber());
+        checkStudentIdDuplicate(memberId, info.getStudentId());
+        Member member = findMember(memberId);
+        member.setMajor(info.getMajor());
+        member.setName(info.getName());
+        member.setPhoneNumber(info.getPhoneNumber());
+        member.setStudentId(info.getStudentId());
+        return memberRepository.save(member);
+    }
+
+    private void checkStudentIdDuplicate(Long memberId, String studentId) {
+        Optional<Member> member = memberRepository.findByStudentId(studentId);
+        if (member.isPresent() && member.get().getId() != memberId)
+            throw new CustomException(MemberErrorCode.DUP_STUDENTID);
+    }
+
+    private void checkPhoneDuplicate(Long memberId, String phoneNumber) {
+        Optional<Member> member = memberRepository.findByPhoneNumber(phoneNumber);
+        if (member.isPresent() && member.get().getId() != memberId)
+            throw new CustomException(MemberErrorCode.DUP_PHONE);
     }
 
     public void resetPassword(Long memberId, String pw) {
@@ -120,9 +153,11 @@ public class MemberService {
         String authKey = String.valueOf(random.nextInt(888888) + 111111);// 범위 : 111111 ~ 999999
 
         // 이메일 발송
-        sendAuthEmail(request.getEmail(), authKey);
-        // TODO for dev
-        // sendAuthEmail(request.getEmail(), "111111");
+        if (MODE.equals("prod")) {
+            sendAuthEmail(request.getEmail(), authKey);
+        } else {
+            sendAuthEmail(request.getEmail(), "111111");
+        }
     }
 
     private void sendAuthEmail(String email, String authKey) {
@@ -142,8 +177,7 @@ public class MemberService {
             javaMailSender.send(mimeMessage);
 
         } catch (MessagingException e) {
-            // TODO 메일 재전송 or 메일 에러났으니 나중에 다시 요청 부탁
-            e.printStackTrace();
+            throw new CustomException(CommonErrorCode.EMAIL_SEND_FAILED);
         }
 
         // 유효 시간(5분)동안 {email, authKey} 저장

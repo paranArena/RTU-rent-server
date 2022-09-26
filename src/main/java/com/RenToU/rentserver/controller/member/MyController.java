@@ -1,13 +1,18 @@
 package com.RenToU.rentserver.controller.member;
 
+import com.RenToU.rentserver.application.CouponService;
 import com.RenToU.rentserver.application.ProductService;
+import com.RenToU.rentserver.domain.CouponMember;
+import com.RenToU.rentserver.domain.CouponMemberHistory;
 import com.RenToU.rentserver.domain.Product;
 import com.RenToU.rentserver.dto.StatusCode;
+import com.RenToU.rentserver.dto.request.UpdateMemberInfoDto;
 import com.RenToU.rentserver.dto.response.ClubRoleDto;
 import com.RenToU.rentserver.dto.response.MemberInfoDto;
 import com.RenToU.rentserver.dto.response.ResponseDto;
 import com.RenToU.rentserver.dto.response.ResponseMessage;
 import com.RenToU.rentserver.dto.response.preview.ClubPreviewDto;
+import com.RenToU.rentserver.dto.response.preview.CouponPreviewDto;
 import com.RenToU.rentserver.dto.response.preview.NotificationPreviewDto;
 import com.RenToU.rentserver.dto.response.preview.ProductPreviewDto;
 import com.RenToU.rentserver.dto.response.preview.RentalPreviewDto;
@@ -31,6 +36,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
@@ -41,6 +47,7 @@ public class MyController {
     private final NotificationService notificationService;
 
     private final ProductService productService;
+    private final CouponService couponService;
     private final Mapper mapper;
 
     @GetMapping("/info")
@@ -50,6 +57,15 @@ public class MyController {
         MemberInfoDto resData = mapper.map(member, MemberInfoDto.class);
 
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_MY_INFO, resData));
+    }
+
+    @PutMapping("/info")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    public ResponseEntity<?> updateMyInfo(@Valid @RequestBody UpdateMemberInfoDto info) {
+        Long memberId = memberService.getMyIdWithAuthorities();
+        Member member = memberService.updateMemberInfo(memberId, info);
+        MemberInfoDto resData = mapper.map(member, MemberInfoDto.class);
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.UPDATE_MY_INFO, resData));
     }
 
     @GetMapping("/clubs")
@@ -122,7 +138,7 @@ public class MyController {
                 .map((rental) -> rental.getItem())
                 .collect(Collectors.toList());
         List<RentalPreviewDto> resData = items.stream()
-                .map((item) -> RentalPreviewDto.from(item,member.getId()))
+                .map((item) -> RentalPreviewDto.from(item, member.getId()))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_MY_RENT, resData));
     }
@@ -134,4 +150,26 @@ public class MyController {
         memberService.deleteMember(memberId);
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.QUIT_SUCCESS));
     }
+
+    @GetMapping("/coupons/all")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    public ResponseEntity<?> getMyCouponsAll() {
+        long memberId = memberService.getMyIdWithAuthorities();
+        List<CouponMember> couponMembers = couponService.getMyCouponsAll(memberId);
+        List<CouponPreviewDto> resData = couponMembers.stream().map(c -> CouponPreviewDto.from(c.getCoupon()))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_MY_COUPON_MEMBER_ALL, resData));
+    }
+
+    @GetMapping("/couponHistories/all")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    public ResponseEntity<?> getMyCouponHistoriesAll() {
+        long memberId = memberService.getMyIdWithAuthorities();
+        List<CouponMemberHistory> couponMemberHistories = couponService.getMyCouponHistoriesAll(memberId);
+        List<CouponPreviewDto> resData = couponMemberHistories.stream().map(c -> CouponPreviewDto.from(c.getCoupon()))
+                .collect(Collectors.toList());
+        return ResponseEntity
+                .ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_MY_COUPON_MEMBER_HISTORY_ALL, resData));
+    }
+
 }
