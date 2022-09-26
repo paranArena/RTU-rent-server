@@ -1,5 +1,6 @@
 application.yml
 application-*.yml
+application.yml
 dump.rdb
 
 HELP.md
@@ -40,6 +41,6 @@ out/
 ### VS Code ###
 .vscode/
 
-/src/main/resources/application.yml
+src/main/resources/application.yml
 serviceAccountKey.json
 
