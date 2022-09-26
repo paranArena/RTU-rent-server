@@ -103,6 +103,16 @@ public class MyController {
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_MY_CLUB_ROLE, resData));
     }
 
+//    @GetMapping("/products")
+//    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+//    public ResponseEntity<?> getMyProducts(HttpServletRequest request) {
+//        Long memberId = memberService.getMyIdWithAuthorities();
+//        List<Product> products = productService.getMyProducts(memberId);
+//        List<ProductPreviewDto> resData = products.stream()
+//                .map(product -> ProductPreviewDto.from(product))
+//                .collect(Collectors.toList());
+//        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.GET_MY_PRODUCT, resData));
+//    }
     @GetMapping("/products")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<?> getMyProducts(HttpServletRequest request) {

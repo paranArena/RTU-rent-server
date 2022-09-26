@@ -13,6 +13,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
+import javax.persistence.NamedSubgraph;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
@@ -27,6 +30,18 @@ import static javax.persistence.FetchType.LAZY;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@NamedEntityGraph(
+    name = "club.Product",
+    attributeNodes = {
+        @NamedAttributeNode(value = "products")
+    }
+)
+@NamedEntityGraph(
+        name = "club.ClubMember",
+        attributeNodes = {
+                @NamedAttributeNode(value = "memberList")
+        }
+)
 public class Club extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -4,6 +4,8 @@ import com.RenToU.rentserver.domain.Club;
 import com.RenToU.rentserver.domain.ClubHashtag;
 import com.RenToU.rentserver.domain.Hashtag;
 import com.RenToU.rentserver.domain.Member;
+import com.RenToU.rentserver.infrastructure.jpa.ClubHashtagRepository;
+import com.RenToU.rentserver.infrastructure.jpa.MemberRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

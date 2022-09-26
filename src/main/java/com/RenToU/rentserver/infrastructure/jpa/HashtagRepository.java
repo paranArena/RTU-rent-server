@@ -1,4 +1,4 @@
-package com.RenToU.rentserver.infrastructure;
+package com.RenToU.rentserver.infrastructure.jpa;
 
 import com.RenToU.rentserver.domain.Hashtag;
 import org.springframework.data.jpa.repository.JpaRepository;

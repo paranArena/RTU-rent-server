@@ -18,7 +18,7 @@ import com.RenToU.rentserver.dto.request.SignupDto;
 import com.RenToU.rentserver.exceptions.AuthErrorCode;
 import com.RenToU.rentserver.exceptions.CustomException;
 import com.RenToU.rentserver.exceptions.MemberErrorCode;
-import com.RenToU.rentserver.infrastructure.MemberRepository;
+import com.RenToU.rentserver.infrastructure.jpa.MemberRepository;
 import com.RenToU.rentserver.util.SecurityUtil;
 
 import lombok.RequiredArgsConstructor;
@@ -26,10 +26,7 @@ import lombok.RequiredArgsConstructor;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
-import static com.RenToU.rentserver.domain.ClubRole.ADMIN;
 import static com.RenToU.rentserver.domain.ClubRole.OWNER;
-import static com.RenToU.rentserver.domain.ClubRole.USER;
-import static com.RenToU.rentserver.domain.ClubRole.WAIT;
 
 @Service
 @RequiredArgsConstructor

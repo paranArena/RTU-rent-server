@@ -9,11 +9,12 @@ import com.RenToU.rentserver.domain.Member;
 import com.RenToU.rentserver.exceptions.ClubErrorCode;
 import com.RenToU.rentserver.exceptions.CustomException;
 import com.RenToU.rentserver.exceptions.MemberErrorCode;
-import com.RenToU.rentserver.infrastructure.ClubHashtagRepository;
-import com.RenToU.rentserver.infrastructure.ClubMemberRepository;
-import com.RenToU.rentserver.infrastructure.ClubRepository;
-import com.RenToU.rentserver.infrastructure.HashtagRepository;
-import com.RenToU.rentserver.infrastructure.MemberRepository;
+import com.RenToU.rentserver.infrastructure.club.ClubQueryRepository;
+import com.RenToU.rentserver.infrastructure.jpa.ClubHashtagRepository;
+import com.RenToU.rentserver.infrastructure.clubMember.ClubMemberRepository;
+import com.RenToU.rentserver.infrastructure.jpa.ClubRepository;
+import com.RenToU.rentserver.infrastructure.jpa.HashtagRepository;
+import com.RenToU.rentserver.infrastructure.jpa.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,6 +37,7 @@ public class ClubServiceImpl implements ClubService {
     private final ClubMemberRepository clubMemberRepository;
 
     private final ClubHashtagRepository clubHashtagRepository;
+    private final ClubQueryRepository clubQueryRepository;
 
     @Override
     public List<Club> findClubs() {
@@ -163,9 +165,10 @@ public class ClubServiceImpl implements ClubService {
     @Override
     public List<Club> getMyClubs(long memberId) {
         Member member = findMember(memberId);
-        List<ClubMember> requests = member.getClubList().stream().filter(cm -> !cm.getRole().equals(ClubRole.WAIT))
+        List<ClubMember> requests = clubMemberRepository.searchByMemberIdWithClub(memberId).stream().filter(cm -> !cm.getRole().equals(ClubRole.WAIT))
                 .collect(Collectors.toList());
         return requests.stream().map(cm -> cm.getClub()).collect(Collectors.toList());
+//        return clubQueryRepository.searchClubByMemberId(memberId);
     }
 
     @Override

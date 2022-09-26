@@ -1,6 +1,5 @@
 package com.RenToU.rentserver.application;
 
-import com.RenToU.rentserver.domain.ClubRole;
 import com.RenToU.rentserver.dto.request.UpdateNotificationDto;
 import com.RenToU.rentserver.dto.service.CreateNotificationServiceDto;
 import com.RenToU.rentserver.domain.Club;
@@ -9,9 +8,9 @@ import com.RenToU.rentserver.domain.Notification;
 import com.RenToU.rentserver.exceptions.ClubErrorCode;
 import com.RenToU.rentserver.exceptions.CustomException;
 import com.RenToU.rentserver.exceptions.MemberErrorCode;
-import com.RenToU.rentserver.infrastructure.ClubRepository;
-import com.RenToU.rentserver.infrastructure.MemberRepository;
-import com.RenToU.rentserver.infrastructure.NotificationRepository;
+import com.RenToU.rentserver.infrastructure.jpa.ClubRepository;
+import com.RenToU.rentserver.infrastructure.jpa.MemberRepository;
+import com.RenToU.rentserver.infrastructure.jpa.NotificationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

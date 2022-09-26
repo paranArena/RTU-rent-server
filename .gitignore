@@ -44,3 +44,5 @@ out/
 src/main/resources/application.yml
 serviceAccountKey.json
 
+###queryDSL
+generated

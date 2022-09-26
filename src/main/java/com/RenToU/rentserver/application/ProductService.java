@@ -1,7 +1,7 @@
 package com.RenToU.rentserver.application;
 
-import com.RenToU.rentserver.domain.ClubRole;
 import com.RenToU.rentserver.domain.Rental;
+import com.RenToU.rentserver.dto.response.preview.ProductPreviewDto;
 import com.RenToU.rentserver.dto.service.AddItemServiceDto;
 import com.RenToU.rentserver.dto.service.CreateProductServiceDto;
 import com.RenToU.rentserver.domain.Club;
@@ -12,11 +12,14 @@ import com.RenToU.rentserver.dto.service.UpdateProductInfoServiceDto;
 import com.RenToU.rentserver.exceptions.ClubErrorCode;
 import com.RenToU.rentserver.exceptions.CustomException;
 import com.RenToU.rentserver.exceptions.MemberErrorCode;
-import com.RenToU.rentserver.infrastructure.ClubRepository;
-import com.RenToU.rentserver.infrastructure.ItemRepository;
-import com.RenToU.rentserver.infrastructure.MemberRepository;
-import com.RenToU.rentserver.infrastructure.ProductRepository;
-import com.RenToU.rentserver.infrastructure.RentalRepository;
+import com.RenToU.rentserver.infrastructure.club.ClubQueryRepository;
+import com.RenToU.rentserver.infrastructure.clubMember.ClubMemberRepository;
+import com.RenToU.rentserver.infrastructure.clubMember.ClubMemberRepositoryImpl;
+import com.RenToU.rentserver.infrastructure.jpa.ClubRepository;
+import com.RenToU.rentserver.infrastructure.jpa.ItemRepository;
+import com.RenToU.rentserver.infrastructure.jpa.MemberRepository;
+import com.RenToU.rentserver.infrastructure.jpa.ProductRepository;
+import com.RenToU.rentserver.infrastructure.jpa.RentalRepository;
 import com.github.dozermapper.core.Mapper;
 
 import lombok.RequiredArgsConstructor;
@@ -41,7 +44,8 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final RentalRepository rentalRepository;
     private final ItemRepository itemRepository;
-
+    private final ClubMemberRepository clubMemberRepository;
+    private final ClubQueryRepository clubQueryRepository;
     @Transactional
     public Product registerProduct(CreateProductServiceDto dto) {
         Club club = findClub(dto.getClubId());
@@ -73,7 +77,7 @@ public class ProductService {
         Club club = findClub(clubId);
         club.findClubMemberByMemberId(memberId).validateRole(false, WAIT);
 
-        return club.getProducts();
+        return productRepository.findAllByClubId(clubId);
     }
 
     public Product getProductById(Long productId) {
@@ -81,15 +85,25 @@ public class ProductService {
                 .orElseThrow(() -> new CustomException(ClubErrorCode.PRODUCT_NOT_FOUND));
     }
 
+//    public List<Product> getMyProducts(Long memberId) {
+//        Member member = findMember(memberId);
+//        List<Club> clubs = clubMemberRepository.searchByMemberIdWithClub(memberId)
+//                .stream().map(cm->cm.getClub()).collect(Collectors.toList());
+//        List<Product> products = new ArrayList<>();
+//        clubs.stream().forEach(c -> products.addAll(c.getProducts()));
+//        products.forEach(p->p.getItems());
+//        return products;
+//    }
     public List<Product> getMyProducts(Long memberId) {
         Member member = findMember(memberId);
-        List<Club> clubs = member.getClubListWithoutWait().stream().map(cm -> cm.getClub())
-                .collect(Collectors.toList());
+        List<Club> clubs = clubMemberRepository.searchByMemberIdWithClub(memberId)
+                .stream().map(cm->cm.getClub()).collect(Collectors.toList());
         List<Product> products = new ArrayList<>();
         clubs.stream().forEach(c -> products.addAll(c.getProducts()));
+        products.forEach(p->clubQueryRepository.searchRentals(p));
+
         return products;
     }
-
     @Transactional
     public Product updateProductInfo(Long productId, UpdateProductInfoServiceDto dto) {
         Club club = findClub(dto.getClubId());

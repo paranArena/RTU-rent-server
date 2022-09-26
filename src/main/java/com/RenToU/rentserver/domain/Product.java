@@ -15,6 +15,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
+import javax.persistence.NamedSubgraph;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import java.util.ArrayList;
@@ -24,6 +27,15 @@ import java.util.stream.Collectors;
 import static javax.persistence.FetchType.LAZY;
 
 //물품 ex) 책, 우산
+@NamedEntityGraph(
+        name = "product.ItemRental",
+        attributeNodes = {
+                @NamedAttributeNode(value = "items", subgraph = "subgraph.rental")
+        },
+        subgraphs = {
+                @NamedSubgraph(name = "subgraph.rental", attributeNodes = @NamedAttributeNode(value = "rental"))
+        }
+)
 @Entity
 @Setter
 @Getter

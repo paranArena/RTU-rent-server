@@ -1,4 +1,4 @@
-package com.RenToU.rentserver.infrastructure;
+package com.RenToU.rentserver.infrastructure.jpa;
 
 import com.RenToU.rentserver.domain.Item;
 import com.RenToU.rentserver.domain.RentalHistory;

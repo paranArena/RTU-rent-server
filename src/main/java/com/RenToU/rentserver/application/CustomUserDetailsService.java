@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.RenToU.rentserver.domain.Member;
-import com.RenToU.rentserver.infrastructure.MemberRepository;
+import com.RenToU.rentserver.infrastructure.jpa.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
 
