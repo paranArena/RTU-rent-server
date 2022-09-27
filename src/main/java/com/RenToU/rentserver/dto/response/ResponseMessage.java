@@ -99,4 +99,6 @@ public class ResponseMessage {
     public static final String GET_COUPON_ADMIN = "쿠폰 정보 어드민 조회 성공";
     public static final String DELETE_COUPON_MEMBER_ADMIN = "개별 쿠폰 삭제 성공";
     public static final String DELETE_COUPON_ADMIN = "쿠폰 삭제 성공";
+
+    public static final String GET_RENTAL_STATUS = "렌탈 상태 조회 성공";
 }
