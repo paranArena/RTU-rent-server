@@ -3,6 +3,7 @@ package com.RenToU.rentserver.controller.club;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.RenToU.rentserver.application.CouponService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,6 +30,7 @@ public class ClubRequestController {
     private final MemberService memberService;
     private final ClubService clubService;
 
+    private final CouponService couponService;
     @PostMapping("/join")
     public ResponseEntity<?> requestClubJoin(@PathVariable Long clubId) {
         clubService.requestClubJoin(clubId, memberService.getMyIdWithAuthorities());
@@ -40,6 +42,10 @@ public class ClubRequestController {
             @PathVariable Long clubId,
             @PathVariable Long joinMemberId) {
         clubService.acceptClubJoin(clubId, memberService.getMyIdWithAuthorities(), joinMemberId);
+        //사보 이벤트
+        if(clubId == 18){//사보일 경우 8
+            couponService.grantCouponAdmin(memberService.getMyIdWithAuthorities(),18,1,List.of(joinMemberId));
+        }
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.ACCEPT_CLUB_JOIN));
     }
 
