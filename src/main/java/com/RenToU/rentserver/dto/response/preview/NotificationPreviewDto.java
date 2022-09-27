@@ -20,8 +20,6 @@ public class NotificationPreviewDto {
 
     private Long clubId;
 
-    private String clubName;
-
     private String title;
 
     private String imagePath;
@@ -39,7 +37,6 @@ public class NotificationPreviewDto {
         return NotificationPreviewDto.builder()
                 .id(notification.getId())
                 .clubId(notification.getClub().getId())
-                .clubName(notification.getClub().getName())
                 .title(notification.getTitle())
                 .isPublic(notification.getIsPublic())
                 .imagePath(notification.getImagePath())
