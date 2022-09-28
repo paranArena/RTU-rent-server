@@ -298,7 +298,7 @@ public class ClubServiceImpl implements ClubService {
     }
 
     private List<ClubMember> getAllClubUser(Club club) {
-        return club.getMemberList().stream().filter(cm -> cm.getRole() != ClubRole.WAIT).collect(Collectors.toList());
+        return club.getMemberList().stream().filter(cm -> cm.getRole() != ClubRole.WAIT).filter(cm-> cm.getMember().isActivated()).collect(Collectors.toList());
         // return users.stream().map(cm->cm.getMember()).collect(Collectors.toList());
     }
 }
