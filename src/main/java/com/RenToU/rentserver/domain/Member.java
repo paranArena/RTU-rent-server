@@ -151,4 +151,8 @@ public class Member extends BaseTimeEntity {
     public void removeCoupon(CouponMember couponMember) {
         this.coupons.remove(couponMember);
     }
+
+//    public boolean getActivated() {
+//        return this.activated;
+//    }
 }
