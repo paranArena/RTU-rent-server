@@ -2,6 +2,7 @@ package com.RenToU.rentserver.controller.club;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -154,6 +155,16 @@ public class ClubProductController {
         List<Product> products = productService.getProductsByClub(memberId, clubId);
         List<ProductPreviewDto> resData = products.stream()
                 .map(n -> ProductPreviewDto.from(n))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.SEARCH_CLUB_PRODUCT_SUCCESS, resData));
+    }
+
+    @GetMapping("/all/items")
+    public ResponseEntity<?> getProductAll(@PathVariable Long clubId) {
+        Long memberId = memberService.getMyIdWithAuthorities();
+        List<Product> products = productService.getProductsByClub(memberId, clubId);
+        List<ProductInfoDto> resData = products.stream()
+                .map((product) -> ProductInfoDto.from(product, memberId))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, ResponseMessage.SEARCH_CLUB_PRODUCT_SUCCESS, resData));
     }
