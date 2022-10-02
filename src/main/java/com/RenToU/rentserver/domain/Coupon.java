@@ -91,7 +91,7 @@ public class Coupon extends BaseTimeEntity {
 
     public CouponMember findCouponMemberByMemberId(long memberId) {
         CouponMember CouponMember = this.getMembers().stream().filter(cm -> {
-            return cm.getMember().getId() == memberId;
+            return cm.getMember().getId().equals(memberId);
         }).findFirst().orElseThrow(() -> new CustomException(CouponErrorCode.COUPON_MEMBER_NOT_FOUND));
 
         return CouponMember;

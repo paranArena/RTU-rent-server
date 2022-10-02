@@ -84,7 +84,7 @@ public class Rental {
     }
 
     private void setExpDate() {
-        if (this.getItem().getRentalPolicy() == RentalPolicy.FIFO) {
+        if (this.getItem().getRentalPolicy().equals(RentalPolicy.FIFO)) {
             this.expDate = LocalDateTime.now().plusDays(this.getItem().getProduct().getFifoRentalPeriod());
         } else {
             this.expDate = LocalDateTime.now().plusDays(this.getItem().getProduct().getReserveRentalPeriod());
@@ -136,7 +136,7 @@ public class Rental {
     }
 
     public boolean isMeRental(Long memberId) {
-        if (memberId == member.getId()) {
+        if (memberId.equals(member.getId())) {
             return true;
         } else {
             return false;

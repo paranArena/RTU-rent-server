@@ -90,7 +90,7 @@ public class NotificationService {
         if (club.findClubMemberByMemberId(memberId).isRole(false, WAIT)) {
             notifications = club.getNotifications();
         } else {
-            notifications = club.getNotifications().stream().filter(n -> n.getIsPublic() == true)
+            notifications = club.getNotifications().stream().filter(n -> n.getIsPublic().equals(true))
                     .collect(Collectors.toList());
         }
         return notifications;
