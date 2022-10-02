@@ -138,7 +138,7 @@ public class Member extends BaseTimeEntity {
 
     public ClubMember findClubMemberByClubId(long clubId) {
         ClubMember clubMember = this.getClubList().stream().filter(cm -> {
-            return cm.getClub().getId() == clubId;
+            return cm.getClub().getId().equals(clubId);
         }).findFirst().orElseThrow(() -> new CustomException(ClubErrorCode.CLUBMEMBER_NOT_FOUND_BY_CLUBID));
         return clubMember;
     }
