@@ -47,11 +47,11 @@ public class Member extends BaseTimeEntity {
     private boolean activated;
 
     @Builder.Default
-    @OneToMany(mappedBy = "member",fetch = LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "member", fetch = LAZY, cascade = CascadeType.ALL)
     private List<ClubMember> clubList = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "member",fetch = LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "member", fetch = LAZY, cascade = CascadeType.ALL)
     private List<Rental> rentals = new ArrayList<>();
 
     @ManyToMany
@@ -65,7 +65,7 @@ public class Member extends BaseTimeEntity {
     private List<RentalHistory> rentalHistories = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "member",fetch = LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "member", fetch = LAZY, cascade = CascadeType.ALL)
     private List<CouponMember> coupons = new ArrayList<>();
 
     public static Member createTempMember(String studentName, String studentId, Club club) {
@@ -139,7 +139,7 @@ public class Member extends BaseTimeEntity {
     public ClubMember findClubMemberByClubId(long clubId) {
         ClubMember clubMember = this.getClubList().stream().filter(cm -> {
             return cm.getClub().getId() == clubId;
-        }).findFirst().orElseThrow(() -> new CustomException(ClubErrorCode.CLUBMEMBER_NOT_FOUND));
+        }).findFirst().orElseThrow(() -> new CustomException(ClubErrorCode.CLUBMEMBER_NOT_FOUND_BY_CLUBID));
         return clubMember;
     }
 
@@ -152,7 +152,7 @@ public class Member extends BaseTimeEntity {
         this.coupons.remove(couponMember);
     }
 
-//    public boolean getActivated() {
-//        return this.activated;
-//    }
+    // public boolean getActivated() {
+    // return this.activated;
+    // }
 }
