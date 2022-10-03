@@ -62,7 +62,6 @@ public class Coupon extends BaseTimeEntity {
     @OneToMany(mappedBy = "coupon", fetch = LAZY, cascade = CascadeType.ALL)
     private List<CouponMemberHistory> histories = new ArrayList<>();
 
-
     public static Coupon createCoupon(CouponServiceDto dto, Club club) {
         Coupon coupon = Coupon.builder()
                 .name(dto.getName())
@@ -92,7 +91,7 @@ public class Coupon extends BaseTimeEntity {
 
     public CouponMember findCouponMemberByMemberId(long memberId) {
         CouponMember CouponMember = this.getMembers().stream().filter(cm -> {
-            return cm.getMember().getId() == memberId;
+            return cm.getMember().getId().equals(memberId);
         }).findFirst().orElseThrow(() -> new CustomException(CouponErrorCode.COUPON_MEMBER_NOT_FOUND));
 
         return CouponMember;
@@ -103,10 +102,10 @@ public class Coupon extends BaseTimeEntity {
     }
 
     public void vadlidateDate() {
-        if(this.getActDate().isAfter(LocalDateTime.now())){
+        if (this.getActDate().isAfter(LocalDateTime.now())) {
             throw new CustomException(CouponErrorCode.COUPON_NOT_ACTIVATED);
         }
-        if(this.getExpDate().isBefore(LocalDateTime.now())){
+        if (this.getExpDate().isBefore(LocalDateTime.now())) {
             throw new CustomException(CouponErrorCode.COUPON_EXPIRED);
         }
     }

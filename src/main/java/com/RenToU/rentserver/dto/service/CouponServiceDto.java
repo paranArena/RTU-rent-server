@@ -38,7 +38,7 @@ public class CouponServiceDto {
 
     private Location location;
 
-    public static CouponServiceDto from(CreateCouponDto dto,Long clubId, Long memberId, Location location) {
+    public static CouponServiceDto from(CreateCouponDto dto, Long clubId, Long memberId, Location location) {
         return CouponServiceDto.builder()
                 .name(dto.getName())
                 .information(dto.getInformation())

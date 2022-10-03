@@ -19,6 +19,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import java.util.Arrays;
+
 @Entity
 @Getter
 @Builder
@@ -59,7 +60,7 @@ public class ClubMember extends BaseTimeEntity {
     }
 
     public void acceptJoin() {
-        if (this.role == ClubRole.WAIT) {
+        if (this.role.equals(ClubRole.WAIT)) {
             this.role = ClubRole.USER;
         } else {
             throw new CustomException(ClubErrorCode.NOT_WAIT_USER);
@@ -67,7 +68,7 @@ public class ClubMember extends BaseTimeEntity {
     }
 
     public void grantAdmin() {
-        if (this.role == ClubRole.USER) {
+        if (this.role.equals(ClubRole.USER)) {
             this.role = ClubRole.ADMIN;
         } else {
             throw new CustomException(ClubErrorCode.CANT_GRANT_ADMIN);
@@ -75,20 +76,21 @@ public class ClubMember extends BaseTimeEntity {
     }
 
     public void grantUser() {
-        if (this.role == ClubRole.ADMIN) {
+        if (this.role.equals(ClubRole.ADMIN)) {
             this.role = ClubRole.USER;
         } else {
             throw new CustomException(ClubErrorCode.CANT_GRANT_USER);
         }
     }
 
-    public void validateRole(Boolean isContaining,ClubRole... clubRoles) {
-        if (isContaining == Arrays.stream(clubRoles).noneMatch(role -> role == this.role)) {
+    public void validateRole(Boolean isContaining, ClubRole... clubRoles) {
+        if (isContaining.equals(Arrays.stream(clubRoles).noneMatch(role -> role.equals(this.role)))) {
             throw new CustomException(ClubErrorCode.NO_MATCHING_ROLE);
         }
     }
-    public boolean isRole(Boolean isContaining,ClubRole... clubRoles) {
-        if (isContaining == Arrays.stream(clubRoles).noneMatch(role -> role == this.role)) {
+
+    public boolean isRole(Boolean isContaining, ClubRole... clubRoles) {
+        if (isContaining.equals(Arrays.stream(clubRoles).noneMatch(role -> role.equals(this.role)))) {
             return true;
         }
         return false;

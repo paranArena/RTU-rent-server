@@ -82,7 +82,7 @@ class NotificationServiceTest {
 
         assertThatThrownBy(() -> service.createNotification(dto))
                 .isInstanceOf(CustomException.class)
-                .hasFieldOrPropertyWithValue("errorCode", ClubErrorCode.CLUBMEMBER_NOT_FOUND);
+                .hasFieldOrPropertyWithValue("errorCode", ClubErrorCode.CLUBMEMBER_NOT_FOUND_BY_MEMBERID);
 
     }
 
