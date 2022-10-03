@@ -5,9 +5,14 @@ import java.util.Collections;
 import java.util.Optional;
 import java.util.Random;
 
+import com.RenToU.rentserver.domain.Club;
+import com.RenToU.rentserver.domain.ClubMember;
+import com.RenToU.rentserver.domain.ClubRole;
 import com.RenToU.rentserver.dto.request.EmailDto;
 import com.RenToU.rentserver.exceptions.ClubErrorCode;
 import com.RenToU.rentserver.exceptions.CommonErrorCode;
+import com.RenToU.rentserver.infrastructure.ClubMemberRepository;
+import com.RenToU.rentserver.infrastructure.ClubRepository;
 import com.RenToU.rentserver.util.RedisUtil;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -44,6 +49,8 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
     private final JavaMailSender javaMailSender;
     private final RedisUtil redisUtil;
+    private final ClubRepository clubRepository;
+    private final ClubMemberRepository clubMemberRepository;
 
     @Value("${external.mode}")
     private String MODE;
@@ -75,7 +82,10 @@ public class MemberService {
                 .authorities(Collections.singleton(authority))
                 .build();
 
-        return memberRepository.save(member);
+        memberRepository.save(member);
+        Club ren2u = clubRepository.findById(18L).get();
+        clubMemberRepository.save(ClubMember.createClubMember(ren2u,member, USER));
+        return member;
     }
 
     @Transactional
