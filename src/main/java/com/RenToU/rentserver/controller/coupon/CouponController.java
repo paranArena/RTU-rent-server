@@ -2,32 +2,24 @@ package com.RenToU.rentserver.controller.coupon;
 
 import com.RenToU.rentserver.application.CouponService;
 import com.RenToU.rentserver.application.MemberService;
-import com.RenToU.rentserver.application.NotificationService;
-import com.RenToU.rentserver.application.S3Service;
 import com.RenToU.rentserver.domain.Coupon;
 import com.RenToU.rentserver.domain.CouponMember;
 import com.RenToU.rentserver.domain.CouponMemberHistory;
 import com.RenToU.rentserver.domain.Location;
-import com.RenToU.rentserver.domain.Notification;
 import com.RenToU.rentserver.dto.StatusCode;
 import com.RenToU.rentserver.dto.request.CreateCouponDto;
-import com.RenToU.rentserver.dto.request.CreateNotificationDto;
 import com.RenToU.rentserver.dto.request.GrantCouponDto;
 import com.RenToU.rentserver.dto.response.CouponInfoAdminDto;
 import com.RenToU.rentserver.dto.response.CouponInfoDto;
-import com.RenToU.rentserver.dto.response.NotificationDto;
 import com.RenToU.rentserver.dto.response.ResponseDto;
 import com.RenToU.rentserver.dto.response.ResponseMessage;
 import com.RenToU.rentserver.dto.response.preview.CouponMemberPreviewDto;
 import com.RenToU.rentserver.dto.response.preview.CouponPreviewDto;
 import com.RenToU.rentserver.dto.service.CouponServiceDto;
-import com.RenToU.rentserver.dto.service.CreateNotificationServiceDto;
-import com.github.dozermapper.core.Mapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -48,7 +40,6 @@ public class CouponController {
     private final MemberService memberService;
 
     private final CouponService couponService;
-    private final Mapper mapper;
 
     @PostMapping("coupons/admin")
     public ResponseEntity<?> createCouponAdmin(@PathVariable long clubId,

@@ -1,7 +1,6 @@
 package com.RenToU.rentserver.domain;
 
 import com.RenToU.rentserver.dto.service.CouponServiceDto;
-import com.RenToU.rentserver.exceptions.ClubErrorCode;
 import com.RenToU.rentserver.exceptions.CouponErrorCode;
 import com.RenToU.rentserver.exceptions.CustomException;
 import lombok.AllArgsConstructor;
@@ -39,6 +38,8 @@ public class Coupon extends BaseTimeEntity {
 
     private String name;
 
+    private Integer max;
+
     private String information;
 
     private String imagePath;
@@ -65,6 +66,7 @@ public class Coupon extends BaseTimeEntity {
     public static Coupon createCoupon(CouponServiceDto dto, Club club) {
         Coupon coupon = Coupon.builder()
                 .name(dto.getName())
+                .max(dto.getMax())
                 .imagePath(dto.getImagePath())
                 .information(dto.getInformation())
                 .actDate(dto.getActDate())
@@ -112,6 +114,7 @@ public class Coupon extends BaseTimeEntity {
 
     public void update(CouponServiceDto dto) {
         this.name = dto.getName();
+        this.max = dto.getMax();
         this.information = dto.getInformation();
         this.imagePath = dto.getImagePath();
         this.actDate = dto.getActDate();

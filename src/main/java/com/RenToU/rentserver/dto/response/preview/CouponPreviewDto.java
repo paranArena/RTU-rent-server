@@ -1,7 +1,6 @@
 package com.RenToU.rentserver.dto.response.preview;
 
 import com.RenToU.rentserver.domain.Coupon;
-import com.RenToU.rentserver.domain.Notification;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,6 +24,8 @@ public class CouponPreviewDto {
 
     private String name;
 
+    private Integer max;
+
     private String imagePath;
 
     private LocalDateTime actDate;
@@ -39,10 +40,11 @@ public class CouponPreviewDto {
                 .id(coupon.getId())
                 .clubId(coupon.getClub().getId())
                 .clubName(coupon.getClub().getName())
+                .name(coupon.getName())
+                .max(coupon.getMax())
                 .imagePath(coupon.getImagePath())
                 .actDate(coupon.getActDate())
                 .expDate(coupon.getExpDate())
-                .name(coupon.getName())
                 .build();
     }
 }
