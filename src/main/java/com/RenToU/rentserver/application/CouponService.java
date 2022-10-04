@@ -70,12 +70,14 @@ public class CouponService {
     public void grantCouponAdmin(long granterId, long clubId, long couponId, List<Long> memberIds) {
         Member granter = findMember(granterId);
         Club club = findClub(clubId);
+        Coupon coupon = findCoupon(couponId);
+        if (coupon.getMembers().size() >= coupon.getMax())
+            throw new CustomException(CouponErrorCode.COUPON_EXHAUSTED);
         club.findClubMemberByMemberId(granterId).validateRole(true, OWNER, ADMIN);
         memberIds.stream().forEach(memberId -> {
             club.findClubMemberByMemberId(memberId).validateRole(false, WAIT);
             Member member = findMember(memberId);
             member.getCoupons().stream().forEach(cm -> cm.getId());
-            Coupon coupon = findCoupon(couponId);
             CouponMember couponMember = CouponMember.createCouponMember(coupon, member, granter);
             couponMemberRepository.save(couponMember);
         });

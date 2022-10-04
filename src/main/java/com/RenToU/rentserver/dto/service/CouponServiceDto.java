@@ -1,19 +1,14 @@
 package com.RenToU.rentserver.dto.service;
 
-import com.RenToU.rentserver.application.CouponService;
 import com.RenToU.rentserver.domain.Location;
-import com.RenToU.rentserver.domain.RentalPolicy;
 import com.RenToU.rentserver.dto.request.CreateCouponDto;
-import com.github.dozermapper.core.inject.Inject;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.convert.Jsr310Converters;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import static org.springframework.data.convert.Jsr310Converters.StringToLocalDateTimeConverter.INSTANCE;
 
@@ -28,6 +23,8 @@ public class CouponServiceDto {
     // mapped by CreateProductDto
     private String name;
 
+    private Integer max;
+
     private LocalDateTime actDate;
 
     private LocalDateTime expDate;
@@ -41,6 +38,7 @@ public class CouponServiceDto {
     public static CouponServiceDto from(CreateCouponDto dto, Long clubId, Long memberId, Location location) {
         return CouponServiceDto.builder()
                 .name(dto.getName())
+                .max(dto.getMax())
                 .information(dto.getInformation())
                 .imagePath(dto.getImagePath())
                 .expDate(INSTANCE.convert(dto.getExpDate()))
