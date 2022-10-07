@@ -97,4 +97,12 @@ public class Item extends BaseTimeEntity {
         this.product = null;
     }
 
+    public void validateNotRentOrWait(Long memberId) {
+        if (this.rental != null) {
+            if(this.rental.getRentalStatus() != RentalStatus.WAIT || this.rental.getMember().getId() != memberId ){
+                throw new CustomException(RentalErrorCode.CANNOT_RENT);
+            }
+
+        }
+    }
 }
