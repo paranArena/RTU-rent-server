@@ -20,7 +20,8 @@ public enum ClubErrorCode implements ErrorCode {
     NO_USER_PERMISSION(HttpStatus.FORBIDDEN, "해당 클럽에 대한 접근 권한이 없습니다."),
 
     CLUB_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 클럽을 찾을 수 없습니다."),
-    CLUBMEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 클럽에서 해당 멤버를 찾을 수 없습니다."),
+    CLUBMEMBER_NOT_FOUND_BY_MEMBERID(HttpStatus.NOT_FOUND, "이 클럽에 가입되지 않은 유저입니다."),
+    CLUBMEMBER_NOT_FOUND_BY_CLUBID(HttpStatus.NOT_FOUND, "이 멤버가 가입되지 않은 클럽입니다."),
     HASHTAG_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 클럽에 등록되지 않은 해쉬태그입니다."),
     NOTIFICATION_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 클럽에서 해당 공지사항을 찾을 수 없습니다."),
     PRODUCT_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 클럽에서 해당 물품을 찾을 수 없습니다."),
@@ -28,7 +29,7 @@ public enum ClubErrorCode implements ErrorCode {
     NO_MATCHING_ROLE(HttpStatus.FORBIDDEN, "해당 작업을 수행하기 위한 역할이 없습니다."),
     CLUB_OWNER_CANT_QUIT(HttpStatus.FORBIDDEN, "클럽장은 회원 탈퇴가 불가능합니다."),
 
-    IMAGE_UPLOAD_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "이미지 업로드에 실패했습니다.");
+    IMAGE_UPLOAD_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "이미지 업로드에 실패했습니다."),;
 
     private final HttpStatus httpStatus;
     private final String message;
