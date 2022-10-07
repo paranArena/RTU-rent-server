@@ -96,7 +96,7 @@ public class ClubServiceImpl implements ClubService {
         Club club = findClub(clubId);
         club.findClubMemberByMemberId(memberId).validateRole(true, OWNER, ADMIN);
         return club.getMemberList().stream()
-                .filter((clubMember) -> clubMember.getRole() == ClubRole.WAIT)
+                .filter((clubMember) -> clubMember.getRole().equals(ClubRole.WAIT))
                 .collect(Collectors.toList());
     }
 
@@ -175,7 +175,7 @@ public class ClubServiceImpl implements ClubService {
             ClubMember cm = club.findClubMemberByMemberId(memberId);
             return cm.getRole();
         } catch (CustomException e) {
-            if (e.getErrorCode() == ClubErrorCode.CLUBMEMBER_NOT_FOUND)
+            if (e.getErrorCode().equals(ClubErrorCode.CLUBMEMBER_NOT_FOUND_BY_MEMBERID))
                 return ClubRole.NONE;
             else {
                 throw e;
@@ -276,7 +276,7 @@ public class ClubServiceImpl implements ClubService {
      */
     private void validateCanJoin(Club club, Member member) {
         club.getMemberList().stream().forEach(cl -> {
-            if (cl.getMember() == member) {
+            if (cl.getMember().equals(member)) {
                 throw new CustomException(ClubErrorCode.CANT_REQUEST_JOIN);
             }
         });
@@ -298,7 +298,8 @@ public class ClubServiceImpl implements ClubService {
     }
 
     private List<ClubMember> getAllClubUser(Club club) {
-        return club.getMemberList().stream().filter(cm -> cm.getRole() != ClubRole.WAIT).filter(cm-> cm.getMember().isActivated()).collect(Collectors.toList());
+        return club.getMemberList().stream().filter(cm -> cm.getRole() != ClubRole.WAIT)
+                .filter(cm -> cm.getMember().isActivated()).collect(Collectors.toList());
         // return users.stream().map(cm->cm.getMember()).collect(Collectors.toList());
     }
 }

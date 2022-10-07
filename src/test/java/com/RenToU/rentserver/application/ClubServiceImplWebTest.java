@@ -177,7 +177,7 @@ class ClubServiceImplWebTest {
                 assertThat(member.getClubList()).isEmpty();
                 assertThatThrownBy(() -> club.findClubMemberByMemberId(memberId))
                         .isInstanceOf(CustomException.class)
-                        .hasFieldOrPropertyWithValue("errorCode", ClubErrorCode.CLUBMEMBER_NOT_FOUND);
+                        .hasFieldOrPropertyWithValue("errorCode", ClubErrorCode.CLUBMEMBER_NOT_FOUND_BY_MEMBERID);
             }
         }
     }
