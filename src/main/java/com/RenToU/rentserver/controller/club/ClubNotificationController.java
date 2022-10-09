@@ -47,10 +47,8 @@ public class ClubNotificationController {
     public ResponseEntity<?> createNotification(@PathVariable long clubId,
             @Valid @ModelAttribute CreateNotificationDto createNotificationDto) throws IOException {
         long memberId = memberService.getMyIdWithAuthorities();
-        List<String> imagePaths = s3Service.imageToPath(createNotificationDto.getImage(), "nofitication");
         CreateNotificationServiceDto notificationServiceDto = mapper.map(createNotificationDto,
                 CreateNotificationServiceDto.class);
-        notificationServiceDto.setImagePaths(imagePaths);
         notificationServiceDto.setMemberId(memberId);
         notificationServiceDto.setClubId(clubId);
         Notification notification = notificationService.createNotification(notificationServiceDto);

@@ -28,5 +28,6 @@ public class CreateNotificationDto {
     @Mapping("content")
     private String content;
 
-    private List<MultipartFile> image;
+    @Mapping("imagePaths")
+    private List<String> imagePaths;
 }
