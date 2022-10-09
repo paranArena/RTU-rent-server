@@ -41,7 +41,7 @@ public class NotificationService {
         String title = notificationServiceDto.getTitle();
         String content = notificationServiceDto.getContent();
         String imagePath = null;
-        if (notificationServiceDto.getImagePaths() != null) {
+        if (!notificationServiceDto.getImagePaths().isEmpty()) {
             imagePath = notificationServiceDto.getImagePaths().get(0);
         }
         Notification notification = Notification.createNotification(title, content, imagePath, club);
