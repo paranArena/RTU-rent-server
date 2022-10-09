@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -45,7 +46,7 @@ public class ClubNotificationController {
 
     @PostMapping("")
     public ResponseEntity<?> createNotification(@PathVariable long clubId,
-            @Valid @ModelAttribute CreateNotificationDto createNotificationDto) throws IOException {
+            @Valid @RequestBody CreateNotificationDto createNotificationDto) throws IOException {
         long memberId = memberService.getMyIdWithAuthorities();
         CreateNotificationServiceDto notificationServiceDto = mapper.map(createNotificationDto,
                 CreateNotificationServiceDto.class);
@@ -67,7 +68,7 @@ public class ClubNotificationController {
 
     @PutMapping("/{notificationId}")
     public ResponseEntity<?> updateNotification(@PathVariable long clubId, @PathVariable long notificationId,
-            @Valid @ModelAttribute UpdateNotificationDto updateNotificationDto) {
+            @Valid @RequestBody UpdateNotificationDto updateNotificationDto) {
         long memberId = memberService.getMyIdWithAuthorities();
         Notification notification = notificationService.updateNotification(memberId, clubId, notificationId,
                 updateNotificationDto);
