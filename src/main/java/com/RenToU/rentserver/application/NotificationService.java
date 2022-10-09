@@ -41,6 +41,7 @@ public class NotificationService {
         String title = notificationServiceDto.getTitle();
         String content = notificationServiceDto.getContent();
         String imagePath = null;
+        System.out.println(notificationServiceDto.getImagePaths());
         if (!notificationServiceDto.getImagePaths().isEmpty()) {
             imagePath = notificationServiceDto.getImagePaths().get(0);
         }
@@ -104,10 +105,8 @@ public class NotificationService {
         boolean isPublic = false;
         if (dto.getIsPublic().contains("true")) { // equals 쓰면 에러남. dto.getIsPublic() 맨 앞 바이트에 8이 붙어있음
             isPublic = true;
-        } else {
-            isPublic = false;
         }
-        notification.update(dto.getTitle(), dto.getContent(), dto.getImagePath().get(0), isPublic);
+        notification.update(dto.getTitle(), dto.getContent(), dto.getImagePaths().get(0), isPublic);
         notificationRepository.save(notification);
         return findNotification(notification.getId());
     }
