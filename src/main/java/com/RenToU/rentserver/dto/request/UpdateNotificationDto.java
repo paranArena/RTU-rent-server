@@ -30,5 +30,5 @@ public class UpdateNotificationDto {
     @Mapping("isPublic")
     private String isPublic;
 
-    private List<String> imagePath;
+    private List<String> imagePaths;
 }
