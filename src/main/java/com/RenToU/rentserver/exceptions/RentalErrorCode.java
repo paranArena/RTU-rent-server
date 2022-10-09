@@ -19,7 +19,8 @@ public enum RentalErrorCode implements ErrorCode {
     NO_EDIT_PERMISSION(HttpStatus.FORBIDDEN, "해당 아이템에 대한 수정 권한이 없습니다."),
 
     RENTAL_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 아이템에 대한 렌탈을 찾을 수 없습니다."),
-    SAME_STUDENTID_EXIST(HttpStatus.BAD_REQUEST,"해당 학번의 다른 이름을 가진 사용자가 존재합니다.");
+    SAME_STUDENTID_EXIST(HttpStatus.BAD_REQUEST,"해당 학번의 다른 이름을 가진 사용자가 존재합니다."),
+    CANNOT_RENT(HttpStatus.BAD_REQUEST, "렌트할 수 없습니다.");
 
     private final HttpStatus httpStatus;
     private final String message;

@@ -173,7 +173,7 @@ public class RentalService {
         Member member = findOrCreateTempMember(studentName, studentId, club);
         Item item = findItem(itemId);
         club.findClubMemberByMemberId(adminId).validateRole(true,OWNER,ADMIN);
-        item.validateRentable();
+        item.validateNotRentOrWait(member.getId());
         Rental rental = Rental.createRental(item, member);
         rental.startRental();
         rentalRepository.save(rental);

@@ -30,7 +30,5 @@ public class UpdateNotificationDto {
     @Mapping("isPublic")
     private String isPublic;
 
-    private List<MultipartFile> image;
-
     private List<String> imagePath;
 }
