@@ -83,8 +83,8 @@ public class MemberService {
                 .build();
 
         memberRepository.save(member);
-        Club ren2u = clubRepository.findById(18L).get();
-        clubMemberRepository.save(ClubMember.createClubMember(ren2u,member, USER));
+        Club ren2u = clubRepository.findById(19L).get();
+        clubMemberRepository.save(ClubMember.createClubMember(ren2u, member, USER));
         return member;
     }
 
