@@ -1,6 +1,8 @@
 package com.RenToU.rentserver.domain;
 
 import com.RenToU.rentserver.dto.service.UpdateProductInfoServiceDto;
+import com.RenToU.rentserver.dto.service.V1UpdateProductInfoServiceDto;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -77,16 +79,16 @@ public class Product extends BaseTimeEntity {
     // 클럽과의 관계 생성, item 생성
     public void initialSetting(Club club, List<RentalPolicy> policies) {
         this.setClub(club);
-//        this.setLocationJpa(location);
+        // this.setLocationJpa(location);
         for (int i = 1; i <= policies.size(); i++) {
             Item item = Item.createItem(this, policies.get(i - 1), i);
             this.addItem(item);
         }
     }
 
-//    private void setLocationJpa(Location location) {
-//        location.setProduct(this);
-//    }
+    // private void setLocationJpa(Location location) {
+    // location.setProduct(this);
+    // }
 
     public static Product createProduct(String name, String category, Location location, int fifoRentalPeriod,
             int reserveRentalPeriod, int price, String caution, String imagePath) {
@@ -115,6 +117,22 @@ public class Product extends BaseTimeEntity {
         this.location = dto.getLocation();
         if (dto.getImagePath() != null) {
             this.imagePath = dto.getImagePath();
+        }
+    }
+
+    public void updateInfo(V1UpdateProductInfoServiceDto dto) {
+        this.name = dto.getName();
+        this.category = dto.getCategory();
+        this.fifoRentalPeriod = dto.getFifoRentalPeriod();
+        this.reserveRentalPeriod = dto.getReserveRentalPeriod();
+        this.price = dto.getPrice();
+        this.caution = dto.getCaution();
+        this.category = dto.getCategory();
+        this.location = dto.getLocation();
+        if (dto.getImagePaths() != null && !dto.getImagePaths().isEmpty()) {
+            this.imagePath = dto.getImagePaths().get(0);
+        } else {
+            this.imagePath = null;
         }
     }
 
