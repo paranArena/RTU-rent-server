@@ -20,6 +20,8 @@ public class CouponInfoAdminDto {
 
     private String name;
 
+    private Integer max;
+
     private String information;
 
     private int allCouponCount;
@@ -33,7 +35,6 @@ public class CouponInfoAdminDto {
     private LocalDateTime actDate;
     private LocalDateTime expDate;
 
-
     public static CouponInfoAdminDto from(Coupon coupon) {
         if (coupon == null)
             return null;
@@ -41,6 +42,7 @@ public class CouponInfoAdminDto {
         return CouponInfoAdminDto.builder()
                 .id(coupon.getId())
                 .name(coupon.getName())
+                .max(coupon.getMax())
                 .information(coupon.getInformation())
                 .imagePath(coupon.getImagePath())
                 .actDate(coupon.getActDate())
