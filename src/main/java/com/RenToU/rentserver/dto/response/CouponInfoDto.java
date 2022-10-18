@@ -1,17 +1,13 @@
 package com.RenToU.rentserver.dto.response;
 
-import com.RenToU.rentserver.domain.Club;
 import com.RenToU.rentserver.domain.Coupon;
-import com.RenToU.rentserver.domain.Location;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @Setter
@@ -27,6 +23,8 @@ public class CouponInfoDto {
     private String clubName;
 
     private String name;
+
+    private Integer max;
 
     private String information;
 
@@ -46,6 +44,7 @@ public class CouponInfoDto {
                 .clubId(coupon.getClub().getId())
                 .clubName(coupon.getClub().getName())
                 .name(coupon.getName())
+                .max(coupon.getMax())
                 .information(coupon.getInformation())
                 .imagePath(coupon.getImagePath())
                 .actDate(coupon.getActDate())
