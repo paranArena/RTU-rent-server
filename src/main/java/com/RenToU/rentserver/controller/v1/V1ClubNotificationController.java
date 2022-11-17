@@ -1,23 +1,10 @@
 package com.RenToU.rentserver.controller.v1;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
-import com.RenToU.rentserver.dto.request.UpdateNotificationDto;
-import com.RenToU.rentserver.dto.request.V1CreateNotificationDto;
-import com.RenToU.rentserver.dto.request.V1UpdateNotificationDto;
-import com.RenToU.rentserver.dto.response.NotificationDto;
-import com.RenToU.rentserver.application.NotificationService;
-import com.RenToU.rentserver.application.S3Service;
-import com.RenToU.rentserver.domain.Notification;
-
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -26,11 +13,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.RenToU.rentserver.application.MemberService;
+import com.RenToU.rentserver.application.NotificationService;
+import com.RenToU.rentserver.application.S3Service;
+import com.RenToU.rentserver.domain.Notification;
 import com.RenToU.rentserver.dto.StatusCode;
-import com.RenToU.rentserver.dto.request.CreateNotificationDto;
+import com.RenToU.rentserver.dto.request.V1CreateNotificationDto;
+import com.RenToU.rentserver.dto.request.V1UpdateNotificationDto;
+import com.RenToU.rentserver.dto.response.NotificationDto;
 import com.RenToU.rentserver.dto.response.ResponseDto;
 import com.RenToU.rentserver.dto.response.ResponseMessage;
-import com.RenToU.rentserver.dto.response.preview.NotificationPreviewDto;
 import com.RenToU.rentserver.dto.service.CreateNotificationServiceDto;
 import com.github.dozermapper.core.Mapper;
 

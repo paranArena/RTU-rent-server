@@ -47,7 +47,8 @@ public class FirebaseCloudMessageService {
         System.out.println(response.body().string());
     }
 
-    private String makeMessage(String targetToken, String title, String body) throws JsonParseException, JsonProcessingException {
+    private String makeMessage(String targetToken, String title, String body)
+            throws JsonParseException, JsonProcessingException {
         FcmMessage fcmMessage = FcmMessage.builder()
                 .message(FcmMessage.Message.builder()
                         .token(targetToken)
@@ -55,8 +56,9 @@ public class FirebaseCloudMessageService {
                                 .title(title)
                                 .body(body)
                                 .image(null)
-                                .build()
-                        ).build()).validateOnly(false).build();
+                                .build())
+                        .build())
+                .validateOnly(false).build();
 
         return objectMapper.writeValueAsString(fcmMessage);
     }

@@ -1,15 +1,13 @@
 package com.RenToU.rentserver.infrastructure;
 
-import com.RenToU.rentserver.domain.ClubHashtag;
-import com.RenToU.rentserver.domain.Coupon;
-import com.RenToU.rentserver.domain.CouponMember;
-import com.RenToU.rentserver.domain.Hashtag;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
+import com.RenToU.rentserver.domain.CouponMember;
 
 public interface CouponMemberRepository extends JpaRepository<CouponMember, Long> {
-    @EntityGraph(attributePaths = {"coupon"})
+    @EntityGraph(attributePaths = { "coupon" })
     List<CouponMember> findAllByMemberId(Long member_id);
 }
