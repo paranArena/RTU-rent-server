@@ -108,7 +108,7 @@ public class NotificationService {
         } else {
             isPublic = false;
         }
-        notification.update(dto.getTitle(), dto.getContent(), dto.getImagePath().get(0), isPublic);
+        notification.update(dto.getTitle(), dto.getContent(), dto.getImagePath(), isPublic);
         notificationRepository.save(notification);
         return findNotification(notification.getId());
     }
