@@ -1,6 +1,5 @@
 package com.RenToU.rentserver.application;
 
-import com.RenToU.rentserver.domain.ClubRole;
 import com.RenToU.rentserver.domain.Rental;
 import com.RenToU.rentserver.dto.service.AddItemServiceDto;
 import com.RenToU.rentserver.dto.service.CreateProductServiceDto;

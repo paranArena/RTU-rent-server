@@ -1,6 +1,5 @@
 package com.RenToU.rentserver.application;
 
-import com.RenToU.rentserver.domain.ClubRole;
 import com.RenToU.rentserver.dto.request.UpdateNotificationDto;
 import com.RenToU.rentserver.dto.request.V1UpdateNotificationDto;
 import com.RenToU.rentserver.dto.service.CreateNotificationServiceDto;
@@ -42,7 +41,8 @@ public class NotificationService {
         String title = notificationServiceDto.getTitle();
         String content = notificationServiceDto.getContent();
         String imagePath = null;
-        if (notificationServiceDto.getImagePaths() != null) {
+        System.out.println(notificationServiceDto.getImagePaths());
+        if (notificationServiceDto.getImagePaths() != null && !notificationServiceDto.getImagePaths().isEmpty()) {
             imagePath = notificationServiceDto.getImagePaths().get(0);
         }
         Notification notification = Notification.createNotification(title, content, imagePath, club);
@@ -125,7 +125,7 @@ public class NotificationService {
         } else {
             isPublic = false;
         }
-        notification.update(dto.getTitle(), dto.getContent(), dto.getImagePaths().get(0), isPublic);
+        notification.update(dto.getTitle(), dto.getContent(), dto.getImagePaths(), isPublic);
         notificationRepository.save(notification);
         return findNotification(notification.getId());
     }
