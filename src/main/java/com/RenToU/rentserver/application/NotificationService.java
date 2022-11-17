@@ -1,6 +1,7 @@
 package com.RenToU.rentserver.application;
 
 import com.RenToU.rentserver.dto.request.UpdateNotificationDto;
+import com.RenToU.rentserver.dto.request.V1UpdateNotificationDto;
 import com.RenToU.rentserver.dto.service.CreateNotificationServiceDto;
 import com.RenToU.rentserver.domain.Club;
 import com.RenToU.rentserver.domain.Member;
@@ -104,6 +105,25 @@ public class NotificationService {
         boolean isPublic = false;
         if (dto.getIsPublic().contains("true")) { // equals 쓰면 에러남. dto.getIsPublic() 맨 앞 바이트에 8이 붙어있음
             isPublic = true;
+        } else {
+            isPublic = false;
+        }
+        notification.update(dto.getTitle(), dto.getContent(), dto.getImagePath().get(0), isPublic);
+        notificationRepository.save(notification);
+        return findNotification(notification.getId());
+    }
+
+    @Transactional
+    public Notification updateNotification(long memberId, long clubId, long notificationId,
+            V1UpdateNotificationDto dto) {
+        Club club = findClub(clubId);
+        club.findClubMemberByMemberId(memberId).validateRole(true, OWNER, ADMIN);
+        Notification notification = findNotification(notificationId);
+        boolean isPublic = false;
+        if (dto.getIsPublic().contains("true")) { // equals 쓰면 에러남. dto.getIsPublic() 맨 앞 바이트에 8이 붙어있음
+            isPublic = true;
+        } else {
+            isPublic = false;
         }
         notification.update(dto.getTitle(), dto.getContent(), dto.getImagePaths(), isPublic);
         notificationRepository.save(notification);

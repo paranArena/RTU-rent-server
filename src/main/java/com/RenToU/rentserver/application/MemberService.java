@@ -83,8 +83,12 @@ public class MemberService {
                 .build();
 
         memberRepository.save(member);
-        Club ren2u = clubRepository.findById(19L).get();
-        clubMemberRepository.save(ClubMember.createClubMember(ren2u, member, USER));
+
+        // prod 일 때, Ren2U 자동 회원 가입
+        if (MODE.equals("prod")) {
+            Club ren2u = clubRepository.findById(19L).get();
+            clubMemberRepository.save(ClubMember.createClubMember(ren2u, member, USER));
+        }
         return member;
     }
 
