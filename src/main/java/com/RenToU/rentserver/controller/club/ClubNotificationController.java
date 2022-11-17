@@ -1,6 +1,5 @@
 package com.RenToU.rentserver.controller.club;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -9,13 +8,11 @@ import javax.validation.Valid;
 import com.RenToU.rentserver.dto.request.UpdateNotificationDto;
 import com.RenToU.rentserver.dto.response.NotificationDto;
 import com.RenToU.rentserver.application.NotificationService;
-import com.RenToU.rentserver.application.S3Service;
 import com.RenToU.rentserver.domain.Notification;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -39,13 +36,12 @@ import lombok.RequiredArgsConstructor;
 public class ClubNotificationController {
 
     private final MemberService memberService;
-    private final S3Service s3Service;
     private final NotificationService notificationService;
     private final Mapper mapper;
 
     @PostMapping("")
     public ResponseEntity<?> createNotification(@PathVariable long clubId,
-            @Valid @ModelAttribute CreateNotificationDto createNotificationDto) throws IOException {
+            @Valid @RequestBody CreateNotificationDto createNotificationDto) {
         long memberId = memberService.getMyIdWithAuthorities();
         List<String> imagePaths = s3Service.imageToPath(createNotificationDto.getImage(), "nofitication");
         CreateNotificationServiceDto notificationServiceDto = mapper.map(createNotificationDto,

@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -57,10 +59,14 @@ public class Notification extends BaseTimeEntity {
         this.isPublic = !isPublic;
     }
 
-    public void update(String title, String content, String imagePath, Boolean isPublic) {
+    public void update(String title, String content, List<String> imagePaths, Boolean isPublic) {
         this.title = title;
         this.content = content;
-        this.imagePath = imagePath;
+        if (imagePaths != null && !imagePaths.isEmpty()) {
+            this.imagePath = imagePaths.get(0);
+        } else {
+            this.imagePath = null;
+        }
         this.isPublic = isPublic;
     }
 }

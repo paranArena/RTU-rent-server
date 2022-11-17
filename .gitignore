@@ -43,4 +43,5 @@ out/
 
 src/main/resources/application.yml
 serviceAccountKey.json
+firebase_service_key.json
 
