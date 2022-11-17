@@ -1,14 +1,14 @@
 package com.RenToU.rentserver.dto.response.preview;
 
+import java.time.LocalDateTime;
+
 import com.RenToU.rentserver.domain.Coupon;
-import com.RenToU.rentserver.domain.Notification;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
