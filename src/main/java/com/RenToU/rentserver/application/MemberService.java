@@ -1,19 +1,14 @@
 package com.RenToU.rentserver.application;
 
-import java.sql.SQLIntegrityConstraintViolationException;
+import static com.RenToU.rentserver.domain.ClubRole.OWNER;
+import static com.RenToU.rentserver.domain.ClubRole.USER;
+
 import java.util.Collections;
 import java.util.Optional;
 import java.util.Random;
 
-import com.RenToU.rentserver.domain.Club;
-import com.RenToU.rentserver.domain.ClubMember;
-import com.RenToU.rentserver.domain.ClubRole;
-import com.RenToU.rentserver.dto.request.EmailDto;
-import com.RenToU.rentserver.exceptions.ClubErrorCode;
-import com.RenToU.rentserver.exceptions.CommonErrorCode;
-import com.RenToU.rentserver.infrastructure.ClubMemberRepository;
-import com.RenToU.rentserver.infrastructure.ClubRepository;
-import com.RenToU.rentserver.util.RedisUtil;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -23,24 +18,24 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.RenToU.rentserver.domain.Authority;
+import com.RenToU.rentserver.domain.Club;
+import com.RenToU.rentserver.domain.ClubMember;
 import com.RenToU.rentserver.domain.Member;
+import com.RenToU.rentserver.dto.request.EmailDto;
 import com.RenToU.rentserver.dto.request.SignupDto;
 import com.RenToU.rentserver.dto.request.UpdateMemberInfoDto;
 import com.RenToU.rentserver.exceptions.AuthErrorCode;
+import com.RenToU.rentserver.exceptions.ClubErrorCode;
+import com.RenToU.rentserver.exceptions.CommonErrorCode;
 import com.RenToU.rentserver.exceptions.CustomException;
 import com.RenToU.rentserver.exceptions.MemberErrorCode;
+import com.RenToU.rentserver.infrastructure.ClubMemberRepository;
+import com.RenToU.rentserver.infrastructure.ClubRepository;
 import com.RenToU.rentserver.infrastructure.MemberRepository;
+import com.RenToU.rentserver.util.RedisUtil;
 import com.RenToU.rentserver.util.SecurityUtil;
 
 import lombok.RequiredArgsConstructor;
-
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
-
-import static com.RenToU.rentserver.domain.ClubRole.ADMIN;
-import static com.RenToU.rentserver.domain.ClubRole.OWNER;
-import static com.RenToU.rentserver.domain.ClubRole.USER;
-import static com.RenToU.rentserver.domain.ClubRole.WAIT;
 
 @Service
 @RequiredArgsConstructor
@@ -83,8 +78,12 @@ public class MemberService {
                 .build();
 
         memberRepository.save(member);
-        Club ren2u = clubRepository.findById(19L).get();
-        clubMemberRepository.save(ClubMember.createClubMember(ren2u, member, USER));
+
+        // prod 일 때, Ren2U 자동 회원 가입
+        if (MODE.equals("prod")) {
+            Club ren2u = clubRepository.findById(19L).get();
+            clubMemberRepository.save(ClubMember.createClubMember(ren2u, member, USER));
+        }
         return member;
     }
 

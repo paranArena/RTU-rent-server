@@ -1,13 +1,11 @@
 package com.RenToU.rentserver.domain;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 class ClubTest {
     Club club;
@@ -29,8 +27,8 @@ class ClubTest {
     public void findClubMyMemberTest() {
         // given
         // when
-//        ClubMember findMember = club.findClubMemberByMember(INITIAL_OWNER);
-//        // then
-//        assertThat(findMember.getMember()).isEqualTo(INITIAL_OWNER);
+        // ClubMember findMember = club.findClubMemberByMember(INITIAL_OWNER);
+        // // then
+        // assertThat(findMember.getMember()).isEqualTo(INITIAL_OWNER);
     }
 }

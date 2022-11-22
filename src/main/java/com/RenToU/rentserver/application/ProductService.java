@@ -1,6 +1,5 @@
 package com.RenToU.rentserver.application;
 
-import com.RenToU.rentserver.domain.ClubRole;
 import com.RenToU.rentserver.domain.Rental;
 import com.RenToU.rentserver.dto.service.AddItemServiceDto;
 import com.RenToU.rentserver.dto.service.CreateProductServiceDto;
@@ -9,6 +8,8 @@ import com.RenToU.rentserver.domain.Item;
 import com.RenToU.rentserver.domain.Member;
 import com.RenToU.rentserver.domain.Product;
 import com.RenToU.rentserver.dto.service.UpdateProductInfoServiceDto;
+import com.RenToU.rentserver.dto.service.V1CreateProductServiceDto;
+import com.RenToU.rentserver.dto.service.V1UpdateProductInfoServiceDto;
 import com.RenToU.rentserver.exceptions.ClubErrorCode;
 import com.RenToU.rentserver.exceptions.CustomException;
 import com.RenToU.rentserver.exceptions.MemberErrorCode;
@@ -46,8 +47,23 @@ public class ProductService {
     public Product registerProduct(CreateProductServiceDto dto) {
         Club club = findClub(dto.getClubId());
         Long requesterId = dto.getMemberId();
-        club.findClubMemberByMemberId(requesterId).validateRole(true,OWNER,ADMIN);
+        club.findClubMemberByMemberId(requesterId).validateRole(true, OWNER, ADMIN);
         Product product = mapper.map(dto, Product.class);
+        product.initialSetting(club, dto.getRentalPolicies());
+        productRepository.save(product);
+        clubRepository.save(club);
+        return product;
+    }
+
+    @Transactional
+    public Product registerProduct(V1CreateProductServiceDto dto) {
+        Club club = findClub(dto.getClubId());
+        Long requesterId = dto.getMemberId();
+        club.findClubMemberByMemberId(requesterId).validateRole(true, OWNER, ADMIN);
+        Product product = mapper.map(dto, Product.class);
+        if (dto.getImagePaths() != null && dto.getImagePaths().size() > 0) {
+            product.setImagePath(dto.getImagePaths().get(0));
+        }
         product.initialSetting(club, dto.getRentalPolicies());
         productRepository.save(product);
         clubRepository.save(club);
@@ -94,7 +110,19 @@ public class ProductService {
     public Product updateProductInfo(Long productId, UpdateProductInfoServiceDto dto) {
         Club club = findClub(dto.getClubId());
         Long requesterId = dto.getMemberId();
-        club.findClubMemberByMemberId(requesterId).validateRole(true,OWNER,ADMIN);
+        club.findClubMemberByMemberId(requesterId).validateRole(true, OWNER, ADMIN);
+        Product product = findProduct(productId);
+        product.updateInfo(dto);
+        productRepository.save(product);
+        clubRepository.save(club);
+        return product;
+    }
+
+    @Transactional
+    public Product updateProductInfo(Long productId, V1UpdateProductInfoServiceDto dto) {
+        Club club = findClub(dto.getClubId());
+        Long requesterId = dto.getMemberId();
+        club.findClubMemberByMemberId(requesterId).validateRole(true, OWNER, ADMIN);
         Product product = findProduct(productId);
         product.updateInfo(dto);
         productRepository.save(product);
@@ -108,7 +136,7 @@ public class ProductService {
         if (clubId != product.getClub().getId())
             throw new CustomException(ClubErrorCode.PRODUCT_NOT_FOUND);
         Club club = findClub(clubId);// 영속성 컨텍스트 등록을 위해 repository로 검색
-        club.findClubMemberByMemberId(memberId).validateRole(true,OWNER,ADMIN);
+        club.findClubMemberByMemberId(memberId).validateRole(true, OWNER, ADMIN);
         Item item = findItem(itemId);
         if (productId != item.getProduct().getId())
             throw new CustomException(ClubErrorCode.ITEM_NOT_FOUND);
@@ -127,7 +155,7 @@ public class ProductService {
         if (clubId != product.getClub().getId())
             throw new CustomException(ClubErrorCode.PRODUCT_NOT_FOUND);
         Club club = findClub(clubId);// 영속성 컨텍스트 등록을 위해 repository로 검색
-        club.findClubMemberByMemberId(memberId).validateRole(true,OWNER,ADMIN);
+        club.findClubMemberByMemberId(memberId).validateRole(true, OWNER, ADMIN);
         Item item = Item.createItem(product, dto.getRentalPolicy(), dto.getNumbering());
         itemRepository.save(item);
     }
@@ -138,7 +166,7 @@ public class ProductService {
         if (clubId != product.getClub().getId())
             throw new CustomException(ClubErrorCode.PRODUCT_NOT_FOUND);
         Club club = findClub(clubId);// 영속성 컨텍스트 등록을 위해 repository로 검색
-        club.findClubMemberByMemberId(memberId).validateRole(true,OWNER,ADMIN);
+        club.findClubMemberByMemberId(memberId).validateRole(true, OWNER, ADMIN);
         product.deleteClub();
         productRepository.deleteById(productId);
     }

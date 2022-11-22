@@ -1,9 +1,9 @@
 package com.RenToU.rentserver.dto.request;
 
+import java.util.List;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-
-import org.springframework.web.multipart.MultipartFile;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,7 +16,7 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdateProductInfoDto {
+public class V1UpdateProductInfoDto {
 
     @NotBlank(message = "물품 이름을 입력해주세요.")
     private String name;
@@ -33,16 +33,13 @@ public class UpdateProductInfoDto {
     @NotNull(message = "렌탈 기간을 입력해주세요.")
     private int reserveRentalPeriod;
 
-    @NotBlank(message = "렌탈 장소 이름를 입력해주세요.")
     private String locationName;
 
-    @NotNull(message = "장소의 좌표를 찾을 수 없습니다.")
     private Double latitude;
 
-    @NotNull(message = "장소의 좌표를 찾을 수 없습니다.")
     private Double longitude;
 
     private String caution;
 
-    private MultipartFile image;
+    private List<String> imagePaths;
 }
