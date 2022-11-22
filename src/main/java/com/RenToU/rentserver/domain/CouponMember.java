@@ -1,11 +1,6 @@
 package com.RenToU.rentserver.domain;
 
-import com.RenToU.rentserver.exceptions.ClubErrorCode;
-import com.RenToU.rentserver.exceptions.CustomException;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import java.time.LocalDateTime;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -16,7 +11,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import java.time.LocalDateTime;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
@@ -62,8 +61,6 @@ public class CouponMember extends BaseTimeEntity {
         this.member = member;
     }
 
-
-
     public String toString() {
         return this.getCoupon().getName() + " " + this.getMember().getName() + " " + this.getGranter();
     }
@@ -76,8 +73,8 @@ public class CouponMember extends BaseTimeEntity {
 
     }
 
-//    public void delete() {
-//        member.deleteCoupon(this);
-//        coupon.deleteMember(this);
-//    }
+    // public void delete() {
+    // member.deleteCoupon(this);
+    // coupon.deleteMember(this);
+    // }
 }

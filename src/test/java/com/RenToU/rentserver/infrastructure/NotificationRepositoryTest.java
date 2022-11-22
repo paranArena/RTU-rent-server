@@ -1,9 +1,9 @@
 package com.RenToU.rentserver.infrastructure;
 
-import com.RenToU.rentserver.domain.Club;
-import com.RenToU.rentserver.domain.Hashtag;
-import com.RenToU.rentserver.domain.Member;
-import com.RenToU.rentserver.domain.Notification;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.ArrayList;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,9 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import com.RenToU.rentserver.domain.Club;
+import com.RenToU.rentserver.domain.Hashtag;
+import com.RenToU.rentserver.domain.Member;
+import com.RenToU.rentserver.domain.Notification;
 
 @SpringBootTest
 @Transactional

@@ -1,6 +1,5 @@
 package com.RenToU.rentserver.controller.club;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -46,10 +44,12 @@ public class ClubNotificationController {
 
     @PostMapping("")
     public ResponseEntity<?> createNotification(@PathVariable long clubId,
-            @Valid @RequestBody CreateNotificationDto createNotificationDto) throws IOException {
+            @Valid @ModelAttribute CreateNotificationDto createNotificationDto) {
         long memberId = memberService.getMyIdWithAuthorities();
+        List<String> imagePaths = s3Service.imageToPath(createNotificationDto.getImage(), "nofitication");
         CreateNotificationServiceDto notificationServiceDto = mapper.map(createNotificationDto,
                 CreateNotificationServiceDto.class);
+        notificationServiceDto.setImagePaths(imagePaths);
         notificationServiceDto.setMemberId(memberId);
         notificationServiceDto.setClubId(clubId);
         Notification notification = notificationService.createNotification(notificationServiceDto);
@@ -68,8 +68,10 @@ public class ClubNotificationController {
 
     @PutMapping("/{notificationId}")
     public ResponseEntity<?> updateNotification(@PathVariable long clubId, @PathVariable long notificationId,
-            @Valid @RequestBody UpdateNotificationDto updateNotificationDto) {
+            @Valid @ModelAttribute UpdateNotificationDto updateNotificationDto) {
         long memberId = memberService.getMyIdWithAuthorities();
+        List<String> imagePaths = s3Service.imageToPath(updateNotificationDto.getImage(), "notification");
+        updateNotificationDto.setImagePath(imagePaths);
         Notification notification = notificationService.updateNotification(memberId, clubId, notificationId,
                 updateNotificationDto);
         NotificationDto resData = NotificationDto.from(notification);

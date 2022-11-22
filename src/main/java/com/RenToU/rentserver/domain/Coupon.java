@@ -1,13 +1,10 @@
 package com.RenToU.rentserver.domain;
 
-import com.RenToU.rentserver.dto.service.CouponServiceDto;
-import com.RenToU.rentserver.exceptions.ClubErrorCode;
-import com.RenToU.rentserver.exceptions.CouponErrorCode;
-import com.RenToU.rentserver.exceptions.CustomException;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import static javax.persistence.FetchType.LAZY;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -20,11 +17,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
-import static javax.persistence.FetchType.LAZY;
+import com.RenToU.rentserver.dto.service.CouponServiceDto;
+import com.RenToU.rentserver.exceptions.CouponErrorCode;
+import com.RenToU.rentserver.exceptions.CustomException;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter

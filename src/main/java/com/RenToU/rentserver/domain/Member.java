@@ -45,6 +45,9 @@ public class Member extends BaseTimeEntity {
 
     @Column(name = "activated")
     private boolean activated;
+    @Column(name = "fcmToken", unique = true)
+    private String fcmToken;
+
 
     @Builder.Default
     @OneToMany(mappedBy = "member", fetch = LAZY, cascade = CascadeType.ALL)
@@ -94,7 +97,9 @@ public class Member extends BaseTimeEntity {
         this.clubList.add(clubMember);
         clubMember.setMember(this);
     }
-
+    public void setFcm(String fcmToken) {
+        this.fcmToken = fcmToken;
+    }
     public static Member createMember(String name, String email) {
         Member member = Member.builder()
                 .name(name)

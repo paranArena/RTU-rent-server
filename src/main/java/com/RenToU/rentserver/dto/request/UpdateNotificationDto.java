@@ -1,15 +1,18 @@
 package com.RenToU.rentserver.dto.request;
 
+import java.util.List;
+
+import javax.validation.constraints.NotBlank;
+
+import org.springframework.web.multipart.MultipartFile;
+
 import com.github.dozermapper.core.Mapping;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.web.multipart.MultipartFile;
-
-import javax.validation.constraints.NotBlank;
-import java.util.List;
 
 @Getter
 @Setter
@@ -30,5 +33,7 @@ public class UpdateNotificationDto {
     @Mapping("isPublic")
     private String isPublic;
 
-    private List<String> imagePaths;
+    private List<MultipartFile> image;
+
+    private List<String> imagePath;
 }

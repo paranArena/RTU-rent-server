@@ -1,5 +1,17 @@
 package com.RenToU.rentserver.application;
 
+import static com.RenToU.rentserver.domain.ClubRole.ADMIN;
+import static com.RenToU.rentserver.domain.ClubRole.OWNER;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.RenToU.rentserver.domain.Club;
 import com.RenToU.rentserver.domain.ClubMember;
 import com.RenToU.rentserver.domain.ClubRole;
@@ -10,7 +22,6 @@ import com.RenToU.rentserver.domain.Rental;
 import com.RenToU.rentserver.domain.RentalHistory;
 import com.RenToU.rentserver.exceptions.ClubErrorCode;
 import com.RenToU.rentserver.exceptions.CustomException;
-import com.RenToU.rentserver.exceptions.ErrorCode;
 import com.RenToU.rentserver.exceptions.MemberErrorCode;
 import com.RenToU.rentserver.exceptions.RentalErrorCode;
 import com.RenToU.rentserver.infrastructure.ClubRepository;
@@ -18,18 +29,8 @@ import com.RenToU.rentserver.infrastructure.ItemRepository;
 import com.RenToU.rentserver.infrastructure.MemberRepository;
 import com.RenToU.rentserver.infrastructure.RentalHistoryRepository;
 import com.RenToU.rentserver.infrastructure.RentalRepository;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import static com.RenToU.rentserver.domain.ClubRole.ADMIN;
-import static com.RenToU.rentserver.domain.ClubRole.OWNER;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -133,7 +134,7 @@ public class RentalService {
 
     public List<Item> getRentalsByClub(Long clubId, Long memberId) {
         Club club = findClub(clubId);
-        club.findClubMemberByMemberId(memberId).validateRole(true,OWNER,ADMIN);
+        club.findClubMemberByMemberId(memberId).validateRole(true, OWNER, ADMIN);
         List<Product> products = club.getProducts();
         List<Item> items = new ArrayList<>();
         products.stream().forEach(product -> {
@@ -149,7 +150,7 @@ public class RentalService {
 
     public List<RentalHistory> getRentalHistoryByClub(long clubId, Long memberId) {
         Club club = findClub(clubId);
-        club.findClubMemberByMemberId(memberId).validateRole(true,OWNER,ADMIN);
+        club.findClubMemberByMemberId(memberId).validateRole(true, OWNER, ADMIN);
         List<Product> products = findClub(clubId).getProducts();
         List<Item> items = new ArrayList<>();
         products.stream().forEach(product -> {
@@ -172,7 +173,7 @@ public class RentalService {
         Club club = findClub(clubId);
         Member member = findOrCreateTempMember(studentName, studentId, club);
         Item item = findItem(itemId);
-        club.findClubMemberByMemberId(adminId).validateRole(true,OWNER,ADMIN);
+        club.findClubMemberByMemberId(adminId).validateRole(true, OWNER, ADMIN);
         item.validateNotRentOrWait(member.getId());
         Rental rental = Rental.createRental(item, member);
         rental.startRental();
@@ -182,9 +183,9 @@ public class RentalService {
     private Member findOrCreateTempMember(String studentName, String studentId, Club club) {
         Optional<Member> member = memberRepository.findOneWithAuthoritiesByStudentId(studentId);
         if (member.isPresent()) {
-            if(member.get().getName().equals(studentName)) {
+            if (member.get().getName().equals(studentName)) {
                 return member.get();
-            }else{
+            } else {
                 throw new CustomException(RentalErrorCode.SAME_STUDENTID_EXIST);
             }
         } else {
@@ -203,7 +204,7 @@ public class RentalService {
         Rental rental = findRentalByItem(findItem(itemId));
         Club club = findClub(clubId);
         rental.validateRent();
-        club.findClubMemberByMemberId(adminId).validateRole(true,OWNER,ADMIN);
+        club.findClubMemberByMemberId(adminId).validateRole(true, OWNER, ADMIN);
         rental.validateMember(member);
         rental.checkLate();
         rental.finishRental();
@@ -220,7 +221,7 @@ public class RentalService {
     public void cancelRentalAdmin(Long adminId, Long clubId, Long itemId) {
         Rental rental = findRentalByItem(findItem(itemId));
         Club club = findClub(clubId);
-        club.findClubMemberByMemberId(adminId).validateRole(true,OWNER,ADMIN);
+        club.findClubMemberByMemberId(adminId).validateRole(true, OWNER, ADMIN);
         rental.validateWait();
         rental.cancel();
         RentalHistory rentalHistory = RentalHistory.RentalToHistory(rental);

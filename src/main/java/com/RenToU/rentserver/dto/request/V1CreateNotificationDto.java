@@ -1,24 +1,23 @@
 package com.RenToU.rentserver.dto.request;
 
+import java.util.List;
+
+import javax.validation.constraints.NotBlank;
+
 import com.github.dozermapper.core.Mapping;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
-import javax.validation.constraints.NotBlank;
-
-import org.springframework.web.multipart.MultipartFile;
-
 @Getter
 @Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateNotificationDto {
+public class V1CreateNotificationDto {
 
     @NotBlank
     @Mapping("title")
@@ -28,5 +27,6 @@ public class CreateNotificationDto {
     @Mapping("content")
     private String content;
 
-    private List<MultipartFile> image;
+    @Mapping("imagePaths")
+    private List<String> imagePaths;
 }
