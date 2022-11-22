@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+// TODO Caused by: java.sql.SQLException: Field 'd' doesn't have a default value
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/v1/clubs")
@@ -43,7 +44,7 @@ public class V1ClubController {
     }
 
     @PutMapping("/{clubId}/info")
-    public ResponseEntity<?> updateClub(@PathVariable long clubId, V1UpdateClubDto updateClubDto) {
+    public ResponseEntity<?> updateClub(@PathVariable long clubId, @Valid @RequestBody V1UpdateClubDto updateClubDto) {
         long memberId = memberService.getMyIdWithAuthorities();
         List<String> imagePaths = updateClubDto.getImagePaths();
         String imagePath = null;
