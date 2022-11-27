@@ -2,7 +2,6 @@ package com.RenToU.rentserver.controller.v1;
 
 import com.RenToU.rentserver.application.MemberService;
 import com.RenToU.rentserver.application.NotificationService;
-import com.RenToU.rentserver.application.S3Service;
 import com.RenToU.rentserver.domain.Notification;
 import com.RenToU.rentserver.dto.StatusCode;
 import com.RenToU.rentserver.dto.request.V1CreateNotificationDto;
@@ -24,7 +23,6 @@ import javax.validation.Valid;
 public class V1ClubNotificationController {
 
     private final MemberService memberService;
-    private final S3Service s3Service;
     private final NotificationService notificationService;
     private final Mapper mapper;
 
