@@ -13,7 +13,7 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 
 @Component
-@Async("matching")
+@Async("createNotification")
 @Transactional
 @RequiredArgsConstructor
 public class CreateNotificationEventListener {
