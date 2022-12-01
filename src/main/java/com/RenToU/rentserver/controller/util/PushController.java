@@ -22,17 +22,6 @@ public class PushController {
         firebaseCloudMessageService.setFcmToken(registerDto.getMemberId(),registerDto.getFcmToken());
         return ResponseEntity.ok().build();
     }
-    @PostMapping("/api/fcm")
-    public ResponseEntity pushMessage(@RequestBody RequestDto requestDto) throws IOException {
-        System.out.println(requestDto.getTargetToken() + " "
-                +requestDto.getTitle() + " " + requestDto.getBody());
-
-        firebaseCloudMessageService.sendMessageTo(
-                requestDto.getTargetToken(),
-                requestDto.getTitle(),
-                requestDto.getBody());
-        return ResponseEntity.ok().build();
-    }
 }
 
 @Data

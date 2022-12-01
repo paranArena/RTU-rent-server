@@ -31,16 +31,15 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class FirebaseCloudMessageService {
-    private final String API_URL = "https://fcm.googleapis.com/v1/projects/ren2u-push/messages:send";
-    private final ObjectMapper objectMapper;
-    private final MemberRepository memberRepository;
-    @Value("${fcm.key.path}")
-    private String FCM_PRIVATE_KEY_PATH;
 
-    //
+    private final MemberRepository memberRepository;
+
+    @Value("${fcm.key.path}")
+    private final String FCM_PRIVATE_KEY_PATH;
+
     // 메시징만 권한 설정
     @Value("${fcm.key.scope}")
-    private String fireBaseScope;
+    private final String fireBaseScope;
 
     // fcm 기본 설정 진행
     @PostConstruct
@@ -95,60 +94,6 @@ public class FirebaseCloudMessageService {
         } catch (FirebaseMessagingException e) {
             log.error("cannot send to memberList push message. error info : {}", e.getMessage());
         }
-    }
-
-    public void sendMessageTo(String targetToken, String title, String body) throws IOException {
-        String message = makeMessage(targetToken, title, body);
-        OkHttpClient client = new OkHttpClient();
-        RequestBody requestBody = RequestBody.create(message,
-                MediaType.get("application/json; charset=utf-8"));
-        Request request = new Request.Builder()
-                .url(API_URL)
-                .post(requestBody)
-                .addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + getAccessToken())
-                .addHeader(HttpHeaders.CONTENT_TYPE, "application/json; UTF-8")
-                .build();
-
-        Response response = client.newCall(request).execute();
-
-        System.out.println(response.body().string());
-    }
-
-    public void subscribe(List<String> tokens, String topic) throws FirebaseMessagingException {
-        TopicManagementResponse response = FirebaseMessaging.getInstance().subscribeToTopic(tokens, topic);
-        System.out.println(response.getSuccessCount() + " tokens were subscribed successfully");
-    }
-
-    public void unsubscribe(List<String> tokens, String topic) throws FirebaseMessagingException {
-        TopicManagementResponse response = FirebaseMessaging.getInstance().unsubscribeFromTopic(tokens, topic);
-        System.out.println(response.getSuccessCount() + " tokens were subscribed successfully");
-    }
-
-    private String makeMessage(String targetToken, String title, String body)
-            throws JsonParseException, JsonProcessingException {
-        FcmMessage fcmMessage = FcmMessage.builder()
-                .message(FcmMessage.Message.builder()
-                        .token(targetToken)
-                        .notification(FcmMessage.Notification.builder()
-                                .title(title)
-                                .body(body)
-                                .image(null)
-                                .build())
-                        .build())
-                .validateOnly(false).build();
-
-        return objectMapper.writeValueAsString(fcmMessage);
-    }
-
-    private String getAccessToken() throws IOException {
-        String firebaseConfigPath = "firebase/firebase_service_key.json";
-
-        GoogleCredentials googleCredentials = GoogleCredentials
-                .fromStream(new ClassPathResource(firebaseConfigPath).getInputStream())
-                .createScoped(List.of("https://www.googleapis.com/auth/cloud-platform"));
-
-        googleCredentials.refreshIfExpired();
-        return googleCredentials.getAccessToken().getTokenValue();
     }
 
     public void setFcmToken(Long memberId, String fcmToken) {
