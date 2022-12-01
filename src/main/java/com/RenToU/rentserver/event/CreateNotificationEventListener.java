@@ -1,6 +1,7 @@
 package com.RenToU.rentserver.event;
 
 import com.RenToU.rentserver.application.FirebaseCloudMessageService;
+import com.RenToU.rentserver.domain.Club;
 import com.RenToU.rentserver.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
@@ -21,10 +22,11 @@ public class CreateNotificationEventListener {
     private final FirebaseCloudMessageService firebaseCloudMessageService;
 
     @EventListener
-    public void handleMatchingCompleteEvent(CreateNotificationEvent createNotificationEvent) {
+    public void handleCreateNotificationEvent(CreateNotificationEvent createNotificationEvent) {
 
         // 알림 보낼 멤버 목록
         List<Member> memberList = createNotificationEvent.getMemberList();
+        Club club = createNotificationEvent.getClub();
 
         // fcmToken 뽑기
         List<String> fcmTokenList = memberList
@@ -34,8 +36,9 @@ public class CreateNotificationEventListener {
 
         // 알림 보내기
         if (fcmTokenList.size() != 0) {
-            firebaseCloudMessageService.sendByTokenList(fcmTokenList);
+            firebaseCloudMessageService.sendByTokenList(fcmTokenList, "Ren2U", club.getName()+"의 공지사항이 생성되었습니다.");
         }
 
     }
+
 }

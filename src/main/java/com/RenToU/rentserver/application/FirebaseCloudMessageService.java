@@ -63,14 +63,13 @@ public class FirebaseCloudMessageService {
         }
     }
 
-
     // 알림 보내기
-    public void sendByTokenList(List<String> tokenList) {
+    public void sendByTokenList(List<String> tokenList, String title, String body) {
 
         // 메시지 만들기
         List<Message> messages = tokenList.stream().map(token -> Message.builder()
                 .putData("time", LocalDateTime.now().toString())
-                .setNotification(new Notification("제목", "알림 내용"))
+                .setNotification(new Notification(title, body))
                 .setToken(token)
                 .build()).collect(Collectors.toList());
 

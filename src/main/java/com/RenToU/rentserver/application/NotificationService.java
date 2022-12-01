@@ -53,8 +53,8 @@ public class NotificationService {
 
         // event trigger
         List<Member> members = club.getMemberList().stream().map(ClubMember::getMember).collect(Collectors.toList());
-        members.forEach(Member::getFcmToken);
-        eventPublisher.publishEvent(new CreateNotificationEvent(members));
+        members.forEach(Member::getFcmToken); // for lazy load
+        eventPublisher.publishEvent(new CreateNotificationEvent(club, members));
 
         return notification;
     }
@@ -118,7 +118,7 @@ public class NotificationService {
 
     @Transactional
     public Notification updateNotification(long memberId, long clubId, long notificationId,
-                                           V1UpdateNotificationDto dto) {
+            V1UpdateNotificationDto dto) {
         Club club = findClub(clubId);
         club.findClubMemberByMemberId(memberId).validateRole(true, OWNER, ADMIN);
         Notification notification = findNotification(notificationId);
