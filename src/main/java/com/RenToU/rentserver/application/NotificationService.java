@@ -53,6 +53,7 @@ public class NotificationService {
 
         // event trigger
         List<Member> members = club.getMemberList().stream().map(ClubMember::getMember).collect(Collectors.toList());
+        members.forEach(Member::getFcmToken);
         eventPublisher.publishEvent(new CreateNotificationEvent(members));
 
         return notification;
