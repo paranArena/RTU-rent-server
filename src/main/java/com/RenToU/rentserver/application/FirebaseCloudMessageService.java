@@ -1,21 +1,15 @@
 package com.RenToU.rentserver.application;
 
-import com.RenToU.rentserver.domain.FcmMessage;
 import com.RenToU.rentserver.domain.Member;
 import com.RenToU.rentserver.exceptions.CustomException;
 import com.RenToU.rentserver.exceptions.MemberErrorCode;
 import com.RenToU.rentserver.infrastructure.MemberRepository;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.messaging.*;
-import com.google.gson.JsonParseException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import okhttp3.*;
-import org.apache.http.HttpHeaders;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
@@ -105,5 +99,27 @@ public class FirebaseCloudMessageService {
     private Member findMember(Long memberId) {
         return memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(MemberErrorCode.MEMBER_NOT_FOUND));
+    }
+
+    public void sendByToken(String token, String title, String body) {
+
+        // 메시지 만들기
+        Message message = Message.builder()
+                .putData("time", LocalDateTime.now().toString())
+                .setNotification(new Notification(title, body))
+                .setToken(token)
+                .build();
+
+        // 요청에 대한 응답을 받을 response
+        String response;
+        try {
+
+            // 알림 발송
+            response = FirebaseMessaging.getInstance().send(message);
+            log.info("sendByToken: " + response);
+
+        } catch (FirebaseMessagingException e) {
+            log.error("cannot send to memberList push message. error info : {}", e.getMessage());
+        }
     }
 }
