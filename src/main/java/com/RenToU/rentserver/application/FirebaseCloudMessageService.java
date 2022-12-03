@@ -35,11 +35,11 @@ public class FirebaseCloudMessageService {
     private final MemberRepository memberRepository;
 
     @Value("${fcm.key.path}")
-    private final String FCM_PRIVATE_KEY_PATH;
+    private String FCM_PRIVATE_KEY_PATH;
 
     // 메시징만 권한 설정
     @Value("${fcm.key.scope}")
-    private final String fireBaseScope;
+    private String fireBaseScope;
 
     // fcm 기본 설정 진행
     @PostConstruct
