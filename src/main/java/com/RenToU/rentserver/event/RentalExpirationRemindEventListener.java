@@ -22,6 +22,7 @@ public class RentalExpirationRemindEventListener {
 
         // 알림 보낼 멤버 목록
         Member member = rentalExpirationRemindEvent.getMember();
+        Long day = rentalExpirationRemindEvent.getDay();
         String club = rentalExpirationRemindEvent.getClub().getName();
         String product = rentalExpirationRemindEvent.getProduct().getName();
         Rental rental = rentalExpirationRemindEvent.getRental();
@@ -31,7 +32,9 @@ public class RentalExpirationRemindEventListener {
 
         // 알림 보내기
         if (fcmToken != null && !fcmToken.isBlank()) {
-            firebaseCloudMessageService.sendByToken(fcmToken, "Ren2U", "내일 렌탈 만료 물품: (" + club + ") " + product);
+            if(day == 1){
+                firebaseCloudMessageService.sendByToken(fcmToken, "Ren2U", "내일 렌탈 만료 물품: (" + club + ") " + product);
+            }
         }
 
     }
