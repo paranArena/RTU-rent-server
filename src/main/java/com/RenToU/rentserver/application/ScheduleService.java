@@ -65,6 +65,7 @@ public class ScheduleService {
                 Member member = rental.getMember();
                 Product product = rental.getItem().getProduct();
                 Club club = product.getClub();
+                member.getFcmToken(); // init proxy
                 club.getName(); // init proxy
                 product.getName(); // init proxy
 
