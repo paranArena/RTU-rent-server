@@ -9,6 +9,9 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 @Component
 @Async("rentalExpirationRemind")
 @Transactional
@@ -33,10 +36,14 @@ public class RentalExpirationRemindEventListener {
         // 알림 보내기
         if (fcmToken != null && !fcmToken.isBlank()) {
             if (day == 1) {
-                firebaseCloudMessageService.sendByToken(fcmToken, "Ren2U", rental.getExpDate() + " 렌탈 만료 물품: (" + club + ") " + product);
+                firebaseCloudMessageService.sendByToken(fcmToken, "Ren2U", formatDate(rental.getExpDate()) + " 렌탈 만료 물품: (" + club + ") " + product);
             }
         }
 
+    }
+
+    private String formatDate(LocalDateTime date){
+        return date.format(DateTimeFormatter.ofPattern("MM월 dd일 E요일"));
     }
 
 }
