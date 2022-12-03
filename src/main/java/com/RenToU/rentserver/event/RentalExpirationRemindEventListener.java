@@ -32,8 +32,8 @@ public class RentalExpirationRemindEventListener {
 
         // 알림 보내기
         if (fcmToken != null && !fcmToken.isBlank()) {
-            if(day == 1){
-                firebaseCloudMessageService.sendByToken(fcmToken, "Ren2U", "내일 렌탈 만료 물품: (" + club + ") " + product);
+            if (day == 1) {
+                firebaseCloudMessageService.sendByToken(fcmToken, "Ren2U", rental.getExpDate() + " 렌탈 만료 물품: (" + club + ") " + product);
             }
         }
 

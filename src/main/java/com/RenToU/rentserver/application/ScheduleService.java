@@ -1,7 +1,6 @@
 package com.RenToU.rentserver.application;
 
 import com.RenToU.rentserver.domain.*;
-import com.RenToU.rentserver.event.CreateNotificationEvent;
 import com.RenToU.rentserver.event.RentalExpirationRemindEvent;
 import com.RenToU.rentserver.infrastructure.*;
 import lombok.RequiredArgsConstructor;
@@ -59,7 +58,7 @@ public class ScheduleService {
         List<Rental> rentals = rentalRepository.findAllByRentalStatus(RentalStatus.RENT);
         if (rentals != null) {
             List<Rental> expiredSoon = rentals.stream().filter(
-                    rental -> rental.getExpDate().minusDays(day + 1).isAfter(LocalDateTime.now())
+                    rental -> LocalDateTime.now().plusDays(day + 1).isAfter(rental.getExpDate())
             ).collect(Collectors.toList());
             expiredSoon.forEach(rental -> {
                 Member member = rental.getMember();
