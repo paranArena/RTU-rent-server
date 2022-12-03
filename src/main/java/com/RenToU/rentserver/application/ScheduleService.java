@@ -67,7 +67,7 @@ public class ScheduleService {
                 Club club = product.getClub();
 
 
-                eventPublisher.publishEvent(new RentalExpirationRemindEvent(club, product, rental, member));
+                eventPublisher.publishEvent(new RentalExpirationRemindEvent(day, club, product, rental, member));
             });
         }
     }

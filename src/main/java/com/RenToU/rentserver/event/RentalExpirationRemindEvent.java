@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public class RentalExpirationRemindEvent {
+    private final Long day;
     private final Club club;
     private final Product product;
     private final Rental rental;
