@@ -8,6 +8,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -54,11 +55,11 @@ public class ScheduleService {
         }
     }
 
-    public void checkExpiredRental(long day) {
+    public void checkExpiredRentalAfter(long day) {
         List<Rental> rentals = rentalRepository.findAllByRentalStatus(RentalStatus.RENT);
         if (rentals != null) {
             List<Rental> expiredSoon = rentals.stream().filter(
-                    rental -> LocalDateTime.now().plusDays(day + 1).isAfter(rental.getExpDate())
+                    rental -> LocalDate.now().plusDays(day).isEqual(rental.getExpDate().toLocalDate())
             ).collect(Collectors.toList());
             expiredSoon.forEach(rental -> {
                 Member member = rental.getMember();
@@ -70,6 +71,26 @@ public class ScheduleService {
 
 
                 eventPublisher.publishEvent(new RentalExpirationRemindEvent(day, club, product, rental, member));
+            });
+        }
+    }
+
+    public void checkExpiredRental() {
+        List<Rental> rentals = rentalRepository.findAllByRentalStatus(RentalStatus.RENT);
+        if (rentals != null) {
+            List<Rental> expiredSoon = rentals.stream().filter(
+                    rental -> LocalDate.now().isBefore(rental.getExpDate().toLocalDate())
+            ).collect(Collectors.toList());
+            expiredSoon.forEach(rental -> {
+                Member member = rental.getMember();
+                Product product = rental.getItem().getProduct();
+                Club club = product.getClub();
+                member.getFcmToken(); // init proxy
+                club.getName(); // init proxy
+                product.getName(); // init proxy
+
+
+                eventPublisher.publishEvent(new RentalExpirationRemindEvent(-1L, club, product, rental, member));
             });
         }
     }

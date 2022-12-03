@@ -36,14 +36,13 @@ public class RentalExpirationRemindEventListener {
         // 알림 보내기
         if (fcmToken != null && !fcmToken.isBlank()) {
             if (day == 1) {
-                firebaseCloudMessageService.sendByToken(fcmToken, "Ren2U", formatDate(rental.getExpDate()) + " 렌탈 만료 물품: (" + club + ") " + product);
+                firebaseCloudMessageService.sendByToken(fcmToken, "렌탈 만료 알림",  club + "에서 빌린 " + product + "가 내일 만료됩니다!");
+            }
+            if (day == -1) {
+                firebaseCloudMessageService.sendByToken(fcmToken, "렌탈 만료 알림", club + "에서 빌린 " + product + "가 만료되었습니다!");
             }
         }
 
-    }
-
-    private String formatDate(LocalDateTime date){
-        return date.format(DateTimeFormatter.ofPattern("MM월 dd일 E요일"));
     }
 
 }
