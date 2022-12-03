@@ -38,6 +38,9 @@ public class RentalExpirationRemindEventListener {
             if (day == 1) {
                 firebaseCloudMessageService.sendByToken(fcmToken, "렌탈 만료 알림",  club + "에서 빌린 " + product + "가 내일 만료됩니다!");
             }
+            if (day == 0){
+                firebaseCloudMessageService.sendByToken(fcmToken, "렌탈 만료 알림",  club + "에서 빌린 " + product + "가 오늘 만료됩니다!");
+            }
             if (day == -1) {
                 firebaseCloudMessageService.sendByToken(fcmToken, "렌탈 만료 알림", club + "에서 빌린 " + product + "가 만료되었습니다!");
             }

@@ -39,6 +39,7 @@ public class ScheduleController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         scheduleService.checkExpiredRentalAfter(1);
+        scheduleService.checkExpiredRentalAfter(0);
         scheduleService.checkExpiredRental();
         return ResponseEntity.ok(ResponseDto.res(StatusCode.OK, "만료되는 렌탈 리마인드 메세지 전송 성공"));
     }
