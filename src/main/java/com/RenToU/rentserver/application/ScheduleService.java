@@ -1,18 +1,11 @@
 package com.RenToU.rentserver.application;
 
-import com.RenToU.rentserver.domain.Club;
-import com.RenToU.rentserver.domain.ClubMember;
-import com.RenToU.rentserver.domain.ClubRole;
-import com.RenToU.rentserver.domain.Member;
-import com.RenToU.rentserver.domain.Rental;
-import com.RenToU.rentserver.domain.RentalHistory;
-import com.RenToU.rentserver.domain.RentalStatus;
-import com.RenToU.rentserver.infrastructure.ClubMemberRepository;
-import com.RenToU.rentserver.infrastructure.ClubRepository;
-import com.RenToU.rentserver.infrastructure.MemberRepository;
-import com.RenToU.rentserver.infrastructure.RentalHistoryRepository;
-import com.RenToU.rentserver.infrastructure.RentalRepository;
+import com.RenToU.rentserver.domain.*;
+import com.RenToU.rentserver.event.CreateNotificationEvent;
+import com.RenToU.rentserver.event.RentalExpirationRemindEvent;
+import com.RenToU.rentserver.infrastructure.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,12 +23,13 @@ public class ScheduleService {
     private final ClubMemberRepository clubMemberRepository;
     private final MemberRepository memberRepository;
     private final ClubRepository clubRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Transactional
     public void checkExpiredRentalWait() {
         List<Rental> rentals = rentalRepository.findAllByRentalStatus(RentalStatus.WAIT);
         if (rentals != null) {
-            rentals.stream().forEach(rental -> {
+            rentals.forEach(rental -> {
                 if (rental.getRentDate().plusMinutes(10).isBefore(LocalDateTime.now())) {
                     rental.validateWait();
                     rental.cancel();
@@ -46,19 +40,35 @@ public class ScheduleService {
             });
         }
     }
+
     @Transactional
     public void joinRen2UAll() {
         Club club = clubRepository.findById(19L).get();
         List<Long> cmId = clubMemberRepository.findAllByClubId(19L)
-                .stream().map(cm->cm.getMember().getId()).collect(Collectors.toList());
-        for(Long i = 1L; i <= 200L; i++){
-            if(cmId.contains(i)){
+                .stream().map(cm -> cm.getMember().getId()).collect(Collectors.toList());
+        for (Long i = 1L; i <= 200L; i++) {
+            if (cmId.contains(i)) {
                 continue;
             }
             Optional<Member> member = memberRepository.findById(i);
-            if(member.isPresent()){
-                clubMemberRepository.save(ClubMember.createClubMember(club,member.get(), ClubRole.USER));
-            }
+            member.ifPresent(value -> clubMemberRepository.save(ClubMember.createClubMember(club, value, ClubRole.USER)));
+        }
+    }
+
+    public void checkExpiredRental(long day) {
+        List<Rental> rentals = rentalRepository.findAllByRentalStatus(RentalStatus.RENT);
+        if (rentals != null) {
+            List<Rental> expiredSoon = rentals.stream().filter(
+                    rental -> rental.getExpDate().minusDays(day + 1).isAfter(LocalDateTime.now())
+            ).collect(Collectors.toList());
+            expiredSoon.forEach(rental -> {
+                Member member = rental.getMember();
+                Product product = rental.getItem().getProduct();
+                Club club = product.getClub();
+
+
+                eventPublisher.publishEvent(new RentalExpirationRemindEvent(day, club, product, rental, member));
+            });
         }
     }
 }
