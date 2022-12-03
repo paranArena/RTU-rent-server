@@ -79,7 +79,7 @@ public class ScheduleService {
         List<Rental> rentals = rentalRepository.findAllByRentalStatus(RentalStatus.RENT);
         if (rentals != null) {
             List<Rental> expiredSoon = rentals.stream().filter(
-                    rental -> LocalDate.now().isBefore(rental.getExpDate().toLocalDate())
+                    rental -> LocalDate.now().isAfter(rental.getExpDate().toLocalDate())
             ).collect(Collectors.toList());
             expiredSoon.forEach(rental -> {
                 Member member = rental.getMember();
