@@ -65,6 +65,8 @@ public class ScheduleService {
                 Member member = rental.getMember();
                 Product product = rental.getItem().getProduct();
                 Club club = product.getClub();
+                club.getName(); // init proxy
+                product.getName(); // init proxy
 
 
                 eventPublisher.publishEvent(new RentalExpirationRemindEvent(day, club, product, rental, member));
